@@ -42,6 +42,8 @@ Every case supports a configurable publisher root such as `AvivPeretsFBX`; no pu
 - The required technology stack must have a no-cost local path. No task may introduce a mandatory paid software edition, paid subscription, or paid hosted service.
 - Visual Studio Code plus PowerShell and repository-local CLI tools is the supported development baseline. Paid Visual Studio is optional and must never be required by an acceptance condition.
 - Tool discovery and path configuration must reject selected executables or writable project paths outside the project root.
+- `docs/QUALITY_AND_RELEASE_GATES.md` is normative. UX/accessibility, traceability, complete test layers, coverage, mutation, performance, security, installation, engineering-quality, and fail-closed release requirements cannot be deferred implicitly.
+- No coverage percentage, test count, review statement, or unsupported quality claim substitutes for mapped acceptance evidence.
 
 ## 2. Task Workflow
 
@@ -51,18 +53,39 @@ Every case supports a configurable publisher root such as `AvivPeretsFBX`; no pu
 - `[x]` — complete and verified.
 - Active work is recorded in the Active Work table below; do not invent additional checkbox symbols.
 
+### Git Authority
+
+- The user exclusively controls Git commits and remote operations.
+- Codex must never run `git commit` or `git push` unless the user explicitly authorizes that exact action.
+- Codex must not stage files, merge branches, create pull requests, create tags, or publish releases unless the user explicitly authorizes the exact action.
+- Authorization for one Git or remote action does not authorize another action or a future action.
+- Codex may use read-only Git commands such as `git status`, `git diff`, `git log`, and `git branch --show-current` for inspection and validation.
+- Every future task must begin by reading `AGENTS.md` completely before any other project action.
+
+### Codex Task Handoff
+
+At the end of every task, Codex must report:
+
+- Changed files.
+- Test and validation results.
+- Suggested branch name.
+- Suggested commit message.
+- Manual commands the user can run.
+
 ### Completion Rule
 
-A task can change to `[x]` only when:
+A task can change to `[x]` only when all of the following are satisfied:
 
 1. Its acceptance condition is satisfied.
 2. Required automated tests pass locally.
-3. The task branch is pushed to GitHub.
-4. GitHub CI passes.
-5. The change is merged into `main`, unless the task explicitly records an approved exception.
-6. The Completion Log contains the branch, final commit, PR, and completion date.
+3. Every applicable requirement and acceptance criterion has current mapped evidence, and all approved quality thresholds and release gates pass.
+4. The required commit exists.
+5. The task branch is pushed to GitHub.
+6. GitHub CI passes.
+7. The change is merged into `main`, unless the task explicitly records an approved exception.
+8. The Completion Log contains the branch, final commit, PR, and completion date.
 
-Merely writing code locally does not complete a task.
+Codex must not mark a PB task complete until the user explicitly confirms that the commit, push, CI, and merge requirements were completed. Read-only repository evidence does not replace that confirmation. Merely writing code locally does not complete a task.
 
 ### Branch Naming
 
@@ -92,7 +115,7 @@ feat/PB-0607-unity-urp-material-compiler
 - Do not mix unrelated cleanup into a task branch.
 - A dependent task starts from updated `main` after its dependencies are merged.
 - If implementation reveals missing work, add a new ID rather than silently expanding scope.
-- Bootstrap tasks may share one temporary `bootstrap/package-builder` branch until the GitHub remote and `main` branch exist; they are still logged separately.
+- Bootstrap tasks also use one documented PB task per branch. Any temporary exception requires explicit user approval and must be recorded in the affected task and Completion Log.
 
 ### Priority
 
@@ -127,7 +150,7 @@ Append a row whenever a task is marked `[x]`.
 | M6 — Fab Package Ready | Fab archives, media, documentation, and reports validate | E09–E10 |
 | M7 — Unreal Complete | All five product cases work in Unreal | E11–E12 |
 | M8 — Operator Experience | WPF and CLI drive the same production pipeline | E13–E14 |
-| M9 — Release Candidate | Security, CI, installer, and full regression pass | E15–E17 |
+| M9 — Release Candidate | Security, CI, installer, quality gates, and full regression pass | E15–E18 |
 
 ## 6. Critical Path
 
@@ -149,10 +172,11 @@ flowchart LR
     E02 --> E14["E14 CLI"]
     E05 --> E15["E15 Security and hardening"]
     E12 --> E16["E16 CI and distribution"]
-    E13 --> E17["E17 Release"]
-    E14 --> E17
-    E15 --> E17
-    E16 --> E17
+    E13 --> E18["E18 Quality gates"]
+    E14 --> E18
+    E15 --> E18
+    E16 --> E18
+    E18 --> E17["E17 Release"]
 ```
 
 ---
@@ -219,9 +243,15 @@ flowchart LR
 - [ ] **PB-0012 — Record initial architecture decisions** — **P0**
   - Branch: `docs/PB-0012-initial-adrs`
   - Depends on: PB-0010
-  - Done when: ADRs 0001–0008 from the architecture document exist and are linked from the docs index.
+  - Done when: ADRs 0001–0013 from the architecture document exist and are linked from the docs index.
 
-**E00 exit:** M0 is complete when PB-0001 through PB-0012 are complete.
+- [ ] **PB-0013 — Establish the permanent quality and release-gate baseline** — **P0**
+  - Branch: `docs/PB-0013-quality-release-gates`
+  - Owner: Architecture and Quality Engineering
+  - Depends on: none
+  - Done when: `AGENTS.md`, the product plan, architecture, backlog, and `docs/QUALITY_AND_RELEASE_GATES.md` agree on the 68 stable UX, testing, performance, security, installation, engineering, and release requirements; every requirement group maps to an owned E18 task with a dependency and measurable `Done when` condition; release-blocking rules and required coverage thresholds are identical across documents; Markdown, requirement-ID, task-ID, dependency-reference, branch-format, changed-file-scope, and cross-document consistency tests pass; and no application implementation is included.
+
+**E00 exit:** M0 is complete when PB-0001 through PB-0013 are complete.
 
 ---
 
@@ -1378,13 +1408,113 @@ flowchart LR
 
 ---
 
+# E18 — Cross-Cutting Quality and Release Gates
+
+**Goal:** Every permanent quality requirement has an owner, mapped evidence, enforced threshold, and fail-closed release decision using a free local or self-hosted workflow.
+
+E18 appears before E17 in execution order because the quality gate was added after the existing permanent epic IDs were assigned; the IDs are not renumbered or reused.
+
+- [ ] **PB-1801 — Create criterion-level requirements-to-tests traceability** — **P0**
+  - Branch: `docs/PB-1801-requirements-traceability`
+  - Owner: Quality Engineering
+  - Depends on: PB-0010, PB-0012, PB-0013
+  - Done when: every normative requirement in the product plan, architecture, `QUALITY_AND_RELEASE_GATES.md`, and every PB `Done when` clause has a stable row containing source, owner, at least one concrete test ID, fixture, evidence path, and status; approved supplementary verification is recorded separately and cannot replace a test; an offline validator rejects duplicate IDs, missing mappings, stale evidence, and unknown tests; and the same validation runs from Visual Studio Code.
+
+- [ ] **PB-1802 — Define the accessible desktop design system and guided workflow** — **P0**
+  - Branch: `feat/PB-1802-desktop-design-system`
+  - Owner: Desktop UX
+  - Depends on: PB-1301, PB-1304, PB-1309
+  - Done when: versioned tokens and reusable WPF patterns define typography, spacing, colour, high contrast, focus, validation, progress, destructive actions, loading/empty/error states, and accessible names; setup-through-results screens use consistent patterns, sensible defaults, and progressive disclosure; and component and workflow tests demonstrate the documented behavior.
+
+- [ ] **PB-1803 — Validate accessibility, critical UI automation, and first-time usability** — **P0**
+  - Branch: `test/PB-1803-accessibility-usability`
+  - Owner: Accessibility and UX Research
+  - Depends on: PB-1316, PB-1802
+  - Done when: approved critical setup, inspect, configure, dry-run, build, cancel, diagnose, retry, and results-review journeys pass deterministic keyboard-only and UI Automation tests for accessible names, roles, focus order, visible focus, high contrast, and 200% text scaling; at least five representative first-time users complete the approved scenarios; observed completion, error, assistance, and severity results meet user-approved numeric criteria; and every unresolved finding has a PB task.
+
+- [ ] **PB-1804 — Implement and test dry-run, progress, actionable errors, and safe recovery UX** — **P0**
+  - Branch: `feat/PB-1804-dry-run-recovery-ux`
+  - Owner: Application and Desktop UX
+  - Depends on: PB-0208, PB-0213, PB-1310, PB-1311, PB-1314
+  - Done when: dry run reports canonical inputs, names, paths, actions, outputs, warnings, and resource estimates while before/after hashes prove zero target/source writes; running jobs expose stage, measurable progress, elapsed time, and cancellation; errors identify the failed step/asset/consequence/fix without a primary raw stack trace; reviewed user input survives tested failures; and cancel, retry, and resume tests prove source safety and accurate repeated-work disclosure.
+
+- [ ] **PB-1805 — Complete the deterministic offline test portfolio and fixture matrix** — **P0**
+  - Branch: `test/PB-1805-complete-test-portfolio`
+  - Owner: Quality Engineering
+  - Depends on: PB-0811, PB-1213, PB-1407, PB-1501 through PB-1512, PB-1601 through PB-1605
+  - Done when: unit, contract, integration, end-to-end, UI, regression, installer, upgrade, and failure-recovery suites are classified and mapped; static, rigged, animated, set, and collection fixtures pass every applicable portable/Unity/Unreal cell; corrupt, incomplete, malicious, unusually large, nested, long-path, Unicode, and resource-pressure cases run; network tests are isolated explicitly; and two clean default offline runs produce equivalent logical results.
+
+- [ ] **PB-1806 — Enforce line and branch coverage thresholds and exclusions** — **P0**
+  - Branch: `test/PB-1806-coverage-gates`
+  - Owner: Quality Engineering
+  - Depends on: PB-0009, PB-1801, PB-1805
+  - Done when: pinned no-cost tooling reports and trends line/branch coverage; the gate fails below 90% line or 85% branch overall and below 100% branch for security validation, path handling, naming, manifest validation, or package-integrity code; every exclusion is listed with technical justification and explicit user approval; and threshold tests prove each failure mode blocks the gate locally and in CI.
+
+- [ ] **PB-1807 — Add mutation testing for critical validation and security code** — **P0**
+  - Branch: `test/PB-1807-critical-mutation-testing`
+  - Owner: Security and Quality Engineering
+  - Depends on: PB-1805, PB-1806
+  - Done when: pinned no-cost mutation tooling covers the approved critical components; an initial baseline and numeric component thresholds are explicitly user-approved; deterministic reports identify killed, survived, timeout, and no-coverage mutants; no high-risk mutant survives without documented user approval and follow-up; and tests prove an under-threshold result blocks release.
+
+- [ ] **PB-1808 — Approve performance budgets, repeatable benchmarks, and build resource metrics** — **P0**
+  - Branch: `test/PB-1808-performance-budgets`
+  - Owner: Performance Engineering
+  - Depends on: PB-0910, PB-1511, PB-1512, PB-1601 through PB-1605
+  - Done when: versioned small, medium, and large fixtures have user-approved numeric elapsed-time, peak-memory, peak-project-disk, and temporary-space budgets by applicable stage/target; benchmarks record fixture hashes, machine profile, exact tool versions, warm-up, at least five measured samples, variance, and regression thresholds; every build report records stage/total duration, peak process memory, peak contained project-disk and temporary-space use, and bytes read/written; and over-budget regression tests fail the gate.
+
+- [ ] **PB-1809 — Prove streaming, bounded concurrency, cache correctness, and minimal copying** — **P0**
+  - Branch: `test/PB-1809-resource-efficiency`
+  - Owner: Infrastructure and Performance Engineering
+  - Depends on: PB-0203, PB-0204, PB-0208, PB-0214, PB-0215, PB-1808
+  - Done when: large-file/archive tests demonstrate bounded-memory streaming; tests prove end-to-end `CancellationToken` propagation through .NET operations and equivalent worker-process cancellation; concurrency-limit, idle/total-timeout, and cleanup tests pass under resource pressure; cache identity, invalidation, version compatibility, concurrency, and corruption recovery are proven; copy/byte metrics identify FBX, GLB, texture, archive, and engine-project transfers; and any full-memory or duplicate-copy exception has measured justification and explicit user approval.
+
+- [ ] **PB-1810 — Maintain the threat model and malicious-input security suite** — **P0**
+  - Branch: `security/PB-1810-threat-model-input-security`
+  - Owner: Security Engineering
+  - Depends on: PB-1501 through PB-1510
+  - Done when: a versioned threat model covers archives, models, textures, scripts/executables, engine projects, plugins, downloads, external tools, generated packages, and trust boundaries; each threat maps to a control and test; archive preflight validates compressed/extracted size, expansion ratio, count, nesting, extension, duplicate/canonical destination, and containment; and traversal, ZIP bomb, reparse/symlink escape, injection, executable/script, corrupt, incomplete, and collision suites pass without executing imported content.
+
+- [ ] **PB-1811 — Harden external processes, secrets, downloads, diagnostics, and network consent** — **P0**
+  - Branch: `security/PB-1811-process-secrets-privacy`
+  - Owner: Security and Infrastructure Engineering
+  - Depends on: PB-0001, PB-0207, PB-0208, PB-0212, PB-0305, PB-0912, PB-1503 through PB-1505
+  - Done when: external tools run with explicit literal arguments, least practical privilege, contained isolated working/temp/cache/log paths, bounded timeouts, cancellation, and cleanup; source/log/manifest/fixture/diagnostic/package scans contain no token, credential, or private key; redaction tests cover secrets and sensitive paths; official downloads verify pinned checksums/signatures where available; outbound communication is deny-by-default and consent-tested; and the application and default tests operate offline.
+
+- [ ] **PB-1812 — Enforce warning-free builds, supply-chain evidence, and vulnerability procedures** — **P0**
+  - Branch: `security/PB-1812-supply-chain-quality`
+  - Owner: Security and Build Engineering
+  - Depends on: PB-0006, PB-0011, PB-1611
+  - Done when: direct and transitive dependency versions are recorded as far as each ecosystem permits; production/release compiler and approved analyzer warnings fail the build; a machine-readable release SBOM is generated; pinned no-cost dependency-vulnerability, secret, static-analysis, and licence checks run locally and in CI; no critical/high vulnerability lacks a time-bounded explicit user exception; and documented private reporting, severity, response, update, emergency-patch, and disclosure procedures pass review exercises.
+
+- [ ] **PB-1813 — Validate installation, prerequisites, diagnostics, and lifecycle safety** — **P0**
+  - Branch: `test/PB-1813-installation-lifecycle`
+  - Owner: Distribution and UX Engineering
+  - Depends on: PB-0912, PB-1302, PB-1612, PB-1613, PB-1614
+  - Done when: a simple installer and technically practical portable option are provided or the portable exception has evidence and user approval; unnecessary elevation is absent and each required elevation is explained/tested; .NET/Blender/Unity/Unreal/modules/disk/permissions/root checks pass; engines/licences are never installed/accepted silently; guided first run and repair work; fresh install, repair, upgrade, downgrade prevention, interruption, uninstall, and retained-user-data tests pass; an in-app redacted diagnostic report exports; and all required workflows work beneath the single root with free tooling and Visual Studio Code.
+
+- [ ] **PB-1814 — Enforce engineering-quality architecture and evidence review** — **P0**
+  - Branch: `test/PB-1814-engineering-quality-gates`
+  - Owner: Architecture and Build Engineering
+  - Depends on: PB-0006, PB-0011, PB-0012, PB-1801
+  - Done when: nullable references, deterministic/CI builds, strict supported analyzers, and warnings-as-errors are verified for production projects; architecture tests reject domain dependencies on WPF, Blender, Unity, Unreal, persistence/filesystem implementations, or marketplaces; contract tests cover typed/versioned contracts, composition-root dependency injection, and explicit expected-error results; required ADR topics are present; review templates cover correctness, mapped tests, UX/accessibility, performance, security, containment, licences, and docs; and an evidence audit rejects unsupported “best practice,” “secure,” “fast,” or “production ready” claims.
+
+- [ ] **PB-1815 — Implement the fail-closed release-gate evaluator and evidence bundle** — **P0**
+  - Branch: `feat/PB-1815-release-gate-evidence`
+  - Owner: Release and Quality Engineering
+  - Depends on: PB-1608, PB-1611, PB-1613, PB-1801 through PB-1814
+  - Done when: one documented free local/self-hosted command validates evidence schema, commit/tool identity, freshness, traceability, required tests/engine fixtures, coverage, mutation, vulnerabilities, performance budgets, accessibility, installer lifecycle, package integrity, and clean import/reopen; automated negative tests prove every REL-001 through REL-008 condition blocks release; exceptions record requirement, risk, scope, explicit user approval, expiry, and follow-up; the evidence bundle is complete and reviewable; and the evaluator cannot commit, push, merge, tag, create a pull request, publish, or release automatically.
+
+**E18 exit:** Every QUALITY_AND_RELEASE_GATES requirement maps to an owned completed task and concrete passing evidence, and the fail-closed release evaluator passes through the free local or self-hosted workflow.
+
+---
+
 # E17 — Version 1 Release Validation
 
 **Goal:** Prove the complete system works for all five cases and release it reproducibly.
 
 - [ ] **PB-1701 — Run full static-product release acceptance** — **P0**
   - Branch: `release/PB-1701-static-acceptance`
-  - Depends on: PB-1010, PB-1115, PB-1316, PB-1407, PB-1510, PB-1608
+  - Depends on: PB-1010, PB-1115, PB-1316, PB-1407, PB-1510, PB-1608, PB-1815
   - Done when: WPF and CLI both build portable, Unity, Unreal, Fab, media, docs, reports, clean reimports, and identical logical results.
 
 - [ ] **PB-1702 — Run full rigged-no-animation release acceptance** — **P0**
@@ -1453,6 +1583,13 @@ The system is considered working only when all of the following are true:
 - A clean workstation can install and operate version 1 using the documentation.
 - Every selected tool and every project-owned download, log, runtime-data file, cache, temporary file, build, report, and generated artifact remains beneath `C:\Dev\PackageBuilder`.
 - A contributor can develop, restore, build, test, run, and debug through Visual Studio Code and local CLI tooling without paid Visual Studio, paid software, a paid subscription, or a paid hosted service.
+- Every normative requirement and PB acceptance criterion has an owner and current concrete evidence in the traceability matrix.
+- Unit, contract, integration, end-to-end, UI, regression, installer, upgrade, failure-recovery, five-case target, hostile-input, and clean import/reopen suites pass deterministically, with network tests isolated explicitly.
+- Overall coverage is at least 90% line and 85% branch, critical security/path/naming/manifest/package-integrity code has 100% branch coverage, and approved mutation thresholds pass with no unapproved exclusion or high-risk survivor.
+- Accessibility-critical workflows and representative first-time-user acceptance pass; approved small/medium/large performance budgets pass; build resource metrics are complete.
+- The threat model, warning-free builds, SBOM, dependency/vulnerability/secret/static/licence scans, download verification, network-consent controls, and vulnerability procedures pass.
+- Installer/portable, privilege, prerequisites, first run, repair, upgrade, downgrade prevention, interruption, uninstall, user-data preservation, redacted diagnostics, containment, and free Visual Studio Code workflow tests pass.
+- The fail-closed release evaluator reports no REL-001 through REL-008 blocker and all exceptions have explicit user approval, expiry, and follow-up.
 
 ## 8. Backlog Maintenance Rules
 
@@ -1463,4 +1600,6 @@ The system is considered working only when all of the following are true:
 - Keep the Completion Log chronological.
 - Review official engine and marketplace requirements when promoting new versions.
 - At each milestone, verify the product plan, architecture document, and backlog still agree.
+- Keep `docs/QUALITY_AND_RELEASE_GATES.md`, the criterion-level traceability matrix, task ownership, dependencies, test IDs, thresholds, and release-gate behavior synchronized whenever a requirement or acceptance condition changes.
+- Do not weaken coverage, mutation, accessibility, performance, security, installation, package-integrity, or evidence thresholds without written justification and explicit user approval.
 - P2 ideas belong in a clearly labelled future-roadmap section and must not silently block version 1.

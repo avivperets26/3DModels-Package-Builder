@@ -38,6 +38,10 @@ Fab is the first marketplace adapter. Engine targets and marketplace adapters re
 11. **Single-root containment** — every project file, managed tool, download, log, runtime-data file, cache, and generated artifact resolves beneath `C:\Dev\PackageBuilder`.
 12. **No-cost required stack** — development and operation never require a paid software edition, paid subscription, or paid hosted service.
 13. **Editor independence** — Visual Studio Code and repository scripts provide the supported development workflow; paid Visual Studio remains optional.
+14. **Accessible, recoverable UX** — one consistent design system supports keyboard and assistive-technology use, guided dry runs, transparent progress, actionable errors, preserved input, and safe retry.
+15. **Complete evidence traceability** — every normative requirement and PB acceptance criterion maps to at least one current test; approved supplementary verification never replaces that test.
+16. **Measured quality** — coverage, mutation, performance, resource, accessibility, security, installation, and package-integrity evidence is reproducible and thresholded.
+17. **Fail-closed releases** — missing, stale, contradictory, failing, or unapproved evidence blocks a release.
 
 ## 3. Current Development-Machine Audit
 
@@ -99,10 +103,15 @@ The first Unreal implementation uses Python. A minimal C++ editor plugin is intr
 | Python formatting/linting | Ruff |
 | Unity tests | Unity Test Framework for Editor tests |
 | Unreal tests | Python smoke tests plus Unreal Automation Tests where necessary |
-| CI | Optional GitHub Actions free-tier workflow for core tests; no-cost self-hosted Windows runner for engine tests |
+| CI | GitHub Actions free-tier workflow for PB repository completion gates once configured; no-cost self-hosted Windows runner for engine/UI/installer/performance tests; never required for local product operation |
 | Dependency updates | Dependabot or Renovate pull requests |
 | Documentation | Markdown plus Architecture Decision Records |
 | Installer | Deferred decision; no-cost MSIX or permissively licensed Velopack evaluated during productization |
+| Coverage | Coverlet-compatible .NET collection plus a pinned no-cost report generator; line and branch thresholds enforced locally and in CI |
+| Mutation testing | Pinned Stryker.NET or an approved no-cost equivalent for critical validation and security code |
+| Benchmarks | Pinned BenchmarkDotNet or an approved no-cost equivalent plus end-to-end fixture resource measurement |
+| WPF UI/accessibility tests | Windows UI Automation with a pinned permissively licensed driver such as FlaUI, plus manual representative-user studies |
+| Supply-chain evidence | NuGet audit, pinned Gitleaks or equivalent secret scanning, supported static analyzers, and a pinned no-cost SBOM generator |
 
 ## 5. Why This Stack
 
@@ -141,6 +150,23 @@ No task may require a paid Visual Studio licence, the Visual Studio XAML designe
 All mandatory components have a no-cost local development path. Core code uses the .NET SDK, Git, PowerShell, Visual Studio Code, SQLite, and permissively licensed libraries. Blender is free and open source. Engine adapters must work with vendor editions available without an upfront paid subscription where the user's vendor-licence eligibility permits; Package Builder never mandates a paid tier or bundles a commercial licence.
 
 Remote Git hosting, issue tracking, update checks, and CI are collaboration conveniences. Local builds, tests, engine workers, documentation, and release composition cannot depend on a paid hosted service or on network availability after approved tools and inputs are present.
+
+### 5.6 Quality Evidence Toolchain
+
+`docs/QUALITY_AND_RELEASE_GATES.md` is normative. All selected quality tools must be free for required local or self-hosted use, installed or restored beneath the project root, version-pinned, and callable from Visual Studio Code tasks and repository scripts.
+
+The quality pipeline produces:
+
+- A criterion-level requirements-to-tests traceability matrix.
+- Unit, contract, integration, end-to-end, UI, accessibility, regression, installer, upgrade, failure-recovery, engine-fixture, and malicious-input results.
+- Overall line and branch coverage, critical-code branch coverage, trend data, and a user-approved exclusion register.
+- Mutation results for validation and security components.
+- Small, medium, and large fixture benchmark results with time, peak memory, peak disk, temporary-space, bytes read/written, machine profile, and tool-version evidence.
+- Threat-model coverage, warning-free compilation/analyzer output, dependency-vulnerability, secret, static-analysis, licence, download-integrity, and SBOM evidence.
+- Installer/portable, privilege, prerequisite, repair, upgrade, downgrade-prevention, uninstall, retained-data, diagnostic-export, and containment evidence.
+- Generated-package inventory, hashes, unexpected-content scan, validation-report consistency, and clean import/reopen evidence.
+
+The default test suite is deterministic and offline. Tests that require a network are explicitly categorized as network integration tests, run separately, and cannot be the sole evidence for behavior that can be validated locally.
 
 ## 6. System Context
 
@@ -198,6 +224,7 @@ Primary domain types:
 
 - Create and edit product manifests.
 - Inspect source inputs.
+- Produce a side-effect-free dry-run plan containing canonical paths, proposed names, actions, outputs, warnings, and resource estimates.
 - Resolve tool and engine versions.
 - Create immutable staging jobs.
 - Normalize source assets.
@@ -227,6 +254,10 @@ public interface IEngineVersionProvider;
 public interface IProcessRunner;
 public interface IArtifactStore;
 public interface IBuildHistoryStore;
+public interface IBuildPlanner;
+public interface IResourceMonitor;
+public interface IDiagnosticReportExporter;
+public interface IReleaseGateEvaluator;
 ```
 
 Version 1 adapters are compiled and registered through dependency injection. Arbitrary third-party DLL loading is intentionally deferred until signing, compatibility, and security policies exist.
@@ -284,6 +315,10 @@ It does not import models or create engine-native assets.
 - `PackageBuilder.Cli` — local automation and CI.
 
 Both call the same application services and produce identical build behavior.
+
+The WPF layer uses one accessible design system and contains no build policy. View models expose explicit loading, progress, validation, cancellation, failure, retry, and completion states. Critical setup-to-results workflows support keyboard-only and screen-reader operation, high contrast, scalable text, visible focus, predictable focus order, sensible defaults, and progressive disclosure. User input is retained independently of transient job state so a failed worker cannot erase reviewed configuration.
+
+Dry run is an application use case, not a visual mock. It resolves and validates the same manifest, paths, names, tool versions, target plan, and estimated resource requirements used by execution without changing source or generating target files. Execution records the approved plan identity and reports material differences before proceeding.
 
 ## 8. Physical Repository Structure
 
@@ -351,6 +386,8 @@ C:\Dev\PackageBuilder\
 ```
 
 Large source models, engine caches, generated packages, customer assets, and marketplace releases are never tracked by Git. They remain inside the single workspace root in ignored directories. `.gitignore` and containment tests protect that boundary.
+
+The source-controlled documentation set includes `docs/QUALITY_AND_RELEASE_GATES.md`. PB-1801 also maintains a criterion-level traceability record in a documented source-controlled format, while large generated test reports and release evidence remain beneath ignored `artifacts` and `logs` directories.
 
 ## 9. Runtime Data Structure
 
@@ -763,12 +800,22 @@ Expected external failures are represented as results rather than unhandled exce
 
 ## 22. Security and Source Safety
 
+- Maintain a versioned threat model for archives, FBX/GLB models, textures, embedded scripts/executables, engine projects, plugins, managed downloads, external processes, generated packages, and update/network boundaries.
 - Treat downloaded models and archives as untrusted input.
-- Defend against ZIP path traversal, decompression bombs, reparse points, and filename collisions.
+- Defend against ZIP path traversal, decompression bombs, excessive expansion ratios, nesting/file-count abuse, symlink/reparse-point escapes, duplicate destinations, command injection, unsafe process arguments, and filename collisions.
+- Before extraction, validate compressed and projected extracted sizes, expansion ratio, file count, nesting, extension policy, duplicate/canonical destinations, and the final contained target.
 - Restrict each worker to its job staging and template clone directories where practical.
 - Do not execute scripts found inside product source archives.
 - Do not interpolate filenames into shell command strings.
 - Store no GitHub, Fab, Unity, or Epic credentials in manifests or source control.
+- Store no token, credential, or private key in source code, logs, test fixtures, manifests, generated documentation, or generated packages.
+- Run external tools with the least privilege practical, isolated contained working directories, explicit arguments, bounded idle/total timeouts, cancellation, and verified cleanup.
+- Redact secrets and sensitive paths from logs, reports, support bundles, diagnostics, process records, and user-facing errors through tested policy.
+- Pin managed downloads and dependencies and verify vendor checksums and digital signatures where available. Retain verification evidence beneath the project root.
+- Generate a machine-readable SBOM for releases and run no-cost dependency-vulnerability, secret, static-analysis, and licence checks locally and in approved CI.
+- Treat compiler and approved analyzer warnings as errors in production projects and release builds; scope and justify any suppression.
+- Do not add telemetry, uploads, cloud processing, update communication, or other external communication without explicit user consent, purpose disclosure, and documented offline/disable behavior.
+- Document private vulnerability reporting, triage severity, response targets, dependency-update review, emergency patching, and disclosure procedures.
 - Keep the application local/offline by default except update checks and user-approved downloads.
 - Verify every managed input, tool, download, log, runtime-data, cache, temporary, and output destination resolves beneath `C:\Dev\PackageBuilder` before reading, creating, deleting, moving, or replacing project-owned files.
 - Use atomic directory promotion for completed releases.
@@ -795,6 +842,11 @@ Expected external failures are represented as results rather than unhandled exce
 - Python avoids third-party packages inside Blender unless necessary.
 - Unity package dependencies are locked in template manifests.
 - Unreal plugin/template dependencies are documented and versioned.
+- Production projects enable nullable reference types, deterministic/continuous-integration builds, strict supported analyzers, and compiler/analyzer warnings as errors.
+- Analyzer suppressions are narrow, documented, tested where applicable, and included in review evidence.
+- Architecture tests enforce that domain logic has no dependency on WPF, Blender, Unity, Unreal, persistence implementations, filesystem implementations, or marketplace adapters.
+- Expected failures cross boundaries through typed, versioned contracts and explicit result/error values; dependency injection occurs at composition boundaries.
+- Important architecture, security, compatibility, dependency, installation, privacy, and quality decisions are recorded in ADRs.
 
 ### Automated Updates
 
@@ -805,7 +857,13 @@ Dependency update bots open pull requests. Updates merge only after:
 - Security/licence review passes.
 - Relevant engine smoke tests pass.
 
+Every code review uses a checklist covering correctness, mapped requirements/tests, UX/accessibility impact, performance evidence, security/threat-model impact, containment, dependency/licence impact, diagnostics, and documentation. No review may rely on an unsupported claim of best practice, security, speed, or production readiness.
+
 ## 24. Testing Strategy
+
+The requirements-to-tests traceability matrix maps every normative requirement and PB acceptance criterion to an owner, at least one concrete test ID, fixture, evidence location, and status. Approved manual or documentary verification may be recorded in addition to, but never instead of, a test. Missing or stale mappings are release-blocking. Test counts, coverage, and mutation scores supplement rather than replace criterion-level evidence.
+
+The default unit/contract/integration suite is deterministic and offline. Network-dependent tests are explicitly categorized as network integration tests, execute separately, and cannot be the sole evidence for behavior that can be verified locally. Repeated runs must produce equivalent logical results and stable reports apart from declared timestamps, durations, and environment measurements.
 
 ### 24.1 Unit Tests
 
@@ -861,11 +919,36 @@ Fixtures exercise albedo, normal, metallic, roughness, emission, optional alpha,
 
 Engine preview renders are compared with approved reference images using tolerant perceptual metrics. A difference does not automatically fail when an engine renderer intentionally changes, but it requires review before promoting a new engine version.
 
+### 24.7 Coverage and Mutation
+
+- Measure and trend line and branch coverage for production code.
+- Enforce at least 90% line coverage and 85% branch coverage overall.
+- Enforce 100% branch coverage for security validation, path handling, naming, manifest validation, and package-integrity code.
+- Require written technical justification and explicit user approval for every exclusion; retain exclusions in the evidence bundle.
+- Mutation-test critical validation and security components with approved thresholds based on a measured baseline.
+- Treat surviving high-risk mutants as blocking until killed or explicitly reviewed and approved by the user.
+
+### 24.8 Complete Product and Failure Matrix
+
+All five product cases run against portable, Unity, and Unreal targets wherever applicable. Representative golden fixtures cover valid static, rigged, animated, set, and collection behavior. Boundary/security suites cover corrupt, incomplete, malicious, unusually large, deeply nested, long-path, Unicode, and resource-pressure inputs. The portfolio includes unit, contract, integration, end-to-end, UI, regression, installer, upgrade, and failure-recovery tests.
+
+### 24.9 UX, Accessibility, and Usability
+
+Critical setup, inspect, configure, dry-run, build, cancel, diagnose, retry/resume, and results-review workflows have deterministic UI automation. Accessibility evidence covers keyboard-only operation, screen-reader semantics, high contrast, scalable text, visible focus, focus order, actionable errors, and preserved input. Representative first-time users validate approved scenarios and success criteria; automated accessibility checks do not replace usability studies.
+
+### 24.10 Installation and Upgrade
+
+Clean-machine tests cover installer and portable delivery where approved, privilege/elevation boundaries, prerequisites, first run, repair, supported upgrade, downgrade prevention, interrupted operations, uninstall, user-data preservation, diagnostics export, root containment, and the free Visual Studio Code workflow.
+
+### 24.11 Evidence Retention and Release Evaluation
+
+Generated test, coverage, mutation, benchmark, accessibility, usability, analyzer, vulnerability, secret-scan, static-analysis, licence, SBOM, installation, package-integrity, and engine-import evidence is written beneath ignored `artifacts` or `logs` paths. The release evaluator validates schema, freshness, commit/tool identity, threshold results, mapped requirements, and approved exceptions. Missing, stale, unreadable, contradictory, or failing evidence blocks release.
+
 ## 25. Continuous Integration
 
 ### GitHub-Hosted Workflow
 
-When enabled on a GitHub Free repository, runs on each pull request:
+After PB-0009 configures repository CI, the GitHub Free workflow runs on each pull request:
 
 - Restore with locked dependency versions.
 - Build .NET solution.
@@ -873,7 +956,9 @@ When enabled on a GitHub Free repository, runs on each pull request:
 - Run formatting/static checks.
 - Validate JSON schemas and example manifests.
 - Build documentation links/index.
-- Scan dependencies and secrets.
+- Enforce warning-free production builds and approved line/branch coverage thresholds.
+- Run offline deterministic suites and validate the requirement-to-test mappings affected by the change.
+- Scan dependencies, secrets, static analysis, licences, unexpected large files, and SBOM generation through no-cost tools.
 
 The same restore, build, format, schema, and test commands are runnable locally from Visual Studio Code. Hosted CI is not required to develop or operate Package Builder, and no paid runner capacity is an architecture dependency.
 
@@ -889,6 +974,12 @@ Runs on a controlled Windows workstation because Unity and Unreal installations 
 - Candidate engine promotion suite.
 
 Engine integration CI never publishes marketplace output automatically.
+
+### Release Gate Workflow
+
+The fail-closed release gate consumes local or self-hosted evidence for traceability, required tests, coverage, mutation, engine fixtures, clean import/reopen, accessibility, representative-user validation, performance budgets, vulnerabilities, secrets, static analysis, SBOM, installer lifecycle, and package integrity. It fails when evidence is absent, stale, contradictory, below threshold, or associated with a different commit/tool lock. It never publishes automatically; Git commits, tags, pushes, merges, pull requests, and releases remain user-controlled under `AGENTS.md`.
+
+The same gate is runnable from a Visual Studio Code terminal without a paid hosted service. GitHub Actions may mirror core checks within the GitHub Free allowance, and no-cost self-hosted Windows runners execute engine, UI, installer, and performance evidence.
 
 ## 26. Observability and Supportability
 
@@ -908,6 +999,8 @@ The support bundle command collects manifests, versions, logs, and reports while
 
 ## 27. Performance and Concurrency
 
+- Define user-approved numeric elapsed-time, peak-memory, peak-project-disk, and temporary-space budgets for small, medium, and large versioned fixtures and each applicable stage/target.
+- Benchmark with recorded fixture hashes, CPU/memory/storage/OS profile, exact tool versions, warm-up policy, sample count, variance, and regression thresholds.
 - Lightweight inspection and hashing can run concurrently.
 - Blender workers use a configurable small concurrency limit.
 - Unity and Unreal builds default to one writer per engine installation/template family.
@@ -915,6 +1008,11 @@ The support bundle command collects manifests, versions, logs, and reports while
 - Disk-space checks run before copying, extracting, rendering, or building.
 - Large files are streamed rather than loaded fully into memory.
 - Cancellation is cooperative first and forceful only after a timeout.
+- Every long-running .NET operation propagates `CancellationToken`; worker processes receive equivalent cancellation; all long-running work uses bounded concurrency, idle and total timeouts, and verified cleanup.
+- Cache use requires tested content identity, invalidation, concurrency, corruption recovery, and exact version compatibility.
+- Avoid unnecessary FBX, GLB, texture, archive, and engine-project copies while preserving immutable-source and containment guarantees.
+- Record stage/total durations, peak process memory, peak contained project-disk and temporary-space use, and bytes read/written in every build report.
+- Optimize only from reproducible benchmark evidence and never at the expense of correctness, determinism, security, accessibility, or source safety.
 
 ## 28. Distribution Strategy
 
@@ -922,12 +1020,15 @@ Version 1 is a developer-operated repository application with a fully local, no-
 
 Productization later adds:
 
-- Signed desktop installer.
+- Simple signed desktop installer plus a portable distribution where technically practical; any rejected portable path requires evidence and user approval.
 - Self-contained .NET deployment.
-- Engine/tool discovery wizard.
+- Prerequisite and permission checks for .NET, Blender, Unity, Unreal, required modules, disk space, and project-root containment.
+- Guided first-run engine/tool discovery, missing-tool explanations, and repair flows without silent engine installation or third-party licence acceptance.
 - Optional update channel.
-- Crash/support bundle flow.
+- Redacted in-application diagnostic export and crash/support bundle flow.
 - Profile import/export.
+
+Installation avoids administrator access unless a documented component genuinely requires elevation. Lifecycle tests cover fresh installation, portable startup, repair, supported upgrade, downgrade prevention, interrupted operations, uninstall, and preservation of user projects, source assets, generated packages, release artifacts, and other data not explicitly selected for removal.
 
 Blender, Unity, and Unreal are not redistributed in Package Builder releases. For this workspace, approved installations are acquired through vendor-authorized channels into versioned directories beneath `C:\Dev\PackageBuilder\tools`; selected build executables cannot resolve outside the project root. Vendor licence eligibility remains the operator's responsibility, but Package Builder does not mandate a paid edition or subscription.
 
@@ -943,6 +1044,11 @@ The following ADRs should be created when implementation begins:
 6. `ADR-0006-sqlite-build-history.md`
 7. `ADR-0007-compiled-in-adapters-for-v1.md`
 8. `ADR-0008-marketplace-requirements-profiles.md`
+9. `ADR-0009-requirements-traceability-and-release-evidence.md`
+10. `ADR-0010-accessible-guided-dry-run-workflow.md`
+11. `ADR-0011-threat-model-secrets-and-network-consent.md`
+12. `ADR-0012-quality-toolchain-and-thresholds.md`
+13. `ADR-0013-installer-portable-and-lifecycle-safety.md`
 
 Each ADR records context, decision, alternatives, consequences, and migration considerations.
 
@@ -996,6 +1102,11 @@ The second vertical slice repeats this flow with `Silverwing_Talonbow`, includin
 | Long paths break tools | One short project root, contained subdirectories, and path-length validation |
 | Duplicate/generated files enter Git | Comprehensive `.gitignore`, CI size checks, and secret scans |
 | Test fixtures have unclear licences | Use self-created or explicitly licensed minimal fixtures only |
+| Coverage masks missing behavior | Criterion-level traceability, mutation tests, hostile inputs, and evidence review |
+| Performance regresses on real assets | Approved fixture budgets, repeatable benchmarks, trends, and fail-closed release checks |
+| UI is inaccessible or confusing | Accessible design system, deterministic UI/accessibility tests, and representative first-time-user studies |
+| Installer damages or removes user data | Privilege boundaries plus fresh/repair/upgrade/downgrade/uninstall and retained-data tests |
+| Quality evidence is stale or contradictory | Commit/tool-bound evidence schemas and a fail-closed release evaluator |
 
 ## 33. Definition of Architecture Ready
 
@@ -1005,6 +1116,7 @@ This architecture is ready for implementation when:
 - Latest Approved Stable engine policy is accepted.
 - Repository and runtime data locations are confirmed.
 - Single-root containment, no-cost tooling, and Visual Studio Code development requirements are accepted and verified.
+- `docs/QUALITY_AND_RELEASE_GATES.md`, stable quality requirement IDs, ownership, traceability schema, threat-model scope, accessibility-critical workflows, performance-budget method, and fail-closed release conditions are accepted.
 - Product and publisher manifest fields are approved.
 - One test fixture exists for each product case.
 - .NET 10 SDK is installed.

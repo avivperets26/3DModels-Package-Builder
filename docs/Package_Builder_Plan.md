@@ -35,6 +35,13 @@ The publisher root is configurable. `AvivPeretsFBX` is the default, but another 
 - Keep engine targets and marketplace targets independent. Unity, Unreal, FBX, and GLB describe deliverables; Fab and future stores describe packaging, media, documentation, and listing rules.
 - Keep all project files, managed tools, downloads, logs, runtime data, caches, and generated artifacts beneath `C:\Dev\PackageBuilder`; no sibling data root or user-profile fallback is permitted.
 - Require a no-cost development path using Visual Studio Code and command-line tooling. Paid Visual Studio, paid software editions, paid subscriptions, and paid hosted services are not prerequisites.
+- Treat `docs/QUALITY_AND_RELEASE_GATES.md` as the normative quality baseline for user experience, testing, performance, security, installation, engineering evidence, and release decisions.
+- Use a consistent accessible desktop design system with keyboard-only operation, screen-reader support, high contrast, scalable text, clear focus, guided defaults, progressive disclosure, and deterministic UI tests for critical workflows.
+- Preview planned file and package changes before execution; preserve reviewed input after failure; show stage, progress, elapsed time, cancellation, actionable errors, and safe retry without presenting raw stack traces as the primary user-facing error.
+- Maintain requirement-to-test traceability across every PB acceptance criterion, all five product cases, and all applicable targets. Coverage, mutation, benchmark, accessibility, security, installation, and package-integrity evidence are release inputs rather than optional metrics.
+- Define measured time, memory, disk, and regression budgets for representative fixture sizes; stream large data, bound concurrency, and optimize only from reproducible evidence.
+- Maintain a threat model, verify downloads and dependencies, prevent unsafe archive/process behavior, redact sensitive data, generate an SBOM, and require explicit consent before telemetry, uploads, or other external communication.
+- Fail closed at release time when required quality evidence is missing, stale, contradictory, or outside an approved threshold.
 
 ## 3. High-Level Architecture
 
@@ -617,6 +624,16 @@ Documentation is generated from UTF-8 templates to prevent corrupted characters 
 - No missing materials or unexpected helpers.
 - Set/collection item count matches the manifest.
 
+### Quality and Release Gate
+
+- Every normative requirement and PB acceptance criterion maps to at least one passing test in the traceability matrix; approved manual or documentary evidence may supplement but never replace the required test.
+- Required unit, contract, integration, end-to-end, UI, regression, installer, upgrade, failure-recovery, engine-fixture, and clean-reimport/reopen tests pass.
+- Overall coverage is at least 90% line and 85% branch; security validation, path handling, naming, manifest validation, and package-integrity code maintain 100% branch coverage.
+- Critical validation and security mutation thresholds pass, and every exclusion or surviving high-risk mutant has explicit user approval.
+- Approved small, medium, and large fixture performance budgets pass and every build report contains duration and peak-resource evidence.
+- No unapproved critical/high vulnerability, accessibility-critical failure, installation-lifecycle failure, or generated-package integrity/import failure remains.
+- Missing, stale, unreadable, or contradictory evidence blocks release. A percentage alone never proves that a requirement is satisfied.
+
 ## 13. Build Output and Reporting
 
 Each build produces:
@@ -630,6 +647,8 @@ artifacts/Builds/<PublisherRoot>/<FolderName>/<Version>/
 ├── Reports/
 │   ├── ValidationReport.html
 │   ├── ValidationReport.json
+│   ├── ResourceMetrics.json
+│   ├── PackageIntegrity.json
 │   └── BuildLog.txt
 └── Manifest/
     └── product.json
@@ -642,6 +661,16 @@ Build status is one of:
 - `Failed` — no release package is produced.
 
 ## 14. User Interface
+
+### Interaction, Accessibility, and Recovery
+
+- Use one documented desktop design system for layout, typography, spacing, colour, controls, state, validation, and destructive actions.
+- Make critical workflows operable by keyboard and screen reader, with high-contrast support, scalable text, meaningful accessible names, predictable focus order, and clearly visible focus.
+- Guide first-time users through setup, source inspection, configuration, dry run, build, validation, recovery, and result review with sensible defaults and progressive disclosure.
+- Show a dry-run summary of affected assets, normalized names, contained paths, planned actions, requested outputs, warnings, and estimated resource use before a file-changing or generating operation begins.
+- During work, show current stage, measurable progress, elapsed time, and safe cancellation. Preserve user input after recoverable failure and explain retry/resume scope.
+- Errors identify the failed step, affected asset, consequence, and corrective action. Raw stack traces remain in redacted diagnostics rather than serving as the primary error.
+- Validate critical workflows through deterministic UI/accessibility automation and representative first-time-user studies with approved success criteria.
 
 ### Main Screen
 
@@ -714,6 +743,8 @@ The repository name is `package-builder`. Code namespaces begin with `PackageBui
 - Create one verified source fixture for each of the five cases.
 - Record required Unity and Unreal versions.
 - Decide the default pivot, scale, collision, and normal-map policies.
+- Assign stable quality requirement IDs, owners, test evidence, and release gates in the requirements-to-tests traceability matrix.
+- Approve the initial threat model, fixture-size definitions, performance-budget method, accessibility-critical workflow list, and allowed network-integration test classification.
 
 Exit condition: manifests for all five fixtures are approved.
 
@@ -755,6 +786,8 @@ Primary fixtures: one equipment set and one multi-weapon collection.
 - Add duplicate-file, path-length, naming, and dependency validators.
 - Add HTML validation report.
 - Test package import into clean Unity projects.
+- Complete critical UI/accessibility automation and representative first-time-user validation.
+- Establish coverage and mutation baselines, performance budgets, resource reporting, security scans, and fail-closed quality evidence aggregation.
 
 ### Phase 5 — Unreal Pipeline
 
@@ -768,6 +801,8 @@ Primary fixtures: one equipment set and one multi-weapon collection.
 ### Phase 6 — Productization
 
 - Installer and engine-path detection.
+- Portable distribution where technically practical, prerequisite checks, guided first run, repair, and redacted diagnostic export.
+- Fresh-install, repair, upgrade, downgrade-prevention, interrupted-operation, uninstall, privilege, and retained-user-data validation.
 - Publisher profile manager.
 - Build history and versioning.
 - Batch queue.
@@ -775,6 +810,16 @@ Primary fixtures: one equipment set and one multi-weapon collection.
 - End-user documentation and recovery procedures.
 
 ## 16. Initial Acceptance Tests
+
+### Cross-Cutting Quality Acceptance
+
+- The traceability matrix maps every applicable product requirement and PB acceptance criterion to concrete evidence.
+- Overall line/branch coverage and critical-code 100% branch thresholds pass with no unapproved exclusions.
+- Critical security and validation mutation targets pass or have explicitly approved reviewed exceptions.
+- Small, medium, and large fixture benchmarks remain inside approved time, memory, disk, temporary-space, and regression budgets.
+- Keyboard-only, screen-reader, high-contrast, scalable-text, focus, dry-run, cancellation, failure-preservation, and safe-retry workflows pass automated and representative-user validation.
+- Threat-model tests, warning-free release builds, SBOM generation, dependency/vulnerability/secret/static scans, and download signature/checksum checks pass.
+- Installer/portable, prerequisites, first run, repair, upgrade, downgrade prevention, uninstall, diagnostic export, user-data preservation, containment, and free Visual Studio Code workflows pass.
 
 ### Static Fixture
 
@@ -826,6 +871,11 @@ Package Builder version 1 is complete when:
 - A failed validation cannot be mislabeled as a successful release build.
 - All tools, downloads, logs, runtime data, caches, and generated artifacts remain beneath the single project root.
 - A clean workstation can develop, build, test, and run the project with Visual Studio Code and no paid software, subscription, or hosted-service requirement.
+- Every normative requirement and PB acceptance criterion has current passing evidence in the requirements-to-tests traceability matrix.
+- Required test layers, five-case target fixtures, coverage thresholds, mutation thresholds, accessibility validation, security checks, approved performance budgets, installation lifecycle tests, SBOM, and package-integrity/clean-import gates pass.
+- Every build report includes stage/total durations, peak process memory, peak contained project-disk and temporary-space use, and byte-transfer metrics.
+- The release evidence bundle contains no missing, stale, unreadable, contradictory, or unapproved result, vulnerability, exclusion, or exception.
+- Product and release claims are limited to what the retained evidence demonstrates.
 
 ## 18. Standards References
 
