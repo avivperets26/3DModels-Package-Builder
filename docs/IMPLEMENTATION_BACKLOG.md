@@ -53,7 +53,10 @@ Every case supports a configurable publisher root such as `AvivPeretsFBX`; no pu
 
 - `[ ]` — not complete.
 - `[x]` — complete and verified.
-- Active work is recorded in the Active Work table below; do not invent additional checkbox symbols.
+- 🟢 **DONE** — every acceptance, test, Git/GitHub, and user-confirmation gate has passed; only then may the task use `[x]` and enter the Completion Log.
+- 🟡 **PROCESS** — work is active or has reached an intermediate lifecycle state, but at least one completion gate remains; the task stays `[ ]`.
+- 🔴 **BLOCKED** — a specific unresolved condition prevents meaningful progress; record that blocker and keep the task `[ ]`.
+- Lifecycle markers supplement the `[ ]` and `[x]` checkboxes; do not invent additional checkbox symbols or treat a marker as completion evidence.
 
 ### Git Authority
 
@@ -127,31 +130,38 @@ feat/PB-0607-unity-urp-material-compiler
 
 ## 3. Active Work
 
-| Task | Documented branch | Owner | Started | Current local/remote state | Current blocker |
-|---|---|---|---|---|---|
-| PB-0001 | `chore/PB-0001-dotnet-10-sdk` | Codex for local validation; user for Git gates | 2026-07-21 | SDK `10.0.302` is installed and validated locally. Baseline commit `1562abfef49071e83978e7573499d07e629b0c53` is preserved. Remote branch `origin/chore/PB-0001-dotnet-10-sdk` exists at `fc34bffff838cac41198940ed54b91b25c33f838`. Lifecycle state: pushed, but not CI-passed, merged, or complete. | Local `origin` uses HTTPS instead of the required SSH URL, and current SSH authentication evidence is absent. No remote `main`, pull request, GitHub CI run, merge, or user completion confirmation exists. The bootstrap CI dependency cycle remains unresolved. |
-| PB-0013 | `docs/PB-0013-quality-release-gates` | Codex for documentation/validation; user for Git gates | 2026-07-22 | Quality baseline commit `fc34bffff838cac41198940ed54b91b25c33f838` is present on the remote PB-0001 branch. The current documentation-synchronization edits to `AGENTS.md` and this backlog are implemented and validated locally; they are not staged, committed, or pushed. No separate local or remote PB-0013 branch exists. | The pushed baseline commit creates a documented one-task-per-branch conflict. The current synchronization edits require user-controlled Git handling. No remote `main`, pull request, CI run, merge, or user completion confirmation exists. |
+| Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
+|---|---|---|---|---|---|---|
+| PB-0001 | 🟡 **PROCESS** | `chore/PB-0001-dotnet-10-sdk` | Codex for local revalidation; user for Git and completion gates | 2026-07-21 | Local and remote feature branch are at `c68ff924eb3162efcea79af27f19bff2b9dad896`. Pull request [#2](https://github.com/avivperets26/3DModels-Package-Builder/pull/2) is open against `main`. The complete 2026-07-22 local revalidation passed: SDK/version/runtime selection, `global.json`, both official SHA-512 hashes, both Microsoft signatures, all 5,611 installed ZIP files, containment, WPF templates, clean restore, Release build with 0 warnings and 0 errors, evidence logs, old-staging absence, Git exclusions, and repository checks. No GitHub workflow run exists for the feature commit. | Conflict content is resolved locally in the working tree, but the merge index remains unmerged until the user stages the resolved files. The user must then complete and push the merge into `main` and explicitly confirm PB-0001 completion. Local `origin` remains configured with HTTPS rather than the previously required SSH URL, and current SSH authentication evidence is absent. The one-time PB-0001 CI bootstrap exception below waives only the missing GitHub CI result. |
+| PB-0013 | 🟡 **PROCESS** | `docs/PB-0013-quality-release-gates` | User for remaining completion confirmation | 2026-07-22 | Remote feature commit `a1032c48f2a8d0dc98d0c589f1a845605950952b` was merged by pull request [#1](https://github.com/avivperets26/3DModels-Package-Builder/pull/1) into public default branch `main` at `13e5875b686c3219e3571d45ceaa93c463e881ff`. | No GitHub CI evidence or explicit user completion confirmation is recorded. The historical one-task-per-branch conflict remains documented below. |
 
 ### Verified Bootstrap Repository State
 
 Verified on 2026-07-22 using read-only local Git inspection and GitHub repository, branch, workflow-run, and pull-request evidence:
 
-- Local `main` is at `fc34bffff838cac41198940ed54b91b25c33f838` and tracks `origin/chore/PB-0001-dotnet-10-sdk`.
-- Local `origin` is configured as `https://github.com/avivperets26/3DModels-Package-Builder.git`, not the previously required SSH URL; current SSH authentication has not been verified in this handoff.
-- The only verified remote branch is `chore/PB-0001-dotnet-10-sdk`, also at `fc34bffff838cac41198940ed54b91b25c33f838`; it is currently the remote default branch.
-- Remote `main` does not exist.
-- No pull request or GitHub Actions workflow run exists for the verified commit.
+- Local `main` is at `13e5875b686c3219e3571d45ceaa93c463e881ff`, tracks `origin/main`, and is resolving a merge from PB-0001 commit `c68ff924eb3162efcea79af27f19bff2b9dad896`.
+- Remote `main` exists at `13e5875b686c3219e3571d45ceaa93c463e881ff` and is the GitHub default branch.
+- Remote branches `chore/PB-0001-dotnet-10-sdk` and `docs/PB-0013-quality-release-gates` exist at `c68ff924eb3162efcea79af27f19bff2b9dad896` and `a1032c48f2a8d0dc98d0c589f1a845605950952b`, respectively.
+- Pull request #1 is merged; pull request #2 is open and was reported as conflicting before this local content resolution.
+- No GitHub workflow run exists for PB-0001 commit `c68ff924eb3162efcea79af27f19bff2b9dad896`; the documented PB-0001-only CI exception applies.
+- Local `origin` is configured as `https://github.com/avivperets26/3DModels-Package-Builder.git`, not the previously required SSH URL; current SSH authentication has not been verified.
 - The actual repository is [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder), and public visibility is an approved user decision as of 2026-07-22.
 - The planned repository name is `package-builder`, while the actual GitHub repository name is `3DModels-Package-Builder`; the discrepancy is unresolved.
-- The Completion Log remains empty because no task has user-confirmed commit, push, CI, and merge evidence satisfying every completion gate.
+- The Completion Log remains empty because no task has every required gate and explicit user completion confirmation recorded.
 
 ### Unresolved Bootstrap Decisions
 
-- **Bootstrap CI dependency cycle:** the global completion rule requires GitHub CI before PB-0001 can complete, while PB-0009 creates core CI and depends on PB-0006 and PB-0008, which are downstream of PB-0001 through the E00 dependency chain. A user-approved decision is required to add earlier bootstrap CI, revise the dependency/completion workflow, or document a scoped exception.
-- **Branch topology:** local `main` tracks the remote PB-0001 feature branch, the remote default is that feature branch, and remote `main` is absent. No branch creation, retargeting, or merge resolution is selected here.
 - **Remote transport:** local `origin` uses HTTPS rather than the required SSH URL, and current SSH authentication evidence is absent. No remote URL or authentication change is selected here.
 - **One-task-per-branch conflict:** PB-0013 commit `fc34bffff838cac41198940ed54b91b25c33f838` was pushed on the PB-0001 branch rather than `docs/PB-0013-quality-release-gates`. No history rewrite, branch move, or exception is selected here.
 - **Repository name:** planning specifies `package-builder`, while the actual repository is `3DModels-Package-Builder`. No rename or documentation-policy change is selected here.
+
+### PB-0001 One-Time GitHub CI Bootstrap Exception
+
+- **Scope:** PB-0001 only, solely for verification of the machine-local repository-contained .NET SDK installation.
+- **Reason:** PB-0001 must establish and verify the local SDK before the repository's CI infrastructure exists; no GitHub workflow is currently available to execute this machine-local installation validation.
+- **Approved:** 2026-07-22, explicitly by the user.
+- **Effect:** the GitHub CI-pass completion gate is waived only for PB-0001. Every local PB-0001 acceptance criterion, integrity check, containment check, build validation, documentation update, user-controlled commit/push/integration gate, and explicit user completion confirmation remains required.
+- **No precedent:** this exception does not weaken, replace, defer, or create precedent for CI requirements on PB-0002 or any later task. Any future exception requires separate explicit user approval and documentation.
 
 ## 4. Completion Log
 
@@ -209,7 +219,7 @@ flowchart LR
 
 **Goal:** An approved public GitHub repository with a buildable, testable .NET 10 solution and agreed project rules.
 
-- [ ] **PB-0001 — Install and verify the .NET 10 LTS SDK** — **P0**
+- [ ] **PB-0001 — Install and verify the .NET 10 LTS SDK** — **P0** — 🟡 **PROCESS**
   - Branch: `chore/PB-0001-dotnet-10-sdk`
   - Depends on: none
   - Done when: official release metadata identifies the approved active LTS SDK; SDK `10.0.302` and its verified downloads live beneath the project root; Microsoft SHA-512/signature and extracted-file integrity checks pass; `dotnet --version`, `dotnet --list-sdks`, and `dotnet --info` resolve only the repository-local SDK; WPF CLI templates are available for Visual Studio Code development; all CLI state/temp/log paths are contained; the old staging transfer is removed only after verification; and the environment baseline is committed.
