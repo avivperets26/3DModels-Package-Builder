@@ -1,0 +1,30 @@
+name: Repository baseline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate-repository-baseline:
+    name: Validate repository baseline
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out full reachable history
+        # actions/checkout v7.0.0, reviewed and pinned to its verified immutable release commit.
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Run repository baseline validation
+        shell: pwsh
+        run: |
+          & (Join-Path $env:GITHUB_WORKSPACE 'scripts\Test-RepositoryBaseline.ps1') `
+            -RepositoryRoot $env:GITHUB_WORKSPACE `
+            -RequireTrackedFiles

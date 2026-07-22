@@ -105,7 +105,7 @@ The first Unreal implementation uses Python. A minimal C++ editor plugin is intr
 | Python formatting/linting | Ruff |
 | Unity tests | Unity Test Framework for Editor tests |
 | Unreal tests | Python smoke tests plus Unreal Automation Tests where necessary |
-| CI | GitHub Actions free-tier workflow for PB repository completion gates once configured; no-cost self-hosted Windows runner for engine/UI/installer/performance tests; never required for local product operation |
+| CI | PB-0002 minimal GitHub Actions repository-bootstrap validation; PB-0009 full solution restore/build/test CI; no-cost self-hosted Windows runner for engine/UI/installer/performance tests; never required for local product operation |
 | Dependency updates | Dependabot or Renovate pull requests |
 | Documentation | Markdown plus Architecture Decision Records |
 | Installer | Deferred decision; no-cost MSIX or permissively licensed Velopack evaluated during productization |
@@ -949,9 +949,17 @@ Generated test, coverage, mutation, benchmark, accessibility, usability, analyze
 
 ## 25. Continuous Integration
 
-### GitHub-Hosted Workflow
+### PB-0002 Bootstrap Repository Workflow
 
-After PB-0009 configures repository CI, the GitHub Free workflow runs on each pull request:
+Before the .NET solution and test projects exist, PB-0002 provides a minimal GitHub Free workflow for repository-completion evidence. It runs on pull requests targeting `main` and pushes to `main` on `windows-latest`, checks out full history with credentials disabled, and invokes the same dependency-free PowerShell validator used locally.
+
+The bootstrap validator is limited to required tracked files, the approved `global.json` SDK pin, PowerShell parsing, Markdown structure and local links, backlog task/dependency/branch/lifecycle/Completion Log consistency, current repository secret/personal-path/binary/generated/runtime exclusions, `git diff --check`, and reachable-history integrity. GitHub containment resolves from `GITHUB_WORKSPACE`; the workflow does not require the hosted checkout to use `C:\Dev\PackageBuilder`.
+
+Every action reference is pinned to a reviewed immutable commit SHA. The workflow does not restore or build the future application, install .NET or any engine, upload artifacts, add telemetry, publish outputs, or require a paid service.
+
+### PB-0009 Full GitHub-Hosted Workflow
+
+PB-0009 establishes the GitHub Free solution-level workflow on each pull request:
 
 - Restore with locked dependency versions.
 - Build .NET solution.
@@ -959,9 +967,14 @@ After PB-0009 configures repository CI, the GitHub Free workflow runs on each pu
 - Run formatting/static checks.
 - Validate JSON schemas and example manifests.
 - Build documentation links/index.
+
+Later quality and supply-chain tasks extend that same CI path to:
+
 - Enforce warning-free production builds and approved line/branch coverage thresholds.
 - Run offline deterministic suites and validate the requirement-to-test mappings affected by the change.
 - Scan dependencies, secrets, static analysis, licences, unexpected large files, and SBOM generation through no-cost tools.
+
+PB-0009 retains or invokes the PB-0002 repository-bootstrap validation before adding solution restore, build, formatting, and automated application tests. PB-0009, not PB-0002, owns that full application CI foundation; later backlog tasks own coverage, analyzer, dependency, licence, secret, static-analysis, and SBOM gates.
 
 The same restore, build, format, schema, and test commands are runnable locally from Visual Studio Code. Hosted CI is not required to develop or operate Package Builder, and no paid runner capacity is an architecture dependency.
 
