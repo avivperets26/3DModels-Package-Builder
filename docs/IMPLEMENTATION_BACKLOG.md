@@ -2,8 +2,10 @@
 
 **Document status:** Active project backlog
 **Repository:** `C:\Dev\PackageBuilder`
+**GitHub repository:** [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder)
+**GitHub visibility:** Public, approved by the user on 2026-07-22
 **Runtime data:** `C:\Dev\PackageBuilder\runtime-data`
-**Default branch:** `main`
+**Planned default branch:** `main`
 **Last reviewed:** 2026-07-22
 
 ## 1. Purpose
@@ -125,9 +127,31 @@ feat/PB-0607-unity-urp-material-compiler
 
 ## 3. Active Work
 
-| Task | Branch | Owner | Started | Current blocker |
-|---|---|---|---|---|
-| PB-0001 | `chore/PB-0001-dotnet-10-sdk` | Codex | 2026-07-21 | Local install, verification, and baseline commit are complete; push, CI, and merge gates are unavailable during repository bootstrap, so the task remains open. |
+| Task | Documented branch | Owner | Started | Current local/remote state | Current blocker |
+|---|---|---|---|---|---|
+| PB-0001 | `chore/PB-0001-dotnet-10-sdk` | Codex for local validation; user for Git gates | 2026-07-21 | SDK `10.0.302` is installed and validated locally. Baseline commit `1562abfef49071e83978e7573499d07e629b0c53` is preserved. Remote branch `origin/chore/PB-0001-dotnet-10-sdk` exists at `fc34bffff838cac41198940ed54b91b25c33f838`. Lifecycle state: pushed, but not CI-passed, merged, or complete. | Local `origin` uses HTTPS instead of the required SSH URL, and current SSH authentication evidence is absent. No remote `main`, pull request, GitHub CI run, merge, or user completion confirmation exists. The bootstrap CI dependency cycle remains unresolved. |
+| PB-0013 | `docs/PB-0013-quality-release-gates` | Codex for documentation/validation; user for Git gates | 2026-07-22 | Quality baseline commit `fc34bffff838cac41198940ed54b91b25c33f838` is present on the remote PB-0001 branch. The current documentation-synchronization edits to `AGENTS.md` and this backlog are implemented and validated locally; they are not staged, committed, or pushed. No separate local or remote PB-0013 branch exists. | The pushed baseline commit creates a documented one-task-per-branch conflict. The current synchronization edits require user-controlled Git handling. No remote `main`, pull request, CI run, merge, or user completion confirmation exists. |
+
+### Verified Bootstrap Repository State
+
+Verified on 2026-07-22 using read-only local Git inspection and GitHub repository, branch, workflow-run, and pull-request evidence:
+
+- Local `main` is at `fc34bffff838cac41198940ed54b91b25c33f838` and tracks `origin/chore/PB-0001-dotnet-10-sdk`.
+- Local `origin` is configured as `https://github.com/avivperets26/3DModels-Package-Builder.git`, not the previously required SSH URL; current SSH authentication has not been verified in this handoff.
+- The only verified remote branch is `chore/PB-0001-dotnet-10-sdk`, also at `fc34bffff838cac41198940ed54b91b25c33f838`; it is currently the remote default branch.
+- Remote `main` does not exist.
+- No pull request or GitHub Actions workflow run exists for the verified commit.
+- The actual repository is [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder), and public visibility is an approved user decision as of 2026-07-22.
+- The planned repository name is `package-builder`, while the actual GitHub repository name is `3DModels-Package-Builder`; the discrepancy is unresolved.
+- The Completion Log remains empty because no task has user-confirmed commit, push, CI, and merge evidence satisfying every completion gate.
+
+### Unresolved Bootstrap Decisions
+
+- **Bootstrap CI dependency cycle:** the global completion rule requires GitHub CI before PB-0001 can complete, while PB-0009 creates core CI and depends on PB-0006 and PB-0008, which are downstream of PB-0001 through the E00 dependency chain. A user-approved decision is required to add earlier bootstrap CI, revise the dependency/completion workflow, or document a scoped exception.
+- **Branch topology:** local `main` tracks the remote PB-0001 feature branch, the remote default is that feature branch, and remote `main` is absent. No branch creation, retargeting, or merge resolution is selected here.
+- **Remote transport:** local `origin` uses HTTPS rather than the required SSH URL, and current SSH authentication evidence is absent. No remote URL or authentication change is selected here.
+- **One-task-per-branch conflict:** PB-0013 commit `fc34bffff838cac41198940ed54b91b25c33f838` was pushed on the PB-0001 branch rather than `docs/PB-0013-quality-release-gates`. No history rewrite, branch move, or exception is selected here.
+- **Repository name:** planning specifies `package-builder`, while the actual repository is `3DModels-Package-Builder`. No rename or documentation-policy change is selected here.
 
 ## 4. Completion Log
 
@@ -183,7 +207,7 @@ flowchart LR
 
 # E00 — Repository and Development Foundation
 
-**Goal:** A private GitHub repository with a buildable, testable .NET 10 solution and agreed project rules.
+**Goal:** An approved public GitHub repository with a buildable, testable .NET 10 solution and agreed project rules.
 
 - [ ] **PB-0001 — Install and verify the .NET 10 LTS SDK** — **P0**
   - Branch: `chore/PB-0001-dotnet-10-sdk`
@@ -195,10 +219,10 @@ flowchart LR
   - Depends on: PB-0001
   - Done when: the minimal PB-0001 bootstrap repository is normalized onto `main`, existing planning documents are tracked, ignored single-root runtime directories are absent from the index, and local history contains the verified PB-0001 baseline commit.
 
-- [ ] **PB-0003 — Create the private GitHub repository and push `main`** — **P0**
+- [ ] **PB-0003 — Establish the approved public GitHub repository and push `main`** — **P0**
   - Branch: `chore/PB-0003-github-remote`
   - Depends on: PB-0002
-  - Done when: private repository `package-builder` exists under the approved GitHub profile and local `main` tracks `origin/main`.
+  - Done when: the approved public repository is documented at [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder), the planned-versus-actual repository-name discrepancy remains explicitly documented until the user resolves it separately, and local `main` tracks `origin/main`.
 
 - [ ] **PB-0004 — Add repository-safe `.gitignore` rules** — **P0**
   - Branch: `chore/PB-0004-gitignore`

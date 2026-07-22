@@ -3,6 +3,8 @@
 **Document status:** Proposed baseline architecture
 **Project:** Package Builder
 **Repository:** `C:\Dev\PackageBuilder`
+**GitHub repository:** [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder)
+**GitHub visibility:** Public, approved by the user on 2026-07-22
 **Runtime data:** `C:\Dev\PackageBuilder\runtime-data`
 **Last reviewed:** 2026-07-22
 
@@ -97,7 +99,7 @@ The first Unreal implementation uses Python. A minimal C++ editor plugin is intr
 |---|---|
 | Source control | Git |
 | Developer editor | Visual Studio Code with PowerShell and `dotnet` CLI; Visual Studio optional |
-| Remote hosting | GitHub Free, private repository initially; optional for local development and operation |
+| Remote hosting | GitHub Free, approved public repository at [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder); optional for local development and operation |
 | Unit tests | xUnit |
 | .NET formatting | `dotnet format` plus `.editorconfig` |
 | Python formatting/linting | Ruff |
@@ -826,7 +828,8 @@ Expected external failures are represented as results rather than unhandled exce
 
 ### Repository Rules
 
-- Private GitHub repository initially.
+- The approved GitHub repository is public: [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder).
+- Apply the public-repository safeguards in `AGENTS.md` to every tracked file and every handoff.
 - `main` must stay buildable.
 - Feature branches and pull requests for reviewed work.
 - Conventional or clearly scoped commit messages.
