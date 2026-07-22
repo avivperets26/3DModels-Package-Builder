@@ -51,7 +51,10 @@ Every case supports a configurable publisher root such as `AvivPeretsFBX`; no pu
 
 - `[ ]` — not complete.
 - `[x]` — complete and verified.
-- Active work is recorded in the Active Work table below; do not invent additional checkbox symbols.
+- 🟢 **DONE** — every acceptance, test, Git/GitHub, and user-confirmation gate has passed; only then may the task use `[x]` and enter the Completion Log.
+- 🟡 **PROCESS** — work is active or has reached an intermediate lifecycle state, but at least one completion gate remains; the task stays `[ ]`.
+- 🔴 **BLOCKED** — a specific unresolved condition prevents meaningful progress; record that blocker and keep the task `[ ]`.
+- Lifecycle markers supplement the `[ ]` and `[x]` checkboxes; do not invent additional checkbox symbols or treat a marker as completion evidence.
 
 ### Git Authority
 
@@ -125,9 +128,17 @@ feat/PB-0607-unity-urp-material-compiler
 
 ## 3. Active Work
 
-| Task | Branch | Owner | Started | Current blocker |
-|---|---|---|---|---|
-| PB-0001 | `chore/PB-0001-dotnet-10-sdk` | Codex | 2026-07-21 | Local install, verification, and baseline commit are complete; push, CI, and merge gates are unavailable during repository bootstrap, so the task remains open. |
+| Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
+|---|---|---|---|---|---|---|
+| PB-0001 | 🟡 **PROCESS** | `chore/PB-0001-dotnet-10-sdk` | Codex for local revalidation; user for Git and completion gates | 2026-07-21 | Local and remote feature branch are at `fc34bffff838cac41198940ed54b91b25c33f838`. Public GitHub `main` is the default branch at `13e5875b686c3219e3571d45ceaa93c463e881ff` and contains the feature commit in its ancestry. No GitHub workflow run exists. The complete 2026-07-22 local revalidation passed: SDK/version/runtime selection, `global.json`, both official SHA-512 hashes, both Microsoft signatures, all 5,611 installed ZIP files, containment, WPF templates, clean restore, Release build with 0 warnings and 0 errors, evidence logs, old-staging absence, and Git exclusions. | The current documentation updates require a user-controlled commit and push, integration into `main`, and explicit user completion confirmation. The feature branch diverges from the newer `main` documentation and may require user-controlled conflict resolution. Local `origin` remains configured with HTTPS rather than the previously required SSH URL, and current SSH authentication evidence is absent. The one-time PB-0001 CI bootstrap exception below waives only the missing GitHub CI result. |
+
+### PB-0001 One-Time GitHub CI Bootstrap Exception
+
+- **Scope:** PB-0001 only, solely for verification of the machine-local repository-contained .NET SDK installation.
+- **Reason:** PB-0001 must establish and verify the local SDK before the repository's CI infrastructure exists; no GitHub workflow is currently available to execute this machine-local installation validation.
+- **Approved:** 2026-07-22, explicitly by the user.
+- **Effect:** the GitHub CI-pass completion gate is waived only for PB-0001. Every local PB-0001 acceptance criterion, integrity check, containment check, build validation, documentation update, user-controlled commit/push/integration gate, and explicit user completion confirmation remains required.
+- **No precedent:** this exception does not weaken, replace, defer, or create precedent for CI requirements on PB-0002 or any later task. Any future exception requires separate explicit user approval and documentation.
 
 ## 4. Completion Log
 
@@ -185,7 +196,7 @@ flowchart LR
 
 **Goal:** A private GitHub repository with a buildable, testable .NET 10 solution and agreed project rules.
 
-- [ ] **PB-0001 — Install and verify the .NET 10 LTS SDK** — **P0**
+- [ ] **PB-0001 — Install and verify the .NET 10 LTS SDK** — **P0** — 🟡 **PROCESS**
   - Branch: `chore/PB-0001-dotnet-10-sdk`
   - Depends on: none
   - Done when: official release metadata identifies the approved active LTS SDK; SDK `10.0.302` and its verified downloads live beneath the project root; Microsoft SHA-512/signature and extracted-file integrity checks pass; `dotnet --version`, `dotnet --list-sdks`, and `dotnet --info` resolve only the repository-local SDK; WPF CLI templates are available for Visual Studio Code development; all CLI state/temp/log paths are contained; the old staging transfer is removed only after verification; and the environment baseline is committed.
