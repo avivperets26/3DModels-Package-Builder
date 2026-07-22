@@ -132,22 +132,21 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0001 | 🟡 **PROCESS** | `chore/PB-0001-dotnet-10-sdk` | Codex for local revalidation; user for Git and completion gates | 2026-07-21 | Local and remote feature branch are at `c68ff924eb3162efcea79af27f19bff2b9dad896`. Pull request [#2](https://github.com/avivperets26/3DModels-Package-Builder/pull/2) is open against `main`. The complete 2026-07-22 local revalidation passed: SDK/version/runtime selection, `global.json`, both official SHA-512 hashes, both Microsoft signatures, all 5,611 installed ZIP files, containment, WPF templates, clean restore, Release build with 0 warnings and 0 errors, evidence logs, old-staging absence, Git exclusions, and repository checks. No GitHub workflow run exists for the feature commit. | Conflict content is resolved locally in the working tree, but the merge index remains unmerged until the user stages the resolved files. The user must then complete and push the merge into `main` and explicitly confirm PB-0001 completion. Local `origin` remains configured with HTTPS rather than the previously required SSH URL, and current SSH authentication evidence is absent. The one-time PB-0001 CI bootstrap exception below waives only the missing GitHub CI result. |
 | PB-0013 | 🟡 **PROCESS** | `docs/PB-0013-quality-release-gates` | User for remaining completion confirmation | 2026-07-22 | Remote feature commit `a1032c48f2a8d0dc98d0c589f1a845605950952b` was merged by pull request [#1](https://github.com/avivperets26/3DModels-Package-Builder/pull/1) into public default branch `main` at `13e5875b686c3219e3571d45ceaa93c463e881ff`. | No GitHub CI evidence or explicit user completion confirmation is recorded. The historical one-task-per-branch conflict remains documented below. |
 
 ### Verified Bootstrap Repository State
 
 Verified on 2026-07-22 using read-only local Git inspection and GitHub repository, branch, workflow-run, and pull-request evidence:
 
-- Local `main` is at `13e5875b686c3219e3571d45ceaa93c463e881ff`, tracks `origin/main`, and is resolving a merge from PB-0001 commit `c68ff924eb3162efcea79af27f19bff2b9dad896`.
-- Remote `main` exists at `13e5875b686c3219e3571d45ceaa93c463e881ff` and is the GitHub default branch.
+- Local `main` and `origin/main` are at PB-0001 merge commit `e7f92aa9fc389c40bd4e3d1ee3a368e3d7f55993`.
+- Remote `main` exists at `e7f92aa9fc389c40bd4e3d1ee3a368e3d7f55993` and is the GitHub default branch.
 - Remote branches `chore/PB-0001-dotnet-10-sdk` and `docs/PB-0013-quality-release-gates` exist at `c68ff924eb3162efcea79af27f19bff2b9dad896` and `a1032c48f2a8d0dc98d0c589f1a845605950952b`, respectively.
-- Pull request #1 is merged; pull request #2 is open and was reported as conflicting before this local content resolution.
+- Pull request #1 is merged. PB-0001 pull request [#2](https://github.com/avivperets26/3DModels-Package-Builder/pull/2) is merged into `main` as `e7f92aa9fc389c40bd4e3d1ee3a368e3d7f55993`.
 - No GitHub workflow run exists for PB-0001 commit `c68ff924eb3162efcea79af27f19bff2b9dad896`; the documented PB-0001-only CI exception applies.
 - Local `origin` is configured as `https://github.com/avivperets26/3DModels-Package-Builder.git`, not the previously required SSH URL; current SSH authentication has not been verified.
 - The actual repository is [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder), and public visibility is an approved user decision as of 2026-07-22.
 - The planned repository name is `package-builder`, while the actual GitHub repository name is `3DModels-Package-Builder`; the discrepancy is unresolved.
-- The Completion Log remains empty because no task has every required gate and explicit user completion confirmation recorded.
+- The Completion Log records PB-0001 as the only completed task after the user confirmed its commit, push, pull-request, merge, validation, and approved-exception gates.
 
 ### Unresolved Bootstrap Decisions
 
@@ -169,7 +168,7 @@ Append a row whenever a task is marked `[x]`.
 
 | Task | Branch | Final commit | Pull request | Completed | Notes |
 |---|---|---|---|---|---|
-| — | — | — | — | — | — |
+| PB-0001 | `chore/PB-0001-dotnet-10-sdk` | `c68ff924eb3162efcea79af27f19bff2b9dad896` | [#2](https://github.com/avivperets26/3DModels-Package-Builder/pull/2) | 2026-07-22 | Merged into `main` as `e7f92aa9fc389c40bd4e3d1ee3a368e3d7f55993`. Only the missing CI run was waived by the approved PB-0001-only bootstrap exception; all other completion gates passed. |
 
 ## 5. Milestones
 
@@ -219,7 +218,7 @@ flowchart LR
 
 **Goal:** An approved public GitHub repository with a buildable, testable .NET 10 solution and agreed project rules.
 
-- [ ] **PB-0001 — Install and verify the .NET 10 LTS SDK** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0001 — Install and verify the .NET 10 LTS SDK** — **P0** — 🟢 **DONE**
   - Branch: `chore/PB-0001-dotnet-10-sdk`
   - Depends on: none
   - Done when: official release metadata identifies the approved active LTS SDK; SDK `10.0.302` and its verified downloads live beneath the project root; Microsoft SHA-512/signature and extracted-file integrity checks pass; `dotnet --version`, `dotnet --list-sdks`, and `dotnet --info` resolve only the repository-local SDK; WPF CLI templates are available for Visual Studio Code development; all CLI state/temp/log paths are contained; the old staging transfer is removed only after verification; and the environment baseline is committed.

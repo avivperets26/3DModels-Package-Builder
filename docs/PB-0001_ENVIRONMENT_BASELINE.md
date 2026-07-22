@@ -2,7 +2,20 @@
 
 **Recorded:** 2026-07-22
 **Project root:** `C:\Dev\PackageBuilder`
-**Task status:** 🟡 **PROCESS** — local installation and revalidation pass; PB-0001 remains open until the remaining user-controlled completion gates are satisfied.
+**Task status:** 🟢 **DONE** — all local validation and user-controlled completion gates passed, with only the missing CI run waived by the approved PB-0001-only bootstrap exception.
+
+## Completion Evidence
+
+| Item | Evidence |
+|---|---|
+| Branch | `chore/PB-0001-dotnet-10-sdk` |
+| Final validation commit | `c68ff924eb3162efcea79af27f19bff2b9dad896` |
+| Pull request | [#2](https://github.com/avivperets26/3DModels-Package-Builder/pull/2) — merged |
+| Merge commit on `main` | `e7f92aa9fc389c40bd4e3d1ee3a368e3d7f55993` |
+| Completed | 2026-07-22 |
+| CI exception | User-approved PB-0001-only bootstrap exception; only the missing GitHub CI run was waived. |
+
+The user confirmed the PB-0001 commit, push, pull-request, and merge gates. The exception creates no precedent and does not weaken CI requirements for later tasks.
 
 ## Containment Policy
 
