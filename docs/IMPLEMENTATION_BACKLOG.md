@@ -132,25 +132,23 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
+| PB-0002 | 🟡 **PROCESS** | `chore/PB-0002-initialize-repository` | User for Git and GitHub completion gates | 2026-07-22 | Local audit passed on 2026-07-22: the repository root and branch are correct; the working tree was clean before PB-0002 edits; local `main`, `origin/main`, and remote `main` shared verification checkpoint `979c2a773ebe222343d5a3d2b4f72f383b532d60`; the PB-0001 baseline is an ancestor; required files are tracked; and index, ignore, history-integrity, security, and governance checks passed. See `docs/PB-0002_REPOSITORY_BASELINE.md`. | The PB-0002 changes are not committed or pushed, GitHub CI has not run and no PB-0002 exception is approved, the branch is not merged, and explicit user completion confirmation is absent. |
 | PB-0013 | 🟡 **PROCESS** | `docs/PB-0013-quality-release-gates` | User for remaining completion confirmation | 2026-07-22 | Remote feature commit `a1032c48f2a8d0dc98d0c589f1a845605950952b` was merged by pull request [#1](https://github.com/avivperets26/3DModels-Package-Builder/pull/1) into public default branch `main` at `13e5875b686c3219e3571d45ceaa93c463e881ff`. | No GitHub CI evidence or explicit user completion confirmation is recorded. The historical one-task-per-branch conflict remains documented below. |
 
-### Verified Bootstrap Repository State
+### Dated Repository Verification Checkpoints
 
-Verified on 2026-07-22 using read-only local Git inspection and GitHub repository, branch, workflow-run, and pull-request evidence:
+The detailed PB-0002 audit is recorded in `docs/PB-0002_REPOSITORY_BASELINE.md`. Hashes below describe the state verified on 2026-07-22; they are not permanent claims about a future `HEAD` or branch tip.
 
-- Local `main` and `origin/main` are at PB-0001 merge commit `e7f92aa9fc389c40bd4e3d1ee3a368e3d7f55993`.
-- Remote `main` exists at `e7f92aa9fc389c40bd4e3d1ee3a368e3d7f55993` and is the GitHub default branch.
-- Remote branches `chore/PB-0001-dotnet-10-sdk` and `docs/PB-0013-quality-release-gates` exist at `c68ff924eb3162efcea79af27f19bff2b9dad896` and `a1032c48f2a8d0dc98d0c589f1a845605950952b`, respectively.
-- Pull request #1 is merged. PB-0001 pull request [#2](https://github.com/avivperets26/3DModels-Package-Builder/pull/2) is merged into `main` as `e7f92aa9fc389c40bd4e3d1ee3a368e3d7f55993`.
-- No GitHub workflow run exists for PB-0001 commit `c68ff924eb3162efcea79af27f19bff2b9dad896`; the documented PB-0001-only CI exception applies.
-- Local `origin` is configured as `https://github.com/avivperets26/3DModels-Package-Builder.git`, not the previously required SSH URL; current SSH authentication has not been verified.
-- The actual repository is [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder), and public visibility is an approved user decision as of 2026-07-22.
-- The planned repository name is `package-builder`, while the actual GitHub repository name is `3DModels-Package-Builder`; the discrepancy is unresolved.
-- The Completion Log records PB-0001 as the only completed task after the user confirmed its commit, push, pull-request, merge, validation, and approved-exception gates.
+- Before PB-0002 edits, the working tree was clean and `HEAD` on `chore/PB-0002-initialize-repository` was `979c2a773ebe222343d5a3d2b4f72f383b532d60`.
+- Local `main`, its `origin/main` upstream, and read-only remote `main` evidence all resolved to checkpoint `979c2a773ebe222343d5a3d2b4f72f383b532d60`.
+- GitHub reported the approved repository as public with default branch `main`; local fetch and push URLs both matched `https://github.com/avivperets26/3DModels-Package-Builder.git`.
+- PB-0001 baseline commit `1562abfef49071e83978e7573499d07e629b0c53` was a valid commit and an ancestor of the verified `main` checkpoint.
+- All required planning, governance, baseline, SDK-pin, and environment-entry files were tracked. No tools, downloads, logs, runtime data, artifacts, build outputs, user-specific files, prohibited binaries, generated engine assets, or out-of-root paths were in the index.
+- Reachable history passed strict integrity checks with no missing objects. Representative ignore checks passed for the existing PB-0001 rules; uncovered Unity, Unreal, Blender, credential, and key-file patterns remain explicitly deferred to PB-0004.
+- PB-0001 remains the only completed task and the only Completion Log entry. PB-0002 and PB-0013 remain active and incomplete.
 
 ### Unresolved Bootstrap Decisions
 
-- **Remote transport:** local `origin` uses HTTPS rather than the required SSH URL, and current SSH authentication evidence is absent. No remote URL or authentication change is selected here.
 - **One-task-per-branch conflict:** PB-0013 commit `fc34bffff838cac41198940ed54b91b25c33f838` was pushed on the PB-0001 branch rather than `docs/PB-0013-quality-release-gates`. No history rewrite, branch move, or exception is selected here.
 - **Repository name:** planning specifies `package-builder`, while the actual repository is `3DModels-Package-Builder`. No rename or documentation-policy change is selected here.
 
@@ -223,7 +221,7 @@ flowchart LR
   - Depends on: none
   - Done when: official release metadata identifies the approved active LTS SDK; SDK `10.0.302` and its verified downloads live beneath the project root; Microsoft SHA-512/signature and extracted-file integrity checks pass; `dotnet --version`, `dotnet --list-sdks`, and `dotnet --info` resolve only the repository-local SDK; WPF CLI templates are available for Visual Studio Code development; all CLI state/temp/log paths are contained; the old staging transfer is removed only after verification; and the environment baseline is committed.
 
-- [ ] **PB-0002 — Initialize the local Git repository and `main` branch** — **P0**
+- [ ] **PB-0002 — Initialize the local Git repository and `main` branch** — **P0** — 🟡 **PROCESS**
   - Branch: `chore/PB-0002-initialize-repository`
   - Depends on: PB-0001
   - Done when: the minimal PB-0001 bootstrap repository is normalized onto `main`, existing planning documents are tracked, ignored single-root runtime directories are absent from the index, and local history contains the verified PB-0001 baseline commit.
@@ -1351,7 +1349,7 @@ flowchart LR
 
 - [ ] **PB-1512 — Add concurrency and resource-pressure suite** — **P1**
   - Branch: `test/PB-1512-concurrency-stress`
-- Depends on: PB-0215, PB-1507, PB-1508
+  - Depends on: PB-0215, PB-1507, PB-1508
   - Done when: parallel lightweight jobs and serialized engine writers remain correct under configured CPU/memory/disk pressure.
 
 - [ ] **PB-1513 — Implement cache eviction and integrity verification** — **P1**
