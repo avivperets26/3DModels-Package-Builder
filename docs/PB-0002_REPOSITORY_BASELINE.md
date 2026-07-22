@@ -5,8 +5,9 @@
 - **Documented branch:** `chore/PB-0002-initialize-repository`
 - **Verification date:** 2026-07-22
 - **Dated `main` checkpoint:** `979c2a773ebe222343d5a3d2b4f72f383b532d60`
+- **Dated post-audit remote `main` checkpoint:** `c75c119cfae7c8e9bfe4f2b0fea2fbd77575e028`
 
-This document records a verification checkpoint, not a permanent claim about a future `HEAD`, branch tip, or remote state. PB-0002 remains incomplete until its commit, push, GitHub CI or separately approved exception, merge, and explicit user-confirmation gates are satisfied.
+This document records verification checkpoints, not permanent claims about a future `HEAD`, branch tip, or remote state. PB-0002 remains incomplete until the current changes are committed and pushed by the user, the bootstrap repository workflow passes in GitHub Actions, the branch is merged, and the user explicitly confirms completion. No PB-0002 CI exception is approved.
 
 ## 1. Pre-change repository state
 
@@ -21,6 +22,23 @@ The following read-only checks ran before any PB-0002 file was changed:
 | Pre-change branch `HEAD` | `979c2a773ebe222343d5a3d2b4f72f383b532d60` |
 
 The clean-tree result applies only to the pre-change checkpoint. The PB-0002 documentation edits intentionally make the final working tree non-clean until the user performs the authorized Git workflow.
+
+### 1.1 Continuation checkpoint before bootstrap CI work
+
+Read-only inspection before the bootstrap CI changes began on 2026-07-22 found:
+
+| Check | Result |
+|---|---|
+| Working tree | Clean |
+| Checked-out branch | `chore/PB-0002-initialize-repository` |
+| Branch `HEAD` | `cb0748f9e7300f2122014bff5e9a130b47b3dc5d` |
+| Configured upstream | `origin/chore/PB-0002-initialize-repository` at the same commit |
+| Read-only remote branch | Present at `cb0748f9e7300f2122014bff5e9a130b47b3dc5d` |
+| Prior pull request | [#3](https://github.com/avivperets26/3DModels-Package-Builder/pull/3), merged into `main` on 2026-07-22 |
+| Prior merge commit | `c75c119cfae7c8e9bfe4f2b0fea2fbd77575e028` |
+| Workflow runs on the task branch | Zero before the bootstrap workflow existed |
+
+This proves that the earlier PB-0002 repository-audit documentation was committed, pushed, and merged. It does not provide the required CI pass or explicit user completion confirmation, so PB-0002 remained open for this approved bootstrap CI continuation.
 
 ## 2. Branches, remote, and history
 
@@ -47,7 +65,7 @@ No Git setting, remote, branch, or GitHub setting was changed.
 
 ## 3. Required tracked baseline
 
-All required files were present in the index:
+All files required by the pre-CI baseline were present in the index:
 
 - `AGENTS.md`
 - `global.json`
@@ -58,7 +76,10 @@ All required files were present in the index:
 - `docs/PB-0001_ENVIRONMENT_BASELINE.md`
 - `scripts/Enter-PackageBuilderEnvironment.ps1`
 
-The pre-change index contained nine files in total: the eight required files above plus `.gitignore`.
+The pre-change index contained nine files in total: the eight required files above plus `.gitignore`. The approved continuation adds these reviewable candidate files, which remain untracked until the user performs the Git workflow:
+
+- `scripts/Test-RepositoryBaseline.ps1`
+- `.github/workflows/repository-baseline.yml`
 
 Additional baseline checks passed:
 
@@ -134,6 +155,34 @@ The synchronized backlog validation produced these results:
 - Tracked Markdown had balanced fenced-code markers, consistent table column counts, valid heading-level transitions, and no Unicode replacement character.
 - One pre-existing unindented PB-1512 dependency line was corrected without changing its content or task status.
 
-## 8. Lifecycle decision
+## 8. Bootstrap repository CI
 
-The PB-0002 local repository-baseline acceptance evidence is present. Read-only remote evidence found no `chore/PB-0002-initialize-repository` branch, no workflow run for that branch, and no pull request for that branch. The task remains `[ ]` and 🟡 **PROCESS** because the user-controlled commit and push have not occurred, GitHub CI has not run and no PB-0002 exception is approved, the branch is not merged, and the user has not confirmed completion. PB-0002 is not added to the Completion Log.
+PB-0002 now includes a deliberately narrow repository/documentation bootstrap workflow:
+
+- `.github/workflows/repository-baseline.yml` runs for pull requests targeting `main` and pushes to `main`.
+- It uses the free GitHub-hosted `windows-latest` runner and grants only read access to repository contents.
+- `actions/checkout` v7.0.0 is pinned to its reviewed, verified immutable release commit `9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0`, uses full history, and does not persist credentials.
+- The workflow passes `GITHUB_WORKSPACE` to `scripts/Test-RepositoryBaseline.ps1`; neither file assumes that GitHub checked out the repository at `C:\Dev\PackageBuilder`.
+- CI uses `-RequireTrackedFiles`. Local pre-staging review includes tracked files plus untracked, non-ignored candidate files so Codex can validate changes without staging them.
+- The script checks required files and the approved `global.json` pin; PowerShell parsing; Markdown headings, fences, tables, and local links; PB task IDs, dependencies, cycles, branches, lifecycle markers, and Completion Log synchronization; prohibited repository content; workflow pinning/scope; `git diff --check`; and reachable-history integrity.
+- The workflow does not restore, build, format, or test the future .NET solution; install .NET, Blender, Unity, or Unreal; upload artifacts; add telemetry; publish; or require a paid service.
+
+PB-0009 remains the owner of full solution restore, build, format checking, and automated test CI. Later backlog tasks own coverage and supply-chain gates. PB-0002 supplies only the minimum GitHub CI evidence needed to validate the repository bootstrap before that solution exists.
+
+The local pre-staging command is:
+
+```powershell
+.\scripts\Test-RepositoryBaseline.ps1
+```
+
+The GitHub-equivalent tracked-file mode, which will pass only after the user has added the new files to Git, is:
+
+```powershell
+.\scripts\Test-RepositoryBaseline.ps1 -RepositoryRoot (git rev-parse --show-toplevel) -RequireTrackedFiles
+```
+
+On 2026-07-22, the pre-staging command reported 12 passed checks and zero failed checks. This is local evidence only; it is not GitHub Actions evidence.
+
+## 9. Lifecycle decision
+
+The PB-0002 repository audit and bootstrap CI implementation are locally validated. The earlier audit commit was merged through PR #3, but the newly added validator, workflow, and synchronized documentation remain local and uncommitted. The workflow therefore has no passing GitHub Actions evidence for these changes. PB-0002 remains `[ ]` and 🟡 **PROCESS** because the current user-controlled commit and push, passing GitHub workflow, merge of this continuation, and explicit user completion confirmation remain outstanding. No CI exception is approved, and PB-0002 is not added to the Completion Log.
