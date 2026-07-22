@@ -1,13 +1,16 @@
 # PB-0002 Repository Baseline
 
 - **Task:** PB-0002 — Initialize the local Git repository and `main` branch
-- **Lifecycle:** `[ ]` — 🟡 **PROCESS**
+- **Lifecycle:** `[x]` — 🟢 **DONE**
 - **Documented branch:** `chore/PB-0002-initialize-repository`
 - **Verification date:** 2026-07-22
 - **Dated `main` checkpoint:** `979c2a773ebe222343d5a3d2b4f72f383b532d60`
 - **Dated post-audit remote `main` checkpoint:** `c75c119cfae7c8e9bfe4f2b0fea2fbd77575e028`
+- **Bootstrap CI commit:** `0b1700e4d999069ef7372fcc0ba0e6971789b8e5`
+- **Final direct `main` merge:** `86ac34ac61f1cb729e59fc0c7c10ffd772b2ee2a`
+- **Completion date:** 2026-07-22
 
-This document records verification checkpoints, not permanent claims about a future `HEAD`, branch tip, or remote state. PB-0002 remains incomplete until the current changes are committed and pushed by the user, the bootstrap repository workflow passes in GitHub Actions, the branch is merged, and the user explicitly confirms completion. No PB-0002 CI exception is approved.
+This document records the verified PB-0002 repository-bootstrap evidence. The original baseline and CI continuation satisfied their documented local, Git, GitHub CI, merge, and user-confirmation gates. PB-0002 completed on 2026-07-22 without a CI exception.
 
 ## 1. Pre-change repository state
 
@@ -76,7 +79,7 @@ All files required by the pre-CI baseline were present in the index:
 - `docs/PB-0001_ENVIRONMENT_BASELINE.md`
 - `scripts/Enter-PackageBuilderEnvironment.ps1`
 
-The pre-change index contained nine files in total: the eight required files above plus `.gitignore`. The approved continuation adds these reviewable candidate files, which remain untracked until the user performs the Git workflow:
+The pre-change index contained nine files in total: the eight required files above plus `.gitignore`. The approved continuation added these files, which were tracked in bootstrap CI commit `0b1700e4d999069ef7372fcc0ba0e6971789b8e5`:
 
 - `scripts/Test-RepositoryBaseline.ps1`
 - `.github/workflows/repository-baseline.yml`
@@ -141,7 +144,7 @@ The unrestricted strict `git fsck` also reported seven dangling blobs and five d
 
 ## 7. Backlog and Markdown consistency
 
-The synchronized backlog validation produced these results:
+At the pre-completion checkpoint, the synchronized backlog validation produced these results:
 
 - 243 task definitions and no duplicate task ID.
 - Every documented task branch matched the allowed format and included its task ID.
@@ -175,14 +178,27 @@ The local pre-staging command is:
 .\scripts\Test-RepositoryBaseline.ps1
 ```
 
-The GitHub-equivalent tracked-file mode, which will pass only after the user has added the new files to Git, is:
+The GitHub-equivalent tracked-file mode is:
 
 ```powershell
 .\scripts\Test-RepositoryBaseline.ps1 -RepositoryRoot (git rev-parse --show-toplevel) -RequireTrackedFiles
 ```
 
-On 2026-07-22, the pre-staging command reported 12 passed checks and zero failed checks. This is local evidence only; it is not GitHub Actions evidence.
+On 2026-07-22, both the pre-staging validation and the final local completion-bookkeeping validation reported 12 passed checks and zero failed checks. The separate GitHub Actions evidence is recorded below.
 
-## 9. Lifecycle decision
+## 9. Final completion evidence
 
-The PB-0002 repository audit and bootstrap CI implementation are locally validated. The earlier audit commit was merged through PR #3, but the newly added validator, workflow, and synchronized documentation remain local and uncommitted. The workflow therefore has no passing GitHub Actions evidence for these changes. PB-0002 remains `[ ]` and 🟡 **PROCESS** because the current user-controlled commit and push, passing GitHub workflow, merge of this continuation, and explicit user completion confirmation remain outstanding. No CI exception is approved, and PB-0002 is not added to the Completion Log.
+| Gate | Final evidence |
+|---|---|
+| Original baseline commit | `cb0748f9e7300f2122014bff5e9a130b47b3dc5d` |
+| Original baseline integration | [PR #3](https://github.com/avivperets26/3DModels-Package-Builder/pull/3) merged as `c75c119cfae7c8e9bfe4f2b0fea2fbd77575e028` |
+| Bootstrap CI commit | `0b1700e4d999069ef7372fcc0ba0e6971789b8e5` on `chore/PB-0002-initialize-repository` |
+| CI continuation integration | Merged directly into `main` as `86ac34ac61f1cb729e59fc0c7c10ffd772b2ee2a` |
+| Pull-request scope | PR #3 contained the original baseline only; the CI continuation used a direct `main` merge and did not have a second PR |
+| GitHub CI | [Repository baseline workflow run 29957972750](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/29957972750) — `success` for `86ac34ac61f1cb729e59fc0c7c10ffd772b2ee2a` |
+| Local final validation | `scripts/Test-RepositoryBaseline.ps1 -RequireTrackedFiles` — 12 passed, zero failed |
+| User confirmation | The user explicitly confirmed the commit, push, direct merge, and successful CI gates |
+| CI exception | None used |
+| Completion date | 2026-07-22 |
+
+PB-0002 is `[x]` and 🟢 **DONE**. It is removed from Active Work and recorded exactly once in the backlog Completion Log. PB-0013 and every unrelated task retain their previous status.

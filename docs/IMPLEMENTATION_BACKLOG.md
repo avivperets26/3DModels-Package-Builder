@@ -132,7 +132,6 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0002 | 🟡 **PROCESS** | `chore/PB-0002-initialize-repository` | User for Git and GitHub completion gates | 2026-07-22 | The earlier repository-audit commit `cb0748f9e7300f2122014bff5e9a130b47b3dc5d` was merged through pull request [#3](https://github.com/avivperets26/3DModels-Package-Builder/pull/3) as `c75c119cfae7c8e9bfe4f2b0fea2fbd77575e028`. The approved minimal bootstrap validator, SHA-pinned Windows GitHub Actions workflow, and synchronized documentation are implemented locally; the reusable pre-staging validation reports 12 passed checks and zero failures. See `docs/PB-0002_REPOSITORY_BASELINE.md`. | The new bootstrap CI continuation is not committed or pushed, its GitHub workflow has not passed, it is not merged, and explicit user completion confirmation is absent. No PB-0002 CI exception is approved. |
 | PB-0013 | 🟡 **PROCESS** | `docs/PB-0013-quality-release-gates` | User for remaining completion confirmation | 2026-07-22 | Remote feature commit `a1032c48f2a8d0dc98d0c589f1a845605950952b` was merged by pull request [#1](https://github.com/avivperets26/3DModels-Package-Builder/pull/1) into public default branch `main` at `13e5875b686c3219e3571d45ceaa93c463e881ff`. | No GitHub CI evidence or explicit user completion confirmation is recorded. The historical one-task-per-branch conflict remains documented below. |
 
 ### Dated Repository Verification Checkpoints
@@ -145,10 +144,12 @@ The detailed PB-0002 audit is recorded in `docs/PB-0002_REPOSITORY_BASELINE.md`.
 - PB-0001 baseline commit `1562abfef49071e83978e7573499d07e629b0c53` was a valid commit and an ancestor of the verified `main` checkpoint.
 - All required planning, governance, baseline, SDK-pin, and environment-entry files were tracked. No tools, downloads, logs, runtime data, artifacts, build outputs, user-specific files, prohibited binaries, generated engine assets, or out-of-root paths were in the index.
 - Reachable history passed strict integrity checks with no missing objects. Representative ignore checks passed for the existing PB-0001 rules; uncovered Unity, Unreal, Blender, credential, and key-file patterns remain explicitly deferred to PB-0004.
-- PB-0001 remains the only completed task and the only Completion Log entry. PB-0002 and PB-0013 remain active and incomplete.
+- At the initial repository-audit checkpoint, PB-0001 was the only completed task and Completion Log entry; PB-0002 and PB-0013 were still active and incomplete.
 - Before the bootstrap CI continuation began, `chore/PB-0002-initialize-repository` and its configured upstream both resolved to `cb0748f9e7300f2122014bff5e9a130b47b3dc5d`, and the working tree was clean.
 - Read-only GitHub evidence shows that commit was merged through PR #3 into remote `main` at `c75c119cfae7c8e9bfe4f2b0fea2fbd77575e028`; the task branch had zero workflow runs before this continuation.
-- The PB-0002 bootstrap CI candidate runs only repository/documentation validation on `windows-latest`; its local pre-staging run passed 12 checks with zero failures. A GitHub-hosted pass remains outstanding.
+- Bootstrap CI commit `0b1700e4d999069ef7372fcc0ba0e6971789b8e5` was pushed on the documented task branch and merged directly into `main` as `86ac34ac61f1cb729e59fc0c7c10ffd772b2ee2a`. PR #3 contained only the original baseline; no second pull request was used for the CI continuation.
+- [Repository baseline workflow run 29957972750](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/29957972750) concluded successfully for the direct `main` merge. The user explicitly confirmed the commit, push, merge, and successful CI gates on 2026-07-22. No PB-0002 CI exception was used.
+- PB-0002 is complete and recorded in the Completion Log. PB-0013 remains active and unchanged.
 
 ### Unresolved Bootstrap Decisions
 
@@ -170,6 +171,7 @@ Append a row whenever a task is marked `[x]`.
 | Task | Branch | Final commit | Pull request | Completed | Notes |
 |---|---|---|---|---|---|
 | PB-0001 | `chore/PB-0001-dotnet-10-sdk` | `c68ff924eb3162efcea79af27f19bff2b9dad896` | [#2](https://github.com/avivperets26/3DModels-Package-Builder/pull/2) | 2026-07-22 | Merged into `main` as `e7f92aa9fc389c40bd4e3d1ee3a368e3d7f55993`. Only the missing CI run was waived by the approved PB-0001-only bootstrap exception; all other completion gates passed. |
+| PB-0002 | `chore/PB-0002-initialize-repository` | `0b1700e4d999069ef7372fcc0ba0e6971789b8e5` | [#3](https://github.com/avivperets26/3DModels-Package-Builder/pull/3) — original baseline only | 2026-07-22 | Original baseline commit `cb0748f9e7300f2122014bff5e9a130b47b3dc5d` merged through PR #3 as `c75c119cfae7c8e9bfe4f2b0fea2fbd77575e028`. Bootstrap CI commit `0b1700e4d999069ef7372fcc0ba0e6971789b8e5` was merged directly into `main` as `86ac34ac61f1cb729e59fc0c7c10ffd772b2ee2a`; [workflow run 29957972750](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/29957972750) succeeded. No second PR and no CI exception were used; the user confirmed all completion gates. |
 
 ## 5. Milestones
 
@@ -224,10 +226,10 @@ flowchart LR
   - Depends on: none
   - Done when: official release metadata identifies the approved active LTS SDK; SDK `10.0.302` and its verified downloads live beneath the project root; Microsoft SHA-512/signature and extracted-file integrity checks pass; `dotnet --version`, `dotnet --list-sdks`, and `dotnet --info` resolve only the repository-local SDK; WPF CLI templates are available for Visual Studio Code development; all CLI state/temp/log paths are contained; the old staging transfer is removed only after verification; and the environment baseline is committed.
 
-- [ ] **PB-0002 — Initialize the local Git repository and `main` branch** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0002 — Initialize the local Git repository and `main` branch** — **P0** — 🟢 **DONE**
   - Branch: `chore/PB-0002-initialize-repository`
   - Depends on: PB-0001
-  - Done when: the minimal PB-0001 bootstrap repository is normalized onto `main`; required planning and validation files are tracked; ignored single-root runtime directories, prohibited binaries, generated engine assets, secrets, and personal paths are absent from the repository; local history contains the verified PB-0001 baseline commit; and the reusable repository-baseline script passes locally and in a minimal SHA-pinned GitHub Actions workflow on pull requests and pushes to `main` using a free Windows GitHub-hosted runner. This bootstrap workflow validates repository/documentation structure, governance, diffs, and reachable history only; PB-0009 remains the owner of full restore, build, format, test, and application CI, while later tasks own coverage and supply-chain gates. PB-0002 stays `[ ]` and 🟡 **PROCESS** until its commit, push, GitHub workflow, merge, and explicit user-confirmation gates pass.
+  - Done when: the minimal PB-0001 bootstrap repository is normalized onto `main`; required planning and validation files are tracked; ignored single-root runtime directories, prohibited binaries, generated engine assets, secrets, and personal paths are absent from the repository; local history contains the verified PB-0001 baseline commit; and the reusable repository-baseline script passes locally and in a minimal SHA-pinned GitHub Actions workflow on pull requests and pushes to `main` using a free Windows GitHub-hosted runner. This bootstrap workflow validates repository/documentation structure, governance, diffs, and reachable history only; PB-0009 remains the owner of full restore, build, format, test, and application CI, while later tasks own coverage and supply-chain gates. PB-0002 remained `[ ]` and 🟡 **PROCESS** until its commit, push, GitHub workflow, merge, and explicit user-confirmation gates passed.
 
 - [ ] **PB-0003 — Establish the approved public GitHub repository and push `main`** — **P0**
   - Branch: `chore/PB-0003-github-remote`
