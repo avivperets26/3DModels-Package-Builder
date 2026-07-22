@@ -32,6 +32,18 @@ These rules apply permanently to the entire `C:\Dev\PackageBuilder` tree unless 
 24. At the end of every task, Codex must report the changed files, test and validation results, suggested branch name, suggested commit message, and manual commands the user can run.
 25. Codex must leave every PB task open until the user confirms that its commit, push, CI, and merge requirements were completed.
 
+## Public Repository Safeguards
+
+The approved GitHub repository is [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder), and its approved visibility is public.
+
+- Treat every tracked file as publicly visible.
+- Never commit credentials, tokens, private keys, personal data, customer assets, or private configuration.
+- Never commit downloaded SDKs, engine installations, logs, caches, generated packages, or marketplace assets.
+- Check for secrets and prohibited files before every handoff.
+- Keep local-only files protected by `.gitignore`.
+- Do not include third-party assets unless their licence permits public redistribution.
+- Redact sensitive information from examples and diagnostics.
+
 ## Non-Negotiable Quality Rules
 
 These rules are mandatory acceptance requirements. Follow [the detailed quality and release gates](docs/QUALITY_AND_RELEASE_GATES.md) for the exact thresholds, requirements-to-tests matrix, security controls, performance budgets, evidence requirements, and release-blocking conditions.
@@ -97,3 +109,66 @@ These rules are mandatory acceptance requirements. Follow [the detailed quality 
 ### 11. Required first action
 
 - Every Codex task must read this `AGENTS.md` file completely before inspecting files, planning, running project commands, or making changes.
+
+## Documentation Synchronization and Task Status
+
+### 1. Documentation is part of implementation
+
+- Documentation is a required task deliverable, not optional cleanup.
+- When work changes behavior, architecture, configuration, dependencies, approved versions, UX, security, performance, installation, packaging, folder structure, or workflows, update every relevant document during the same task.
+- Do not update unrelated documentation merely to create activity or make a task appear larger.
+- If documentation does not require changes, the final handoff must state `Documentation impact: none` and explain why.
+
+### 2. Required task status synchronization
+
+- At the beginning of work, inspect the implementation backlog and update Active Work when the verified state has changed or the task is missing.
+- Active Work must identify the PB task, documented branch, current local state, and real current blocker.
+- Update the blocker whenever circumstances change; never leave a resolved blocker as the reported state.
+- Treat `implemented locally`, `validated locally`, `pushed`, `CI passed`, `merged`, and `complete` as distinct lifecycle states.
+- Never describe locally implemented or locally validated work as fully complete.
+- Keep the task checkbox unchecked until every documented completion gate passes and the user confirms completion.
+- Update the Completion Log only after the user confirms the required commit, push, CI, and merge evidence.
+- Never infer GitHub branches, pushes, CI, pull requests, merges, repository settings, or releases from local Git state.
+
+### 3. Evidence-based status
+
+- Before reporting task status, use read-only inspection and the relevant validation commands or evidence sources.
+- Record exact test results, validation evidence, branch name, and commit when available.
+- Do not claim that tests, CI, pushes, pull requests, merges, tags, or releases occurred without evidence.
+- Record unresolved contradictions, decisions, and blockers explicitly instead of hiding or silently resolving them.
+
+### 4. Documentation sources
+
+Review and update the sources affected by the task, which may include:
+
+- `AGENTS.md`.
+- `docs/IMPLEMENTATION_BACKLOG.md`.
+- `docs/Package_Builder_Plan.md`.
+- `docs/TECH_STACK_AND_ARCHITECTURE.md`.
+- `docs/QUALITY_AND_RELEASE_GATES.md`.
+- Environment baseline documents.
+- Architecture Decision Records.
+- User installation and usage documentation.
+- Requirements-to-tests traceability records.
+
+### 5. Handoff requirements
+
+Every task handoff must report:
+
+- Task ID and current lifecycle state.
+- Work completed.
+- Work remaining.
+- Files changed.
+- Documentation changed, or `Documentation impact: none` with an explanation.
+- Tests and validation performed.
+- Current blockers and unresolved decisions.
+- Suggested branch.
+- Suggested commit message.
+- Manual Git commands, when appropriate.
+- Whether backlog Active Work and the Completion Log reflect the verified current state.
+
+### 6. Manual Git ownership
+
+- Documentation synchronization never authorizes Codex to stage, commit, push, merge, create a pull request, create a tag, publish a release, or change GitHub settings.
+- The user performs all Git and remote operations unless the user explicitly authorizes Codex to perform one exact action.
+- Codex records a Git-related lifecycle state only after receiving direct evidence or explicit confirmation from the user.
