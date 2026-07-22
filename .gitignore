@@ -1,0 +1,13 @@
+# PB-0001: repository-local tools and generated state must never be committed.
+/tools/
+/downloads/
+/logs/
+/runtime-data/
+/artifacts/
+
+# Build output and per-user IDE state.
+**/bin/
+**/obj/
+.vs/
+*.suo
+*.user
