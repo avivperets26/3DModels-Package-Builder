@@ -53,8 +53,8 @@ Every case supports a configurable publisher root such as `AvivPeretsFBX`; no pu
 
 - `[ ]` — not complete.
 - `[x]` — complete and verified.
-- 🟢 **DONE** — every acceptance, test, Git/GitHub, and user-confirmation gate has passed; only then may the task use `[x]` and enter the Completion Log.
-- 🟡 **PROCESS** — work is active or has reached an intermediate lifecycle state, but at least one completion gate remains; the task stays `[ ]`.
+- 🟢 **DONE** — every acceptance, test, Git/GitHub, and user-confirmation gate has passed; the marker, `[x]`, Active Work removal, and Completion Log row are recorded during the approved next-task rollover.
+- 🟡 **PROCESS** — work is active, progressing through publication gates, or awaiting approved next-task rollover synchronization; the task stays `[ ]`.
 - 🔴 **BLOCKED** — a specific unresolved condition prevents meaningful progress; record that blocker and keep the task `[ ]`.
 - Lifecycle markers supplement the `[ ]` and `[x]` checkboxes; do not invent additional checkbox symbols or treat a marker as completion evidence.
 
@@ -65,7 +65,7 @@ Every case supports a configurable publisher root such as `AvivPeretsFBX`; no pu
 - Codex must not stage files, merge branches, create pull requests, create tags, or publish releases unless the user explicitly authorizes the exact action.
 - Authorization for one Git or remote action does not authorize another action or a future action.
 - Codex may use read-only Git commands such as `git status`, `git diff`, `git log`, and `git branch --show-current` for inspection and validation.
-- Pull requests are optional; a user-confirmed direct merge is sufficient when the commit, branch push, merge into `main`, successful `main` CI, and user confirmation have evidence.
+- Pull requests are optional. A direct merge requires local validation, the task commit, task-branch push, merge into `main`, push of `main`, successful `main` CI, and explicit user confirmation. Branch CI is not required when the direct task-branch push does not trigger it, and no branch CI may be claimed without evidence.
 - Every future task must begin by reading `AGENTS.md` completely before any other project action.
 
 ### Codex Task Handoff
@@ -78,20 +78,43 @@ At the end of every task, Codex must report:
 - Suggested commit message.
 - Manual commands the user can run.
 
-### Completion Rule
+### Logical Completion Rule
 
-A task can change to `[x]` only when all of the following are satisfied:
+A task is logically complete only when all of the following are satisfied:
 
 1. Its acceptance condition is satisfied.
 2. Required automated tests pass locally.
 3. Every applicable requirement and acceptance criterion has current mapped evidence, and all approved quality thresholds and release gates pass.
-4. The required commit exists.
+4. The task is committed once on its documented branch.
 5. The task branch is pushed to GitHub.
-6. GitHub CI passes.
-7. The change is merged into `main`, unless the task explicitly records an approved exception.
-8. The Completion Log contains the branch, final commit, pull request or direct-merge record, and completion date.
+6. The task is merged into `main`, and `main` is pushed.
+7. The resulting `main` CI succeeds, unless the user explicitly approves and documents an exception.
+8. The user explicitly confirms the commit, push, merge, required `main` CI, and task completion.
 
-Codex must not mark a PB task complete until the user explicitly confirms that the commit, push, CI, and merge requirements were completed. Read-only repository evidence does not replace that confirmation. Merely writing code locally does not complete a task.
+Read-only repository evidence does not replace user confirmation. Merely writing code locally does not complete a task. Pull-request or branch CI may provide additional evidence when present, but neither is required for a direct merge, and branch CI must never be claimed when the direct task-branch push did not trigger it.
+
+### Permanent One-Merge Rollover
+
+Each implementation task is committed, pushed, and merged into `main` only once. Do not return to an already merged task branch solely for completion bookkeeping.
+
+The required direct-merge sequence is:
+
+1. Complete local validation.
+2. Commit the task branch.
+3. Push the task branch.
+4. Merge it into `main`.
+5. Push `main`.
+6. Wait for successful `main` CI.
+7. Receive explicit user confirmation.
+
+After step 7 the task is logically complete. Its repository bookkeeping is recorded at the beginning of the next task branch, before that task's implementation:
+
+1. Mark the previous task `[x]` and 🟢 **DONE**.
+2. Remove it from Active Work.
+3. Add exactly one Completion Log row.
+4. Record its final task commit, merge into `main`, successful `main` CI, and explicit user confirmation.
+
+This previous-task completion synchronization is an allowed documentation operation in the next task branch and does not violate the one-implementation-task-per-branch rule. The next task is then implemented normally in that same branch. Do not create a dedicated completion-only branch, commit cycle, pull request, or merge. The final project task or final milestone may use one final documentation-only synchronization when no successor task exists.
 
 ### Branch Naming
 
@@ -120,6 +143,7 @@ feat/PB-0607-unity-urp-material-compiler
 - Each task should be independently reviewable and testable.
 - Do not mix unrelated cleanup into a task branch.
 - A dependent task starts from updated `main` after its dependencies are merged.
+- Synchronizing the immediately previous confirmed task's completion at the beginning of the next task branch is allowed documentation work, not a second implementation task.
 - If implementation reveals missing work, add a new ID rather than silently expanding scope.
 - Bootstrap tasks also use one documented PB task per branch. Any temporary exception requires explicit user approval and must be recorded in the affected task and Completion Log.
 
@@ -134,6 +158,7 @@ feat/PB-0607-unity-urp-material-compiler
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
 | PB-0013 | 🟡 **PROCESS** | `docs/PB-0013-quality-release-gates` | User for remaining completion confirmation | 2026-07-22 | Remote feature commit `a1032c48f2a8d0dc98d0c589f1a845605950952b` was merged by pull request [#1](https://github.com/avivperets26/3DModels-Package-Builder/pull/1) into public default branch `main` at `13e5875b686c3219e3571d45ceaa93c463e881ff`. | No GitHub CI evidence or explicit user completion confirmation is recorded. The historical one-task-per-branch conflict remains documented below. |
+| PB-0006 | 🟡 **PROCESS** | `chore/PB-0006-central-build-config` | Codex for local implementation; user for Git and completion gates | 2026-07-23 | Implemented and validated locally with SDK `10.0.302`, VSTest, and the stable `xunit.v3.mtp-off` 3.2.2 executable-project baseline; normal and locked restore passed; Debug and Release builds each reported 0 warnings and 0 errors; Release VSTest invocation exited 0 with zero meaningful tests because PB-0008 owns the smoke tests; central configuration passed 8/8 checks; architecture passed 7/7 checks; repository baseline passed 16/16 checks; no legacy xUnit v2 dependency remains in test lock files; the permanent one-merge rollover workflow is documented. | No local implementation blocker. Required user-controlled gates are the single PB-0006 commit, task-branch push, direct or PR merge into `main`, push of `main`, successful `main` CI, and explicit confirmation. No branch CI is claimed or required for a direct push that does not trigger it. |
 
 ### Dated Repository Verification Checkpoints
 
@@ -181,9 +206,9 @@ The detailed PB-0003 audit and final gate evidence are recorded in `docs/PB-0003
 
 ## 4. Completion Log
 
-Append a row whenever a task is marked `[x]`.
+During the approved next-task rollover, append exactly one row for the immediately previous task when it is marked `[x]`. The row must record its final task commit, merge into `main`, successful `main` CI or approved exception, explicit user confirmation, and completion date.
 
-| Task | Branch | Final commit | Pull request | Completed | Notes |
+| Task | Branch | Final commit | Integration | Completed | Notes |
 |---|---|---|---|---|---|
 | PB-0001 | `chore/PB-0001-dotnet-10-sdk` | `c68ff924eb3162efcea79af27f19bff2b9dad896` | [#2](https://github.com/avivperets26/3DModels-Package-Builder/pull/2) | 2026-07-22 | Merged into `main` as `e7f92aa9fc389c40bd4e3d1ee3a368e3d7f55993`. Only the missing CI run was waived by the approved PB-0001-only bootstrap exception; all other completion gates passed. |
 | PB-0002 | `chore/PB-0002-initialize-repository` | `0b1700e4d999069ef7372fcc0ba0e6971789b8e5` | [#3](https://github.com/avivperets26/3DModels-Package-Builder/pull/3) — original baseline only | 2026-07-22 | Original baseline commit `cb0748f9e7300f2122014bff5e9a130b47b3dc5d` merged through PR #3 as `c75c119cfae7c8e9bfe4f2b0fea2fbd77575e028`. Bootstrap CI commit `0b1700e4d999069ef7372fcc0ba0e6971789b8e5` was merged directly into `main` as `86ac34ac61f1cb729e59fc0c7c10ffd772b2ee2a`; [workflow run 29957972750](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/29957972750) succeeded. No second PR and no CI exception were used; the user confirmed all completion gates. |
@@ -264,7 +289,7 @@ flowchart LR
   - Depends on: PB-0004
   - Done when: all projects defined in the architecture document exist, reference inward correctly, and repository-local `dotnet build` succeeds from a Visual Studio Code terminal without Visual Studio.
 
-- [ ] **PB-0006 — Add centralized SDK, build, and NuGet configuration** — **P0**
+- [ ] **PB-0006 — Add centralized SDK, build, and NuGet configuration** — **P0** — 🟡 **PROCESS**
   - Branch: `chore/PB-0006-central-build-config`
   - Depends on: PB-0005
   - Done when: `global.json`, `Directory.Build.props`, and `Directory.Packages.props` pin approved versions and enable nullable references, warnings, deterministic builds, and analyzers.
@@ -1649,8 +1674,9 @@ The system is considered working only when all of the following are true:
 
 - Keep IDs permanent; never reuse a removed ID.
 - Add new tasks to the relevant epic and update dependencies.
-- When a task changes scope materially, document it in the PR and split remaining work into new tasks.
-- Update this backlog in the same task branch before marking that task complete.
+- When a task changes scope materially, document it in task evidence and, when used, the pull request; split remaining work into new tasks.
+- Keep the current task `[ ]` / 🟡 **PROCESS** in its own implementation branch. After successful `main` CI and user confirmation, synchronize `[x]`, 🟢 **DONE**, Active Work removal, and the single Completion Log row at the beginning of the next task branch.
+- Never return to an already merged task branch or create a dedicated completion-only publication cycle; the final project task or milestone may use one final documentation-only synchronization when no successor exists.
 - Keep the Completion Log chronological.
 - Review official engine and marketplace requirements when promoting new versions.
 - At each milestone, verify the product plan, architecture document, and backlog still agree.

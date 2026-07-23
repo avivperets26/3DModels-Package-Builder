@@ -314,6 +314,7 @@ Invoke-Check 'Target frameworks, project types, assembly names, and root namespa
         $outputType = Get-ProjectProperty $projectXml 'OutputType'
         $useWpf = Get-ProjectProperty $projectXml 'UseWPF'
         $isTestProject = Get-ProjectProperty $projectXml 'IsTestProject'
+        $isPackable = Get-ProjectProperty $projectXml 'IsPackable'
         $assemblyName = Get-ProjectProperty $projectXml 'AssemblyName'
         $rootNamespace = Get-ProjectProperty $projectXml 'RootNamespace'
 
@@ -342,15 +343,28 @@ Invoke-Check 'Target frameworks, project types, assembly names, and root namespa
                 }
             }
             'Test' {
-                if (($null -ne $outputType -and $outputType -cne 'Library') -or
-                    $useWpf -eq 'true' -or $isTestProject -cne 'true') {
-                    throw "$($specification.Name) must be a non-WPF test library with IsTestProject=true."
+                if ($outputType -cne 'Exe' -or $useWpf -eq 'true' -or
+                    $isTestProject -cne 'true' -or $isPackable -cne 'false') {
+                    throw "$($specification.Name) must be a non-WPF xUnit v3 executable with IsTestProject=true and IsPackable=false."
                 }
 
                 $packageNames = @(Get-PackageReferenceNames $projectXml)
-                foreach ($requiredPackage in @('Microsoft.NET.Test.Sdk', 'xunit', 'xunit.runner.visualstudio')) {
-                    if ($packageNames -notcontains $requiredPackage) {
-                        throw "$($specification.Name) is missing required test package $requiredPackage."
+                $requiredPackages = @(
+                    'coverlet.collector',
+                    'Microsoft.NET.Test.Sdk',
+                    'xunit.runner.visualstudio',
+                    'xunit.v3.mtp-off'
+                )
+                $packageDifferences = @(
+                    Compare-Object -ReferenceObject ($requiredPackages | Sort-Object) -DifferenceObject ($packageNames | Sort-Object)
+                )
+                if ($packageDifferences.Count -gt 0) {
+                    throw "$($specification.Name) must reference exactly the approved VSTest-compatible xUnit v3 package set."
+                }
+
+                foreach ($mtpProperty in @('UseMicrosoftTestingPlatformRunner', 'TestingPlatformDotnetTestSupport')) {
+                    if ($null -ne (Get-ProjectProperty $projectXml $mtpProperty)) {
+                        throw "$($specification.Name) must not enable Microsoft Testing Platform through $mtpProperty."
                     }
                 }
             }
