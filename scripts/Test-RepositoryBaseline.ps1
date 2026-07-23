@@ -346,6 +346,43 @@ Invoke-Check 'Central build validator supports standalone Windows PowerShell inv
     }
 }
 
+Invoke-Check 'Test-project configuration passes dependency-free validation' {
+    $validatorPath = Join-Path $script:RepositoryRoot 'scripts\Test-TestProjects.ps1'
+    if (-not (Test-Path -LiteralPath $validatorPath -PathType Leaf)) {
+        throw 'Missing scripts/Test-TestProjects.ps1.'
+    }
+
+    & $validatorPath -RepositoryRoot $script:RepositoryRoot
+}
+
+Invoke-Check 'Test-project validator supports standalone Windows PowerShell invocation' {
+    $validatorPath = [System.IO.Path]::GetFullPath(
+        (Join-Path $script:RepositoryRoot 'scripts\Test-TestProjects.ps1')
+    )
+    if (-not (Test-Path -LiteralPath $validatorPath -PathType Leaf)) {
+        throw 'Missing scripts/Test-TestProjects.ps1.'
+    }
+
+    $windowsPowerShellPath = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'
+    if (-not (Test-Path -LiteralPath $windowsPowerShellPath -PathType Leaf)) {
+        throw "Windows PowerShell executable is unavailable: $windowsPowerShellPath"
+    }
+
+    $validatorOutput = @(
+        & $windowsPowerShellPath `
+            -NoProfile `
+            -NonInteractive `
+            -ExecutionPolicy Bypass `
+            -File $validatorPath `
+            -RepositoryRoot $script:RepositoryRoot 2>&1
+    )
+    $validatorExitCode = $LASTEXITCODE
+    if ($validatorExitCode -ne 0) {
+        $capturedOutput = $validatorOutput -join [Environment]::NewLine
+        throw "Standalone test-project validator failed with exit code ${validatorExitCode}. Captured output:`n$capturedOutput"
+    }
+}
+
 Invoke-Check 'Formatting configuration passes dependency-free validation' {
     $validatorPath = Join-Path $script:RepositoryRoot 'scripts\Test-FormattingConfiguration.ps1'
     if (-not (Test-Path -LiteralPath $validatorPath -PathType Leaf)) {

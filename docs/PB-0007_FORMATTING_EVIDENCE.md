@@ -2,7 +2,7 @@
 
 **Task:** PB-0007 — Add coding style and formatting enforcement
 **Branch:** `chore/PB-0007-formatting`
-**Lifecycle:** 🟡 **PROCESS**
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-07-23
 
 ## Scope and Status
@@ -10,6 +10,8 @@
 PB-0007 establishes a free, repository-contained formatting baseline for .NET, Python, Blender/Unreal worker code, PowerShell, XML, XAML, JSON, YAML, and Markdown. The task does not add application behavior and does not add full application GitHub CI; PB-0009 remains the owner of restore, build, format, and test CI.
 
 The default validation path is read-only for source files. An explicit `-Fix` switch is the only supported mutation path, and it is followed immediately by the same verification checks used in normal mode.
+
+The task is complete after its final task commit, pull-request merge, successful required `main` workflow, and explicit user confirmation. The permanent one-merge rollover was recorded at the beginning of PB-0008.
 
 ## Approved Versions and Official Sources
 
@@ -184,7 +186,16 @@ Explicit fix mode changed one existing source file:
 
 Ruff changed no existing source because the repository currently contains no Python worker files. The configuration is active for future `.py`, `.pyi`, and `.pyw` files and validates its own `ruff.toml` input today.
 
-No PB-0007 GitHub CI is claimed because the task changes have not been published.
+### Final Publication Evidence
+
+| Gate | Verified evidence |
+|---|---|
+| Final task commit | `56a1974dddd67b30e51084a3cbce6a985e1e9fd7` on `chore/PB-0007-formatting` |
+| Integration | [Pull request #8](https://github.com/avivperets26/3DModels-Package-Builder/pull/8) |
+| Merge into `main` | `908e4b0ca92629d07a8ced5b529e72d6b4f5c0a5` |
+| Required `main` CI | [Repository baseline workflow run 30024743745](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30024743745), independently verified as an attempt-1 `push` run on `main` for the exact merge commit; the workflow and its `Validate repository baseline` job completed successfully |
+| User confirmation | The user explicitly confirmed the task-branch push, merge into `main`, and green required `main` CI on 2026-07-23 |
+| Exception | None; no CI, quality, or completion exception was used |
 
 ## Documentation Impact
 
@@ -194,8 +205,9 @@ No PB-0007 GitHub CI is claimed because the task changes have not been published
 - Updated `docs/PB-0006_CENTRAL_BUILD_CONFIGURATION_EVIDENCE.md` with final completion evidence.
 - `docs/Package_Builder_Plan.md` and `docs/QUALITY_AND_RELEASE_GATES.md` require no policy change because PB-0007 implements their existing UTF-8, free-tooling, containment, warning, download-integrity, and evidence requirements without changing a normative requirement.
 
-## Remaining Gates
+## Rollover Status
 
-- User stages and commits PB-0007 on `chore/PB-0007-formatting`.
-- User pushes the task branch, merges it into `main`, pushes `main`, receives successful required `main` CI, and explicitly confirms completion.
-- Synchronize PB-0007 completion only at the beginning of the next task branch under the one-merge rollover workflow.
+- PB-0007 is `[x]` and 🟢 **DONE** in the backlog.
+- PB-0007 was removed from Active Work and recorded exactly once in the Completion Log.
+- The rollover was recorded on `test/PB-0008-test-projects`; no separate PB-0007 bookkeeping commit or publication cycle was created.
+- No PB-0007 gate remains.
