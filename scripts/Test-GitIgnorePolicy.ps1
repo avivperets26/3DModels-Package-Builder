@@ -1,10 +1,41 @@
 [CmdletBinding()]
 param(
-    [string]$RepositoryRoot = (Join-Path $PSScriptRoot '..')
+    [string]$RepositoryRoot
 )
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+
+if ([string]::IsNullOrWhiteSpace($RepositoryRoot)) {
+    $scriptPathProperty = $MyInvocation.MyCommand.PSObject.Properties['Path']
+    $invokedScriptPath = if ($null -eq $scriptPathProperty) {
+        $null
+    }
+    else {
+        [string]$scriptPathProperty.Value
+    }
+    if ([string]::IsNullOrWhiteSpace($invokedScriptPath)) {
+        throw 'RepositoryRoot was not supplied and the executing script path is unavailable. Invoke this file with powershell.exe -File or pass -RepositoryRoot explicitly.'
+    }
+
+    try {
+        $resolvedScriptPath = [System.IO.Path]::GetFullPath($invokedScriptPath)
+    }
+    catch {
+        throw "RepositoryRoot was not supplied and the executing script path could not be resolved: $($_.Exception.Message)"
+    }
+
+    if (-not (Test-Path -LiteralPath $resolvedScriptPath -PathType Leaf)) {
+        throw "RepositoryRoot was not supplied and the executing script path is unavailable: $resolvedScriptPath"
+    }
+
+    $scriptDirectory = [System.IO.Path]::GetDirectoryName($resolvedScriptPath)
+    if ([string]::IsNullOrWhiteSpace($scriptDirectory)) {
+        throw "RepositoryRoot was not supplied and the executing script directory could not be resolved from: $resolvedScriptPath"
+    }
+
+    $RepositoryRoot = Join-Path $scriptDirectory '..'
+}
 
 $script:RepositoryRoot = [System.IO.Path]::GetFullPath($RepositoryRoot).TrimEnd([char[]]'\/')
 $script:GitIgnorePath = Join-Path $script:RepositoryRoot '.gitignore'
