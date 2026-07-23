@@ -1,12 +1,15 @@
 # PB-0004 Git Ignore Policy Evidence
 
 - **Task:** PB-0004 — Add repository-safe `.gitignore` rules
-- **Lifecycle:** `[ ]` — 🟡 **PROCESS**
+- **Lifecycle:** `[x]` — 🟢 **DONE**
 - **Documented branch:** `chore/PB-0004-gitignore`
 - **Verification date:** 2026-07-23
+- **Final corrective commit:** `235c952a06951fa21e9b18b72a1ac69ce45e3487`
+- **Final direct-main merge:** `835916065f38b735ae31b83092dea989298c0d0e`
+- **Completion date:** 2026-07-23
 - **Project root:** `C:\Dev\PackageBuilder`
 
-The original policy checkpoint was committed as `3f9a9a920d2ef1ef233e8f5f2b55bae75f5deab9`, merged through [pull request #5](https://github.com/avivperets26/3DModels-Package-Builder/pull/5) as `cab7c3cbf803bf8f1c6187c2ee18dc5f08717988`, and passed its pull-request and final `main` workflows. PB-0004 was reopened after the standalone Windows PowerShell invocation exposed a parameter-binding failure. The correction is locally implemented and validated, but its new Git and GitHub completion gates remain outstanding.
+PB-0004 is complete. The original policy implementation was merged through pull request #5 with successful pull-request and `main` workflows. The standalone-invocation correction was subsequently committed, pushed, merged directly into `main` without a corrective pull request, and validated by a successful corrected `main` workflow. The user explicitly confirmed the corrective push, direct merge, and successful CI. No CI exception was used.
 
 ## Policy Coverage
 
@@ -52,18 +55,27 @@ No rule globally ignores `.fbx`, `.glb`, `.gltf`, `.obj`, `.blend`, `.png`, `.jp
 | Current direct PowerShell invocation | Pass — 107 synthetic paths: 67 ignored and 40 trackable; 15 tracked paths checked with no conflict |
 | Current tracked-file repository baseline | Pass — 14 checks passed, 0 failed, including the new standalone child-process regression |
 
-## Previous Merged Checkpoint Evidence
+## Original Implementation Cycle
 
-| Gate | Previous evidence |
+| Gate | Evidence |
 |---|---|
-| Task commit | `3f9a9a920d2ef1ef233e8f5f2b55bae75f5deab9` |
+| Original commit | `3f9a9a920d2ef1ef233e8f5f2b55bae75f5deab9` |
 | Task-branch push | Explicitly confirmed by the user; pull request #5 contains the task commit |
 | Pull-request merge | [Pull request #5](https://github.com/avivperets26/3DModels-Package-Builder/pull/5) merged into `main` as `cab7c3cbf803bf8f1c6187c2ee18dc5f08717988` |
 | Pull-request CI | [Repository baseline run 30003215780](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30003215780) succeeded |
-| Final `main` CI | [Repository baseline run 30003275017](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30003275017) succeeded |
-| User confirmation | The user explicitly confirmed the push and successful CI for the previous merged checkpoint on 2026-07-23 |
+| Original `main` CI | [Repository baseline run 30003275017](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30003275017) succeeded |
 | CI exception | None |
 
-## Remaining Gates
+## Corrective Standalone-Invocation Cycle
 
-PB-0004 remains `[ ]` and 🟡 **PROCESS**, appears in Active Work, and remains out of the Completion Log. The corrective changes still require a new task commit, task-branch push, pull-request CI, merge into `main`, final `main` CI, and explicit user completion confirmation.
+| Gate | Evidence |
+|---|---|
+| Corrective commit | `235c952a06951fa21e9b18b72a1ac69ce45e3487` |
+| Corrective push | Explicitly confirmed by the user |
+| Corrective pull request | None existed; the corrective commit was merged directly into `main` |
+| Direct-main merge | `835916065f38b735ae31b83092dea989298c0d0e` |
+| Corrected `main` CI | [Repository baseline run 30004427880](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30004427880) succeeded |
+| User confirmation | The user explicitly confirmed the corrective push, direct merge, and successful CI on 2026-07-23 |
+| CI exception | None |
+
+Every PB-0004 acceptance and completion gate is satisfied. PB-0004 is `[x]` and 🟢 **DONE**, has been removed from Active Work, and appears exactly once in the Completion Log.
