@@ -101,7 +101,7 @@ The first Unreal implementation uses Python. A minimal C++ editor plugin is intr
 | Developer editor | Visual Studio Code with PowerShell and `dotnet` CLI; Visual Studio optional |
 | Remote hosting | GitHub Free, approved public repository at [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder); optional for local development and operation |
 | Unit tests | xUnit |
-| .NET formatting | `dotnet format` plus `.editorconfig` |
+| .NET formatting | `dotnet format`, `.editorconfig`, and deterministic Git LF normalization |
 | Python formatting/linting | Ruff |
 | Unity tests | Unity Test Framework for Editor tests |
 | Unreal tests | Python smoke tests plus Unreal Automation Tests where necessary |
@@ -117,7 +117,9 @@ The first Unreal implementation uses Python. A minimal C++ editor plugin is intr
 
 The approved PB-0007 formatting baseline uses the formatter supplied by repository-local .NET SDK `10.0.302`; no separate `dotnet-format` global tool is installed. Ruff `0.15.22` is pinned through root `ruff.toml` with a runtime `required-version` check and installed from the official checksum-verified Windows archive beneath `tools/ruff/0.15.22`. Downloads, setup logs, caches, and validation output remain beneath the ignored repository-local roots.
 
-Ruff targets Python 3.11 because the planned Blender 5.0 worker runtime uses Blender's bundled Python compatibility family. This compatibility target is reviewed with a future approved Blender-family change instead of automatically selecting the newest Python syntax. Root `.editorconfig`, `ruff.toml`, and `scripts/Test-Formatting.ps1` define the shared local policy; verification is non-mutating by default, while an explicit fix mode may apply reviewed formatting changes.
+Ruff targets Python 3.11 because the planned Blender 5.0 worker runtime uses Blender's bundled Python compatibility family. This compatibility target is reviewed with a future approved Blender-family change instead of automatically selecting the newest Python syntax. Root `.editorconfig`, `.gitattributes`, `ruff.toml`, and `scripts/Test-Formatting.ps1` define the shared local policy; verification is non-mutating by default, while an explicit fix mode may apply reviewed formatting changes.
+
+The root `.gitattributes` rule `* text=auto eol=lf` makes text-file checkout line endings deterministic on Windows and other hosts, independently of local `core.autocrlf`. `text=auto` retains Git's binary-content detection instead of forcing binary files through text normalization. The dependency-free formatting-configuration validator requires the root file to be the only reviewable Git attribute file, requires its single non-conflicting rule, and verifies representative C#, PowerShell, YAML, Markdown, solution, and configuration paths with `git check-attr`.
 
 The PB-0008 test baseline keeps the four existing xUnit v3 projects on the centrally pinned VSTest-compatible package set. Each project has a deterministic offline `Category=Smoke` test that loads its directly referenced production assembly and verifies the expected assembly identity. `scripts/Test-TestProjects.ps1` validates the exact project inventory, production references, package configuration, and discoverable smoke-test source without external dependencies. `scripts/Test-BaselineUnitTests.ps1` defaults to repository-local SDK `10.0.302`, a locked restore, Debug configuration, and PB-0008 result paths. It also supports the PB-0009 controlled Release pipeline with no repeated restore or build, while preserving zero-discovery, failure, skip, stale/missing-result, unclassified-outcome, source-nonmutation, and minimum-total protections.
 
@@ -338,6 +340,7 @@ C:\Dev\PackageBuilder\
 ├── global.json
 ├── Directory.Build.props
 ├── Directory.Packages.props
+├── .gitattributes
 ├── .editorconfig
 ├── .gitignore
 ├── README.md

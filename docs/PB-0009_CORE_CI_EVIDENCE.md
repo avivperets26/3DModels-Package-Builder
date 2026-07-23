@@ -11,7 +11,7 @@ PB-0009 expands `.github/workflows/repository-baseline.yml` in place. The PB-000
 
 The new reusable `scripts/Invoke-CoreCi.ps1` entry point runs the same logical pipeline from Windows PowerShell 5.1 locally and `pwsh` in GitHub Actions. Local execution only selects `tools/dotnet/10.0.302/dotnet.exe`. An external action-managed SDK is accepted only with explicit `-GitHubActions`, `GITHUB_ACTIONS=true`, an exact `GITHUB_WORKSPACE` match, and successful `dotnet --version` verification for `10.0.302`.
 
-Initial task commit `c1da19ea70a81436ff04d42b8f59f164bcad6cc3` is pushed on the documented branch and [PR #10](https://github.com/avivperets26/3DModels-Package-Builder/pull/10) is open. The corrective portability change described below remains local and uncommitted.
+Initial task commit `c1da19ea70a81436ff04d42b8f59f164bcad6cc3` and permission-parser correction commit `8415ff83cd9153c72140ee2946675c7f564a15e7` are pushed on the documented branch, and [PR #10](https://github.com/avivperets26/3DModels-Package-Builder/pull/10) is open. The line-ending correction described below remains local and uncommitted.
 
 PB-0009 does not add coverage thresholds, supply-chain enforcement, caching, uploaded artifacts, engines, telemetry, publishing, deployments, secrets, paid services, or marketplace operations. PB-1806 owns coverage gates, and PB-1611 owns dependency, licence, vulnerability, and secret CI.
 
@@ -87,6 +87,27 @@ The correction replaces that permission extraction with a deterministic line-ori
 
 The valid workflow permission block was not changed.
 
+## PR #10 CRLF Formatting Failure and Correction
+
+[GitHub Actions run 30037651223](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30037651223) was the next `pull_request` run for PR #10 at permission-parser correction commit `8415ff83cd9153c72140ee2946675c7f564a15e7`.
+
+| Job | Result | Evidence |
+|---|---|---|
+| `Validate repository baseline` | Passed | All 21 repository-baseline checks passed, confirming the permission-parser correction. |
+| `Validate core application` | Failed | The Release build reported six IDE0055 formatting errors for `src/PackageBuilder.App.Wpf/AssemblyInfo.cs` lines 4–9. |
+
+The file uses LF in the normal local checkout, where formatting and the Release build pass. A contained clean Windows checkout with `core.autocrlf=true` converted the same file to CRLF and reproduced the GitHub IDE0055 failures because `.editorconfig` requires `end_of_line = lf`. The repository had no `.gitattributes` file, so checkout normalization depended on each Git configuration.
+
+The correction adds exactly one root Git attribute rule:
+
+```gitattributes
+* text=auto eol=lf
+```
+
+This makes text-file checkout endings deterministic without weakening IDE0055, warnings-as-errors, `.editorconfig`, or the GitHub workflow. `text=auto` preserves Git's binary-content detection; no Git LFS or unrelated attribute policy is introduced. The formatting-configuration validator now requires the root file to be the only reviewable Git attribute file, rejects additional effective rules as conflicting or unrelated, and verifies C#, PowerShell, YAML, Markdown, solution, and configuration paths resolve to `text=auto` and `eol=lf` through `git check-attr`.
+
+`AssemblyInfo.cs` requires no content change: its `ThemeInfo` arguments remain `ResourceDictionaryLocation.None` and `ResourceDictionaryLocation.SourceAssembly`.
+
 ## Core Pipeline
 
 `scripts/Invoke-CoreCi.ps1` runs these fail-closed stages in order:
@@ -123,6 +144,8 @@ Both the omitted-root and explicit-root core-CI runs passed. They used repositor
 
 The controlled restore accepted all existing lock files. The complete 15-project Release build succeeded with zero warnings and zero errors. .NET formatting, Ruff lint, and Ruff formatting verification made no source changes.
 
+After the Git LF-normalization correction, the complete explicit-root core pipeline again passed all nine stages. Formatting configuration passed 8/8, repository baseline passed 21/21, the Release build remained warning/error-free, and all four tests passed with no failures or skips.
+
 ## Validation Evidence
 
 | Command or check | Result |
@@ -141,26 +164,28 @@ The controlled restore accepted all existing lock files. The complete 15-project
 | `scripts/Test-TestProjects.ps1` | Pass; 4 projects, 4 pinned packages, 4 checks, 0 failures. |
 | `scripts/Test-CentralBuildConfiguration.ps1` | Pass; 15 projects, 4 packages, 8 checks, 0 failures. |
 | `scripts/Test-SolutionArchitecture.ps1` | Pass; 15 projects, 7 checks, 0 failures. |
-| `scripts/Test-FormattingConfiguration.ps1` | Pass through repository baseline; 6 checks, 0 failures. |
+| `scripts/Test-FormattingConfiguration.ps1` | Pass under Windows PowerShell `5.1.26100.8894`; 8 checks, 0 failures. |
+| Representative `git check-attr` validation | Pass; C#, PowerShell, YAML, Markdown, solution, and configuration paths each resolve to `text=auto` and `eol=lf`. |
 | `scripts/Test-Formatting.ps1` | Pass; .NET format, Ruff lint, Ruff format, and source-nonmutation checks succeeded. |
 | `scripts/Test-RepositoryBaseline.ps1 -RequireTrackedFiles` | Pass inside both core runs; 21 checks, 0 failures. |
 | Windows PowerShell 5.1 parsing | Pass under `5.1.26100.8894`; every `scripts/*.ps1` file parsed without errors. |
 | Local PowerShell 7 availability | `pwsh` is unavailable locally; PowerShell 7 verification remains a GitHub PR-CI gate. |
+| Contained `core.autocrlf=true` checkout | Pass; `AssemblyInfo.cs` contained 0 CRLF and 10 LF-only line endings, tracked checkout diff count was 0, and the 15-project Release build completed with 0 warnings/errors. The proposed untracked `.gitattributes` was seeded before materializing the disposable checkout because this task forbids staging or committing it. |
 | `git diff --check` | Pass inside both repository-baseline runs. |
-| Lock-file, changed-file, content, and lifecycle audit | Pass; lock files are unchanged; prohibited generated/runtime content is not reviewable; the corrective worktree is limited to the validator and two requested PB-0009 documents; PB-0008 remains DONE and logged once; PB-0009 remains PROCESS and absent from the Completion Log; PB-0013 is unchanged. |
+| Lock-file, changed-file, content, and lifecycle audit | Pass; lock files are unchanged; prohibited generated/runtime content is not reviewable; the line-ending correction is limited to `.gitattributes`, the formatting-configuration validator, and three affected PB-0009/architecture documents; `AssemblyInfo.cs` and the workflow are unchanged; PB-0008 remains DONE and logged once; PB-0009 remains PROCESS and absent from the Completion Log; PB-0013 is unchanged. |
 
 ## Documentation Impact
 
 - Added this PB-0009 evidence record.
 - Updated `docs/IMPLEMENTATION_BACKLOG.md` for the PB-0008 rollover and active PB-0009 state.
-- Recorded failed PR run `30034710738` and its focused validator-portability correction in this evidence record and the backlog.
+- Recorded failed PR runs `30034710738` and `30037651223` and their focused portability corrections in this evidence record and the backlog.
 - Updated `docs/PB-0008_BASELINE_UNIT_TESTS_EVIDENCE.md` with final publication and rollover evidence.
-- Updated `docs/TECH_STACK_AND_ARCHITECTURE.md` with the current two-job core CI design and local/GitHub SDK boundary.
+- Updated `docs/TECH_STACK_AND_ARCHITECTURE.md` with the current two-job core CI design, local/GitHub SDK boundary, and deterministic Git LF-normalization policy.
 - `docs/PB-0002_REPOSITORY_BASELINE.md` remains unchanged because it accurately records historical PB-0002 evidence; PB-0009 preserves that job and documents the later expansion here.
 - `docs/Package_Builder_Plan.md` and `docs/QUALITY_AND_RELEASE_GATES.md` require no change because PB-0009 implements their existing CI, containment, warning, deterministic-test, free-tooling, and evidence policies without changing a normative requirement or introducing future coverage/supply-chain gates.
 
 ## Remaining Gates
 
-PB-0009 remains locally corrected, `[ ]`, and 🟡 **PROCESS**. PR #10 remains open and unmerged. Run `30034710738` remains failed, and no rerun or successful PB-0009 GitHub CI is claimed.
+PB-0009 remains locally corrected, `[ ]`, and 🟡 **PROCESS**. PR #10 remains open and unmerged. Run `30037651223` confirmed that the repository baseline now passes but the core job fails on CRLF-dependent IDE0055 errors. No successful PB-0009 GitHub CI is claimed.
 
 The user-controlled corrective commit and push to the existing PR branch, successful PR verification including PowerShell 7, merge into and push of `main`, successful required `main` CI, and explicit user completion confirmation remain. PB-0009 completion bookkeeping must be synchronized only at the beginning of the next task branch after those gates pass.

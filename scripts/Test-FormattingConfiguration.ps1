@@ -58,12 +58,14 @@ if (-not [System.StringComparer]::OrdinalIgnoreCase.Equals($gitRoot, $script:Rep
     throw "RepositoryRoot must be the Git top level. Git reports: $gitRoot"
 }
 
+$gitAttributesPath = Join-Path $script:RepositoryRoot '.gitattributes'
 $editorConfigPath = Join-Path $script:RepositoryRoot '.editorconfig'
 $ruffConfigurationPath = Join-Path $script:RepositoryRoot 'ruff.toml'
 $installerPath = Join-Path $script:RepositoryRoot 'scripts\Install-Ruff.ps1'
 $formattingValidatorPath = Join-Path $script:RepositoryRoot 'scripts\Test-Formatting.ps1'
 $evidencePath = Join-Path $script:RepositoryRoot 'docs\PB-0007_FORMATTING_EVIDENCE.md'
 $requiredRelativePaths = @(
+    '.gitattributes',
     '.editorconfig',
     'ruff.toml',
     'scripts/Install-Ruff.ps1',
@@ -75,6 +77,7 @@ $requiredRelativePaths = @(
 Invoke-Check 'Required formatting baseline files exist in the reviewable Git set' {
     $missing = @(
         @(
+            $gitAttributesPath,
             $editorConfigPath,
             $ruffConfigurationPath,
             $installerPath,
@@ -97,6 +100,101 @@ Invoke-Check 'Required formatting baseline files exist in the reviewable Git set
     $notReviewable = @($requiredRelativePaths | Where-Object { $_ -notin $reviewablePaths })
     if ($notReviewable.Count -gt 0) {
         throw "Formatting files are ignored or outside the reviewable Git set: $($notReviewable -join ', ')"
+    }
+}
+
+Invoke-Check '.gitattributes defines one non-conflicting LF normalization policy' {
+    $attributeFiles = @(
+        @(
+            & git -C $script:RepositoryRoot ls-files
+            & git -C $script:RepositoryRoot ls-files --others --exclude-standard
+        ) |
+            ForEach-Object { $_.Replace('\', '/') } |
+            Where-Object { $_ -eq '.gitattributes' -or $_ -match '/\.gitattributes$' } |
+            Sort-Object -Unique
+    )
+    if ($LASTEXITCODE -ne 0) {
+        throw 'Unable to enumerate reviewable Git attribute files.'
+    }
+    if ($attributeFiles.Count -ne 1 -or $attributeFiles[0] -cne '.gitattributes') {
+        $encounteredFiles = if ($attributeFiles.Count -eq 0) {
+            '<none>'
+        }
+        else {
+            $attributeFiles -join ', '
+        }
+        throw (
+            'The root .gitattributes must be the only reviewable Git attribute file; ' +
+            "found $($attributeFiles.Count): $encounteredFiles"
+        )
+    }
+
+    $attributeLines = @(Get-Content -LiteralPath $gitAttributesPath -Encoding UTF8)
+    $effectiveLines = @(
+        $attributeLines |
+            ForEach-Object { $_.Trim() } |
+            Where-Object {
+                -not [string]::IsNullOrWhiteSpace($_) -and
+                -not $_.StartsWith('#', [System.StringComparison]::Ordinal)
+            }
+    )
+    $requiredPolicy = '* text=auto eol=lf'
+
+    if ($effectiveLines.Count -ne 1 -or $effectiveLines[0] -cne $requiredPolicy) {
+        $encountered = if ($effectiveLines.Count -eq 0) {
+            '<none>'
+        }
+        else {
+            $effectiveLines -join ', '
+        }
+        throw (
+            '.gitattributes must contain exactly one effective rule, ' +
+            "'$requiredPolicy', with no conflicting or unrelated line-ending rules. " +
+            "Found $($effectiveLines.Count): $encountered"
+        )
+    }
+}
+
+Invoke-Check 'Representative text files resolve to text=auto and eol=lf' {
+    $representativePaths = [ordered]@{
+        'C#' = 'src/PackageBuilder.App.Wpf/AssemblyInfo.cs'
+        'PowerShell' = 'scripts/Test-FormattingConfiguration.ps1'
+        'YAML' = '.github/workflows/repository-baseline.yml'
+        'Markdown' = 'docs/IMPLEMENTATION_BACKLOG.md'
+        'solution' = 'PackageBuilder.sln'
+        'configuration' = 'Directory.Build.props'
+    }
+
+    foreach ($entry in $representativePaths.GetEnumerator()) {
+        $relativePath = $entry.Value
+        $absolutePath = Join-Path $script:RepositoryRoot $relativePath
+        if (-not (Test-Path -LiteralPath $absolutePath -PathType Leaf)) {
+            throw "Missing representative $($entry.Key) file: $relativePath"
+        }
+
+        $attributeOutput = @(
+            & git -C $script:RepositoryRoot check-attr text eol -- $relativePath 2>&1
+        )
+        if ($LASTEXITCODE -ne 0) {
+            throw "Unable to resolve Git attributes for ${relativePath}: $($attributeOutput -join ' ')"
+        }
+
+        $expectedOutput = @(
+            ('{0}: text: auto' -f $relativePath),
+            ('{0}: eol: lf' -f $relativePath)
+        )
+        if ($attributeOutput.Count -ne $expectedOutput.Count -or
+            @(
+                Compare-Object `
+                    -ReferenceObject $expectedOutput `
+                    -DifferenceObject $attributeOutput `
+                    -CaseSensitive
+            ).Count -gt 0) {
+            throw (
+                "$($entry.Key) file '$relativePath' must resolve to text=auto and eol=lf. " +
+                "Git reported: $($attributeOutput -join '; ')"
+            )
+        }
     }
 }
 
