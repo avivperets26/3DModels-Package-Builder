@@ -2,7 +2,7 @@
 
 **Task:** PB-0008 — Create baseline unit-test projects  
 **Branch:** `test/PB-0008-test-projects`  
-**Lifecycle:** 🟡 **PROCESS**  
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-07-23
 
 ## Scope and Status
@@ -135,10 +135,16 @@ All commands ran on 2026-07-23 from `C:\Dev\PackageBuilder` using repository-con
 - Updated `docs/TECH_STACK_AND_ARCHITECTURE.md` to document the local PB-0008 test workflow and PB-0009 CI boundary.
 - `docs/Package_Builder_Plan.md` and `docs/QUALITY_AND_RELEASE_GATES.md` require no change because PB-0008 implements their existing deterministic, offline, contained test policy without changing a normative requirement or claiming future traceability, coverage, or release thresholds.
 
-## Remaining Gates
+## Final Publication and Rollover Evidence
 
-- PB-0008 remains locally validated, `[ ]`, and 🟡 **PROCESS**.
-- The user must stage and commit PB-0008 on `test/PB-0008-test-projects`.
-- The user must push the task branch, merge it into and push `main`, receive successful required `main` CI, and explicitly confirm completion.
-- No PB-0008 GitHub application-test CI is claimed. The current PB-0002 workflow remains repository-bootstrap validation only; PB-0009 will add full application restore, build, format, and test execution to GitHub Actions.
-- PB-0008 completion bookkeeping must be synchronized only at the beginning of the next task branch after all publication gates and user confirmation pass.
+| Gate | Final evidence |
+|---|---|
+| Task commit | `cdf08733edc28d1990b86a4a70b7d59c33fdcbeb` on `test/PB-0008-test-projects` |
+| Integration | [PR #9](https://github.com/avivperets26/3DModels-Package-Builder/pull/9) |
+| Merge into `main` | `37dbd69690f3397ecf60ef7d96094d9d09221f9a` |
+| Required `main` CI | [Repository baseline workflow run 30029052452](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30029052452) — attempt 1 `push` run on `main`, completed successfully for exact merge commit `37dbd69690f3397ecf60ef7d96094d9d09221f9a` |
+| User confirmation | The user explicitly confirmed on 2026-07-23 that PB-0008 was merged into `main` and required `main` CI was green. |
+| Exception | None used |
+| Rollover | Synchronized exactly once at the beginning of `chore/PB-0009-core-ci`; PB-0008 is removed from Active Work and recorded once in the Completion Log. |
+
+PB-0008 is `[x]` and 🟢 **DONE**. No PB-0008 application-test GitHub Actions run is claimed: its required `main` evidence was the PB-0002 repository-baseline workflow that existed before PB-0009. PB-0009 adds the application restore, build, formatting, Ruff, and test CI foundation without rewriting this historical evidence.
