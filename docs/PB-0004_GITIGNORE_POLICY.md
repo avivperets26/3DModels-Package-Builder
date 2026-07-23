@@ -87,6 +87,4 @@ No rule globally ignores `.fbx`, `.glb`, `.gltf`, `.obj`, `.blend`, `.png`, `.jp
 | Direct-main merge | `f33da4d8664e1467916abdfb497360f6df50efa0` |
 | Published `main` CI | [Repository baseline run 30004923229](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30004923229) succeeded |
 
-This documentation follow-up will be published through the required final pull request, providing `pull_request` CI coverage for the corrected validator.
-
 Every PB-0004 acceptance and completion gate is satisfied. PB-0004 is `[x]` and 🟢 **DONE**, has been removed from Active Work, and appears exactly once in the Completion Log.

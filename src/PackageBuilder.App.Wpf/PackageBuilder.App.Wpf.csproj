@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PackageBuilder.Application\PackageBuilder.Application.csproj" />
+    <ProjectReference Include="..\PackageBuilder.Infrastructure\PackageBuilder.Infrastructure.csproj" />
+    <ProjectReference Include="..\PackageBuilder.Marketplaces.Fab\PackageBuilder.Marketplaces.Fab.csproj" />
+    <ProjectReference Include="..\PackageBuilder.Targets.Portable\PackageBuilder.Targets.Portable.csproj" />
+    <ProjectReference Include="..\PackageBuilder.Targets.Unity\PackageBuilder.Targets.Unity.csproj" />
+    <ProjectReference Include="..\PackageBuilder.Targets.Unreal\PackageBuilder.Targets.Unreal.csproj" />
+    <ProjectReference Include="..\PackageBuilder.Tools.Blender\PackageBuilder.Tools.Blender.csproj" />
+  </ItemGroup>
+
+</Project>

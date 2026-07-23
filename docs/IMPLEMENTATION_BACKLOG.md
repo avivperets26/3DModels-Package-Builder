@@ -65,6 +65,7 @@ Every case supports a configurable publisher root such as `AvivPeretsFBX`; no pu
 - Codex must not stage files, merge branches, create pull requests, create tags, or publish releases unless the user explicitly authorizes the exact action.
 - Authorization for one Git or remote action does not authorize another action or a future action.
 - Codex may use read-only Git commands such as `git status`, `git diff`, `git log`, and `git branch --show-current` for inspection and validation.
+- Pull requests are optional; a user-confirmed direct merge is sufficient when the commit, branch push, merge into `main`, successful `main` CI, and user confirmation have evidence.
 - Every future task must begin by reading `AGENTS.md` completely before any other project action.
 
 ### Codex Task Handoff
@@ -88,7 +89,7 @@ A task can change to `[x]` only when all of the following are satisfied:
 5. The task branch is pushed to GitHub.
 6. GitHub CI passes.
 7. The change is merged into `main`, unless the task explicitly records an approved exception.
-8. The Completion Log contains the branch, final commit, PR, and completion date.
+8. The Completion Log contains the branch, final commit, pull request or direct-merge record, and completion date.
 
 Codex must not mark a PB task complete until the user explicitly confirms that the commit, push, CI, and merge requirements were completed. Read-only repository evidence does not replace that confirmation. Merely writing code locally does not complete a task.
 
@@ -132,6 +133,7 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
+| PB-0005 | 🟡 **PROCESS** | `chore/PB-0005-solution-skeleton` | Codex for local implementation; user for Git/GitHub gates | 2026-07-23 | Repository-local SDK `10.0.302` restored and built all 15 required projects in Release with 0 warnings and 0 errors; architecture validation passed 7/7, repository baseline passed 14/14, `git diff --check` passed, and 0 generated/runtime/NuGet-cache paths are tracked. The implementation remains local and uncommitted. | Required commit, task-branch push, merge into `main`, successful `main` CI, and explicit user completion confirmation remain. A pull request is optional. |
 | PB-0013 | 🟡 **PROCESS** | `docs/PB-0013-quality-release-gates` | User for remaining completion confirmation | 2026-07-22 | Remote feature commit `a1032c48f2a8d0dc98d0c589f1a845605950952b` was merged by pull request [#1](https://github.com/avivperets26/3DModels-Package-Builder/pull/1) into public default branch `main` at `13e5875b686c3219e3571d45ceaa93c463e881ff`. | No GitHub CI evidence or explicit user completion confirmation is recorded. The historical one-task-per-branch conflict remains documented below. |
 
 ### Dated Repository Verification Checkpoints
@@ -257,7 +259,7 @@ flowchart LR
   - Depends on: PB-0003
   - Done when: the documented, categorized policy ignores .NET build/cache output; Visual Studio, JetBrains, and machine-local VS Code state; PowerShell/Python caches and temporary files; Blender backup/recovery/cache state; Unity and Unreal generated state; operating-system metadata; credentials; private keys; signing files; and the repository-local `tools`, `downloads`, `logs`, `runtime-data`, and `artifacts` directories without ignoring shared `.vscode` configuration, legitimate source/engine/fixture/package-input formats, or safe configuration examples; `scripts/Test-GitIgnorePolicy.ps1` verifies synthetic repository-relative ignored and trackable cases, exact negations, path containment, and every tracked path with `git check-ignore -v --no-index`; and the repository-baseline script runs the same validation locally and in GitHub Actions.
 
-- [ ] **PB-0005 — Create the .NET solution and project skeleton** — **P0**
+- [ ] **PB-0005 — Create the .NET solution and project skeleton** — **P0** — 🟡 **PROCESS**
   - Branch: `chore/PB-0005-solution-skeleton`
   - Depends on: PB-0004
   - Done when: all projects defined in the architecture document exist, reference inward correctly, and repository-local `dotnet build` succeeds from a Visual Studio Code terminal without Visual Studio.

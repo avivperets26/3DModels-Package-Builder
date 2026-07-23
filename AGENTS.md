@@ -31,6 +31,7 @@ These rules apply permanently to the entire `C:\Dev\PackageBuilder` tree unless 
 23. Codex may use read-only Git commands such as `git status`, `git diff`, `git log`, and `git branch --show-current` for inspection and validation.
 24. At the end of every task, Codex must report the changed files, test and validation results, suggested branch name, suggested commit message, and manual commands the user can run.
 25. Codex must leave every PB task open until the user confirms that its commit, push, CI, and merge requirements were completed.
+26. Pull requests are optional. A user-confirmed direct merge satisfies the merge workflow when the required commit, branch push, merge into `main`, successful `main` CI, and user confirmation have evidence; lack of a pull request alone is not a completion blocker.
 
 ## Public Repository Safeguards
 
