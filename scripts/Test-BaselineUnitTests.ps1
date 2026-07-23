@@ -1,7 +1,15 @@
 [CmdletBinding()]
 param(
     [string]$RepositoryRoot,
-    [switch]$VerifyNoSourceChanges
+    [switch]$VerifyNoSourceChanges,
+    [ValidateSet('Debug', 'Release')]
+    [string]$Configuration = 'Debug',
+    [switch]$NoRestore,
+    [switch]$NoBuild,
+    [ValidatePattern('^PB-\d{4}$')]
+    [string]$ResultSetName = 'PB-0008',
+    [string]$DotnetExecutable,
+    [switch]$GitHubActions
 )
 
 Set-StrictMode -Version Latest
@@ -15,11 +23,11 @@ $repositoryRootPath = [System.IO.Path]::GetFullPath($RepositoryRoot).TrimEnd([ch
 $solutionPath = Join-Path $repositoryRootPath 'PackageBuilder.sln'
 $globalJsonPath = Join-Path $repositoryRootPath 'global.json'
 $structuralValidatorPath = Join-Path $repositoryRootPath 'scripts\Test-TestProjects.ps1'
-$logDirectory = Join-Path $repositoryRootPath 'logs\validation\PB-0008'
+$logDirectory = Join-Path $repositoryRootPath "logs\validation\$ResultSetName"
 $logPath = Join-Path $logDirectory 'baseline-unit-tests.log'
-$resultsRoot = Join-Path $repositoryRootPath 'artifacts\test-results\PB-0008'
+$resultsRoot = Join-Path $repositoryRootPath "artifacts\test-results\$ResultSetName"
 $summaryPath = Join-Path $resultsRoot 'summary.json'
-$temporaryDirectory = Join-Path $repositoryRootPath 'artifacts\validation\PB-0008\temp'
+$temporaryDirectory = Join-Path $repositoryRootPath "artifacts\validation\$ResultSetName\temp"
 $script:LogLines = New-Object 'System.Collections.Generic.List[string]'
 $script:OriginalEnvironment = @{}
 $script:EnvironmentConfigured = $false
@@ -157,6 +165,7 @@ function Set-ContainedEnvironment {
     foreach ($name in $script:EnvironmentNames) {
         $script:OriginalEnvironment[$name] = [Environment]::GetEnvironmentVariable($name, 'Process')
     }
+    $script:EnvironmentConfigured = $true
 
     $values = [ordered]@{
         DOTNET_ROOT = $DotnetRoot
@@ -180,17 +189,22 @@ function Set-ContainedEnvironment {
             'DOTNET_CLI_TELEMETRY_OPTOUT|TESTINGPLATFORM_TELEMETRY_OPTOUT)$'
         )
         if ($isPathValue) {
-            if (-not (Test-ContainedPath $entry.Value)) {
+            $externalRunnerDotnet = $entry.Key -ceq 'DOTNET_ROOT' -and $GitHubActions
+            if (-not $externalRunnerDotnet -and -not (Test-ContainedPath $entry.Value)) {
                 throw "Environment path escapes the repository root: $($entry.Key)=$($entry.Value)"
             }
-            if (-not (Test-Path -LiteralPath $entry.Value -PathType Container)) {
+            if ($externalRunnerDotnet) {
+                if (-not (Test-Path -LiteralPath $entry.Value -PathType Container)) {
+                    throw "GitHub Actions DOTNET_ROOT does not exist: $($entry.Value)"
+                }
+            }
+            elseif (-not (Test-Path -LiteralPath $entry.Value -PathType Container)) {
                 New-Item -ItemType Directory -Path $entry.Value -Force | Out-Null
             }
         }
         [Environment]::SetEnvironmentVariable($entry.Key, $entry.Value, 'Process')
     }
 
-    $script:EnvironmentConfigured = $true
 }
 
 function Restore-Environment {
@@ -251,13 +265,51 @@ foreach ($requiredFile in @($solutionPath, $globalJsonPath, $structuralValidator
 $globalJson = Get-Content -Raw -LiteralPath $globalJsonPath -Encoding UTF8 | ConvertFrom-Json
 $dotnetVersion = [string]$globalJson.sdk.version
 if ($dotnetVersion -cne '10.0.302') {
-    throw "Expected repository-local .NET SDK 10.0.302; found '$dotnetVersion'."
+    throw "Expected .NET SDK pin 10.0.302; found '$dotnetVersion'."
 }
-$dotnetRoot = Join-Path $repositoryRootPath "tools\dotnet\$dotnetVersion"
-$dotnetExecutable = Join-Path $dotnetRoot 'dotnet.exe'
-if (-not (Test-Path -LiteralPath $dotnetExecutable -PathType Leaf)) {
-    throw "Repository-local .NET SDK is missing: $dotnetExecutable"
+
+if ($GitHubActions) {
+    if ($env:GITHUB_ACTIONS -cne 'true' -or [string]::IsNullOrWhiteSpace($env:GITHUB_WORKSPACE)) {
+        throw 'The -GitHubActions mode requires GITHUB_ACTIONS=true and GITHUB_WORKSPACE.'
+    }
+    $githubWorkspace = [System.IO.Path]::GetFullPath($env:GITHUB_WORKSPACE).TrimEnd([char[]]'\/')
+    if (-not [System.StringComparer]::OrdinalIgnoreCase.Equals($githubWorkspace, $repositoryRootPath)) {
+        throw "RepositoryRoot must equal GITHUB_WORKSPACE in GitHub Actions. Workspace: $githubWorkspace"
+    }
+    if ([string]::IsNullOrWhiteSpace($DotnetExecutable)) {
+        throw 'GitHub Actions mode requires the setup-dotnet managed DotnetExecutable.'
+    }
+    $actionDotnetCommands = @(Get-Command 'dotnet.exe' -CommandType Application -ErrorAction Stop)
+    if ($actionDotnetCommands.Count -lt 1) {
+        throw 'The setup-dotnet managed dotnet.exe is unavailable on PATH.'
+    }
+    $actionDotnetPath = [System.IO.Path]::GetFullPath($actionDotnetCommands[0].Source)
+    $requestedDotnetPath = [System.IO.Path]::GetFullPath($DotnetExecutable)
+    if (-not [System.StringComparer]::OrdinalIgnoreCase.Equals(
+            $actionDotnetPath,
+            $requestedDotnetPath
+        )) {
+        throw "DotnetExecutable must be the setup-dotnet managed PATH selection: $actionDotnetPath"
+    }
 }
+else {
+    if ($env:GITHUB_ACTIONS -ceq 'true') {
+        throw 'GitHub Actions must invoke this script with the explicit -GitHubActions switch.'
+    }
+    if (-not [string]::IsNullOrWhiteSpace($DotnetExecutable)) {
+        throw 'Local validation does not allow a DotnetExecutable override.'
+    }
+    $DotnetExecutable = Join-Path $repositoryRootPath "tools\dotnet\$dotnetVersion\dotnet.exe"
+}
+
+$dotnetExecutablePath = [System.IO.Path]::GetFullPath($DotnetExecutable)
+if (-not $GitHubActions -and -not (Test-ContainedPath $dotnetExecutablePath)) {
+    throw "Local .NET SDK must remain beneath the repository: $dotnetExecutablePath"
+}
+if (-not (Test-Path -LiteralPath $dotnetExecutablePath -PathType Leaf)) {
+    throw "Selected .NET SDK is missing: $dotnetExecutablePath"
+}
+$dotnetRoot = Split-Path $dotnetExecutablePath -Parent
 
 foreach ($directory in @($logDirectory, $resultsRoot, $temporaryDirectory)) {
     if (-not (Test-ContainedPath $directory)) {
@@ -278,16 +330,21 @@ try {
         & $structuralValidatorPath -RepositoryRoot $repositoryRootPath
         Write-ValidationLog '[PASS] Test-project structural validation'
 
-        $dotnetVersionOutput = @(& $dotnetExecutable --version 2>&1)
+        $dotnetVersionOutput = @(& $dotnetExecutablePath --version 2>&1)
         if ($LASTEXITCODE -ne 0 -or ($dotnetVersionOutput -join ' ').Trim() -cne $dotnetVersion) {
             throw "Repository-local .NET SDK version check failed: $($dotnetVersionOutput -join ' ')"
         }
         Write-ValidationLog "[PASS] .NET SDK version $dotnetVersion"
 
-        Invoke-Tool `
-            -Name 'Locked solution restore' `
-            -Executable $dotnetExecutable `
-            -Arguments @('restore', $solutionPath, '--locked-mode', '--verbosity', 'minimal') | Out-Null
+        if ($NoRestore) {
+            Write-ValidationLog '[INFO] Controlled restore was completed by the caller; no restore will run here.'
+        }
+        else {
+            Invoke-Tool `
+                -Name 'Locked solution restore' `
+                -Executable $dotnetExecutablePath `
+                -Arguments @('restore', $solutionPath, '--locked-mode', '--verbosity', 'minimal') | Out-Null
+        }
 
         $projectResults = @()
         $validationFailures = New-Object 'System.Collections.Generic.List[string]'
@@ -311,22 +368,27 @@ try {
                 Remove-Item -LiteralPath $trxPath -Force
             }
 
+            $testArguments = @(
+                'test',
+                $projectPath,
+                '--configuration',
+                $Configuration,
+                '--no-restore',
+                '--logger',
+                "trx;LogFileName=$trxFileName",
+                '--results-directory',
+                $projectResultDirectory,
+                '--verbosity',
+                'minimal'
+            )
+            if ($NoBuild) {
+                $testArguments += '--no-build'
+            }
+
             $testExitCode = Invoke-Tool `
                 -Name "$($specification.Name) tests" `
-                -Executable $dotnetExecutable `
-                -Arguments @(
-                    'test',
-                    $projectPath,
-                    '--configuration',
-                    'Debug',
-                    '--no-restore',
-                    '--logger',
-                    "trx;LogFileName=$trxFileName",
-                    '--results-directory',
-                    $projectResultDirectory,
-                    '--verbosity',
-                    'minimal'
-                ) `
+                -Executable $dotnetExecutablePath `
+                -Arguments $testArguments `
                 -AllowNonZeroExit
 
             try {
@@ -382,11 +444,16 @@ try {
             "[TOTAL] discovered=$($totals.Discovered), passed=$($totals.Passed), " +
             "failed=$($totals.Failed), skipped=$($totals.Skipped)"
         )
+        if ($totals.Passed -lt 4) {
+            $validationFailures.Add(
+                "The complete baseline suite must report at least 4 passing tests; found $($totals.Passed)."
+            )
+        }
 
         $summary = [ordered]@{
-            task = 'PB-0008'
+            task = $ResultSetName
             sdkVersion = $dotnetVersion
-            configuration = 'Debug'
+            configuration = $Configuration
             projects = @($projectResults | ForEach-Object {
                 [ordered]@{
                     project = $_.Project

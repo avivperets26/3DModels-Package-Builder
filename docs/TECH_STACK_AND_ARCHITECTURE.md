@@ -105,7 +105,7 @@ The first Unreal implementation uses Python. A minimal C++ editor plugin is intr
 | Python formatting/linting | Ruff |
 | Unity tests | Unity Test Framework for Editor tests |
 | Unreal tests | Python smoke tests plus Unreal Automation Tests where necessary |
-| CI | PB-0002 minimal GitHub Actions repository-bootstrap validation; PB-0009 full solution restore/build/test CI; no-cost self-hosted Windows runner for engine/UI/installer/performance tests; never required for local product operation |
+| CI | PB-0009 GitHub Actions repository-baseline plus core restore/build/format/Ruff/test validation on GitHub Free Windows runners; no-cost self-hosted Windows runner for future engine/UI/installer/performance tests; never required for local product operation |
 | Dependency updates | Dependabot or Renovate pull requests |
 | Documentation | Markdown plus Architecture Decision Records |
 | Installer | Deferred decision; no-cost MSIX or permissively licensed Velopack evaluated during productization |
@@ -119,7 +119,9 @@ The approved PB-0007 formatting baseline uses the formatter supplied by reposito
 
 Ruff targets Python 3.11 because the planned Blender 5.0 worker runtime uses Blender's bundled Python compatibility family. This compatibility target is reviewed with a future approved Blender-family change instead of automatically selecting the newest Python syntax. Root `.editorconfig`, `ruff.toml`, and `scripts/Test-Formatting.ps1` define the shared local policy; verification is non-mutating by default, while an explicit fix mode may apply reviewed formatting changes.
 
-The PB-0008 test baseline keeps the four existing xUnit v3 projects on the centrally pinned VSTest-compatible package set. Each project has a deterministic offline `Category=Smoke` test that loads its directly referenced production assembly and verifies the expected assembly identity. `scripts/Test-TestProjects.ps1` validates the exact project inventory, production references, package configuration, and discoverable smoke-test source without external dependencies. `scripts/Test-BaselineUnitTests.ps1` resolves SDK `10.0.302` beneath the repository, restores in locked mode, runs all four projects, rejects zero discovery, failures, skips, and unclassified results, and writes TRX, deterministic logical counts, and logs only beneath ignored `artifacts` and `logs` roots. An explicit source-hash verification mode proves the validation run does not alter reviewable source. PB-0009 remains responsible for executing these tests in the full GitHub Actions application CI workflow.
+The PB-0008 test baseline keeps the four existing xUnit v3 projects on the centrally pinned VSTest-compatible package set. Each project has a deterministic offline `Category=Smoke` test that loads its directly referenced production assembly and verifies the expected assembly identity. `scripts/Test-TestProjects.ps1` validates the exact project inventory, production references, package configuration, and discoverable smoke-test source without external dependencies. `scripts/Test-BaselineUnitTests.ps1` defaults to repository-local SDK `10.0.302`, a locked restore, Debug configuration, and PB-0008 result paths. It also supports the PB-0009 controlled Release pipeline with no repeated restore or build, while preserving zero-discovery, failure, skip, stale/missing-result, unclassified-outcome, source-nonmutation, and minimum-total protections.
+
+The PB-0009 core pipeline is exposed through `scripts/Invoke-CoreCi.ps1` for Visual Studio Code, Windows PowerShell 5.1, and GitHub Actions `pwsh`. It performs repository-baseline validation, exact SDK verification, one locked restore, a warning-free Release build, non-mutating .NET formatting, checksum-verified Ruff `0.15.22` installation, Ruff lint/format checks, and all four Release test projects in a fixed fail-closed order. Local execution accepts only `tools/dotnet/10.0.302`; explicit GitHub Actions mode accepts the `actions/setup-dotnet` managed runner SDK only after the GitHub workspace and exact SDK version are verified. All Package Builder CLI state, NuGet/Ruff caches, temporary files, logs, and results remain beneath the selected repository workspace.
 
 ## 5. Why This Stack
 
@@ -958,34 +960,33 @@ Generated test, coverage, mutation, benchmark, accessibility, usability, analyze
 
 ## 25. Continuous Integration
 
-### PB-0002 Bootstrap Repository Workflow
+### PB-0002 Bootstrap Repository Job
 
-Before the .NET solution and test projects exist, PB-0002 provides a minimal GitHub Free workflow for repository-completion evidence. It runs on pull requests targeting `main` and pushes to `main` on `windows-latest`, checks out full history with credentials disabled, and invokes the same dependency-free PowerShell validator used locally.
+PB-0002 established the initial GitHub Free repository-completion workflow before the .NET solution and test projects existed. PB-0009 preserves its `validate-repository-baseline` job in the same workflow file. The job still runs first on `windows-latest`, checks out full history with credentials disabled, and invokes the same dependency-free PowerShell validator used locally.
 
 The bootstrap validator is limited to required tracked files, the approved `global.json` SDK pin, PowerShell parsing, Markdown structure and local links, backlog task/dependency/branch/lifecycle/Completion Log consistency, current repository secret/personal-path/binary/generated/runtime exclusions, `git diff --check`, and reachable-history integrity. GitHub containment resolves from `GITHUB_WORKSPACE`; the workflow does not require the hosted checkout to use `C:\Dev\PackageBuilder`.
 
-Every action reference is pinned to a reviewed immutable commit SHA. The workflow does not restore or build the future application, install .NET or any engine, upload artifacts, add telemetry, publish outputs, or require a paid service.
+The baseline job remains dependency-free: it does not restore or build the application, install .NET or an engine, upload artifacts, add telemetry, publish outputs, or require a paid service. It now also validates the PB-0009 workflow and local-entry configuration before the dependent core job can start.
 
 ### PB-0009 Full GitHub-Hosted Workflow
 
-PB-0009 establishes the GitHub Free solution-level workflow on each pull request:
+PB-0009 expands `.github/workflows/repository-baseline.yml` for pull requests targeting `main` and pushes to `main`. Repository permissions remain `contents: read`. Both jobs use GitHub Free `windows-latest` runners with bounded timeouts, full-history checkout, and disabled persisted credentials:
 
-- Restore with locked dependency versions.
-- Build .NET solution.
-- Run unit and contract tests.
-- Run formatting/static checks.
-- Validate JSON schemas and example manifests.
-- Build documentation links/index.
+1. `validate-repository-baseline` runs the preserved PB-0002 dependency-free validator.
+2. `core-ci` depends on the baseline job, uses SHA-pinned `actions/setup-dotnet` for exact SDK `10.0.302`, and invokes `scripts/Invoke-CoreCi.ps1` in explicit GitHub Actions mode.
 
-Later quality and supply-chain tasks extend that same CI path to:
+The reviewed action pins are:
 
-- Enforce warning-free production builds and approved line/branch coverage thresholds.
-- Run offline deterministic suites and validate the requirement-to-test mappings affected by the change.
-- Scan dependencies, secrets, static analysis, licences, unexpected large files, and SBOM generation through no-cost tools.
+- `actions/checkout` `v7.0.1` at immutable commit `3d3c42e5aac5ba805825da76410c181273ba90b1`.
+- `actions/setup-dotnet` `v6.0.0` at immutable commit `a98b56852c35b8e3190ac28c8c2271da59106c68`.
 
-PB-0009 retains or invokes the PB-0002 repository-bootstrap validation before adding solution restore, build, formatting, and automated application tests. PB-0009, not PB-0002, owns that full application CI foundation; later backlog tasks own coverage, analyzer, dependency, licence, secret, static-analysis, and SBOM gates.
+The core entry point runs repository validation, exact SDK verification, one locked restore, the complete Release build, `dotnet format --verify-no-changes`, checksum-verified Ruff `0.15.22` installation, Ruff lint and format verification, then all four baseline test projects with no repeated restore/build. Each project must discover and pass at least one test; the aggregate must contain at least four passes and no failed, skipped, missing, stale, or unclassified result.
 
-The same restore, build, format, schema, and test commands are runnable locally from Visual Studio Code. Hosted CI is not required to develop or operate Package Builder, and no paid runner capacity is an architecture dependency.
+The action-managed SDK path is runner infrastructure and is not described as repository-contained. Explicit GitHub Actions mode verifies `GITHUB_ACTIONS`, exact `GITHUB_WORKSPACE`, and SDK `10.0.302`; every project-owned CLI home, NuGet package/cache, Ruff cache, scratch, temporary, log, and result path remains below `GITHUB_WORKSPACE`. Local execution continues to require `tools/dotnet/10.0.302`.
+
+No action uses a mutable tag. PB-0009 adds no package cache, artifact upload, secret, paid service, engine, telemetry, publishing, release, deployment, marketplace operation, coverage threshold, or supply-chain gate. PB-1806 owns coverage enforcement and PB-1611 owns dependency, licence, vulnerability, and secret CI.
+
+The same logical command is runnable from a Visual Studio Code terminal with omitted or explicit repository root. Hosted CI is not required to develop or operate Package Builder, and no paid runner capacity is an architecture dependency.
 
 ### Self-Hosted Engine Workflow
 

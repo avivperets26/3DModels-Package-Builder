@@ -615,27 +615,40 @@ Invoke-Check 'Tracked and candidate files contain no prohibited content' {
     }
 }
 
-Invoke-Check 'Bootstrap GitHub Actions workflow is minimal and immutable' {
-    $workflowPath = Join-Path $script:RepositoryRoot '.github\workflows\repository-baseline.yml'
-    $workflow = Get-Content -Raw -LiteralPath $workflowPath -Encoding UTF8
-    $triggerPattern = '(?ms)^on:\r?\n\s{2}push:\r?\n\s{4}branches:\s*\[\s*main\s*\]\r?\n\s{2}pull_request:\r?\n\s{4}branches:\s*\[\s*main\s*\]'
-    if ($workflow -notmatch $triggerPattern) { throw 'Workflow must run on pushes and pull requests targeting main.' }
-    if ($workflow -notmatch '(?m)^\s*runs-on:\s*windows-latest\s*$') { throw 'Workflow must use the free Windows GitHub-hosted runner.' }
-    if ($workflow -notmatch 'GITHUB_WORKSPACE' -or $workflow -notmatch 'RequireTrackedFiles') { throw 'Workflow must validate relative to GITHUB_WORKSPACE in tracked-file mode.' }
-    if ($workflow -notmatch '(?m)^\s*fetch-depth:\s*0\s*$') { throw 'Workflow must fetch reachable history.' }
-    if ($workflow -notmatch '(?m)^\s*persist-credentials:\s*false\s*$') { throw 'Workflow checkout credentials must not persist.' }
-    $uses = @([regex]::Matches($workflow, '(?m)^\s*uses:\s*(?<value>\S+)\s*$'))
-    if ($uses.Count -eq 0) { throw 'Workflow contains no action reference.' }
-    foreach ($use in $uses) {
-        if ($use.Groups['value'].Value -notmatch '^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+@[0-9a-f]{40}$') {
-            throw "Action is not pinned to an immutable commit SHA: $($use.Groups['value'].Value)"
-        }
+Invoke-Check 'Core CI configuration preserves and extends the repository baseline' {
+    $validatorPath = Join-Path $script:RepositoryRoot 'scripts\Test-CoreCiConfiguration.ps1'
+    if (-not (Test-Path -LiteralPath $validatorPath -PathType Leaf)) {
+        throw 'Missing scripts/Test-CoreCiConfiguration.ps1.'
     }
-    if ($workflow -notmatch 'actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0') {
-        throw 'Workflow must use the reviewed actions/checkout v7.0.0 commit.'
+
+    & $validatorPath -RepositoryRoot $script:RepositoryRoot
+}
+
+Invoke-Check 'Core CI configuration validator supports standalone Windows PowerShell invocation' {
+    $validatorPath = [System.IO.Path]::GetFullPath(
+        (Join-Path $script:RepositoryRoot 'scripts\Test-CoreCiConfiguration.ps1')
+    )
+    if (-not (Test-Path -LiteralPath $validatorPath -PathType Leaf)) {
+        throw 'Missing scripts/Test-CoreCiConfiguration.ps1.'
     }
-    if ($workflow -match '(?i)setup-dotnet|upload-artifact|download-artifact|blender|unity|unreal|telemetry') {
-        throw 'Bootstrap workflow includes an out-of-scope install, engine, artifact, or telemetry operation.'
+
+    $windowsPowerShellPath = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'
+    if (-not (Test-Path -LiteralPath $windowsPowerShellPath -PathType Leaf)) {
+        throw "Windows PowerShell executable is unavailable: $windowsPowerShellPath"
+    }
+
+    $validatorOutput = @(
+        & $windowsPowerShellPath `
+            -NoProfile `
+            -NonInteractive `
+            -ExecutionPolicy Bypass `
+            -File $validatorPath `
+            -RepositoryRoot $script:RepositoryRoot 2>&1
+    )
+    $validatorExitCode = $LASTEXITCODE
+    if ($validatorExitCode -ne 0) {
+        $capturedOutput = $validatorOutput -join [Environment]::NewLine
+        throw "Standalone core-CI validator failed with exit code ${validatorExitCode}. Captured output:`n$capturedOutput"
     }
 }
 

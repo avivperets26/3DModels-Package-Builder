@@ -1,4 +1,4 @@
-name: Repository baseline
+name: Repository baseline and core CI
 
 on:
   push:
@@ -16,8 +16,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Check out full reachable history
-        # actions/checkout v7.0.0, reviewed and pinned to its verified immutable release commit.
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        # actions/checkout v7.0.1, reviewed and pinned to its verified immutable release commit.
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -28,3 +28,29 @@ jobs:
           & (Join-Path $env:GITHUB_WORKSPACE 'scripts\Test-RepositoryBaseline.ps1') `
             -RepositoryRoot $env:GITHUB_WORKSPACE `
             -RequireTrackedFiles
+
+  core-ci:
+    name: Validate core application
+    needs: validate-repository-baseline
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out full reachable history
+        # actions/checkout v7.0.1, reviewed and pinned to its verified immutable release commit.
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Install exact .NET SDK
+        # actions/setup-dotnet v6.0.0, reviewed and pinned to its verified immutable release commit.
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68
+        with:
+          dotnet-version: '10.0.302'
+
+      - name: Run core CI
+        shell: pwsh
+        run: |
+          & (Join-Path $env:GITHUB_WORKSPACE 'scripts\Invoke-CoreCi.ps1') `
+            -RepositoryRoot $env:GITHUB_WORKSPACE `
+            -GitHubActions
