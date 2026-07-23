@@ -1,16 +1,21 @@
 # PB-0003 GitHub Repository Evidence
 
 - **Task:** PB-0003 — Establish the approved public GitHub repository and push `main`
-- **Lifecycle:** `[ ]` — 🟡 **PROCESS**
+- **Lifecycle:** `[x]` — 🟢 **DONE**
 - **Documented branch:** `chore/PB-0003-github-remote`
 - **Verification date:** 2026-07-23
-- **Verified `main` checkpoint:** `2a520bbb2d17245756ca392883ba5a6916f60fef`
+- **Completion date:** 2026-07-23
+- **Initial verified `main` checkpoint:** `2a520bbb2d17245756ca392883ba5a6916f60fef`
+- **Final task commit:** `eecd16ba1906af4c36906eaed7b99ce67f5150a4`
+- **Pull request:** [#4](https://github.com/avivperets26/3DModels-Package-Builder/pull/4)
+- **Merge commit:** `aa0b82b7a2e7880f5d6c57a5399d30e3391912cc`
 - **Approved repository:** [avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder)
-- **Latest verified workflow:** [Repository baseline run 29959167858](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/29959167858)
+- **Successful PR workflow:** [Repository baseline run 29998957170](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/29998957170)
+- **Successful final `main` workflow:** [Repository baseline run 29999066840](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/29999066840)
 
-This document records read-only local Git, remote-ref, GitHub repository, GitHub content, and GitHub Actions evidence for PB-0003. The acceptance-state checks pass at the dated checkpoint, but PB-0003 remains open until its own documentation commit, task-branch push, CI, merge into `main`, and explicit user completion confirmation are evidenced.
+This document records read-only local Git, remote-ref, GitHub repository, GitHub content, and GitHub Actions evidence for PB-0003. The acceptance-state checks and every completion gate passed: the task commit was pushed, its pull-request workflow succeeded, pull request #4 merged it into `main`, the final `main` workflow succeeded, and the user explicitly confirmed the commit, push, CI, pull-request merge, and final `main` CI.
 
-No repository setting, visibility, remote URL, branch configuration, branch ref, or GitHub content was changed during this audit.
+No CI exception was used. No repository setting, visibility, remote URL, branch configuration, repository name, or GitHub setting was changed during the evidence audit or this completion bookkeeping.
 
 ## 1. Repository identity and settings
 
@@ -41,9 +46,11 @@ GitHub repository metadata and the read-only remote `HEAD` symref agree that `ma
 
 Bidirectional ancestry checks between local `main` and `origin/main` passed, proving equality rather than only one-way ancestry. The remote configuration already satisfies the approved HTTPS policy; SSH is not required and no remote change is justified.
 
+Those local and remote-ref values describe the initial acceptance checkpoint. Final GitHub evidence shows task commit `eecd16ba1906af4c36906eaed7b99ce67f5150a4` merged through pull request #4 into `main` as `aa0b82b7a2e7880f5d6c57a5399d30e3391912cc`. Completion bookkeeping did not fetch, move, or modify any local or remote ref.
+
 ## 3. Required files on `main`
 
-The verified `main` tree contains all twelve current repository-baseline files:
+The initial verified `main` checkpoint contains all twelve required repository-baseline files:
 
 - `.github/workflows/repository-baseline.yml`
 - `.gitignore`
@@ -58,7 +65,7 @@ The verified `main` tree contains all twelve current repository-baseline files:
 - `scripts/Enter-PackageBuilderEnvironment.ps1`
 - `scripts/Test-RepositoryBaseline.ps1`
 
-Because local `main`, `origin/main`, and read-only remote `main` resolve to the same commit, the locally inspected tree is the tree published as remote `main`. GitHub content evidence independently confirms that the workflow and PB-0002 evidence document are present on `main`.
+At the initial acceptance checkpoint, local `main`, `origin/main`, and read-only remote `main` resolved to the same commit, so the locally inspected tree was the tree published as remote `main`. GitHub content evidence independently confirmed that the workflow and PB-0002 evidence document were present on `main`. Final pull-request and workflow evidence then confirmed integration of the PB-0003 evidence document into `main`.
 
 ## 4. PB-0002 dependency and workflow
 
@@ -74,7 +81,7 @@ The remote `main` workflow:
 - disables persisted checkout credentials; and
 - invokes `scripts/Test-RepositoryBaseline.ps1` with `-RequireTrackedFiles`.
 
-The latest run for the verified `main` checkpoint is run `29959167858`, event `push`, run number `2`, with status `completed` and conclusion `success`. Its `Validate repository baseline` job and every recorded job step concluded successfully.
+At the initial acceptance checkpoint, run `29959167858`, event `push`, run number `2`, completed successfully; its `Validate repository baseline` job and every recorded job step concluded successfully. For the PB-0003 task commit, [pull-request workflow run 29998957170](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/29998957170) succeeded. After pull request #4 merged into `main`, [final main workflow run 29999066840](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/29999066840) also succeeded. No CI exception was used.
 
 ## 5. Public-repository safety
 
@@ -90,16 +97,15 @@ The repository baseline validation and targeted Git inspection verify that the c
 - no reparse point, Git symlink, submodule, or unexpected special Git mode; and
 - no missing reachable Git object or reachable-history integrity error.
 
-These checks apply to the tracked repository baseline and current PB-0003 documentation candidate. They do not replace the broader supply-chain and secret-scanning work assigned to later security tasks.
+These checks apply to the tracked repository baseline and PB-0003 task commit. They do not replace the broader supply-chain and secret-scanning work assigned to later security tasks.
 
 ### Local validation results
 
 | Validation | Result |
 |---|---|
-| `scripts/Test-RepositoryBaseline.ps1 -RequireTrackedFiles` | 12 passed, 0 failed |
-| `scripts/Test-RepositoryBaseline.ps1` pre-staging candidate mode | 12 passed, 0 failed |
-| Branch, upstream, URL, ref-equality, ancestry, required-file, PB-0002 ancestry, prohibited-path, prohibited-extension, and personal-path checks | All passed |
-| `git diff --check` and `git diff --cached --check` | Passed |
+| `scripts/Test-RepositoryBaseline.ps1 -RequireTrackedFiles` on the completion-bookkeeping candidate | 12 passed, 0 failed |
+| `git diff --check` on the completion-bookkeeping candidate | Passed |
+| Initial branch, upstream, URL, ref-equality, ancestry, required-file, PB-0002 ancestry, prohibited-path, prohibited-extension, and personal-path checks | All passed |
 
 ## 6. Repository-name discrepancy
 
@@ -111,15 +117,18 @@ These checks apply to the tracked repository baseline and current PB-0003 docume
 
 The discrepancy remains explicitly documented in the product plan, backlog, and this evidence record. PB-0003 does not rename the GitHub repository and does not silently rewrite the original planned name. Resolving the difference requires a separate user decision and separately authorized work.
 
-## 7. Completion state and remaining gates
+## 7. Completion state
 
-The repository acceptance state is verified, but the PB task lifecycle is not complete. The following gates remain:
+| Gate | Final evidence |
+|---|---|
+| Task commit | `eecd16ba1906af4c36906eaed7b99ce67f5150a4` |
+| Task-branch push | Explicitly confirmed by the user; pull request #4 and its workflow contain the task commit |
+| Pull-request CI | [Run 29998957170](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/29998957170) succeeded |
+| Pull-request merge | [Pull request #4](https://github.com/avivperets26/3DModels-Package-Builder/pull/4) merged into `main` as `aa0b82b7a2e7880f5d6c57a5399d30e3391912cc` |
+| Final `main` CI | [Run 29999066840](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/29999066840) succeeded |
+| User confirmation | The user explicitly confirmed commit, push, CI, pull-request merge, and final `main` CI on 2026-07-23 |
+| CI exception | None |
 
-1. The user reviews and commits the PB-0003 documentation changes on `chore/PB-0003-github-remote`.
-2. The user pushes that task branch.
-3. PB-0003 GitHub CI passes for the pushed change.
-4. The user merges the reviewed change into `main`.
-5. Post-merge evidence confirms remote `main` and its Repository baseline workflow.
-6. The user explicitly confirms PB-0003 completion.
+Every PB-0003 acceptance and completion gate is satisfied. PB-0003 is `[x]` and 🟢 **DONE**, has been removed from Active Work, and appears exactly once in the Completion Log.
 
-Until then, PB-0003 stays `[ ]` and 🟡 **PROCESS** and remains outside the Completion Log.
+The planned `package-builder` versus actual `3DModels-Package-Builder` repository-name discrepancy remains explicitly unresolved. It is a separate decision and no rename, remote modification, or GitHub setting change is part of PB-0003 completion.
