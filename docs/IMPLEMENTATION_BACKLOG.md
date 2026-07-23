@@ -158,7 +158,7 @@ feat/PB-0607-unity-urp-material-compiler
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
 | PB-0013 | 🟡 **PROCESS** | `docs/PB-0013-quality-release-gates` | User for remaining completion confirmation | 2026-07-22 | Remote feature commit `a1032c48f2a8d0dc98d0c589f1a845605950952b` was merged by pull request [#1](https://github.com/avivperets26/3DModels-Package-Builder/pull/1) into public default branch `main` at `13e5875b686c3219e3571d45ceaa93c463e881ff`. | No GitHub CI evidence or explicit user completion confirmation is recorded. The historical one-task-per-branch conflict remains documented below. |
-| PB-0007 | 🟡 **PROCESS** | `chore/PB-0007-formatting` | Codex for local implementation; user for Git and completion gates | 2026-07-23 | Implemented and validated locally on the documented branch with SDK `10.0.302` and checksum-verified Ruff `0.15.22`; locked restore, non-mutating .NET/Ruff formatting checks, omitted/explicit-root validator modes, Debug and Release builds with zero warnings/errors, formatting configuration 6/6, central configuration 8/8, architecture 7/7, and repository baseline 18/18 passed. Explicit fix mode changed only `AssemblyInfo.cs`. PB-0006 rollover evidence is synchronized exactly once; PB-0013 is unchanged. | No local implementation blocker. Required user-controlled gates remain the PB-0007 commit, task-branch push, merge into and push of `main`, successful required `main` CI, and explicit confirmation. No PB-0007 GitHub CI is claimed. |
+| PB-0008 | 🟡 **PROCESS** | `test/PB-0008-test-projects` | Codex for local implementation; user for Git and completion gates | 2026-07-23 | Implemented and validated locally with SDK `10.0.302`: all 15 lock files remained stable; Debug and Release builds passed with zero warnings/errors; omitted-root, explicit-root, and repeated source-nonmutating test runs each discovered and passed one test per project, four total, with zero failures/skips and an identical logical-summary hash; formatting/Ruff, test-project 4/4, central configuration 8/8, architecture 7/7, formatting configuration 6/6, repository baseline 20/20, PowerShell parsing, diff, containment, and lifecycle checks passed. PB-0007 rollover evidence is synchronized exactly once; PB-0013 is unchanged. | No local implementation blocker. Required user-controlled gates remain the PB-0008 commit, task-branch push, merge into and push of `main`, successful required `main` CI, and explicit confirmation. PB-0009 remains responsible for adding full application test execution to GitHub Actions. |
 
 ### Dated Repository Verification Checkpoints
 
@@ -191,6 +191,17 @@ The detailed PB-0003 audit and final gate evidence are recorded in `docs/PB-0003
 - The planned repository name `package-builder` still differs from the actual name `3DModels-Package-Builder`; the discrepancy remains explicit and unresolved.
 - PB-0003 is `[x]` and 🟢 **DONE** and is recorded once in the Completion Log.
 
+### PB-0007 Completion Evidence
+
+The detailed implementation and final publication evidence are recorded in `docs/PB-0007_FORMATTING_EVIDENCE.md`. Evidence independently verified on 2026-07-23 shows:
+
+- Final task commit `56a1974dddd67b30e51084a3cbce6a985e1e9fd7` was pushed on `chore/PB-0007-formatting`.
+- The task was merged through [pull request #8](https://github.com/avivperets26/3DModels-Package-Builder/pull/8) into `main` as `908e4b0ca92629d07a8ced5b529e72d6b4f5c0a5`.
+- [Repository baseline workflow run 30024743745](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30024743745) was independently verified as an attempt-1 `push` run on `main` for merge commit `908e4b0ca92629d07a8ced5b529e72d6b4f5c0a5`; the run and its `Validate repository baseline` job completed successfully.
+- The user explicitly confirmed on 2026-07-23 that PB-0007 was pushed, merged into `main`, and had green required `main` CI.
+- No CI, quality, or completion exception was used.
+- PB-0007 is `[x]` and 🟢 **DONE** and is recorded exactly once in the Completion Log.
+
 ### Unresolved Bootstrap Decisions
 
 - **One-task-per-branch conflict:** PB-0013 commit `fc34bffff838cac41198940ed54b91b25c33f838` was pushed on the PB-0001 branch rather than `docs/PB-0013-quality-release-gates`. No history rewrite, branch move, or exception is selected here.
@@ -216,6 +227,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0004 | `chore/PB-0004-gitignore` | `235c952a06951fa21e9b18b72a1ac69ce45e3487` | [#5](https://github.com/avivperets26/3DModels-Package-Builder/pull/5) — original implementation; corrective cycle had no PR | 2026-07-23 | Original commit `3f9a9a920d2ef1ef233e8f5f2b55bae75f5deab9` merged through PR #5 as `cab7c3cbf803bf8f1c6187c2ee18dc5f08717988`; [PR workflow run 30003215780](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30003215780) and original [main workflow run 30003275017](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30003275017) succeeded. Corrective commit `235c952a06951fa21e9b18b72a1ac69ce45e3487` was merged directly into `main` as `835916065f38b735ae31b83092dea989298c0d0e`; corrected [main workflow run 30004427880](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30004427880) succeeded. No corrective PR and no CI exception existed; the user explicitly confirmed the push, direct merge, and successful CI. |
 | PB-0005 | `chore/PB-0005-solution-skeleton` | `8c7a0a888621b9e0c43ebf2a91f323de53c617d4` | [#6](https://github.com/avivperets26/3DModels-Package-Builder/pull/6) | 2026-07-23 | Merged into `main` as `b1132fa6e6c66db5abbc521fd64d89fc2ef4eef5`; [PR workflow run 30011460541](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30011460541) and final [main workflow run 30011511939](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30011511939) succeeded. No exception was used; the user explicitly confirmed all completion gates. |
 | PB-0006 | `chore/PB-0006-central-build-config` | `41255c6f5953fc7d2dfe96530617484a1e3f87d9` | [#7](https://github.com/avivperets26/3DModels-Package-Builder/pull/7) | 2026-07-23 | Merged into `main` as `9de260b0e02d201cf539fdfd154224fe99a3122b`; [PR workflow run 30022944913](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30022944913) and final [main workflow run 30022954605](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30022954605) succeeded. No CI or quality exception was used; the user explicitly confirmed the merge and green `main` CI on 2026-07-23. |
+| PB-0007 | `chore/PB-0007-formatting` | `56a1974dddd67b30e51084a3cbce6a985e1e9fd7` | [#8](https://github.com/avivperets26/3DModels-Package-Builder/pull/8) | 2026-07-23 | Merged into `main` as `908e4b0ca92629d07a8ced5b529e72d6b4f5c0a5`; [main workflow run 30024743745](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30024743745) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the task-branch push, merge, and green required `main` CI on 2026-07-23. |
 
 ## 5. Milestones
 
@@ -295,12 +307,12 @@ flowchart LR
   - Depends on: PB-0005
   - Done when: `global.json`, `Directory.Build.props`, and `Directory.Packages.props` pin approved versions and enable nullable references, warnings, deterministic builds, and analyzers.
 
-- [ ] **PB-0007 — Add coding style and formatting enforcement** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0007 — Add coding style and formatting enforcement** — **P0** — 🟢 **DONE**
   - Branch: `chore/PB-0007-formatting`
   - Depends on: PB-0006
   - Done when: `.editorconfig`, `dotnet format`, and Ruff configuration run successfully and are documented.
 
-- [ ] **PB-0008 — Create baseline unit-test projects** — **P0**
+- [ ] **PB-0008 — Create baseline unit-test projects** — **P0** — 🟡 **PROCESS**
   - Branch: `test/PB-0008-test-projects`
   - Depends on: PB-0005
   - Done when: Domain, Application, Infrastructure, and Contract test projects execute at least one passing smoke test.

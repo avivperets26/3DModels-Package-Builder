@@ -119,6 +119,8 @@ The approved PB-0007 formatting baseline uses the formatter supplied by reposito
 
 Ruff targets Python 3.11 because the planned Blender 5.0 worker runtime uses Blender's bundled Python compatibility family. This compatibility target is reviewed with a future approved Blender-family change instead of automatically selecting the newest Python syntax. Root `.editorconfig`, `ruff.toml`, and `scripts/Test-Formatting.ps1` define the shared local policy; verification is non-mutating by default, while an explicit fix mode may apply reviewed formatting changes.
 
+The PB-0008 test baseline keeps the four existing xUnit v3 projects on the centrally pinned VSTest-compatible package set. Each project has a deterministic offline `Category=Smoke` test that loads its directly referenced production assembly and verifies the expected assembly identity. `scripts/Test-TestProjects.ps1` validates the exact project inventory, production references, package configuration, and discoverable smoke-test source without external dependencies. `scripts/Test-BaselineUnitTests.ps1` resolves SDK `10.0.302` beneath the repository, restores in locked mode, runs all four projects, rejects zero discovery, failures, skips, and unclassified results, and writes TRX, deterministic logical counts, and logs only beneath ignored `artifacts` and `logs` roots. An explicit source-hash verification mode proves the validation run does not alter reviewable source. PB-0009 remains responsible for executing these tests in the full GitHub Actions application CI workflow.
+
 ## 5. Why This Stack
 
 ### 5.1 Why .NET and WPF
