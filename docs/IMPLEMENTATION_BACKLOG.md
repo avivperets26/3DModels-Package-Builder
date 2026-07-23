@@ -132,7 +132,6 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0003 | 🟡 **PROCESS** | `chore/PB-0003-github-remote` | User for remaining Git/GitHub gates and completion confirmation | 2026-07-23 | Read-only local Git and GitHub evidence at checkpoint `2a520bbb2d17245756ca392883ba5a6916f60fef` verifies the approved repository is public with default branch `main`; local `main`, `origin/main`, and remote `main` agree; the approved HTTPS fetch/push URLs and `main` upstream are correct; PB-0002 is complete; and the latest Repository baseline workflow passed. See `docs/PB-0003_GITHUB_REPOSITORY_EVIDENCE.md`. | The PB-0003 documentation changes still require a user-created commit, task-branch push, successful PB-0003 CI, merge into `main`, and explicit user completion confirmation. The planned `package-builder` versus actual `3DModels-Package-Builder` name remains intentionally unresolved. |
 | PB-0013 | 🟡 **PROCESS** | `docs/PB-0013-quality-release-gates` | User for remaining completion confirmation | 2026-07-22 | Remote feature commit `a1032c48f2a8d0dc98d0c589f1a845605950952b` was merged by pull request [#1](https://github.com/avivperets26/3DModels-Package-Builder/pull/1) into public default branch `main` at `13e5875b686c3219e3571d45ceaa93c463e881ff`. | No GitHub CI evidence or explicit user completion confirmation is recorded. The historical one-task-per-branch conflict remains documented below. |
 
 ### Dated Repository Verification Checkpoints
@@ -152,17 +151,19 @@ The detailed PB-0002 audit is recorded in `docs/PB-0002_REPOSITORY_BASELINE.md`.
 - [Repository baseline workflow run 29957972750](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/29957972750) concluded successfully for the direct `main` merge. The user explicitly confirmed the commit, push, merge, and successful CI gates on 2026-07-22. No PB-0002 CI exception was used.
 - PB-0002 is complete and recorded in the Completion Log. PB-0013 remains active and unchanged.
 
-### PB-0003 Current Repository Checkpoint
+### PB-0003 Completion Evidence
 
-The detailed PB-0003 audit is recorded in `docs/PB-0003_GITHUB_REPOSITORY_EVIDENCE.md`. Evidence verified on 2026-07-23 shows:
+The detailed PB-0003 audit and final gate evidence are recorded in `docs/PB-0003_GITHUB_REPOSITORY_EVIDENCE.md`. Evidence verified on 2026-07-23 shows:
 
 - GitHub repository `avivperets26/3DModels-Package-Builder` is public and its default branch is `main`.
 - The local origin fetch and push URLs both remain `https://github.com/avivperets26/3DModels-Package-Builder.git`; no SSH requirement or remote change was introduced.
-- Local `main` tracks `origin/main`, and local `main`, `origin/main`, read-only remote `main`, and remote `HEAD` all resolve to `2a520bbb2d17245756ca392883ba5a6916f60fef`.
-- The required repository baseline files, PB-0002 completion evidence, reusable validation script, and SHA-pinned Repository baseline workflow are present on `main`.
-- [Repository baseline workflow run 29959167858](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/29959167858) completed successfully for the current remote `main` checkpoint.
+- At the initial acceptance checkpoint, local `main` tracked `origin/main`, and local `main`, `origin/main`, read-only remote `main`, and remote `HEAD` all resolved to `2a520bbb2d17245756ca392883ba5a6916f60fef`.
+- The required repository baseline files, PB-0002 completion evidence, reusable validation script, and SHA-pinned Repository baseline workflow were present on `main`.
+- Final task commit `eecd16ba1906af4c36906eaed7b99ce67f5150a4` was pushed on `chore/PB-0003-github-remote` and merged through [pull request #4](https://github.com/avivperets26/3DModels-Package-Builder/pull/4) into `main` as `aa0b82b7a2e7880f5d6c57a5399d30e3391912cc`.
+- [PR workflow run 29998957170](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/29998957170) and final [main workflow run 29999066840](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/29999066840) completed successfully.
+- The user explicitly confirmed the task commit, push, CI, pull-request merge, and final `main` CI. No CI exception was used.
 - The planned repository name `package-builder` still differs from the actual name `3DModels-Package-Builder`; the discrepancy remains explicit and unresolved.
-- PB-0003 stays `[ ]` and 🟡 **PROCESS** until its own commit, push, CI, merge, and explicit user-confirmation gates pass.
+- PB-0003 is `[x]` and 🟢 **DONE** and is recorded once in the Completion Log.
 
 ### Unresolved Bootstrap Decisions
 
@@ -185,6 +186,7 @@ Append a row whenever a task is marked `[x]`.
 |---|---|---|---|---|---|
 | PB-0001 | `chore/PB-0001-dotnet-10-sdk` | `c68ff924eb3162efcea79af27f19bff2b9dad896` | [#2](https://github.com/avivperets26/3DModels-Package-Builder/pull/2) | 2026-07-22 | Merged into `main` as `e7f92aa9fc389c40bd4e3d1ee3a368e3d7f55993`. Only the missing CI run was waived by the approved PB-0001-only bootstrap exception; all other completion gates passed. |
 | PB-0002 | `chore/PB-0002-initialize-repository` | `0b1700e4d999069ef7372fcc0ba0e6971789b8e5` | [#3](https://github.com/avivperets26/3DModels-Package-Builder/pull/3) — original baseline only | 2026-07-22 | Original baseline commit `cb0748f9e7300f2122014bff5e9a130b47b3dc5d` merged through PR #3 as `c75c119cfae7c8e9bfe4f2b0fea2fbd77575e028`. Bootstrap CI commit `0b1700e4d999069ef7372fcc0ba0e6971789b8e5` was merged directly into `main` as `86ac34ac61f1cb729e59fc0c7c10ffd772b2ee2a`; [workflow run 29957972750](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/29957972750) succeeded. No second PR and no CI exception were used; the user confirmed all completion gates. |
+| PB-0003 | `chore/PB-0003-github-remote` | `eecd16ba1906af4c36906eaed7b99ce67f5150a4` | [#4](https://github.com/avivperets26/3DModels-Package-Builder/pull/4) | 2026-07-23 | Merged into `main` as `aa0b82b7a2e7880f5d6c57a5399d30e3391912cc`; [PR workflow run 29998957170](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/29998957170) and final [main workflow run 29999066840](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/29999066840) succeeded. No CI exception was used; the user confirmed the commit, push, CI, pull-request merge, and final `main` CI gates. |
 
 ## 5. Milestones
 
@@ -244,7 +246,7 @@ flowchart LR
   - Depends on: PB-0001
   - Done when: the minimal PB-0001 bootstrap repository is normalized onto `main`; required planning and validation files are tracked; ignored single-root runtime directories, prohibited binaries, generated engine assets, secrets, and personal paths are absent from the repository; local history contains the verified PB-0001 baseline commit; and the reusable repository-baseline script passes locally and in a minimal SHA-pinned GitHub Actions workflow on pull requests and pushes to `main` using a free Windows GitHub-hosted runner. This bootstrap workflow validates repository/documentation structure, governance, diffs, and reachable history only; PB-0009 remains the owner of full restore, build, format, test, and application CI, while later tasks own coverage and supply-chain gates. PB-0002 remained `[ ]` and 🟡 **PROCESS** until its commit, push, GitHub workflow, merge, and explicit user-confirmation gates passed.
 
-- [ ] **PB-0003 — Establish the approved public GitHub repository and push `main`** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0003 — Establish the approved public GitHub repository and push `main`** — **P0** — 🟢 **DONE**
   - Branch: `chore/PB-0003-github-remote`
   - Depends on: PB-0002
   - Done when: the approved public repository is documented and verified at [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder); visibility remains public and the default branch remains `main`; the user-approved HTTPS origin fetch/push URLs remain unchanged unless a separately authorized correction is required; local `main` tracks `origin/main`; local `main`, `origin/main`, and read-only remote `main` resolve consistently; PB-0002 remains complete with its successful repository-baseline workflow present on `main`; no secret, personal path, prohibited binary, generated engine asset, or runtime directory is tracked; and the planned `package-builder` versus actual `3DModels-Package-Builder` repository-name discrepancy remains explicit and unresolved until the user makes a separate decision.
