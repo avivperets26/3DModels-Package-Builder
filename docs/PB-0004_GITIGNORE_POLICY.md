@@ -6,7 +6,7 @@
 - **Verification date:** 2026-07-23
 - **Project root:** `C:\Dev\PackageBuilder`
 
-PB-0004 is locally implemented and remains open. No task commit, push, pull request, GitHub CI, merge, final `main` CI, or explicit user completion confirmation is recorded.
+The original policy checkpoint was committed as `3f9a9a920d2ef1ef233e8f5f2b55bae75f5deab9`, merged through [pull request #5](https://github.com/avivperets26/3DModels-Package-Builder/pull/5) as `cab7c3cbf803bf8f1c6187c2ee18dc5f08717988`, and passed its pull-request and final `main` workflows. PB-0004 was reopened after the standalone Windows PowerShell invocation exposed a parameter-binding failure. The correction is locally implemented and validated, but its new Git and GitHub completion gates remain outstanding.
 
 ## Policy Coverage
 
@@ -35,19 +35,35 @@ No rule globally ignores `.fbx`, `.glb`, `.gltf`, `.obj`, `.blend`, `.png`, `.jp
 - It resolves every synthetic path beneath the Git root before checking it.
 - It checks every tracked path with `--no-index` and reports the exact path and matching rule if a tracked file would become ignored.
 
-`scripts/Test-RepositoryBaseline.ps1` invokes the policy validator, so the same test runs locally and in the existing SHA-pinned GitHub Actions repository-baseline workflow.
+`scripts/Test-RepositoryBaseline.ps1` invokes the policy validator directly and also launches a fresh Windows PowerShell 5.1 process using the supported standalone `-File` mode. The regression check uses the validator's absolute path, verifies the child-process exit code, and reports captured output if the process fails. The same checks run locally and in the existing SHA-pinned GitHub Actions repository-baseline workflow.
 
 ## Local Evidence
 
 | Validation | Result |
 |---|---|
-| `scripts/Test-GitIgnorePolicy.ps1` | Pass — 107 synthetic paths: 67 ignored and 40 trackable; 13 tracked paths checked; no conflict |
-| `scripts/Test-RepositoryBaseline.ps1 -RepositoryRoot (git rev-parse --show-toplevel) -RequireTrackedFiles` | Pass — 13 checks passed, 0 failed, including PowerShell parsing, ignore policy, task/dependency/lifecycle state, Completion Log, repository safety, diff checks, and history integrity |
+| Original pre-commit ignore-policy checkpoint | Pass — 107 synthetic paths: 67 ignored and 40 trackable; 13 tracked paths checked; no conflict |
+| Original pre-commit repository-baseline checkpoint | Pass — 13 checks passed, 0 failed |
 | Explicit PowerShell parser validation | Pass — 3 scripts parsed, 0 failed |
 | `git diff --check` | Pass |
 | Tracked-file ignore conflict | None at the local validation checkpoint |
 | Filesystem mutation by policy tests | None; all checked paths were synthetic |
+| Current standalone invocation without `RepositoryRoot` | Pass — exit code 0; 107 synthetic paths: 67 ignored and 40 trackable; 15 tracked paths checked with no conflict |
+| Current standalone invocation with explicit `RepositoryRoot` | Pass — exit code 0; 107 synthetic paths: 67 ignored and 40 trackable; 15 tracked paths checked with no conflict |
+| Current direct PowerShell invocation | Pass — 107 synthetic paths: 67 ignored and 40 trackable; 15 tracked paths checked with no conflict |
+| Current tracked-file repository baseline | Pass — 14 checks passed, 0 failed, including the new standalone child-process regression |
+
+## Previous Merged Checkpoint Evidence
+
+| Gate | Previous evidence |
+|---|---|
+| Task commit | `3f9a9a920d2ef1ef233e8f5f2b55bae75f5deab9` |
+| Task-branch push | Explicitly confirmed by the user; pull request #5 contains the task commit |
+| Pull-request merge | [Pull request #5](https://github.com/avivperets26/3DModels-Package-Builder/pull/5) merged into `main` as `cab7c3cbf803bf8f1c6187c2ee18dc5f08717988` |
+| Pull-request CI | [Repository baseline run 30003215780](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30003215780) succeeded |
+| Final `main` CI | [Repository baseline run 30003275017](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30003275017) succeeded |
+| User confirmation | The user explicitly confirmed the push and successful CI for the previous merged checkpoint on 2026-07-23 |
+| CI exception | None |
 
 ## Remaining Gates
 
-PB-0004 remains `[ ]` and 🟡 **PROCESS** until the user completes and confirms the required commit, task-branch push, pull-request CI, merge into `main`, final `main` CI, and completion bookkeeping. It must remain absent from the Completion Log until those gates pass.
+PB-0004 remains `[ ]` and 🟡 **PROCESS**, appears in Active Work, and remains out of the Completion Log. The corrective changes still require a new task commit, task-branch push, pull-request CI, merge into `main`, final `main` CI, and explicit user completion confirmation.
