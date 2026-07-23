@@ -78,6 +78,135 @@ function Get-JobBlock {
     return ($Lines[$start..$end] -join [Environment]::NewLine)
 }
 
+function ConvertTo-WorkflowLines {
+    param(
+        [Parameter(Mandatory)][AllowEmptyString()][string]$Text
+    )
+
+    $normalized = $Text.Replace("`r`n", "`n").Replace("`r", "`n")
+    return @(
+        $normalized.Split(
+            [char[]]@([char]10),
+            [System.StringSplitOptions]::None
+        )
+    )
+}
+
+function ConvertTo-SanitizedPermissionEntry {
+    param(
+        [Parameter(Mandatory)][AllowEmptyString()][string]$Entry
+    )
+
+    $sanitized = $Entry.
+        Replace("`r", '<CR>').
+        Replace("`n", '<LF>').
+        Replace("`t", '<TAB>')
+    $sanitized = [regex]::Replace(
+        $sanitized,
+        '[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]',
+        '<CONTROL>'
+    )
+    if ($sanitized.Length -gt 160) {
+        $sanitized = $sanitized.Substring(0, 160) + '<TRUNCATED>'
+    }
+
+    return "[$sanitized]"
+}
+
+function Get-WorkflowPermissionEntries {
+    param(
+        [Parameter(Mandatory)][AllowEmptyString()][string[]]$Lines,
+        [Parameter(Mandatory)][int]$DeclarationIndex,
+        [Parameter(Mandatory)][AllowEmptyString()][string]$DeclarationIndent
+    )
+
+    $entries = @(
+        for ($index = $DeclarationIndex + 1; $index -lt $Lines.Count; $index++) {
+            $line = $Lines[$index]
+            if ([string]::IsNullOrWhiteSpace($line)) {
+                continue
+            }
+
+            $keyMatch = [regex]::Match(
+                $line,
+                '^(?<indent>[ \t]*)[A-Za-z0-9_.-]+:'
+            )
+            if ($keyMatch.Success -and
+                $keyMatch.Groups['indent'].Value.Length -le $DeclarationIndent.Length) {
+                break
+            }
+
+            $line
+        }
+    )
+
+    return $entries
+}
+
+function Assert-WorkflowPermissionPolicy {
+    param(
+        [Parameter(Mandatory)][AllowEmptyString()][string[]]$Lines,
+        [Parameter(Mandatory)][string]$Context
+    )
+
+    $declarations = @(
+        for ($index = 0; $index -lt $Lines.Count; $index++) {
+            $match = [regex]::Match(
+                $Lines[$index],
+                '^(?<indent>[ \t]*)permissions:[ \t]*$'
+            )
+            if ($match.Success) {
+                [pscustomobject]@{
+                    Index = $index
+                    Indent = $match.Groups['indent'].Value
+                }
+            }
+        }
+    )
+
+    $permissionEntries = @(
+        foreach ($declaration in $declarations) {
+            Get-WorkflowPermissionEntries `
+                -Lines $Lines `
+                -DeclarationIndex $declaration.Index `
+                -DeclarationIndent $declaration.Indent
+        }
+    )
+    $sanitizedEntries = if ($permissionEntries.Count -eq 0) {
+        '<none>'
+    }
+    else {
+        @(
+            $permissionEntries |
+                ForEach-Object { ConvertTo-SanitizedPermissionEntry -Entry $_ }
+        ) -join ', '
+    }
+    $diagnostic = (
+        "Permission blocks found: $($declarations.Count). " +
+        "Permission entries found: $($permissionEntries.Count). " +
+        "Sanitized permission entries: $sanitizedEntries."
+    )
+
+    if ($declarations.Count -ne 1) {
+        throw "$Context must define exactly one permissions declaration anywhere in the workflow. $diagnostic"
+    }
+    if ($declarations[0].Indent.Length -ne 0) {
+        throw "$Context permissions declaration must be top-level with no indentation. $diagnostic"
+    }
+    if ($permissionEntries.Count -ne 1) {
+        throw "$Context permissions block must contain exactly one nonblank entry. $diagnostic"
+    }
+    if ($permissionEntries[0] -cne '  contents: read') {
+        throw "$Context permission entry must be exactly '  contents: read'. $diagnostic"
+    }
+
+    return [pscustomobject]@{
+        BlockCount = $declarations.Count
+        EntryCount = $permissionEntries.Count
+        Entries = $permissionEntries
+    }
+}
+
 if (-not (Test-Path -LiteralPath $script:RepositoryRoot -PathType Container)) {
     throw "Repository root does not exist: $script:RepositoryRoot"
 }
@@ -142,25 +271,9 @@ Invoke-Check 'Workflow triggers and repository permissions are exact and read-on
         throw 'Workflow must run on pushes to main and pull requests targeting main.'
     }
 
-    $permissionMatch = [regex]::Match(
-        $workflow,
-        '(?ms)^permissions:\r?\n(?<values>(?:\s{2}[A-Za-z-]+:\s*[^\r\n]+\r?\n)+)'
-    )
-    if (-not $permissionMatch.Success) {
-        throw 'Workflow permissions block is missing or malformed.'
-    }
-    $permissionLines = @(
-        $permissionMatch.Groups['values'].Value -split '\r?\n' |
-            Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
-    )
-    if ($permissionLines.Count -ne 1 -or $permissionLines[0] -notmatch '^\s{2}contents:\s*read\s*$') {
-        throw 'Workflow permissions must contain only contents: read.'
-    }
-
-    $permissionBlockCount = @([regex]::Matches($workflow, '(?m)^permissions:\s*$')).Count
-    if ($permissionBlockCount -ne 1) {
-        throw "Workflow must define exactly one global permissions block; found $permissionBlockCount."
-    }
+    $null = Assert-WorkflowPermissionPolicy `
+        -Lines $workflowLines `
+        -Context 'Workflow'
 
     $jobsStart = [array]::IndexOf($workflowLines, 'jobs:')
     if ($jobsStart -lt 0) {
@@ -183,6 +296,137 @@ Invoke-Check 'Workflow triggers and repository permissions are exact and read-on
     if ($runnerValues.Count -ne 2 -or @($runnerValues | Where-Object { $_ -cne 'windows-latest' }).Count -gt 0) {
         throw 'Every workflow job must use the free windows-latest runner.'
     }
+}
+
+Invoke-Check 'Synthetic workflow permission cases are deterministic and fail closed' {
+    $syntheticCases = @(
+        [pscustomobject]@{
+            Name = 'valid LF input'
+            Text = "name: Test`n`npermissions:`n  contents: read`n`njobs:`n  test:`n"
+            ShouldPass = $true
+            BlockCount = 1
+            EntryCount = 1
+            EntryFragments = @()
+        },
+        [pscustomobject]@{
+            Name = 'valid CRLF input'
+            Text = "name: Test`r`n`r`npermissions:`r`n  contents: read`r`n`r`njobs:`r`n  test:`r`n"
+            ShouldPass = $true
+            BlockCount = 1
+            EntryCount = 1
+            EntryFragments = @()
+        },
+        [pscustomobject]@{
+            Name = 'missing permissions'
+            Text = "name: Test`n`njobs:`n  test:`n"
+            ShouldPass = $false
+            BlockCount = 0
+            EntryCount = 0
+            EntryFragments = @('<none>')
+        },
+        [pscustomobject]@{
+            Name = 'duplicate permissions'
+            Text = (
+                "name: Test`npermissions:`n  contents: read`n" +
+                "permissions:`n  contents: read`njobs:`n  test:`n"
+            )
+            ShouldPass = $false
+            BlockCount = 2
+            EntryCount = 2
+            EntryFragments = @('[  contents: read]')
+        },
+        [pscustomobject]@{
+            Name = 'job-level permissions'
+            Text = (
+                "name: Test`njobs:`n  test:`n    permissions:`n" +
+                "      contents: read`n    steps:`n"
+            )
+            ShouldPass = $false
+            BlockCount = 1
+            EntryCount = 1
+            EntryFragments = @('[      contents: read]')
+        },
+        [pscustomobject]@{
+            Name = 'extra read permission'
+            Text = (
+                "name: Test`npermissions:`n  contents: read`n" +
+                "  actions: read`njobs:`n  test:`n"
+            )
+            ShouldPass = $false
+            BlockCount = 1
+            EntryCount = 2
+            EntryFragments = @('[  contents: read]', '[  actions: read]')
+        },
+        [pscustomobject]@{
+            Name = 'write permission'
+            Text = "name: Test`npermissions:`n  contents: write`njobs:`n  test:`n"
+            ShouldPass = $false
+            BlockCount = 1
+            EntryCount = 1
+            EntryFragments = @('[  contents: write]')
+        },
+        [pscustomobject]@{
+            Name = 'invalid permission indentation'
+            Text = "name: Test`npermissions:`n contents: read`njobs:`n  test:`n"
+            ShouldPass = $false
+            BlockCount = 1
+            EntryCount = 1
+            EntryFragments = @('[ contents: read]')
+        }
+    )
+
+    $passedCases = 0
+    foreach ($case in $syntheticCases) {
+        $failureMessage = $null
+        try {
+            $lines = ConvertTo-WorkflowLines -Text $case.Text
+            $null = Assert-WorkflowPermissionPolicy `
+                -Lines $lines `
+                -Context "Synthetic case '$($case.Name)'"
+        }
+        catch {
+            $failureMessage = $_.Exception.Message
+        }
+
+        if ($case.ShouldPass) {
+            if ($null -ne $failureMessage) {
+                throw "Synthetic case '$($case.Name)' should pass: $failureMessage"
+            }
+        }
+        else {
+            if ($null -eq $failureMessage) {
+                throw "Synthetic case '$($case.Name)' unexpectedly passed."
+            }
+            $expectedDiagnostics = @(
+                "Permission blocks found: $($case.BlockCount).",
+                "Permission entries found: $($case.EntryCount).",
+                'Sanitized permission entries:'
+            ) + $case.EntryFragments
+            $missingDiagnostics = @(
+                $expectedDiagnostics |
+                    Where-Object {
+                        $failureMessage.IndexOf(
+                            $_,
+                            [System.StringComparison]::Ordinal
+                        ) -lt 0
+                    }
+            )
+            if ($missingDiagnostics.Count -gt 0) {
+                throw (
+                    "Synthetic case '$($case.Name)' lacked diagnostics: " +
+                    "$($missingDiagnostics -join ', '). Actual: $failureMessage"
+                )
+            }
+        }
+
+        $passedCases++
+        Write-Host "       [PASS] Synthetic permission case: $($case.Name)"
+    }
+
+    if ($passedCases -ne $syntheticCases.Count) {
+        throw "Expected $($syntheticCases.Count) synthetic permission cases; passed $passedCases."
+    }
+    Write-Host "       Synthetic permission cases passed: $passedCases/$($syntheticCases.Count)."
 }
 
 $baselineJob = Get-JobBlock -Lines $workflowLines -JobName 'validate-repository-baseline'
