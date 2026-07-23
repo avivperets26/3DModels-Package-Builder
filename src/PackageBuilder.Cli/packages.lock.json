@@ -1,0 +1,59 @@
+{
+  "version": 2,
+  "dependencies": {
+    "net10.0": {
+      "packagebuilder.application": {
+        "type": "Project",
+        "dependencies": {
+          "PackageBuilder.Contracts": "[1.0.0, )",
+          "PackageBuilder.Domain": "[1.0.0, )"
+        }
+      },
+      "packagebuilder.contracts": {
+        "type": "Project",
+        "dependencies": {
+          "PackageBuilder.Domain": "[1.0.0, )"
+        }
+      },
+      "packagebuilder.domain": {
+        "type": "Project"
+      },
+      "packagebuilder.infrastructure": {
+        "type": "Project",
+        "dependencies": {
+          "PackageBuilder.Contracts": "[1.0.0, )"
+        }
+      },
+      "packagebuilder.marketplaces.fab": {
+        "type": "Project",
+        "dependencies": {
+          "PackageBuilder.Contracts": "[1.0.0, )"
+        }
+      },
+      "packagebuilder.targets.portable": {
+        "type": "Project",
+        "dependencies": {
+          "PackageBuilder.Contracts": "[1.0.0, )"
+        }
+      },
+      "packagebuilder.targets.unity": {
+        "type": "Project",
+        "dependencies": {
+          "PackageBuilder.Contracts": "[1.0.0, )"
+        }
+      },
+      "packagebuilder.targets.unreal": {
+        "type": "Project",
+        "dependencies": {
+          "PackageBuilder.Contracts": "[1.0.0, )"
+        }
+      },
+      "packagebuilder.tools.blender": {
+        "type": "Project",
+        "dependencies": {
+          "PackageBuilder.Contracts": "[1.0.0, )"
+        }
+      }
+    }
+  }
+}

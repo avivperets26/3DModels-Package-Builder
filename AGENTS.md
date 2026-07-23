@@ -16,9 +16,9 @@ These rules apply permanently to the entire `C:\Dev\PackageBuilder` tree unless 
     - `docs/TECH_STACK_AND_ARCHITECTURE.md`
     - `docs/IMPLEMENTATION_BACKLOG.md`
     - `docs/QUALITY_AND_RELEASE_GATES.md`
-11. Work on one PB task per branch using its documented branch name.
-12. Do not mark a PB task complete until its acceptance criteria and tests pass and the user confirms that the required commit, push, GitHub CI, and merge gates are complete, or the user approves and documents an exception.
-13. Record completed work in the backlog completion log.
+11. Work on one implementation PB task per branch using its documented branch name; approved previous-task completion synchronization at the start of the next task branch is not a second implementation task.
+12. A PB task becomes logically complete only after its acceptance criteria and tests pass, its task branch is committed and pushed, it is merged into and pushed on `main`, required `main` CI succeeds, and the user explicitly confirms completion, unless the user approves and documents an exception.
+13. Record each completed task exactly once in the backlog Completion Log through the permanent one-merge rollover workflow.
 14. Preserve unrelated user changes and never use destructive Git or filesystem commands without explicit authorization.
 15. Validate files, paths, names, textures, rigs, animations, and package contents before publishing.
 16. Publisher names such as `AvivPeretsFBX` must be configuration values and never hard-coded.
@@ -30,8 +30,8 @@ These rules apply permanently to the entire `C:\Dev\PackageBuilder` tree unless 
 22. Authorization for one Git or remote action does not authorize another action or a future action.
 23. Codex may use read-only Git commands such as `git status`, `git diff`, `git log`, and `git branch --show-current` for inspection and validation.
 24. At the end of every task, Codex must report the changed files, test and validation results, suggested branch name, suggested commit message, and manual commands the user can run.
-25. Codex must leave every PB task open until the user confirms that its commit, push, CI, and merge requirements were completed.
-26. Pull requests are optional. A user-confirmed direct merge satisfies the merge workflow when the required commit, branch push, merge into `main`, successful `main` CI, and user confirmation have evidence; lack of a pull request alone is not a completion blocker.
+25. Codex must leave each PB task `[ ]` and active in its own task branch. After successful `main` CI and explicit user confirmation make it logically complete, its `[x]`, 🟢 **DONE**, Active Work removal, and Completion Log row are recorded at the beginning of the next task branch.
+26. Pull requests are optional. A direct merge requires local validation, the task commit, task-branch push, merge into `main`, push of `main`, successful `main` CI, and explicit user confirmation; branch CI is not required when the direct branch push does not trigger it.
 
 ## Public Repository Safeguards
 
@@ -51,7 +51,34 @@ The approved GitHub repository is [https://github.com/avivperets26/3DModels-Pack
 - 🟡 **PROCESS** — Work is active, locally implemented, locally validated, pushed, under review, or otherwise progressing, but one or more completion gates remain. The task checkbox stays `[ ]`.
 - 🔴 **BLOCKED** — Work cannot make meaningful progress because a specific unresolved dependency, decision, permission, external state, or repeated failure prevents continuation. Record the exact blocker and keep the task checkbox `[ ]`.
 
-Lifecycle markers supplement rather than replace task checkboxes, acceptance evidence, the Completion Log, or the user's exclusive authority over Git and completion confirmation.
+Lifecycle markers supplement rather than replace task checkboxes, acceptance evidence, the Completion Log, or the user's exclusive authority over Git and completion confirmation. During the approved rollover interval, a task may be logically complete after successful `main` CI and user confirmation while its repository checkbox and marker remain `[ ]` / 🟡 **PROCESS** until the beginning of the next task branch.
+
+## Permanent One-Merge Rollover Workflow
+
+1. Each implementation task has one publication cycle: commit the task branch, push it, and merge it into `main` once.
+2. Never return to an already merged task branch solely for completion bookkeeping.
+3. A direct merge is allowed and requires neither branch CI nor a pull request.
+4. The required direct-merge sequence is:
+   - Complete local validation.
+   - Commit the task branch.
+   - Push the task branch.
+   - Merge it into `main`.
+   - Push `main`.
+   - Wait for successful `main` CI.
+   - Receive explicit user confirmation.
+5. Never claim branch CI occurred when a direct task-branch push did not trigger a workflow.
+6. `main` CI remains required unless the user explicitly approves and documents an exception.
+7. After successful `main` CI and user confirmation, the task is logically complete; no completion-only change is added to its already merged branch.
+8. At the beginning of the next task branch, before implementing that task:
+   - Mark the previous task `[x]` and 🟢 **DONE**.
+   - Remove the previous task from Active Work.
+   - Add exactly one Completion Log row.
+   - Record the previous task's final task commit, merge into `main`, successful `main` CI, and explicit user confirmation.
+9. This previous-task synchronization is an allowed documentation operation in the next task branch and does not violate the one-implementation-task-per-branch rule.
+10. Implement the next task normally in that same branch after the synchronization.
+11. Do not create a dedicated completion-only branch, commit cycle, pull request, or merge.
+12. The final project task or a final milestone with no successor may use one final documentation-only synchronization.
+13. Pull requests remain optional for implementation tasks.
 
 ## Non-Negotiable Quality Rules
 
@@ -130,13 +157,16 @@ These rules are mandatory acceptance requirements. Follow [the detailed quality 
 
 ### 2. Required task status synchronization
 
-- At the beginning of work, inspect the implementation backlog and update Active Work when the verified state has changed or the task is missing.
+- At the beginning of a new task branch, after reading `AGENTS.md`, first synchronize any immediately previous task that has successful `main` CI and explicit user completion confirmation, then inspect and update Active Work for the new task.
 - Active Work must identify the PB task, documented branch, current local state, and real current blocker.
 - Update the blocker whenever circumstances change; never leave a resolved blocker as the reported state.
 - Treat `implemented locally`, `validated locally`, `pushed`, `CI passed`, `merged`, and `complete` as distinct lifecycle states.
 - Never describe locally implemented or locally validated work as fully complete.
-- Keep the task checkbox unchecked until every documented completion gate passes and the user confirms completion.
-- Update the Completion Log only after the user confirms the required commit, push, CI, and merge evidence.
+- Keep the current task checkbox unchecked and its marker at 🟡 **PROCESS** or 🔴 **BLOCKED** throughout its own task branch and one merge.
+- Successful `main` CI plus explicit user confirmation makes the task logically complete, but its repository status is synchronized only at the beginning of the next task branch.
+- During that rollover synchronization, update the prior task to `[x]` / 🟢 **DONE**, remove it from Active Work, and add exactly one Completion Log row with its task commit, merge, `main` CI, and user-confirmation evidence.
+- Do not return to the merged task branch or create a completion-only publication cycle for this synchronization.
+- If no successor task exists, the final project task or milestone may use one final documentation-only synchronization.
 - Never infer GitHub branches, pushes, CI, pull requests, merges, repository settings, or releases from local Git state.
 
 ### 3. Evidence-based status

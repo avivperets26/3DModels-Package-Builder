@@ -17,29 +17,34 @@ if (-not (Test-Path -LiteralPath $dotnetExecutable -PathType Leaf)) {
     throw "The repository-local .NET SDK is missing: $dotnetExecutable"
 }
 
-$runtimeDirectories = @(
-    (Join-Path $projectRoot 'runtime-data\cli-home'),
-    (Join-Path $projectRoot 'runtime-data\nuget-packages'),
-    (Join-Path $projectRoot 'runtime-data\nuget-http-cache'),
-    (Join-Path $projectRoot 'runtime-data\temp')
-)
+$runtimeDirectories = [ordered]@{
+    CliHome = Join-Path $projectRoot 'runtime-data\cli-home'
+    NuGetPackages = Join-Path $projectRoot 'runtime-data\nuget-packages'
+    NuGetHttpCache = Join-Path $projectRoot 'runtime-data\nuget-http-cache'
+    NuGetScratch = Join-Path $projectRoot 'runtime-data\nuget-scratch'
+    NuGetPluginsCache = Join-Path $projectRoot 'runtime-data\nuget-plugins-cache'
+    Temp = Join-Path $projectRoot 'runtime-data\temp'
+}
 
-foreach ($directory in $runtimeDirectories) {
+foreach ($directory in $runtimeDirectories.Values) {
     if (-not (Test-Path -LiteralPath $directory -PathType Container)) {
         New-Item -ItemType Directory -Path $directory | Out-Null
     }
 }
 
 $env:DOTNET_ROOT = $dotnetRoot
-$env:DOTNET_CLI_HOME = $runtimeDirectories[0]
-$env:NUGET_PACKAGES = $runtimeDirectories[1]
-$env:NUGET_HTTP_CACHE_PATH = $runtimeDirectories[2]
-$env:TEMP = $runtimeDirectories[3]
-$env:TMP = $runtimeDirectories[3]
+$env:DOTNET_CLI_HOME = $runtimeDirectories.CliHome
+$env:NUGET_PACKAGES = $runtimeDirectories.NuGetPackages
+$env:NUGET_HTTP_CACHE_PATH = $runtimeDirectories.NuGetHttpCache
+$env:NUGET_SCRATCH = $runtimeDirectories.NuGetScratch
+$env:NUGET_PLUGINS_CACHE_PATH = $runtimeDirectories.NuGetPluginsCache
+$env:TEMP = $runtimeDirectories.Temp
+$env:TMP = $runtimeDirectories.Temp
 $env:DOTNET_MULTILEVEL_LOOKUP = '0'
 $env:DOTNET_SKIP_FIRST_TIME_EXPERIENCE = '1'
 $env:DOTNET_NOLOGO = '1'
 $env:DOTNET_CLI_TELEMETRY_OPTOUT = '1'
+$env:TESTINGPLATFORM_TELEMETRY_OPTOUT = '1'
 
 $pathEntries = $env:PATH -split ';'
 if ($pathEntries -notcontains $dotnetRoot) {
