@@ -2,14 +2,14 @@
 
 **Task:** PB-0006 — Add centralized SDK, build, and NuGet configuration  
 **Branch:** `chore/PB-0006-central-build-config`  
-**Lifecycle:** 🟡 **PROCESS**  
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-07-23
 
 ## Scope and Status
 
 PB-0006 centralizes the existing solution's SDK, compiler, analyzer, package-version, NuGet-source, cache-containment, and dependency-lock policy. It adds no business functionality and does not satisfy PB-0008's requirement for meaningful passing smoke tests or PB-0009's application CI scope.
 
-Local implementation and validation evidence are recorded below. The task remains open until its single task commit, task-branch push, merge into and push of `main`, successful required `main` CI, and explicit user confirmation are complete.
+Local implementation and validation evidence are recorded below. Final publication evidence confirms that every PB-0006 completion gate passed without a CI or quality exception. The approved one-merge rollover was recorded at the beginning of PB-0007 on `chore/PB-0007-formatting`.
 
 ## SDK Policy
 
@@ -152,21 +152,21 @@ The Release VSTest run intentionally reports no available tests in each of the f
 - `docs/Package_Builder_Plan.md`, `docs/TECH_STACK_AND_ARCHITECTURE.md`, and `docs/QUALITY_AND_RELEASE_GATES.md` required no change because they contain no conflicting completion-bookkeeping location or mandatory pull-request/branch-CI workflow.
 - The Completion Log is unchanged.
 
-## Approved PB-0006 Publication and Rollover
+## Final Publication and Completion Evidence
 
-PB-0006 will use one implementation publication cycle. A direct merge is allowed and does not require a pull request or branch CI. No branch CI will be claimed if the task-branch push does not trigger the workflow.
+| Gate | Evidence |
+|---|---|
+| Task commit | `41255c6f5953fc7d2dfe96530617484a1e3f87d9` |
+| Task branch | `chore/PB-0006-central-build-config` |
+| Pull request | [#7](https://github.com/avivperets26/3DModels-Package-Builder/pull/7) |
+| Merge into `main` | `9de260b0e02d201cf539fdfd154224fe99a3122b` |
+| Pull-request workflow | [Run 30022944913](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30022944913), successful |
+| Required `main` workflow | [Run 30022954605](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30022954605), successful |
+| User confirmation | User confirmed the merge and green `main` CI on 2026-07-23 |
+| Exceptions | None; no CI or quality exception was used |
 
-The required sequence is local validation, one PB-0006 task commit, task-branch push, merge into `main`, push of `main`, successful `main` CI, and explicit user confirmation. `main` CI remains required unless the user explicitly approves and documents an exception.
-
-After successful `main` CI and explicit confirmation, PB-0006 is logically complete. Its already merged branch must not receive completion-only bookkeeping. At the beginning of the next task branch, the rollover synchronization will mark PB-0006 `[x]` / 🟢 **DONE**, remove it from Active Work, add exactly one Completion Log row, and record its task commit, merge, `main` CI, and confirmation. That documentation synchronization is allowed in the next task branch before the next task is implemented.
+PB-0006 is logically complete and is synchronized exactly once in the backlog Completion Log. PB-0006 is no longer in Active Work. PB-0007 owns the branch containing this rollover synchronization; no completion-only PB-0006 branch or commit cycle was created.
 
 ## Remaining Gates
 
-- Review the final local diff and evidence.
-- User stages and creates the single PB-0006 task commit.
-- User pushes `chore/PB-0006-central-build-config`; branch CI is not required or claimed if this push does not trigger it.
-- User merges the branch into `main` directly or through an optional pull request.
-- User pushes `main`.
-- Required `main` CI succeeds.
-- User explicitly confirms completion, making PB-0006 logically complete.
-- At the beginning of the next task branch, synchronize PB-0006 to `[x]` / 🟢 **DONE**, remove it from Active Work, and add its one Completion Log row; do not return to this branch for bookkeeping.
+None for PB-0006.

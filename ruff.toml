@@ -1,0 +1,94 @@
+required-version = "==0.15.22"
+target-version = "py311"
+line-length = 100
+indent-width = 4
+preview = false
+fix = false
+unsafe-fixes = false
+respect-gitignore = true
+force-exclude = true
+cache-dir = "runtime-data/ruff-cache"
+src = [
+    "scripts",
+    "tests",
+    "workers/blender",
+    "workers/unreal",
+]
+include = [
+    "*.py",
+    "*.pyi",
+    "*.pyw",
+    "ruff.toml",
+]
+exclude = [
+    ".git",
+    ".mypy_cache",
+    ".nox",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".tox",
+    ".venv",
+    "__pycache__",
+    "artifacts",
+    "bin",
+    "build",
+    "downloads",
+    "engine-templates/**/Binaries",
+    "engine-templates/**/DerivedDataCache",
+    "engine-templates/**/Intermediate",
+    "engine-templates/**/Library",
+    "engine-templates/**/Logs",
+    "engine-templates/**/Saved",
+    "engine-templates/**/Temp",
+    "engine-templates/**/UserSettings",
+    "logs",
+    "obj",
+    "runtime-data",
+    "tools",
+]
+
+[lint]
+select = [
+    "E4",
+    "E7",
+    "E9",
+    "F",
+    "I",
+    "UP",
+    "B",
+    "C4",
+    "S",
+    "SIM",
+    "RUF",
+]
+fixable = [
+    "E4",
+    "E7",
+    "E9",
+    "F",
+    "I",
+    "UP",
+    "B",
+    "C4",
+    "SIM",
+    "RUF",
+]
+unfixable = ["S"]
+
+[lint.isort]
+combine-as-imports = true
+known-first-party = [
+    "package_builder_blender",
+    "package_builder_unreal",
+]
+
+[lint.per-file-ignores]
+"tests/**/*.py" = ["S101"]
+
+[format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "lf"
+docstring-code-format = true
+docstring-code-line-length = "dynamic"

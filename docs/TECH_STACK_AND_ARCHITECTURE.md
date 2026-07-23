@@ -115,6 +115,10 @@ The first Unreal implementation uses Python. A minimal C++ editor plugin is intr
 | WPF UI/accessibility tests | Windows UI Automation with a pinned permissively licensed driver such as FlaUI, plus manual representative-user studies |
 | Supply-chain evidence | NuGet audit, pinned Gitleaks or equivalent secret scanning, supported static analyzers, and a pinned no-cost SBOM generator |
 
+The approved PB-0007 formatting baseline uses the formatter supplied by repository-local .NET SDK `10.0.302`; no separate `dotnet-format` global tool is installed. Ruff `0.15.22` is pinned through root `ruff.toml` with a runtime `required-version` check and installed from the official checksum-verified Windows archive beneath `tools/ruff/0.15.22`. Downloads, setup logs, caches, and validation output remain beneath the ignored repository-local roots.
+
+Ruff targets Python 3.11 because the planned Blender 5.0 worker runtime uses Blender's bundled Python compatibility family. This compatibility target is reviewed with a future approved Blender-family change instead of automatically selecting the newest Python syntax. Root `.editorconfig`, `ruff.toml`, and `scripts/Test-Formatting.ps1` define the shared local policy; verification is non-mutating by default, while an explicit fix mode may apply reviewed formatting changes.
+
 ## 5. Why This Stack
 
 ### 5.1 Why .NET and WPF
