@@ -1,13 +1,170 @@
-# PB-0001: repository-local tools and generated state must never be committed.
+# Repository-local tools and generated state
+# These roots are intentional project-owned locations beneath C:\Dev\PackageBuilder.
 /tools/
 /downloads/
 /logs/
 /runtime-data/
 /artifacts/
 
-# Build output and per-user IDE state.
-**/bin/
-**/obj/
-.vs/
+# .NET build output, test results, and local caches
+**/[Bb]in/
+**/[Oo]bj/
+**/TestResults/
+**/BenchmarkDotNet.Artifacts/
+*.binlog
+*.trx
+**/.coverage
+**/.coverage.*
+**/coverage.cobertura.xml
+**/coverage.opencover.xml
+**/coverage.json
+
+# Visual Studio and JetBrains per-user state
+**/.vs/
 *.suo
 *.user
+*.userosscache
+*.sln.docstates
+*.rsuser
+*.DotSettings.user
+*.iws
+**/.idea/**/workspace.xml
+**/.idea/**/tasks.xml
+**/.idea/**/usage.statistics.xml
+**/.idea/**/dataSources.local.xml
+**/.idea/**/dataSources/
+**/.idea/**/shelf/
+**/.idea/**/httpRequests/
+**/_ReSharper.Caches/
+**/.ReSharper/
+
+# Visual Studio Code machine-local state
+# Do not ignore .vscode itself: shared settings, tasks, launch files, and extensions stay trackable.
+**/.vscode/*.local.json
+**/.vscode/.history/
+**/.vscode/.cache/
+**/.vscode/ipch/
+**/.vscode/.browse.VC.db*
+**/.vscode/compileCommands*.json
+**/.vscode/compile_commands.json
+
+# PowerShell, Python, and local test-tool caches
+**/__pycache__/
+*.py[cod]
+*$py.class
+**/.pytest_cache/
+**/.ruff_cache/
+**/.mypy_cache/
+**/.pytype/
+**/.hypothesis/
+**/.tox/
+**/.nox/
+**/.venv/
+**/venv/
+**/.eggs/
+**/*.egg-info/
+**/pip-wheel-metadata/
+**/PesterResults*.xml
+**/PowerShell_transcript.*.txt
+**/ModuleAnalysisCache
+
+# Blender backup, recovery, cache, crash, and Python-generated state
+*.blend[1-9]*
+*.blend@
+**/quit.blend
+**/*_autosave.blend
+**/blendcache_*/
+**/.blender-cache/
+**/blender.crash.txt
+
+# Unity generated and machine-local state
+# Assets, Packages, ProjectSettings, scenes, prefabs, materials, and package inputs remain trackable.
+**/[Ll]ibrary/
+**/[Tt]emp/
+**/[Ll]ogs/
+**/[Uu]ser[Ss]ettings/
+**/[Bb]uild/
+**/[Bb]uilds/
+**/.utmp/
+**/.gradle/
+**/[Mm]emoryCaptures/
+**/[Rr]ecordings/
+**/[Cc]rashes/
+**/[Cc]rashReports/
+**/[Ee]xportedObj/
+*.opendb
+*.VC.db
+**/sysinfo.txt
+/engine-templates/unity/**/*.csproj
+/engine-templates/unity/**/*.sln
+
+# Unreal generated binaries, caches, intermediates, saved state, and local dependency state
+# Config, Content, Source, .uproject, .uasset, and .umap files remain trackable.
+**/[Bb]inaries/
+**/[Dd]erivedDataCache/
+**/[Ii]ntermediate/
+**/[Ss]aved/
+**/.ue4dependencies/
+/engine-templates/unreal/**/*.sln
+
+# Operating-system metadata, editor swaps, and temporary files
+.DS_Store
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+System Volume Information/
+*.stackdump
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+~$*
+.~lock.*#
+**/.tmp/
+**/.temp/
+
+# Credentials, private keys, signing material, and secret-bearing local configuration
+.env
+.env.*
+!.env.example
+!.env.template
+*.env.local
+**/local.settings.json
+**/appsettings.local.json
+**/appsettings.*.local.json
+**/secrets.local.json
+**/.secrets/
+**/credentials.json
+**/credentials.local.json
+**/client_secret.json
+**/client_secret_*.json
+!**/client_secret.example.json
+!**/client_secret.template.json
+**/service-account.json
+**/service-account.local.json
+**/.netrc
+**/_netrc
+**/.pypirc
+**/.npmrc.local
+**/.docker/config.json
+*.key
+*.key.pem
+*private*.pem
+*.pfx
+*.p12
+*.ppk
+*.snk
+*.jks
+*.keystore
+*.kdbx
+*.mobileprovision
+id_rsa
+id_dsa
+id_ecdsa
+id_ed25519
+id_xmss
+**/private-keys-v1.d/
+**/secring.gpg

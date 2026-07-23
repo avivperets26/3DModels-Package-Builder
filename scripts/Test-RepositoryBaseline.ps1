@@ -273,6 +273,15 @@ Invoke-Check 'PowerShell scripts parse successfully' {
     if ($parseFailures.Count -gt 0) { throw ($parseFailures -join '; ') }
 }
 
+Invoke-Check 'Repository ignore policy passes synthetic and tracked-file validation' {
+    $validatorPath = Join-Path $script:RepositoryRoot 'scripts\Test-GitIgnorePolicy.ps1'
+    if (-not (Test-Path -LiteralPath $validatorPath -PathType Leaf)) {
+        throw 'Missing scripts/Test-GitIgnorePolicy.ps1.'
+    }
+
+    & $validatorPath -RepositoryRoot $script:RepositoryRoot
+}
+
 Invoke-Check 'Markdown structure and local links are valid' {
     $markdownFiles = @($candidatePaths | Where-Object { $_ -match '(?i)\.md$' })
     foreach ($relativePath in $markdownFiles) { Test-Markdown $relativePath }

@@ -132,6 +132,7 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
+| PB-0004 | 🟡 **PROCESS** | `chore/PB-0004-gitignore` | Codex for local implementation; user for Git and GitHub gates | 2026-07-23 | The categorized policy, 107-case synthetic validator, tracked-file conflict check, repository-baseline integration, architecture note, and evidence record are locally implemented. The standalone validator passed 67 ignored and 40 trackable cases with 13 tracked paths checked and no conflict; tracked-file-mode repository baseline passed 13 checks; three PowerShell scripts parsed; and `git diff --check` passed. | No task commit, task-branch push, pull-request CI, merge into `main`, final `main` CI, or explicit user completion confirmation is recorded. |
 | PB-0013 | 🟡 **PROCESS** | `docs/PB-0013-quality-release-gates` | User for remaining completion confirmation | 2026-07-22 | Remote feature commit `a1032c48f2a8d0dc98d0c589f1a845605950952b` was merged by pull request [#1](https://github.com/avivperets26/3DModels-Package-Builder/pull/1) into public default branch `main` at `13e5875b686c3219e3571d45ceaa93c463e881ff`. | No GitHub CI evidence or explicit user completion confirmation is recorded. The historical one-task-per-branch conflict remains documented below. |
 
 ### Dated Repository Verification Checkpoints
@@ -251,10 +252,10 @@ flowchart LR
   - Depends on: PB-0002
   - Done when: the approved public repository is documented and verified at [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder); visibility remains public and the default branch remains `main`; the user-approved HTTPS origin fetch/push URLs remain unchanged unless a separately authorized correction is required; local `main` tracks `origin/main`; local `main`, `origin/main`, and read-only remote `main` resolve consistently; PB-0002 remains complete with its successful repository-baseline workflow present on `main`; no secret, personal path, prohibited binary, generated engine asset, or runtime directory is tracked; and the planned `package-builder` versus actual `3DModels-Package-Builder` repository-name discrepancy remains explicit and unresolved until the user makes a separate decision.
 
-- [ ] **PB-0004 — Add repository-safe `.gitignore` rules** — **P0**
+- [ ] **PB-0004 — Add repository-safe `.gitignore` rules** — **P0** — 🟡 **PROCESS**
   - Branch: `chore/PB-0004-gitignore`
   - Depends on: PB-0003
-  - Done when: .NET build output, optional IDE state, Blender, Unity, Unreal, credentials, and the repository-local `tools`, `downloads`, `logs`, `runtime-data`, and `artifacts` directories are ignored and verified without permitting files outside the project root.
+  - Done when: the documented, categorized policy ignores .NET build/cache output; Visual Studio, JetBrains, and machine-local VS Code state; PowerShell/Python caches and temporary files; Blender backup/recovery/cache state; Unity and Unreal generated state; operating-system metadata; credentials; private keys; signing files; and the repository-local `tools`, `downloads`, `logs`, `runtime-data`, and `artifacts` directories without ignoring shared `.vscode` configuration, legitimate source/engine/fixture/package-input formats, or safe configuration examples; `scripts/Test-GitIgnorePolicy.ps1` verifies synthetic repository-relative ignored and trackable cases, exact negations, path containment, and every tracked path with `git check-ignore -v --no-index`; and the repository-baseline script runs the same validation locally and in GitHub Actions.
 
 - [ ] **PB-0005 — Create the .NET solution and project skeleton** — **P0**
   - Branch: `chore/PB-0005-solution-skeleton`

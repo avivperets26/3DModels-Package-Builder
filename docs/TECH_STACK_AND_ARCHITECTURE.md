@@ -6,7 +6,7 @@
 **GitHub repository:** [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder)
 **GitHub visibility:** Public, approved by the user on 2026-07-22
 **Runtime data:** `C:\Dev\PackageBuilder\runtime-data`
-**Last reviewed:** 2026-07-22
+**Last reviewed:** 2026-07-23
 
 ## 1. Purpose
 
@@ -388,6 +388,8 @@ C:\Dev\PackageBuilder\
 ```
 
 Large source models, engine caches, generated packages, customer assets, and marketplace releases are never tracked by Git. They remain inside the single workspace root in ignored directories. `.gitignore` and containment tests protect that boundary.
+
+The repository ignore policy is validated by `scripts/Test-GitIgnorePolicy.ps1` with synthetic repository-relative paths and `git check-ignore -v --no-index`. The policy protects generated and local-only .NET, editor, Blender, Unity, Unreal, operating-system, temporary, credential, key, and signing state without blanket ignores for model, texture, engine-source, package-input, code, or documentation formats. Shared `.vscode` settings, tasks, launch configurations, and extension recommendations remain trackable, and every tracked path is checked for an unexpected ignore match.
 
 The source-controlled documentation set includes `docs/QUALITY_AND_RELEASE_GATES.md`. PB-1801 also maintains a criterion-level traceability record in a documented source-controlled format, while large generated test reports and release evidence remain beneath ignored `artifacts` and `logs` directories.
 
@@ -835,6 +837,7 @@ Expected external failures are represented as results rather than unhandled exce
 - Conventional or clearly scoped commit messages.
 - Repository-local `tools`, `downloads`, `logs`, `runtime-data`, and `artifacts` remain ignored even though they live beneath the workspace root.
 - No generated packages, engine caches, marketplace source models, credentials, or customer assets are tracked.
+- The categorized `.gitignore` policy is tested by `scripts/Test-GitIgnorePolicy.ps1` and the repository-baseline workflow; rules remain repository-relative, safe examples use explicit negation, shared `.vscode` configuration remains trackable, and legitimate source or licensed-fixture extensions are not ignored globally.
 - Git LFS only for small legally approved test fixtures when necessary.
 
 ### Version Pinning
