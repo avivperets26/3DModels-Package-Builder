@@ -2,14 +2,24 @@
 
 **Task:** PB-0103 — Implement source-asset and texture-assignment models
 **Branch:** `feat/PB-0103-source-assets-textures`
-**Lifecycle:** 🟡 **PROCESS**
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-07-24
 
 ## Scope
 
 PB-0103 adds immutable source metadata, the complete approved canonical source texture-role inventory, renderer-independent colour spaces and normal conventions, and validated image-to-role assignments. The implementation remains in `PackageBuilder.Domain`, preserves PB-0101 and PB-0102 APIs, and adds no filesystem, archive, image-decoding, engine, adapter, marketplace, WPF, persistence, serialization, or networking behavior.
 
-This task also performs the approved PB-0102 rollover. PB-0102 is `[x]` / 🟢 **DONE**, absent from Active Work, and recorded exactly once in the Completion Log. PB-0103 remains `[ ]` / 🟡 **PROCESS**, appears in Active Work, and is absent from the Completion Log.
+This task also performed the approved PB-0102 rollover. PB-0102 is `[x]` / 🟢 **DONE**, absent from Active Work, and recorded exactly once in the Completion Log. The approved PB-0104 rollover now marks PB-0103 `[x]` / 🟢 **DONE**, removes it from Active Work, and records it exactly once in the Completion Log.
+
+## PB-0103 Final Publication Evidence
+
+- Final task commit: `3e21b2aa118f43dc024a377eb855e08af4838c4b`.
+- Pull request: [#17](https://github.com/avivperets26/3DModels-Package-Builder/pull/17).
+- Successful PR workflow: [run 30095076362](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30095076362).
+- Merge commit: `b562be3a69c97d1b8eb7924c48ea47b1b4727eb2`.
+- Successful required main workflow: [run 30095081353](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30095081353).
+- The user explicitly confirmed completion on 2026-07-24.
+- No CI, completion, or quality exception was used.
 
 ## PB-0102 Final Publication Evidence
 
@@ -166,6 +176,6 @@ Coverage uses the centrally pinned `coverlet.collector` `10.0.1` with `ExcludeAs
 | .NET/Ruff formatting and lint | Pass; `dotnet format --verify-no-changes --severity info`, Ruff lint, and Ruff format verification. |
 | `git diff --check` | Pass directly and through repository baseline/core CI. |
 
-## Remaining Gates
+## Completion
 
-PB-0103 remains `[ ]` / 🟡 **PROCESS**, stays in Active Work, and remains absent from the Completion Log. Local implementation and the requested validation matrix pass. User-controlled staging, task commit, task-branch push, merge into and push of `main`, successful required `main` CI, explicit completion confirmation, and next-task rollover synchronization remain.
+PB-0103 is logically complete and its repository status is synchronized by the approved PB-0104 rollover. Its implementation, tests, task commit, task-branch push, pull-request workflow, merge into and push of `main`, required `main` CI, explicit user confirmation, `[x]` / 🟢 **DONE** marker, Active Work removal, and single Completion Log row all have evidence. No PB-0103 gate remains.
