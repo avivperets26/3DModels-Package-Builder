@@ -267,7 +267,6 @@ $paths = [ordered]@{
     AdrInstallation = 'docs/adr/ADR-0013-installer-portable-and-lifecycle-safety.md'
     Pb0012Evidence = 'docs/PB-0012_INITIAL_ADRS_EVIDENCE.md'
     Pb0013Evidence = 'docs/PB-0013_QUALITY_RELEASE_GATES_EVIDENCE.md'
-    Pb0101Evidence = 'docs/PB-0101_PRODUCT_IDENTITY_EVIDENCE.md'
     DocsIndex = 'docs/README.md'
 }
 $texts = @{}
@@ -519,7 +518,6 @@ Invoke-Check 'Markdown and repository-local links are valid for PB-0013 sources'
         $paths['AdrInstallation'],
         $paths['Pb0012Evidence'],
         $paths['Pb0013Evidence'],
-        $paths['Pb0101Evidence'],
         $paths['DocsIndex']
     )) {
         Assert-MarkdownAndLocalLinks $relativePath
@@ -572,7 +570,6 @@ Invoke-Check 'PB task IDs, dependencies, branches, lifecycle, Active Work, and C
     }
     $pb0012 = $taskLookup['PB-0012']
     $pb0013 = $taskLookup['PB-0013']
-    $pb0101 = $taskLookup['PB-0101']
     if (-not $pb0012.Checked -or $pb0012.Header -notmatch '\*\*DONE\*\*') {
         throw 'PB-0012 must be checked and DONE after rollover.'
     }
@@ -585,12 +582,6 @@ Invoke-Check 'PB task IDs, dependencies, branches, lifecycle, Active Work, and C
     if ('PB-0013' -in $activeIds -or
         (@($loggedIds | Where-Object { $_ -eq 'PB-0013' }).Count -ne 1)) {
         throw 'PB-0013 must be absent from Active Work and logged exactly once.'
-    }
-    if ($pb0101.Checked -or $pb0101.Header -notmatch '\*\*PROCESS\*\*') {
-        throw 'PB-0101 must remain unchecked and PROCESS on its own branch.'
-    }
-    if ('PB-0101' -notin $activeIds -or 'PB-0101' -in $loggedIds) {
-        throw 'PB-0101 must remain in Active Work and absent from the Completion Log.'
     }
 }
 
@@ -703,7 +694,7 @@ Invoke-Check 'No unresolved placeholders or unsupported quality claims remain' {
     foreach ($name in @(
         'Rules', 'Plan', 'Architecture', 'Backlog', 'Quality',
         'AdrTraceability', 'AdrUx', 'AdrSecurity', 'AdrQuality', 'AdrInstallation',
-        'Pb0012Evidence', 'Pb0013Evidence', 'Pb0101Evidence'
+        'Pb0012Evidence', 'Pb0013Evidence'
     )) {
         foreach ($line in ($texts[$name] -split '\r?\n')) {
             if ($line -match '(?i)\b(TODO|TBD|TBC|FIXME)\b|lorem ipsum|replace me|may\s+(?:initially|temporarily)\s+be\s+placeholder') {

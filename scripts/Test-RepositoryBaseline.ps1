@@ -680,15 +680,19 @@ Invoke-Check 'Task branch names and lifecycle markers are valid' {
         if ($task.Count -ne 1) { throw "Active Work contains unknown task $id." }
         $statusMatch = [regex]::Match($row.Groups['status'].Value, '\*\*(?<state>PROCESS|BLOCKED)\*\*')
         if (-not $statusMatch.Success) { throw "Active Work task $id has an invalid status." }
-        if ($null -ne $lifecycleStates[$id] -and $lifecycleStates[$id] -ne $statusMatch.Groups['state'].Value) {
+        if ($lifecycleStates[$id] -notin @('PROCESS', 'BLOCKED') -or
+            $lifecycleStates[$id] -ne $statusMatch.Groups['state'].Value) {
             throw "Active Work status for $id does not match its task marker."
         }
         if ($row.Groups['branch'].Value -ne $task[0].Branch[0]) { throw "Active Work branch for $id does not match its task definition." }
     }
     $expectedActive = @($tasks | Where-Object { $lifecycleStates[$_.Id] -in @('PROCESS', 'BLOCKED') } | ForEach-Object Id)
     $missingActive = @($expectedActive | Where-Object { $_ -notin $activeIds })
-    if ($missingActive.Count -gt 0) {
-        throw "Tasks with active lifecycle markers are missing from Active Work: $($missingActive -join ', ')."
+    $unexpectedActive = @($activeIds | Where-Object { $_ -notin $expectedActive })
+    $duplicateActive = @($activeIds | Group-Object | Where-Object Count -gt 1 | ForEach-Object Name)
+    if ($missingActive.Count -gt 0 -or $unexpectedActive.Count -gt 0 -or
+        $duplicateActive.Count -gt 0) {
+        throw "Active Work mismatch. Duplicate: $($duplicateActive -join ', '); missing: $($missingActive -join ', '); unexpected: $($unexpectedActive -join ', ')."
     }
 }
 
