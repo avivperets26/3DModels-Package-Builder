@@ -158,24 +158,19 @@ feat/PB-0607-unity-urp-material-compiler
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
 | PB-0013 | 🟡 **PROCESS** | `docs/PB-0013-quality-release-gates` | User for remaining completion confirmation | 2026-07-22 | Remote feature commit `a1032c48f2a8d0dc98d0c589f1a845605950952b` was merged by pull request [#1](https://github.com/avivperets26/3DModels-Package-Builder/pull/1) into public default branch `main` at `13e5875b686c3219e3571d45ceaa93c463e881ff`. | No GitHub CI evidence or explicit user completion confirmation is recorded. The historical one-task-per-branch conflict remains documented below. |
-| PB-0009 | 🟡 **PROCESS** | `chore/PB-0009-core-ci` | Codex for local correction; user for Git and completion gates | 2026-07-23 | Permission-parser correction commit `8415ff83cd9153c72140ee2946675c7f564a15e7` is pushed and [PR #10](https://github.com/avivperets26/3DModels-Package-Builder/pull/10) is open. [Run 30037651223](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30037651223) confirmed repository baseline 21/21, then failed the core Release build because Windows CRLF checkout produced six IDE0055 errors in `AssemblyInfo.cs`; local LF builds passed and the repository had no `.gitattributes`. The focused local correction adds only `* text=auto eol=lf`, preserves binary detection, and leaves IDE0055, warnings-as-errors, `.editorconfig`, the workflow, and `ThemeInfo` unchanged. Formatting configuration passed 8/8 under Windows PowerShell `5.1.26100.8894`; six representative file classes resolve to `text=auto`/`eol=lf`; a contained `core.autocrlf=true` checkout produced LF-only `AssemblyInfo.cs` and a 0-warning/error Release build; all nine core stages passed; and all four tests passed with 0 failures/skips. Local `pwsh` is unavailable. PB-0008 remains DONE and logged exactly once; PB-0013 is unchanged. | No local implementation blocker. The line-ending correction is uncommitted and unpushed. Remaining user-controlled gates are a corrective commit and push to the existing PR branch, successful PR CI including PowerShell 7, merge into and push of `main`, successful required `main` CI, and explicit completion confirmation. No merge, CI exception, or completion is claimed. |
+| PB-0010 | 🟡 **PROCESS** | `docs/PB-0010-contribution-workflow` | Codex for local implementation and validation; user for Git and completion gates | 2026-07-23 | Locally implemented and validated from PB-0009 merge commit `96c13a565f9ed85d66d13a357cfa2571b2e4dd93`: PB-0009 rollover is synchronized exactly once; contribution documentation passed 11/11 checks; repository baseline passed 23/23; all nine core stages passed; the 15-project Release build had 0 warnings/errors; and all four smoke tests passed with 0 failures/skips. PB-0013's Active Work row and task block are unchanged. | No local implementation blocker. Commit, push, merge, required `main` CI, and explicit completion confirmation remain user-controlled future gates. |
 
-### PB-0009 PR #10 Validator-Portability Failure
+### PB-0009 Completion Evidence
 
-- [GitHub Actions run 30034710738](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30034710738) ran for PR #10 at head commit `c1da19ea70a81436ff04d42b8f59f164bcad6cc3`.
-- `Validate repository baseline` failed when `Test-CoreCiConfiguration.ps1` incorrectly reported that workflow permissions were not limited to `contents: read`.
-- `Validate core application` was skipped because it depends on the baseline job.
-- The workflow contains exactly one top-level `permissions:` block with exactly `  contents: read`; the failure was a multiline-regex portability defect in the validator, not a repository-permission violation.
-- The correction was committed and pushed as `8415ff83cd9153c72140ee2946675c7f564a15e7`; the next PR run confirmed the repository baseline passes.
+The detailed implementation, failure-recovery history, and final publication evidence are recorded in `docs/PB-0009_CORE_CI_EVIDENCE.md`.
 
-### PB-0009 PR #10 CRLF Formatting Failure
-
-- [GitHub Actions run 30037651223](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30037651223) ran for PR #10 at permission-parser correction commit `8415ff83cd9153c72140ee2946675c7f564a15e7`.
-- Repository baseline validation passed all 21 checks, confirming the permission-parser correction.
-- `Validate core application` reached the Release build and failed with six IDE0055 errors on `src/PackageBuilder.App.Wpf/AssemblyInfo.cs` lines 4–9.
-- A local LF checkout passed, while a clean Windows checkout with `core.autocrlf=true` converted the file to CRLF and reproduced the failure. `.editorconfig` already required LF, but the repository had no `.gitattributes` policy.
-- The local correction adds only `* text=auto eol=lf`, preserves binary detection, strengthens the dependency-free formatting validator, and leaves IDE0055, warnings-as-errors, `.editorconfig`, the GitHub workflow, and `ThemeInfo` behavior unchanged.
-- PR CI has not passed and remains an outstanding user-controlled gate. No CI exception exists.
+- Final task commit `973aec7be954115e83fe1c18d0c8139f2d111fda` was pushed on `chore/PB-0009-core-ci`.
+- The task was merged through [pull request #10](https://github.com/avivperets26/3DModels-Package-Builder/pull/10) into `main` as `96c13a565f9ed85d66d13a357cfa2571b2e4dd93`.
+- Final [PR workflow run 30047612915](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30047612915) completed successfully.
+- Required [main workflow run 30047819416](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30047819416) completed successfully for the merge commit; both `Validate repository baseline` and `Validate core application` passed.
+- The user explicitly confirmed the commit, push, merge, green required `main` CI, and task completion on 2026-07-23.
+- No CI, completion, or quality exception was used.
+- PB-0009 is `[x]` / 🟢 **DONE**, removed from Active Work, and recorded exactly once in the Completion Log during this PB-0010 rollover. PB-0013 is unchanged.
 
 ### Dated Repository Verification Checkpoints
 
@@ -246,6 +241,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0006 | `chore/PB-0006-central-build-config` | `41255c6f5953fc7d2dfe96530617484a1e3f87d9` | [#7](https://github.com/avivperets26/3DModels-Package-Builder/pull/7) | 2026-07-23 | Merged into `main` as `9de260b0e02d201cf539fdfd154224fe99a3122b`; [PR workflow run 30022944913](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30022944913) and final [main workflow run 30022954605](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30022954605) succeeded. No CI or quality exception was used; the user explicitly confirmed the merge and green `main` CI on 2026-07-23. |
 | PB-0007 | `chore/PB-0007-formatting` | `56a1974dddd67b30e51084a3cbce6a985e1e9fd7` | [#8](https://github.com/avivperets26/3DModels-Package-Builder/pull/8) | 2026-07-23 | Merged into `main` as `908e4b0ca92629d07a8ced5b529e72d6b4f5c0a5`; [main workflow run 30024743745](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30024743745) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the task-branch push, merge, and green required `main` CI on 2026-07-23. |
 | PB-0008 | `test/PB-0008-test-projects` | `cdf08733edc28d1990b86a4a70b7d59c33fdcbeb` | [#9](https://github.com/avivperets26/3DModels-Package-Builder/pull/9) | 2026-07-23 | Merged into `main` as `37dbd69690f3397ecf60ef7d96094d9d09221f9a`; [main workflow run 30029052452](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30029052452) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the merge and green required `main` CI on 2026-07-23. |
+| PB-0009 | `chore/PB-0009-core-ci` | `973aec7be954115e83fe1c18d0c8139f2d111fda` | [#10](https://github.com/avivperets26/3DModels-Package-Builder/pull/10) | 2026-07-23 | Merged into `main` as `96c13a565f9ed85d66d13a357cfa2571b2e4dd93`; final [PR workflow run 30047612915](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30047612915) and required [main workflow run 30047819416](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30047819416) succeeded, including both repository-baseline and core-application jobs. No exception was used; the user explicitly confirmed the commit, push, merge, green required `main` CI, and completion on 2026-07-23. |
 
 ## 5. Milestones
 
@@ -335,15 +331,15 @@ flowchart LR
   - Depends on: PB-0005
   - Done when: Domain, Application, Infrastructure, and Contract test projects execute at least one passing smoke test.
 
-- [ ] **PB-0009 — Add core GitHub Actions CI** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0009 — Add core GitHub Actions CI** — **P0** — 🟢 **DONE**
   - Branch: `chore/PB-0009-core-ci`
   - Depends on: PB-0006, PB-0008
   - Done when: building on, rather than replacing, PB-0002's repository-bootstrap checks, pull requests restore, build, format-check, and test the solution on a Windows runner using no paid runner or service requirement, and the identical commands remain runnable locally. PB-0009 owns application restore/build/test CI; PB-0002 does not.
 
-- [ ] **PB-0010 — Add contribution and branch workflow documentation** — **P0**
+- [ ] **PB-0010 — Add contribution and branch workflow documentation** — **P0** — 🟡 **PROCESS**
   - Branch: `docs/PB-0010-contribution-workflow`
   - Depends on: PB-0003
-  - Done when: README and CONTRIBUTING explain task IDs, branches, PRs, optional CI, completion logging, versioning, single-root containment, the Visual Studio Code workflow, no-cost prerequisites, and prohibited committed content.
+  - Done when: a professional root README accurately separates the repository-foundation status from planned portable FBX/GLB, Unity, Unreal, marketplace-adapter, and five-case functionality; README and CONTRIBUTING document exact contained Visual Studio Code commands, PB task IDs, all approved branch types, lifecycle markers, one task per branch, optional pull requests, allowed direct merges, the permanent one-merge rollover, required `main` CI, explicit user confirmation, manual Git ownership, documentation synchronization, clearly scoped commits, version/dependency pinning, single-root containment, no-cost prerequisites, external engine licensing boundaries, public-repository safeguards, and prohibited tracked content; task IDs, pinned tool/dependency versions, Package Builder releases, independently versioned marketplace-requirements profiles, and the unapproved release-versioning decision remain distinct; a dependency-free PowerShell validator checks required policy, real commands/files, local links, agreement with `AGENTS.md` and this backlog, no mandatory paid tooling, no unsupported current capability, and no secret/personal/prohibited-content example; the validator runs from `Test-RepositoryBaseline.ps1`; and PB-0010 evidence plus Active Work state remain current without adding PB-0010 to the Completion Log on its own branch.
 
 - [ ] **PB-0011 — Add pull-request, issue, ownership, and dependency-update configuration** — **P1**
   - Branch: `chore/PB-0011-github-governance`
