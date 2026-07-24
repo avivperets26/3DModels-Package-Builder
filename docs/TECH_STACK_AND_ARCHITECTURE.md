@@ -256,6 +256,19 @@ PB-0102 adds closed immutable domain identities without engine dependencies:
 
 The PB-0102 API adds no target selection object, manifest/schema converter, publisher or marketplace profile, Fab coupling, filesystem or persistence behavior, or reference to the Portable, Unity, or Unreal adapter projects.
 
+PB-0103 adds immutable source-asset and renderer-independent texture interpretation in `PackageBuilder.Domain.Assets` and `PackageBuilder.Domain.Textures`:
+
+- `SourceAssetKind` exposes exactly `Fbx`, `Glb`, `Archive`, and `Image`, with canonical identifiers `fbx`, `glb`, `archive`, and `image`.
+- `SourceAsset.Create(SourceAssetKind?, string?, string?)` returns `SourceAssetValidationResult`. It stores a kind, a canonical logical source-relative reference, and an optional original filename without filesystem access, file-existence checks, archive extraction, decoding, hashing, copying, or mutation.
+- Logical references preserve accepted Unicode and casing exactly, use `/` as their only separator, and are compared ordinally and case-sensitively. Validation rejects null/empty/whitespace, rooted and drive-relative forms, URI-like/colon forms, backslashes, empty segments, `.`/`..` segments, segment-edge whitespace, and control characters. It never trims, case-folds, replaces separators, resolves traversal, or otherwise normalizes unsafe input.
+- Explicit source-format consistency requires `.fbx` for FBX, `.glb` for GLB, and `.zip` for Archive, using ordinal case-insensitive extension comparison while preserving the supplied text. Image extensions remain unrestricted until an approved image-format policy exists.
+- `TextureRole` exposes exactly Albedo, Normal, Metallic, Roughness, Emission, Ambient Occlusion, Opacity, and Height. Canonical identifiers are `albedo`, `normal`, `metallic`, `roughness`, `emission`, `ambient-occlusion`, `opacity`, and `height`; `Albedo` is the exact display spelling and `Albeado`, Base Color, Diffuse, target packing names, and unknown values are not canonical roles.
+- `ColourSpace` exposes `Srgb` (`srgb`, display `sRGB`) and `Linear` (`linear`). Albedo and Emission require sRGB; every other canonical role requires Linear.
+- `NormalConvention` exposes Auto, OpenGL, and DirectX using `auto`, `open-gl`, and `direct-x`. A convention is required for Normal and forbidden for every non-Normal role.
+- `TextureAssignment.Create(SourceAsset?, TextureRole?, ColourSpace?, NormalConvention?)` returns `TextureAssignmentValidationResult`, accepts only Image sources, and rejects null, incompatible, missing, or contradictory combinations without silently correcting them.
+
+All PB-0103 canonical identity parsers reuse `CanonicalIdentifierParseResult<T>` and exact ordinal PB-0102 parsing behavior. Source-asset and assignment errors remain task-local expected-input results rather than pre-empting PB-0109's global validation-finding and stable-code model. PB-0103 adds no `SourceAssetSet`, material/shader model, classifier, channel packing, image decoding, engine import setting, filesystem implementation, marketplace rule, or JSON converter.
+
 ### 7.2 Application Layer
 
 `PackageBuilder.Application` implements use cases and orchestration:

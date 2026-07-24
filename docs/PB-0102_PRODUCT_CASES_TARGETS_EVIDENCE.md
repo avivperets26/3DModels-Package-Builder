@@ -2,7 +2,7 @@
 
 **Task:** PB-0102 — Implement product-case and target models
 **Branch:** `feat/PB-0102-product-cases-targets`
-**Lifecycle:** 🟡 **PROCESS**
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-07-24
 
 ## Scope
@@ -10,6 +10,16 @@
 PB-0102 adds the closed domain identities required to distinguish all five approved product cases and the Portable, Unity, and Unreal build-target families. The implementation remains entirely in `PackageBuilder.Domain`, preserves the PB-0101 naming API, and adds no engine, adapter, marketplace, WPF, filesystem, persistence, serialization, or networking dependency.
 
 The task also performs the approved PB-0101 rollover and makes the permanent PB-0012/PB-0013 validators durable. Current task lifecycle is enforced generically by `Test-RepositoryBaseline.ps1` instead of hard-coding a moving domain-task successor in foundation validators.
+
+## Final Publication and Rollover
+
+- Final task commit `16d89bddcac6d26680a20bd7a30956fde1d09dd2` was pushed on `feat/PB-0102-product-cases-targets`.
+- The task was merged through [pull request #16](https://github.com/avivperets26/3DModels-Package-Builder/pull/16) into `main` as `0ac28fbc61b7f5287c4161b1329b50df19dd7e22`.
+- [PR workflow run 30092231887](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30092231887) completed successfully.
+- Required [main workflow run 30092238172](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30092238172) completed successfully for the merge commit.
+- The user explicitly confirmed the task commit, push, merge, successful required `main` CI, and completion on 2026-07-24.
+- No CI, completion, or quality exception was used.
+- The PB-0103 rollover marks PB-0102 `[x]` / 🟢 **DONE**, removes it from Active Work, and records it exactly once in the Completion Log.
 
 ## Public API
 
@@ -171,6 +181,6 @@ PB-0102 adds no marketplace profile, Fab coupling, publisher default, engine set
 
 The first focused compile exposed two `CA1861` analyzer findings in test expectations, and the first formatting pass identified repository-style simplifications. Both were corrected before final validation. An initial disposable-clone copy attempt left the clones on the old committed validators; those old-state passes were rejected as evidence. The final clone matrix used strict error handling, copied a flattened candidate-file list, verified the refactored validator text in each clone, and then passed on `main` and detached HEAD without an exception or weakened gate.
 
-## Remaining Gates
+## Completion State
 
-PB-0102 remains `[ ]` / 🟡 **PROCESS**, stays in Active Work, and is absent from the Completion Log. Local implementation and required validation pass. The user-controlled task commit, task-branch push, merge into and push of `main`, successful required `main` CI, explicit user completion confirmation, and next-task rollover synchronization remain.
+PB-0102 is logically complete and its repository status is synchronized by the approved PB-0103 rollover. Its implementation, tests, task commit, task-branch push, pull-request workflow, merge into and push of `main`, required `main` CI, explicit user confirmation, `[x]` / 🟢 **DONE** marker, Active Work removal, and single Completion Log row all have evidence. No PB-0102 gate remains.
