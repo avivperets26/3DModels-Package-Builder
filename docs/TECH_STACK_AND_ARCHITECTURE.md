@@ -125,6 +125,8 @@ The PB-0008 test baseline keeps the four existing xUnit v3 projects on the centr
 
 The PB-0009 core pipeline is exposed through `scripts/Invoke-CoreCi.ps1` for Visual Studio Code, Windows PowerShell 5.1, and GitHub Actions `pwsh`. It performs repository-baseline validation, exact SDK verification, one locked restore, a warning-free Release build, non-mutating .NET formatting, checksum-verified Ruff `0.15.22` installation, Ruff lint/format checks, and all four Release test projects in a fixed fail-closed order. Local execution accepts only `tools/dotnet/10.0.302`; explicit GitHub Actions mode accepts the `actions/setup-dotnet` managed runner SDK only after the GitHub workspace and exact SDK version are verified. All Package Builder CLI state, NuGet/Ruff caches, temporary files, logs, and results remain beneath the selected repository workspace.
 
+PB-0010 establishes `README.md` and `CONTRIBUTING.md` as the contributor entry points without presenting planned product functionality as available. `scripts/Test-ContributionDocumentation.ps1` is a dependency-free PowerShell validator for required sections, real command/file references, local Markdown links, branch types, lifecycle markers, optional pull requests, direct merges, the permanent one-merge rollover, version boundaries, no-cost tooling, and public-repository safeguards. `scripts/Test-RepositoryBaseline.ps1` runs it in-process and through standalone Windows PowerShell 5.1 before the core pipeline proceeds.
+
 ## 5. Why This Stack
 
 ### 5.1 Why .NET and WPF
@@ -344,10 +346,14 @@ C:\Dev\PackageBuilder\
 ├── .editorconfig
 ├── .gitignore
 ├── README.md
+├── CONTRIBUTING.md
 ├── LICENSE                 # selected before public release
 ├── docs/
 │   ├── Package_Builder_Plan.md
 │   ├── TECH_STACK_AND_ARCHITECTURE.md
+│   ├── IMPLEMENTATION_BACKLOG.md
+│   ├── QUALITY_AND_RELEASE_GATES.md
+│   ├── PB-0010_CONTRIBUTION_WORKFLOW_EVIDENCE.md
 │   └── adr/
 ├── schemas/
 │   ├── product-manifest.schema.json
@@ -389,6 +395,7 @@ C:\Dev\PackageBuilder\
 │   ├── PackageBuilder.Contract.Tests/
 │   └── fixtures/
 ├── scripts/
+│   └── Test-ContributionDocumentation.ps1
 ├── .vscode/                 # source-controlled tasks/launch settings; no machine paths
 ├── .github/workflows/
 ├── tools/                   # ignored repository-local SDKs and engine installations
@@ -967,7 +974,7 @@ Generated test, coverage, mutation, benchmark, accessibility, usability, analyze
 
 PB-0002 established the initial GitHub Free repository-completion workflow before the .NET solution and test projects existed. PB-0009 preserves its `validate-repository-baseline` job in the same workflow file. The job still runs first on `windows-latest`, checks out full history with credentials disabled, and invokes the same dependency-free PowerShell validator used locally.
 
-The bootstrap validator is limited to required tracked files, the approved `global.json` SDK pin, PowerShell parsing, Markdown structure and local links, backlog task/dependency/branch/lifecycle/Completion Log consistency, current repository secret/personal-path/binary/generated/runtime exclusions, `git diff --check`, and reachable-history integrity. GitHub containment resolves from `GITHUB_WORKSPACE`; the workflow does not require the hosted checkout to use `C:\Dev\PackageBuilder`.
+The bootstrap validator is limited to required tracked files, the approved `global.json` SDK pin, PowerShell parsing, Markdown structure and local links, backlog task/dependency/branch/lifecycle/Completion Log consistency, current repository secret/personal-path/binary/generated/runtime exclusions, `git diff --check`, and reachable-history integrity. PB-0010 extends this dependency-free baseline with focused README and CONTRIBUTING validation for required sections, real commands and files, policy agreement, version boundaries, free tooling, public-repository safeguards, optional pull requests, direct merges, and the one-merge rollover. GitHub containment resolves from `GITHUB_WORKSPACE`; the workflow does not require the hosted checkout to use `C:\Dev\PackageBuilder`.
 
 The baseline job remains dependency-free: it does not restore or build the application, install .NET or an engine, upload artifacts, add telemetry, publish outputs, or require a paid service. It now also validates the PB-0009 workflow and local-entry configuration before the dependent core job can start.
 
