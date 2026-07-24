@@ -281,6 +281,19 @@ PB-0104 adds immutable renderer-independent material intent in `PackageBuilder.D
 
 Creation uses task-local structured validation results for expected input failures. Equality and hashing include every retained property, use exact ordinal texture/source identity, and remain culture independent and deterministic. PB-0104 adds no material name or specular workflow, UV-set index, shader, packing, renderer asset, image conversion, filesystem, persistence, networking, marketplace, WPF, JSON, or PB-0109 global finding behavior.
 
+PB-0105 adds immutable renderer-independent rig and animation intent in `PackageBuilder.Domain.Rigging` and `PackageBuilder.Domain.Animations`:
+
+- `RigType` exposes only `Generic` and explicitly selected `Humanoid`; skeleton presence never implies Humanoid.
+- `BoneDefinition` preserves validated Unicode identities exactly and uses ordinal, case-sensitive identity and parent-reference semantics.
+- `SkeletonDefinition` requires exactly one root, rejects null or duplicate bones, self-parenting, missing parents, missing or multiple roots, and direct or indirect cycles, then retains root-first depth-first order with ordinal sibling ordering.
+- `RigTransform` retains any finite signed translation and scale. Its finite non-zero quaternion is normalized robustly at numeric boundaries and sign-canonicalized so equivalent `q` and `-q` rotations compare and hash identically.
+- `BonePose` and `PoseDefinition` represent one complete reference/rest transform per known skeleton bone, reject unknown, duplicate, null, or missing entries, and retain skeleton order independently of input order.
+- `RigDefinition` combines an explicitly selected rig type, validated skeleton, and matching complete reference pose.
+- `LoopBehavior` exposes `Once` and `Loop`; `RootMotionStatus` exposes `None` and `RootBone`.
+- `AnimationDefinition` preserves a validated Unicode clip name, inclusive signed `long` source-frame range, finite positive FPS, loop behavior, root-motion status, exact root reference, and rig. Negative source frames are valid. Inclusive frame count is `EndFrame - StartFrame + 1`; duration is the number of sample intervals, `EndFrame - StartFrame`, divided by FPS, so one frame has zero duration.
+
+PB-0105 creation uses task-local non-throwing validation results rather than PB-0109 global finding codes. Collections are immutable snapshots; hierarchy, pose, equality, and FNV-based hashing are deterministic, ordinal, and culture independent. PB-0105 adds no skin weights, curve data, parsing, baking, compression, retargeting, root-motion extraction, humanoid maps, axes, units, engine assets, renderer behavior, filesystem, persistence, networking, marketplace, WPF, or JSON behavior.
+
 ### 7.2 Application Layer
 
 `PackageBuilder.Application` implements use cases and orchestration:

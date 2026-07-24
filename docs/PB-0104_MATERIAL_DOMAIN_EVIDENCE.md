@@ -1,15 +1,25 @@
 # PB-0104 Material Domain Evidence
 
-**Task:** PB-0104 — Implement renderer-independent material definitions  
-**Branch:** `feat/PB-0104-material-domain`  
-**Lifecycle:** 🟡 **PROCESS**  
+**Task:** PB-0104 — Implement renderer-independent material definitions
+**Branch:** `feat/PB-0104-material-domain`
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-07-24
 
 ## Scope
 
 PB-0104 adds immutable renderer-independent material intent in `PackageBuilder.Domain.Materials`. It reuses PB-0103 `TextureAssignment`, `TextureRole`, and `SourceAsset` APIs and preserves their eight canonical roles. No Unity, Unreal, Blender, WPF, filesystem, persistence, networking, marketplace, rendering, image conversion, channel packing, or specular-workflow behavior is added.
 
-This branch also performs the approved PB-0103 rollover. PB-0103 is `[x]` / 🟢 **DONE**, absent from Active Work, and recorded exactly once in the Completion Log with its supplied publication evidence. PB-0104 remains `[ ]` / 🟡 **PROCESS**, appears in Active Work, and is absent from the Completion Log.
+This branch also performed the approved PB-0103 rollover. PB-0103 is `[x]` / 🟢 **DONE**, absent from Active Work, and recorded exactly once in the Completion Log with its supplied publication evidence. PB-0104 passed its publication gates and is synchronized as `[x]` / 🟢 **DONE** during the PB-0105 rollover.
+
+## PB-0104 Final Publication Evidence
+
+- Final task commit: `5d3f52c107f3de7fa5bac80d85559c80aeaad6b4`.
+- Pull request: [#18](https://github.com/avivperets26/3DModels-Package-Builder/pull/18).
+- Successful PR workflow: [run 30097711367](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30097711367).
+- Merge commit: `1983201ea7a810aac4ca74db0351d73c5554a929`.
+- Successful required main workflow: [run 30097716685](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30097716685).
+- The user explicitly confirmed completion on 2026-07-24.
+- No CI, completion, or quality exception was used.
 
 ## PB-0103 Final Publication Evidence
 
@@ -126,6 +136,6 @@ Coverage uses the centrally pinned `coverlet.collector` `10.0.1` with `ExcludeAs
 | .NET/Ruff formatting and lint | Pass; `dotnet format --verify-no-changes --severity info`, Ruff lint, and Ruff format verification. |
 | `git diff --check` | Pass directly and through repository baseline/core CI. |
 
-## Remaining Gates
+## Completion
 
-PB-0104 remains `[ ]` / 🟡 **PROCESS**, stays in Active Work, and remains absent from the Completion Log. Local implementation and the requested validation matrix pass. User-controlled staging, task commit, task-branch push, merge into and push of `main`, successful required `main` CI, explicit completion confirmation, and next-task rollover synchronization remain.
+PB-0104 passed its local, Git, GitHub, required `main` CI, and explicit user-confirmation gates without exception. The PB-0105 rollover marks it `[x]` / 🟢 **DONE**, removes it from Active Work, and records it exactly once in the Completion Log.
