@@ -74,7 +74,7 @@ As of this document's review date, .NET 10 is the current LTS line, Unity 6.3 is
 | CLI | `System.CommandLine` | Scriptable builds and CI without duplicating application logic |
 | Hosting/DI | `Microsoft.Extensions.Hosting` and dependency injection | Consistent configuration, logging, lifetime, and service composition |
 | Serialization | `System.Text.Json` | Built into .NET, fast, source-generation support |
-| Schema validation | JsonSchema.Net or equivalent permissive JSON Schema library | Versioned validation of manifests and worker contracts |
+| Schema validation | JsonSchema.Net 9.3.0 (MIT) | Pinned offline Draft 2020-12 validation of manifests and worker contracts |
 | Logging | Serilog with text and JSON sinks | Structured per-job logs and readable local diagnostics |
 | Persistence | SQLite through `Microsoft.Data.Sqlite` | Local build history without requiring a server |
 | Image processing | SkiaSharp | Resize, inspect, and compress preview media with a permissive ecosystem |
@@ -340,6 +340,30 @@ Unreal prefix, preview theme, marketplace rule, filesystem, persistence, or netw
 PB-0111 owns profile schemas; PB-0901/PB-0902 own documentation templates and profile resolution;
 PB-0602/PB-0605 and PB-1105 own engine naming behavior; PB-0306/PB-0308 own engine-version
 selection/locking; and PB-0906 owns preview presentation semantics.
+
+PB-0110 adds the first versioned product-manifest boundary:
+
+- `schemas/product-manifest.schema.json` is a self-contained JSON Schema Draft 2020-12 document
+  with schema identity `https://schemas.packagebuilder.dev/product-manifest/v1`. Every owned
+  object rejects unknown properties; required values reject `null` and wrong JSON types.
+- Schema version `1` covers all five exact PB-0102 cases and only `portable`, `unity`, and
+  `unreal` targets. Conditional rules require or forbid rig, animation, item-set, and
+  item-collection sections according to the selected case.
+- `PackageBuilder.Domain.Manifests.ProductManifest` composes the PB-0103 through PB-0107 values,
+  adds an exact three-component decimal `ProductVersion`, validates duplicate identities and
+  cross-references, and returns PB-0109 blocking `ValidationFinding` values for semantic
+  contradictions.
+- `PackageBuilder.Contracts.Manifests.ProductManifestJson` embeds the approved schema, validates
+  offline with pinned JsonSchema.Net 9.3.0, rejects duplicate JSON properties, limits input to
+  1 MiB and nesting to 64 levels, returns structured expected failures, and serializes in one
+  stable canonical property and collection order.
+- Valid and invalid fixtures are retained beneath `tests/fixtures/manifests`. Golden contract
+  tests prove exact deterministic round trips for static, rigged, rigged-animated, item-set, and
+  item-collection manifests.
+
+PB-0110 does not load files, migrate schema versions, resolve publisher/profile records, infer
+product cases, perform engine conversion, or add marketplace-specific listing rules. Those
+responsibilities remain with their documented later PB owners.
 
 PB-0108 adds immutable build execution intent in `PackageBuilder.Domain.BuildJobs`:
 

@@ -19,6 +19,9 @@ $script:ExpectedPackages = [ordered]@{
     'xunit.v3.mtp-off' = '3.2.2'
     'xunit.runner.visualstudio' = '3.1.5'
 }
+$script:ExpectedProductionPackages = [ordered]@{
+    'JsonSchema.Net' = '9.3.0'
+}
 $script:ProjectSpecifications = @(
     [pscustomobject]@{
         Name = 'PackageBuilder.Domain.Tests'
@@ -146,22 +149,32 @@ Invoke-Check 'Exactly the four approved test projects exist' {
 Invoke-Check 'Central test package versions remain exactly pinned' {
     $packages = Get-XmlDocument 'Directory.Packages.props'
     $actualVersions = @($packages.SelectNodes('/Project/ItemGroup/PackageVersion'))
-    if ($actualVersions.Count -ne $script:ExpectedPackages.Count) {
-        throw "Expected exactly $($script:ExpectedPackages.Count) central test packages; found $($actualVersions.Count)."
+    $expectedCentralCount =
+        $script:ExpectedPackages.Count + $script:ExpectedProductionPackages.Count
+    if ($actualVersions.Count -ne $expectedCentralCount) {
+        throw "Expected exactly $expectedCentralCount approved central packages; found $($actualVersions.Count)."
     }
 
     $seen = @{}
     foreach ($package in $actualVersions) {
         $name = [string]$package.Include
         $version = [string]$package.Version
-        if (-not $script:ExpectedPackages.Contains($name)) {
+        $isTestPackage = $script:ExpectedPackages.Contains($name)
+        $isProductionPackage = $script:ExpectedProductionPackages.Contains($name)
+        if (-not $isTestPackage -and -not $isProductionPackage) {
             throw "Unexpected central package version: $name"
         }
         if ($seen.ContainsKey($name)) {
             throw "Duplicate central package version: $name"
         }
-        if ($version -cne $script:ExpectedPackages[$name]) {
-            throw "$name must remain at $($script:ExpectedPackages[$name]); found $version."
+        $expectedVersion = if ($isTestPackage) {
+            $script:ExpectedPackages[$name]
+        }
+        else {
+            $script:ExpectedProductionPackages[$name]
+        }
+        if ($version -cne $expectedVersion) {
+            throw "$name must remain at $expectedVersion; found $version."
         }
         $seen[$name] = $true
     }

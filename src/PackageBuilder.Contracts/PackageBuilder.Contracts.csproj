@@ -8,4 +8,14 @@
     <ProjectReference Include="..\PackageBuilder.Domain\PackageBuilder.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="JsonSchema.Net" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\schemas\product-manifest.schema.json"
+                      Link="Schemas\product-manifest.schema.json"
+                      LogicalName="PackageBuilder.Contracts.Schemas.product-manifest.schema.json" />
+  </ItemGroup>
+
 </Project>

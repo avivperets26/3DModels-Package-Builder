@@ -158,7 +158,18 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0109 | 🟡 **PROCESS** | `feat/PB-0109-validation-findings` | Domain and Contracts Engineering for local work; user for Git gates | 2026-07-24 | PB-0108 rollover is synchronized. Immutable finding/code/severity/source/text/artifact/blocking models and stable non-throwing System.Text.Json contracts are implemented and locally validated. Focused PB-0109 tests pass 111/111; all Domain tests pass 739/739; all Contracts tests pass 34/34; all 11 new production files have 100% line and branch coverage; all four core projects pass 775/775; solution architecture passes 7/7; quality validation passes 11/11 in PowerShell 7 and Windows PowerShell 5.1; ADR validation passes 8/8; repository baseline passes 29/29; all nine core-CI stages pass; and the 15-project Release build has zero warnings/errors. | No local implementation or validation blocker. User-controlled staging, task commit, task-branch push, merge into and push of `main`, successful required `main` CI, explicit completion confirmation, and next-task rollover remain. |
+| PB-0110 | 🟡 **PROCESS** | `feat/PB-0110-product-manifest-schema` | Domain and Contracts Engineering for local work; user for Git gates | 2026-07-24 | PB-0109 rollover is synchronized. PB-0110 is locally implemented and its schema, five-case golden fixtures, hostile/invalid matrix, focused 100% branch coverage, four test projects, locked restore, builds, validators, and public-repository safeguards pass. | User-controlled task commit, push, merge, successful required `main` CI, and explicit completion confirmation remain. |
+
+### PB-0109 Completion Evidence
+
+The detailed implementation, validation, and final publication evidence are recorded in `docs/PB-0109_VALIDATION_FINDINGS_EVIDENCE.md`.
+
+- Final task commit `7f8f49bf4bc90166f84482e8dd30f32e195cce30` was pushed on `feat/PB-0109-validation-findings`.
+- The task was merged through [pull request #23](https://github.com/avivperets26/3DModels-Package-Builder/pull/23) into `main` as `15d41c288aa5718d359620e7e743f2384f894d93`.
+- [PR workflow run 30115151917](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30115151917) and required [main workflow run 30115156865](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30115156865) completed successfully.
+- The user explicitly confirmed the task commit, push, merge, successful required `main` CI, and completion on 2026-07-24.
+- No CI, completion, or quality exception was used.
+- This PB-0110 rollover marks PB-0109 `[x]` / 🟢 **DONE**, removes it from Active Work, and adds exactly one chronological Completion Log row.
 
 ### PB-0108 Completion Evidence
 
@@ -388,6 +399,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0106 | `feat/PB-0106-set-collection-domain` | `7fa99ace7ea27fe4f036cd1525e4ec727eeceb57` | [#20](https://github.com/avivperets26/3DModels-Package-Builder/pull/20) | 2026-07-24 | Merged into `main` as `b97b5e3aa593cb317cae4fdfd193e07e39a482ba`; [PR workflow run 30105134003](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30105134003) and required [main workflow run 30105643680](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30105643680) succeeded. No exception was used; the user explicitly confirmed the task commit, push, merge, successful required `main` CI, and completion on 2026-07-24. |
 | PB-0107 | `feat/PB-0107-profile-domain` | `7f82d16fe258d7cb81a2c9d3d01c1de8be85c37f` | [#21](https://github.com/avivperets26/3DModels-Package-Builder/pull/21) | 2026-07-24 | Merged into `main` as `236343156b69714376b5f48ec4267483bb991307`; [PR workflow run 30109012948](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30109012948) and required [main workflow run 30108791899](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30108791899) were reverified with both jobs successful. No exception was used; the user explicitly confirmed the task commit, push, merge, successful required `main` CI, and completion on 2026-07-24. |
 | PB-0108 | `feat/PB-0108-build-job-domain` | `3a1646e7b9897ee3cc810ed0a47370c2633884d8` | [#22](https://github.com/avivperets26/3DModels-Package-Builder/pull/22) | 2026-07-24 | Merged into `main` as `dcc1c0b04837f08105e024cf088507a42e234248`; [PR workflow run 30111599624](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30111599624) and required [main workflow run 30111832724](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30111832724) succeeded. No exception was used; the user explicitly confirmed the task commit, push, merge, successful required `main` CI, and completion on 2026-07-24. |
+| PB-0109 | `feat/PB-0109-validation-findings` | `7f8f49bf4bc90166f84482e8dd30f32e195cce30` | [#23](https://github.com/avivperets26/3DModels-Package-Builder/pull/23) | 2026-07-24 | Merged into `main` as `15d41c288aa5718d359620e7e743f2384f894d93`; [PR workflow run 30115151917](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30115151917) and required [main workflow run 30115156865](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30115156865) succeeded. No exception was used; the user explicitly confirmed all completion gates on 2026-07-24. |
 
 ## 5. Milestones
 
@@ -553,12 +565,12 @@ flowchart LR
   - Depends on: PB-0102
   - Done when: state transitions match the architecture state machine and invalid transitions fail in tests.
 
-- [ ] **PB-0109 — Implement validation finding and error-code model** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0109 — Implement validation finding and error-code model** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0109-validation-findings`
   - Depends on: PB-0108
   - Done when: stable codes, severity, blocking state, source, related artifact, explanation, and suggestion are serializable and tested.
 
-- [ ] **PB-0110 — Define and validate the product manifest schema** — **P0**
+- [ ] **PB-0110 — Define and validate the product manifest schema** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0110-product-manifest-schema`
   - Depends on: PB-0103 through PB-0107
   - Done when: JSON Schema and C# models cover all five cases and reject incomplete or contradictory manifests.

@@ -28,4 +28,10 @@
     <ProjectReference Include="..\..\src\PackageBuilder.Contracts\PackageBuilder.Contracts.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\fixtures\manifests\**\*.json"
+          Link="fixtures\manifests\%(RecursiveDir)%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>
