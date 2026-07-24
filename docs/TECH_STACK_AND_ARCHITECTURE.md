@@ -294,6 +294,19 @@ PB-0105 adds immutable renderer-independent rig and animation intent in `Package
 
 PB-0105 creation uses task-local non-throwing validation results rather than PB-0109 global finding codes. Collections are immutable snapshots; hierarchy, pose, equality, and FNV-based hashing are deterministic, ordinal, and culture independent. PB-0105 adds no skin weights, curve data, parsing, baking, compression, retargeting, root-motion extraction, humanoid maps, axes, units, engine assets, renderer behavior, filesystem, persistence, networking, marketplace, WPF, or JSON behavior.
 
+PB-0106 adds immutable renderer-independent item-group intent in `PackageBuilder.Domain.Items`:
+
+- `ItemCategory` and `AttachmentSlot` are validated, extensible lowercase canonical identifiers. They contain no hard-coded armor, weapon, engine-socket, skeleton-bone, or marketplace category registry.
+- `ItemDefinition` reuses `InternalAssetId` for stable ordinal item identity, retains user-controlled item order at the group boundary, and stores canonically ordered immutable categories, an optional logical attachment/body slot, and canonically ordered shared-asset ID references.
+- `SharedAssetDefinition` associates an `InternalAssetId` with an existing immutable `SourceAsset`; it declares logical sharing only and performs no material/texture deduplication, filesystem access, hashing, or copying.
+- `ItemRelationship` represents an undirected relationship between two distinct item IDs. Endpoints are canonicalized ordinally so exact and reversed duplicates have the same value, while group validation rejects unknown endpoints.
+- `ItemSetDefinition` always reuses `ProductCase.ItemSet`. It may contain `AssembledSetRules` with complete declared membership, optional logical slots, a uniqueness policy, and extensible compatibility metadata.
+- `ItemCollectionDefinition` always reuses `ProductCase.ItemCollection`, keeps every item independently usable, explicitly rejects assembled-set rules, and exposes no combined runtime object.
+- Assembled membership rejects unknown, missing, duplicate, or slot-contradictory members. When uniqueness is required, repeated non-null attachment slots are rejected. Empty and single-item groups remain valid because no approved PB-0106 requirement defines a minimum group size.
+- Group validation rejects null entries, exact ordinal duplicate item or shared-asset IDs, duplicate relationships, unknown shared-asset references, and shared-asset declarations that no item references. Shared declarations may be referenced by multiple items.
+
+PB-0106 creation uses task-local structured `ItemValidationResult<T>` values rather than PB-0109 global finding codes. All retained collections are immutable snapshots; item order is intentionally user-controlled, while relationships, categories, shared declarations/references, assembled members, and compatibility metadata have deterministic ordinal ordering. Equality and FNV-based hashing are ordinal, case-sensitive, culture independent, renderer independent, and stable across supported processes. PB-0106 adds no source-file grouping, manifest mapping, transforms, retargeting, package generation, preview behavior, engine assets, marketplace identifiers, filesystem, persistence, networking, WPF, or JSON behavior.
+
 ### 7.2 Application Layer
 
 `PackageBuilder.Application` implements use cases and orchestration:

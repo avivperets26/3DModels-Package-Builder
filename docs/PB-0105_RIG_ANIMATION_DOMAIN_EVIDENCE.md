@@ -2,14 +2,24 @@
 
 **Task:** PB-0105 — Implement rig and animation definitions
 **Branch:** `feat/PB-0105-rig-animation-domain`
-**Lifecycle:** 🟡 **PROCESS**
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-07-24
 
 ## Scope
 
 PB-0105 adds immutable renderer-independent rigging and animation intent in `PackageBuilder.Domain.Rigging` and `PackageBuilder.Domain.Animations`. It adds no FBX/GLB parsing, skin weights, animation curves, baking, compression, retargeting, root-motion extraction, rendering, visual preview, engine-specific assets, axes, units, naming prefixes, humanoid bone maps, filesystem, persistence, networking, marketplace, Blender, Unity, Unreal, or WPF behavior.
 
-This branch also performs the approved PB-0104 rollover. PB-0104 is `[x]` / 🟢 **DONE**, absent from Active Work, and recorded exactly once in the Completion Log with the supplied publication evidence. PB-0105 remains `[ ]` / 🟡 **PROCESS**, appears in Active Work, and is absent from the Completion Log.
+The PB-0105 branch also performed the approved PB-0104 rollover. PB-0105 subsequently passed its user-controlled publication gates and was synchronized during the PB-0106 rollover: PB-0105 is `[x]` / 🟢 **DONE**, absent from Active Work, and recorded exactly once in the Completion Log.
+
+## PB-0105 Final Publication Evidence
+
+- Final task commit: `94a3caa147d1c196a9f21a54c2b47230d34c8753`.
+- Pull request: [#19](https://github.com/avivperets26/3DModels-Package-Builder/pull/19).
+- Successful PR workflow: [run 30102421376](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30102421376).
+- Merge commit: `67aff0d6c4a1c7f19b7d88b13cd64bd7da998aab`.
+- Successful required main workflow: [run 30102701368](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30102701368).
+- The user explicitly confirmed completion on 2026-07-24.
+- No CI, completion, or quality exception was used.
 
 ## PB-0104 Final Publication Evidence
 
@@ -107,6 +117,6 @@ All 18 new production files report 100% line and 100% branch coverage in the fin
 | Formatting and lint | Pass; `.NET` formatting plus Ruff lint/format checks. |
 | Diff and public-repository scans | Pass; `git diff --check` plus candidate secret, personal-path, generated-content, prohibited-file, and trailing-whitespace scans. |
 
-## Remaining Gates
+## Completion State
 
-PB-0105 remains `[ ]` / 🟡 **PROCESS**, stays in Active Work, and remains absent from the Completion Log. Local implementation and the requested validation matrix pass. User-controlled staging, task commit, task-branch push, merge into and push of `main`, successful required `main` CI, explicit completion confirmation, and next-task rollover synchronization remain.
+PB-0105 is `[x]` / 🟢 **DONE**. Local implementation and the requested validation matrix passed, the task commit was pushed and merged into `main`, required `main` CI succeeded, the user explicitly confirmed completion, and the PB-0106 rollover recorded the task exactly once.
