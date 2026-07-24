@@ -2,7 +2,7 @@
 
 **Task:** PB-0012 — Record initial architecture decisions
 **Branch:** `docs/PB-0012-initial-adrs`
-**Lifecycle:** 🟡 **PROCESS**
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-07-24
 
 ## Scope and Current State
@@ -12,6 +12,18 @@ PB-0012 records the thirteen decisions already approved by `AGENTS.md`, the prod
 The ADRs have status **Accepted** because the architecture direction is approved. Acceptance records the architecture direction; it does not indicate that implementation is complete. The records do not claim that Blender, Unity, Unreal, packaging, desktop UI, security hardening, marketplace publication, or installer functionality currently exists.
 
 PB-0011 was finalized through the permanent one-merge rollover before PB-0012 implementation. Its final task commit `02491ce01e32559c2b41ce886f5595c286677555` was merged through [pull request #12](https://github.com/avivperets26/3DModels-Package-Builder/pull/12) as `5b37b3c8081d246c03eabe8dc3099b1a99f31ca1`. [PR workflow run 30080298582](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30080298582) and required [main workflow run 30080304495](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30080304495) succeeded. The user explicitly confirmed completion on 2026-07-24, and no CI exception was used.
+
+## Final Publication Evidence
+
+- Final task commit: `335691dcceeaa645231539a2ec83a3dae9db2a3e`.
+- Pull request: [#13](https://github.com/avivperets26/3DModels-Package-Builder/pull/13).
+- Successful PR workflow: [run 30083665801](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30083665801).
+- Merge commit on `main`: `f4b5a5d39b2de97e404f837150bbe0d869e3a366`.
+- Successful required `main` workflow: [run 30083674462](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30083674462).
+- The user explicitly confirmed the commit, push, merge, required CI, and task completion on 2026-07-24.
+- No CI, quality, completion, or other exception was used.
+
+The approved PB-0013 rollover marks PB-0012 `[x]` / 🟢 **DONE**, removes it from Active Work, and records it exactly once in the Completion Log while preserving all earlier implementation and validation evidence below.
 
 ## ADR Inventory
 
@@ -64,7 +76,7 @@ The validator is invoked in-process and through standalone Windows PowerShell 5.
 | Lifecycle and policy checks | Pass; PB-0011 appears once in the Completion Log and not in Active Work; PB-0012 remains active and absent from the Completion Log; permanent policy assertions passed. |
 | `git diff --check` | Pass. |
 
-PB-0012 remains `[ ]` / 🟡 **PROCESS** and is not entered in the Completion Log.
+The results above are the task-branch validation evidence retained from PB-0012. Final publication and completion evidence is recorded separately above.
 
 ## Documentation Impact
 
@@ -72,4 +84,4 @@ PB-0012 adds the documentation index, ADR index, thirteen ADRs, task evidence, a
 
 ## Remaining Gates
 
-After local validation, PB-0012 still requires the user-controlled task commit, task-branch push, merge into and push of `main`, successful required `main` CI, explicit user completion confirmation, and next-task rollover synchronization. No Git or remote action is performed by this task.
+All PB-0012 acceptance, commit, push, merge, required CI, and explicit user-confirmation gates are satisfied. Its final rollover bookkeeping is recorded on the succeeding PB-0013 branch under the permanent one-merge workflow; no exception was used.

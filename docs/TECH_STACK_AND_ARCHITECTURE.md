@@ -171,7 +171,9 @@ Remote Git hosting, issue tracking, update checks, and CI are collaboration conv
 
 ### 5.6 Quality Evidence Toolchain
 
-`docs/QUALITY_AND_RELEASE_GATES.md` is normative. All selected quality tools must be free for required local or self-hosted use, installed or restored beneath the project root, version-pinned, and callable from Visual Studio Code tasks and repository scripts.
+`docs/QUALITY_AND_RELEASE_GATES.md` is the normative source for the exact 68 stable requirement IDs. Other documents reference rather than redefine those IDs. All selected quality tools must be free for required local or self-hosted use, installed or restored beneath the project root, version-pinned, and callable from Visual Studio Code tasks and repository scripts.
+
+The canonical release blockers are REL-001 through REL-008 in `docs/QUALITY_AND_RELEASE_GATES.md`; missing, stale, unreadable, contradictory, or failing evidence blocks release.
 
 The quality pipeline produces:
 
@@ -639,7 +641,7 @@ A version is eligible when:
 - Package Builder's compatibility fixtures pass.
 - Requested marketplace rules permit it.
 
-For Unity, current production Update releases can be preferred for new builds because Unity describes them as production-ready. LTS can be selected when a marketplace or customer compatibility profile requires it.
+For Unity, current non-preview production Update releases can become candidates for new builds after the compatibility promotion suite passes. LTS can be selected when a marketplace or customer compatibility profile requires it.
 
 For Unreal, the newest non-preview launcher release becomes a candidate and must pass the same promotion suite.
 

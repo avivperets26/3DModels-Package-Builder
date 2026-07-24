@@ -14,6 +14,8 @@ Package Builder's release decision requires more than compilation and smoke test
 
 Every required tool must have a free local or self-hosted workflow, be version-pinned, operate from Visual Studio Code and repository scripts, and keep project-owned state beneath `C:\Dev\PackageBuilder`. Paid SaaS and paid IDE features cannot be mandatory.
 
+`docs/QUALITY_AND_RELEASE_GATES.md` is the normative source for the exact 68 stable requirement IDs. This ADR records the selected toolchain categories and thresholds without creating alternate requirement definitions.
+
 ## Decision
 
 Adopt the following evidence categories and permanent thresholds:
@@ -29,6 +31,8 @@ Adopt the following evidence categories and permanent thresholds:
 Use pinned no-cost tools that fit the approved stack: Coverlet-compatible coverage collection and a free report generator; Stryker.NET or an approved no-cost equivalent for mutation testing; BenchmarkDotNet or an approved equivalent plus end-to-end resource measurement; Windows UI Automation with a permissively licensed driver such as FlaUI; and pinned no-cost audit, secret-scan, static-analysis, licence, and SBOM tools. Later PB tasks approve exact versions and configurations before enforcement.
 
 Percentages and tool results supplement rather than replace criterion-level requirements-to-tests evidence. The same required gates must be runnable locally or on no-cost self-hosted infrastructure; hosted mirrors are optional.
+
+The canonical release blockers are REL-001 through REL-008 in `docs/QUALITY_AND_RELEASE_GATES.md`; missing, stale, unreadable, contradictory, or failing evidence blocks release. Git and remote operations remain under explicit user control through `AGENTS.md`.
 
 ## Alternatives Considered
 
