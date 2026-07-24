@@ -248,6 +248,14 @@ PB-0101 implements the first immutable naming types in `PackageBuilder.Domain.Na
 
 Each type exposes `Create(string?)` returning `NamingValidationResult<T>`, with `NamingValidationError` identifying expected user-input failures without requiring exceptions. Inputs are never trimmed, normalized, case-folded, or transformed. Common validation rejects null, empty, whitespace-only, leading/trailing whitespace, controls, Windows-rooted or drive-qualified forms, traversal segments, and directory separators. Filesystem segments additionally reject trailing dots/spaces and Windows-reserved device names. Folder and identifier grammars reject all characters not listed above; no arbitrary length limit is imposed. Equality is type-specific and ordinal case-sensitive, and hash codes use a stable culture-independent ordinal algorithm.
 
+PB-0102 adds closed immutable domain identities without engine dependencies:
+
+- `PackageBuilder.Domain.Products.ProductCase` exposes exactly `Static`, `Rigged`, `RiggedAnimated`, `ItemSet`, and `ItemCollection`, with canonical identifiers `static`, `rigged`, `rigged-animated`, `item-set`, and `item-collection` in that stable order. Set and collection identity does not constrain whether later item manifests contain rigs or animations.
+- `PackageBuilder.Domain.Targets.BuildTarget` exposes exactly `Portable`, `Unity`, and `Unreal`, with canonical identifiers `portable`, `unity`, and `unreal` in that stable order. Portable identifies engine-independent FBX/GLB packaging; Unity and Unreal remain identities only and contain no engine settings.
+- Both types expose `TryParse(string?)` returning `CanonicalIdentifierParseResult<T>`. Parsing is exact ordinal and case-sensitive, accepts only lowercase ASCII words separated by single hyphens, and distinguishes null, empty, whitespace-only, malformed, and well-formed but unknown input without using exceptions for expected failures.
+
+The PB-0102 API adds no target selection object, manifest/schema converter, publisher or marketplace profile, Fab coupling, filesystem or persistence behavior, or reference to the Portable, Unity, or Unreal adapter projects.
+
 ### 7.2 Application Layer
 
 `PackageBuilder.Application` implements use cases and orchestration:

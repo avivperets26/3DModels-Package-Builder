@@ -158,7 +158,18 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0101 | 🟡 **PROCESS** | `feat/PB-0101-product-identity` | Domain Engineering for local work; user for Git gates | 2026-07-24 | PB-0013 and E00/M0 rollover is synchronized. Immutable display-name, internal-asset-ID, folder-name, publisher-root, and canonical `Albedo` naming types are implemented and locally validated. Focused naming tests pass 107/107; all Domain tests pass 108/108; each new naming production file has 100% line and branch coverage; normal and detached quality validation pass 11/11 in PowerShell 7.6.4 and Windows PowerShell 5.1; ADR validation passes 8/8; repository baseline passes 29/29; all nine core-CI stages pass with 111/111 tests and a 0-warning/0-error Release build. | No local implementation or validation blocker. The user-controlled PB-0101 commit, task-branch push, merge into and push of `main`, successful required `main` CI, explicit completion confirmation, and next-task rollover remain. |
+| PB-0102 | 🟡 **PROCESS** | `feat/PB-0102-product-cases-targets` | Domain Engineering for local work; user for Git gates | 2026-07-24 | PB-0101 rollover is synchronized. Closed immutable product-case and build-target identities, exact canonical identifiers, explicit non-throwing parsing results, and public-behavior tests are implemented and locally validated. Focused PB-0102 tests pass 53/53; all Domain tests pass 161/161, preserving the prior 108; every new production file has 100% line and branch coverage; the normal/main/detached quality and ADR matrix passes in PowerShell 7 and Windows PowerShell 5.1; solution architecture passes 7/7; repository baseline passes 29/29; all nine core-CI stages pass with 164/164 tests and a 0-warning/0-error Release build. | No local implementation or validation blocker. The user-controlled PB-0102 commit and push, merge into and push of `main`, successful required `main` CI, explicit completion confirmation, and next-task rollover remain. |
+
+### PB-0101 Completion Evidence
+
+The detailed implementation, validation, and final publication evidence are recorded in `docs/PB-0101_PRODUCT_IDENTITY_EVIDENCE.md`.
+
+- Final task commit `915dda5d7cd6b93b741841336c4e06aea4ad99ef` was pushed on `feat/PB-0101-product-identity`.
+- The task was merged through [pull request #15](https://github.com/avivperets26/3DModels-Package-Builder/pull/15) into `main` as `67d8884799a99bcfd5e1407fff534561206424d9`.
+- [PR workflow run 30089954442](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30089954442) and required [main workflow run 30090184878](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30090184878) completed successfully.
+- The user explicitly confirmed the task commit, push, merge, successful required `main` CI, and completion on 2026-07-24.
+- No CI, completion, or quality exception was used.
+- This PB-0102 rollover marks PB-0101 `[x]` / 🟢 **DONE**, removes it from Active Work, and adds exactly one chronological Completion Log row.
 
 ### PB-0013 Completion Evidence
 
@@ -292,6 +303,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0011 | `chore/PB-0011-github-governance` | `02491ce01e32559c2b41ce886f5595c286677555` | [#12](https://github.com/avivperets26/3DModels-Package-Builder/pull/12) | 2026-07-24 | Merged into `main` as `5b37b3c8081d246c03eabe8dc3099b1a99f31ca1`; [PR workflow run 30080298582](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30080298582) and required [main workflow run 30080304495](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30080304495) succeeded. No exception was used; the user explicitly confirmed the task commit, push, merge, green required `main` CI, and completion on 2026-07-24. |
 | PB-0012 | `docs/PB-0012-initial-adrs` | `335691dcceeaa645231539a2ec83a3dae9db2a3e` | [#13](https://github.com/avivperets26/3DModels-Package-Builder/pull/13) | 2026-07-24 | Merged into `main` as `f4b5a5d39b2de97e404f837150bbe0d869e3a366`; [PR workflow run 30083665801](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30083665801) and required [main workflow run 30083674462](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30083674462) succeeded. No exception was used; the user explicitly confirmed all completion gates on 2026-07-24. |
 | PB-0013 | `docs/PB-0013-quality-release-gates` | `8f79883d9a78c1a211510ee4ea8c855405e12e3c` | [#14](https://github.com/avivperets26/3DModels-Package-Builder/pull/14) | 2026-07-24 | Merged into `main` as `859a97a83d6328b45e70cd515a058c10bc519205`; optional [PR workflow run 30087261318](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30087261318) failed in detached-HEAD changed-file validation as documented, while required [main workflow run 30087267104](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30087267104) succeeded. Pull-request CI was optional, no CI exception was used, and the user explicitly confirmed all completion gates on 2026-07-24. |
+| PB-0101 | `feat/PB-0101-product-identity` | `915dda5d7cd6b93b741841336c4e06aea4ad99ef` | [#15](https://github.com/avivperets26/3DModels-Package-Builder/pull/15) | 2026-07-24 | Merged into `main` as `67d8884799a99bcfd5e1407fff534561206424d9`; [PR workflow run 30089954442](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30089954442) and required [main workflow run 30090184878](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30090184878) succeeded. No exception was used; the user explicitly confirmed the task commit, push, merge, successful required `main` CI, and completion on 2026-07-24. |
 
 ## 5. Milestones
 
@@ -417,12 +429,12 @@ flowchart LR
 
 **Goal:** Stable typed models and versioned schemas describe every supported product case and worker exchange.
 
-- [ ] **PB-0101 — Implement product identity and naming value objects** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0101 — Implement product identity and naming value objects** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0101-product-identity`
   - Depends on: PB-0005
   - Done when: display name, asset ID, folder name, publisher root, validation, and canonical `Albedo` spelling have unit tests.
 
-- [ ] **PB-0102 — Implement product-case and target models** — **P0**
+- [ ] **PB-0102 — Implement product-case and target models** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0102-product-cases-targets`
   - Depends on: PB-0101
   - Done when: static, rigged, rigged-animated, item-set, and item-collection cases plus Portable, Unity, and Unreal targets are represented without engine dependencies.

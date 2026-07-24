@@ -411,19 +411,15 @@ Invoke-Check 'ADRs preserve permanent architecture and repository policies' {
     }
 }
 
-Invoke-Check 'PB-0013 rollover and PB-0101 lifecycle evidence are consistent' {
+Invoke-Check 'PB-0012 and PB-0013 completion lifecycle and evidence are consistent' {
     $backlog = Read-RepositoryText 'docs/IMPLEMENTATION_BACKLOG.md'
     $doneMarker = [char]::ConvertFromUtf32(0x1F7E2) + ' **DONE**'
-    $processMarker = [char]::ConvertFromUtf32(0x1F7E1) + ' **PROCESS**'
     Assert-Pattern $backlog (
         '- \[x\] \*\*PB-0012\b[^\r\n]*' + [regex]::Escape($doneMarker)
     ) 'PB-0012 completed task'
     Assert-Pattern $backlog (
         '- \[x\] \*\*PB-0013\b[^\r\n]*' + [regex]::Escape($doneMarker)
     ) 'PB-0013 completed task'
-    Assert-Pattern $backlog (
-        '- \[ \] \*\*PB-0101\b[^\r\n]*' + [regex]::Escape($processMarker)
-    ) 'PB-0101 active task'
 
     $activeStart = $backlog.IndexOf('## 3. Active Work', [System.StringComparison]::Ordinal)
     $activeEnd = $backlog.IndexOf('## 4. Completion Log', [System.StringComparison]::Ordinal)
@@ -439,18 +435,14 @@ Invoke-Check 'PB-0013 rollover and PB-0101 lifecycle evidence are consistent' {
     if (@([regex]::Matches($activeSection, '(?m)^\|\s*PB-0013\s*\|')).Count -ne 0) {
         throw 'PB-0013 must be absent from Active Work after rollover.'
     }
-    if (@([regex]::Matches($activeSection, '(?m)^\|\s*PB-0101\s*\|')).Count -ne 1) {
-        throw 'PB-0101 must appear exactly once in Active Work.'
-    }
     if (@([regex]::Matches($completionSection, '(?m)^\|\s*PB-0012\s*\|')).Count -ne 1) {
         throw 'PB-0012 must appear exactly once in the Completion Log.'
     }
     if (@([regex]::Matches($completionSection, '(?m)^\|\s*PB-0013\s*\|')).Count -ne 1) {
         throw 'PB-0013 must appear exactly once in the Completion Log.'
     }
-    if (@([regex]::Matches($completionSection, '(?m)^\|\s*PB-0101\s*\|')).Count -ne 0) {
-        throw 'PB-0101 must not appear in the Completion Log on its task branch.'
-    }
+    # Successor-task lifecycle is intentionally enforced by Test-RepositoryBaseline.ps1
+    # so this permanent foundation validator does not change for every domain task.
 
     $evidence = Read-RepositoryText 'docs/PB-0012_INITIAL_ADRS_EVIDENCE.md'
     Assert-Pattern $evidence 'Acceptance records the architecture direction; it does not indicate that implementation is complete' 'PB-0012 implementation boundary'

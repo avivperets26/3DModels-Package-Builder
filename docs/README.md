@@ -1,6 +1,6 @@
 # Package Builder Documentation
 
-This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. The E00 repository foundation is complete. PB-0101 implements the first domain naming capability locally while it proceeds through its publication gates; planned model import, engine workers, packaging, desktop UI, security hardening, and installation features are not claimed as implemented.
+This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. The E00 repository foundation and PB-0101 naming capability are complete. PB-0102 implements product-case and build-target identities locally while it proceeds through its publication gates; planned model import, engine workers, packaging, desktop UI, security hardening, and installation features are not claimed as implemented.
 
 ## Primary Documentation
 
@@ -44,6 +44,7 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 ## Domain Evidence
 
 - [PB-0101 product identity and naming evidence](PB-0101_PRODUCT_IDENTITY_EVIDENCE.md)
+- [PB-0102 product cases and targets evidence](PB-0102_PRODUCT_CASES_TARGETS_EVIDENCE.md)
 
 Generated validation and build evidence belongs beneath ignored `artifacts` or `logs` directories. Tracked evidence must remain safe for the approved public repository.
 
