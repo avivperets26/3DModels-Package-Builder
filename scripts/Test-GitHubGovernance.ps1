@@ -556,33 +556,45 @@ Invoke-Check 'Governance content has no credential, private-path, or unsupported
     }
 }
 
-Invoke-Check 'PB-0011 evidence and lifecycle state remain active and consistent' {
+Invoke-Check 'PB-0011 completion evidence and rollover state remain consistent' {
     $evidence = Read-RepositoryText 'docs/PB-0011_GITHUB_GOVERNANCE_EVIDENCE.md'
     Assert-Matches $evidence '\*\*Official documentation review date:\*\*\s*2026-07-24' 'official documentation review date'
     Assert-Matches $evidence 'public repositories.*secret scanning runs automatically for free' 'public secret-scanning behavior'
     Assert-Matches $evidence 'secret_scanning\.yml.*only.*exclude' 'secret_scanning.yml exclusion-only behavior'
     Assert-Matches $evidence 'PB-1611.*pinned local and CI.*dependency.*licence.*vulnerability.*secret' 'PB-1611 boundary'
     Assert-Matches $evidence 'No GitHub repository setting was changed' 'external settings boundary'
+    Assert-Matches $evidence '02491ce01e32559c2b41ce886f5595c286677555' 'final task commit'
+    Assert-Matches $evidence 'pull/12' 'pull request 12'
+    Assert-Matches $evidence 'actions/runs/30080298582' 'successful PR workflow'
+    Assert-Matches $evidence '5b37b3c8081d246c03eabe8dc3099b1a99f31ca1' 'merge commit'
+    Assert-Matches $evidence 'actions/runs/30080304495' 'successful main workflow'
+    Assert-Matches $evidence 'explicitly confirmed.*2026-07-24' 'explicit user confirmation'
+    Assert-Matches $evidence 'No CI, completion, or quality exception was used' 'no-exception evidence'
 
     $backlog = Read-RepositoryText 'docs/IMPLEMENTATION_BACKLOG.md'
-    Assert-Matches $backlog '- \[ \] \*\*PB-0011\b.*' 'PB-0011 unchecked task'
-    $processMarker = [char]::ConvertFromUtf32(0x1F7E1) + ' **PROCESS**'
+    $doneMarker = [char]::ConvertFromUtf32(0x1F7E2) + ' **DONE**'
     Assert-Matches $backlog (
-        '- \[ \] \*\*PB-0011\b[^\r\n]*' + [regex]::Escape($processMarker)
-    ) 'PB-0011 PROCESS lifecycle'
-    $activeRows = @([regex]::Matches($backlog, '(?m)^\|\s*PB-0011\s*\|'))
-    if ($activeRows.Count -ne 1) {
-        throw "PB-0011 must appear exactly once in Active Work; found $($activeRows.Count)."
+        '- \[x\] \*\*PB-0011\b[^\r\n]*' + [regex]::Escape($doneMarker)
+    ) 'PB-0011 completed lifecycle'
+    $activeStart = $backlog.IndexOf('## 3. Active Work', [System.StringComparison]::Ordinal)
+    $completionStart = $backlog.IndexOf('## 4. Completion Log', [System.StringComparison]::Ordinal)
+    if ($activeStart -lt 0 -or $completionStart -le $activeStart) {
+        throw 'Active Work boundaries were not found.'
+    }
+    $activeSection = $backlog.Substring($activeStart, $completionStart - $activeStart)
+    $activeRows = @([regex]::Matches($activeSection, '(?m)^\|\s*PB-0011\s*\|'))
+    if ($activeRows.Count -ne 0) {
+        throw "PB-0011 must be absent from Active Work after rollover; found $($activeRows.Count) rows."
     }
 
-    $completionStart = $backlog.IndexOf('## 4. Completion Log', [System.StringComparison]::Ordinal)
     $completionEnd = $backlog.IndexOf('## 5. Milestones', [System.StringComparison]::Ordinal)
     if ($completionStart -lt 0 -or $completionEnd -le $completionStart) {
         throw 'Completion Log boundaries were not found.'
     }
     $completionLog = $backlog.Substring($completionStart, $completionEnd - $completionStart)
-    if ($completionLog -match '(?m)^\|\s*PB-0011\s*\|') {
-        throw 'PB-0011 must not be in the Completion Log on its task branch.'
+    $completionRows = @([regex]::Matches($completionLog, '(?m)^\|\s*PB-0011\s*\|'))
+    if ($completionRows.Count -ne 1) {
+        throw "PB-0011 must appear exactly once in the Completion Log; found $($completionRows.Count)."
     }
 }
 
