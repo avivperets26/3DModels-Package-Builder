@@ -2,14 +2,26 @@
 
 **Task:** PB-0010 — Add contribution and branch workflow documentation  
 **Branch:** `docs/PB-0010-contribution-workflow`  
-**Lifecycle:** 🟡 **PROCESS**  
-**Evidence date:** 2026-07-23
+**Lifecycle:** 🟢 **DONE**
+**Evidence date:** 2026-07-24
 
 ## Scope and Current State
 
 PB-0010 adds the root project introduction, the permanent contributor workflow, a dependency-free contribution-documentation validator, and repository-baseline integration. The documentation describes only the repository-foundation capabilities currently present and labels package building, engine adapters, the desktop workflow, and marketplace packaging as planned work.
 
-PB-0010 remains `[ ]` / 🟡 **PROCESS** and is not in the Completion Log. Local validation, Git publication, required `main` CI, and explicit user confirmation remain distinct lifecycle gates.
+PB-0010 is logically complete and was synchronized exactly once at the beginning of PB-0011. It is `[x]` / 🟢 **DONE**, has been removed from Active Work, and has exactly one Completion Log row.
+
+## Publication and Completion Evidence
+
+| Gate | PB-0010 evidence |
+|---|---|
+| Final task commit | `eaf8846df7bf4bb8edc82d8407da8c1a61130231` |
+| Pull request | [PR #11](https://github.com/avivperets26/3DModels-Package-Builder/pull/11) |
+| Successful PR CI | [Run 30077559953](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30077559953) |
+| Merge commit | `b7396bf6b557da26df2f2d08a70c6f6d1b1a3796` |
+| Required `main` CI | [Run 30077718661](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30077718661) — successful |
+| User confirmation | Explicitly provided on 2026-07-24 for commit, push, merge, green required `main` CI, and completion |
+| Exception | None used |
 
 ## PB-0009 Rollover
 
@@ -96,7 +108,7 @@ No final Package Builder release-versioning scheme is presented as approved. Pla
 | Dependency-free documentation validator | Direct validator execution and Windows PowerShell parsing |
 | Baseline integration | Repository baseline in-process and standalone validator checks |
 | Evidence and backlog synchronization | Repository baseline task/lifecycle/Active Work/Completion Log checks |
-| PB-0010 remains active and absent from Completion Log | Repository baseline lifecycle and Completion Log checks |
+| PB-0010 rollover synchronization | Repository baseline lifecycle, Active Work, and single Completion Log row checks |
 | PB-0013 preserved | Changed-file and focused diff audit |
 
 ## Validation Results
@@ -114,7 +126,7 @@ No final Package Builder release-versioning scheme is presented as approved. Pla
 | Markdown structure and local links | Pass in the targeted validator and repository baseline. |
 | `git diff --check` | Pass in the repository baseline, core pipeline, and final focused audit. |
 | Secret, personal-path, and prohibited-file checks | Pass in the targeted contribution validator and repository baseline. |
-| Task IDs, dependencies, lifecycle, Active Work, and Completion Log | Pass; PB-0009 has one Completion Log row and no Active Work row; PB-0010 has one Active Work row and no Completion Log row. |
+| Task IDs, dependencies, lifecycle, Active Work, and Completion Log | Pass for the PB-0010 implementation checkpoint. PB-0010 was later synchronized exactly once during PB-0011 using the publication evidence above. |
 | PB-0013 changed-file audit | Pass; its Active Work row and complete task-definition block exactly match `HEAD`. |
 
 ## Documentation Impact
@@ -127,6 +139,6 @@ No final Package Builder release-versioning scheme is presented as approved. Pla
 - Updated `docs/TECH_STACK_AND_ARCHITECTURE.md` for the contributor-documentation files, validator, and current repository-baseline composition.
 - `docs/Package_Builder_Plan.md` and `docs/QUALITY_AND_RELEASE_GATES.md` require no change because PB-0010 documents and validates their existing requirements without changing product behavior or a normative quality threshold.
 
-## Remaining Gates
+## Completion State
 
-PB-0010 is locally implemented and locally validated but not complete. The user-controlled task commit, task-branch push, merge into and push of `main`, successful required `main` CI, and explicit completion confirmation remain. PB-0010 stays absent from the Completion Log until a later approved rollover.
+PB-0010 has no remaining completion gate. Its final task commit was pushed, merged through PR #11, validated by successful PR and required `main` CI, and explicitly confirmed complete by the user on 2026-07-24. No exception was used. The permanent one-merge rollover bookkeeping is recorded in PB-0011.
