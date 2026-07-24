@@ -2,7 +2,7 @@
 
 **Task:** PB-0106 — Implement set and collection item definitions
 **Branch:** `feat/PB-0106-set-collection-domain`
-**Lifecycle:** 🟡 **PROCESS**
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-07-24
 
 ## Scope
@@ -11,7 +11,7 @@ PB-0106 adds immutable renderer-, engine-, filesystem-, and marketplace-independ
 
 It adds no Unity prefabs or scenes, Unreal Blueprints or maps, material/texture deduplication, source-file grouping, manifest mapping, attachment transforms, skeleton retargeting, package folders, preview selection/rendering, CSV generation, UI, marketplace category identifiers, publisher data, persistence, networking, or JSON contracts.
 
-This branch also performs the approved PB-0105 rollover. PB-0105 is `[x]` / 🟢 **DONE**, absent from Active Work, and recorded exactly once in the Completion Log with its supplied publication evidence. PB-0106 remains `[ ]` / 🟡 **PROCESS**, appears in Active Work, and is absent from the Completion Log.
+This branch also performed the approved PB-0105 rollover. PB-0105 is `[x]` / 🟢 **DONE**, absent from Active Work, and recorded exactly once in the Completion Log with its supplied publication evidence.
 
 ## PB-0105 Final Publication Evidence
 
@@ -109,6 +109,14 @@ All 13 new production source files and all 14 generated coverage class entries r
 | Formatting and lint | Pass; `.NET` formatting plus Ruff lint/format checks. |
 | Diff and public-repository scans | Pass; `git diff --check` plus 25-candidate secret, personal/out-of-root path, binary, large/generated-content, prohibited-extension, placeholder, and production-coupling scans. |
 
-## Remaining Gates
+## Final Publication Evidence
 
-PB-0106 remains `[ ]` / 🟡 **PROCESS**, stays in Active Work, and remains absent from the Completion Log. Local implementation and the requested validation matrix pass. User-controlled staging, task commit, task-branch push, merge into and push of `main`, successful required `main` CI, explicit completion confirmation, and next-task rollover synchronization remain.
+- Final task commit: `7fa99ace7ea27fe4f036cd1525e4ec727eeceb57`.
+- Pull request: [#20](https://github.com/avivperets26/3DModels-Package-Builder/pull/20).
+- Successful PR workflow: [run 30105134003](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30105134003).
+- Merge commit: `b97b5e3aa593cb317cae4fdfd193e07e39a482ba`.
+- Successful required main workflow: [run 30105643680](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30105643680).
+- The user explicitly confirmed completion on 2026-07-24.
+- No CI, completion, or quality exception was used.
+
+PB-0106 is logically complete. The PB-0107 rollover marks it `[x]` / 🟢 **DONE**, removes it from Active Work, and records it exactly once in the Completion Log.

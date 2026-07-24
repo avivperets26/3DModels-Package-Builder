@@ -216,6 +216,24 @@ A publisher profile contains:
 
 Changing profile creates a different top-level package root without modifying the program.
 
+PB-0107 implements the approved shared Domain subset as immutable publisher and generic
+marketplace profile values. Publisher identity contains a configurable `PublisherRoot`, validated
+Unicode display name, syntactically validated support email or credential-free HTTPS URL,
+copyright holder and explicit year policy, explicit AI-disclosure state with optional consistent
+caller-authored text, and optional image-backed logo/watermark declarations. Marketplace identity
+is a separate pair of extensible ordinal marketplace and profile identifiers; it contains no Fab
+listing rules.
+
+The approved copyright policies are single year, explicit year range, and explicit publication
+year. Every year is supplied by the caller; Domain validation never reads the system clock. AI
+disclosure is explicitly undeclared, no-AI-assistance, or AI-assisted. Undeclared disclosure
+forbids text so prose cannot silently fabricate a claim.
+
+Documentation boilerplate, Unity namespace/assembly defaults, Unreal project/pack prefixes,
+render-pipeline and engine defaults, preview themes, schema representation, persistence, and
+profile resolution remain deferred to their documented PB owners. PB-0107 does not invent
+unapproved defaults for those fields.
+
 Example Unity roots:
 
 ```text
