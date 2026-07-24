@@ -1,0 +1,5 @@
+# Default ownership for all repository content.
+* @avivperets26
+
+# Keep GitHub workflow and governance configuration explicitly owned.
+/.github/ @avivperets26

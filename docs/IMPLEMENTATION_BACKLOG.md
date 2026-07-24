@@ -6,7 +6,7 @@
 **GitHub visibility:** Public, approved by the user on 2026-07-22
 **Runtime data:** `C:\Dev\PackageBuilder\runtime-data`
 **Planned default branch:** `main`
-**Last reviewed:** 2026-07-23
+**Last reviewed:** 2026-07-24
 
 ## 1. Purpose
 
@@ -158,7 +158,18 @@ feat/PB-0607-unity-urp-material-compiler
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
 | PB-0013 | 🟡 **PROCESS** | `docs/PB-0013-quality-release-gates` | User for remaining completion confirmation | 2026-07-22 | Remote feature commit `a1032c48f2a8d0dc98d0c589f1a845605950952b` was merged by pull request [#1](https://github.com/avivperets26/3DModels-Package-Builder/pull/1) into public default branch `main` at `13e5875b686c3219e3571d45ceaa93c463e881ff`. | No GitHub CI evidence or explicit user completion confirmation is recorded. The historical one-task-per-branch conflict remains documented below. |
-| PB-0010 | 🟡 **PROCESS** | `docs/PB-0010-contribution-workflow` | Codex for local implementation and validation; user for Git and completion gates | 2026-07-23 | Locally implemented and validated from PB-0009 merge commit `96c13a565f9ed85d66d13a357cfa2571b2e4dd93`: PB-0009 rollover is synchronized exactly once; contribution documentation passed 11/11 checks; repository baseline passed 23/23; all nine core stages passed; the 15-project Release build had 0 warnings/errors; and all four smoke tests passed with 0 failures/skips. PB-0013's Active Work row and task block are unchanged. | No local implementation blocker. Commit, push, merge, required `main` CI, and explicit completion confirmation remain user-controlled future gates. |
+| PB-0011 | 🟡 **PROCESS** | `chore/PB-0011-github-governance` | User for Git and remaining completion gates | 2026-07-24 | Locally implemented and validated from PB-0010 merge commit `b7396bf6b557da26df2f2d08a70c6f6d1b1a3796`: PB-0010 rollover is synchronized exactly once; GitHub governance passed 9/9 checks in PowerShell 7 and Windows PowerShell 5.1; contribution documentation passed 11/11; repository baseline passed 25/25; all nine core stages passed; the 15-project Release build had 0 warnings/errors; and all four smoke tests passed with 0 failures/skips. Secret-scanning exclusions and Renovate configuration are absent. PB-0013's Active Work row and task block are unchanged from `HEAD`. | No local implementation blocker. Task commit, task-branch push, merge into and push of `main`, successful required `main` CI, explicit user completion confirmation, and later rollover synchronization remain user-controlled gates. |
+
+### PB-0010 Completion Evidence
+
+The detailed implementation and final publication evidence are recorded in `docs/PB-0010_CONTRIBUTION_WORKFLOW_EVIDENCE.md`.
+
+- Final task commit `eaf8846df7bf4bb8edc82d8407da8c1a61130231` was pushed on `docs/PB-0010-contribution-workflow`.
+- The task was merged through [pull request #11](https://github.com/avivperets26/3DModels-Package-Builder/pull/11) into `main` as `b7396bf6b557da26df2f2d08a70c6f6d1b1a3796`.
+- [PR workflow run 30077559953](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30077559953) and required [main workflow run 30077718661](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30077718661) completed successfully.
+- The user explicitly confirmed the task commit, push, merge, green required `main` CI, and completion on 2026-07-24.
+- No CI, completion, or quality exception was used.
+- PB-0010 is `[x]` / 🟢 **DONE**, removed from Active Work, and recorded exactly once in the Completion Log during this PB-0011 rollover. PB-0013 is unchanged.
 
 ### PB-0009 Completion Evidence
 
@@ -242,6 +253,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0007 | `chore/PB-0007-formatting` | `56a1974dddd67b30e51084a3cbce6a985e1e9fd7` | [#8](https://github.com/avivperets26/3DModels-Package-Builder/pull/8) | 2026-07-23 | Merged into `main` as `908e4b0ca92629d07a8ced5b529e72d6b4f5c0a5`; [main workflow run 30024743745](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30024743745) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the task-branch push, merge, and green required `main` CI on 2026-07-23. |
 | PB-0008 | `test/PB-0008-test-projects` | `cdf08733edc28d1990b86a4a70b7d59c33fdcbeb` | [#9](https://github.com/avivperets26/3DModels-Package-Builder/pull/9) | 2026-07-23 | Merged into `main` as `37dbd69690f3397ecf60ef7d96094d9d09221f9a`; [main workflow run 30029052452](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30029052452) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the merge and green required `main` CI on 2026-07-23. |
 | PB-0009 | `chore/PB-0009-core-ci` | `973aec7be954115e83fe1c18d0c8139f2d111fda` | [#10](https://github.com/avivperets26/3DModels-Package-Builder/pull/10) | 2026-07-23 | Merged into `main` as `96c13a565f9ed85d66d13a357cfa2571b2e4dd93`; final [PR workflow run 30047612915](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30047612915) and required [main workflow run 30047819416](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30047819416) succeeded, including both repository-baseline and core-application jobs. No exception was used; the user explicitly confirmed the commit, push, merge, green required `main` CI, and completion on 2026-07-23. |
+| PB-0010 | `docs/PB-0010-contribution-workflow` | `eaf8846df7bf4bb8edc82d8407da8c1a61130231` | [#11](https://github.com/avivperets26/3DModels-Package-Builder/pull/11) | 2026-07-24 | Merged into `main` as `b7396bf6b557da26df2f2d08a70c6f6d1b1a3796`; [PR workflow run 30077559953](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30077559953) and required [main workflow run 30077718661](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30077718661) succeeded. No exception was used; the user explicitly confirmed the commit, push, merge, green required `main` CI, and completion on 2026-07-24. |
 
 ## 5. Milestones
 
@@ -336,15 +348,15 @@ flowchart LR
   - Depends on: PB-0006, PB-0008
   - Done when: building on, rather than replacing, PB-0002's repository-bootstrap checks, pull requests restore, build, format-check, and test the solution on a Windows runner using no paid runner or service requirement, and the identical commands remain runnable locally. PB-0009 owns application restore/build/test CI; PB-0002 does not.
 
-- [ ] **PB-0010 — Add contribution and branch workflow documentation** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0010 — Add contribution and branch workflow documentation** — **P0** — 🟢 **DONE**
   - Branch: `docs/PB-0010-contribution-workflow`
   - Depends on: PB-0003
   - Done when: a professional root README accurately separates the repository-foundation status from planned portable FBX/GLB, Unity, Unreal, marketplace-adapter, and five-case functionality; README and CONTRIBUTING document exact contained Visual Studio Code commands, PB task IDs, all approved branch types, lifecycle markers, one task per branch, optional pull requests, allowed direct merges, the permanent one-merge rollover, required `main` CI, explicit user confirmation, manual Git ownership, documentation synchronization, clearly scoped commits, version/dependency pinning, single-root containment, no-cost prerequisites, external engine licensing boundaries, public-repository safeguards, and prohibited tracked content; task IDs, pinned tool/dependency versions, Package Builder releases, independently versioned marketplace-requirements profiles, and the unapproved release-versioning decision remain distinct; a dependency-free PowerShell validator checks required policy, real commands/files, local links, agreement with `AGENTS.md` and this backlog, no mandatory paid tooling, no unsupported current capability, and no secret/personal/prohibited-content example; the validator runs from `Test-RepositoryBaseline.ps1`; and PB-0010 evidence plus Active Work state remain current without adding PB-0010 to the Completion Log on its own branch.
 
-- [ ] **PB-0011 — Add pull-request, issue, ownership, and dependency-update configuration** — **P1**
+- [ ] **PB-0011 — Add pull-request, issue, ownership, and dependency-update configuration** — **P1** — 🟡 **PROCESS**
   - Branch: `chore/PB-0011-github-governance`
   - Depends on: PB-0009, PB-0010
-  - Done when: PR template, issue templates, CODEOWNERS, Dependabot/Renovate, and secret scanning configuration are committed.
+  - Done when: the optional pull-request template covers PB/dependency identity, scope, requirements-to-tests mapping, validation, documentation, UX/accessibility, performance, security, containment, licensing, public-repository checks, and manual publication control; stable Markdown bug and feature issue templates plus their chooser configuration prevent sensitive public reports without using preview Issue Forms; `.github/CODEOWNERS` assigns `@avivperets26` by default and explicitly owns `.github/`; Dependabot v2 alone proposes bounded weekly NuGet and GitHub Actions updates against `main` without private registries, credentials, automerge, paid services, or unsupported ecosystems; a minimal `SECURITY.md` records the currently unverified private-reporting limitation without inventing a contact channel; GitHub's automatic free public-repository secret scanning is documented while `.github/secret_scanning.yml` remains absent because no path exclusion is approved; PB-1611 retains future pinned local/CI dependency, licence, vulnerability, and secret scanning; and a dependency-free Windows PowerShell 5.1/PowerShell 7 validator enforces these rules through the repository baseline.
 
 - [ ] **PB-0012 — Record initial architecture decisions** — **P0**
   - Branch: `docs/PB-0012-initial-adrs`

@@ -6,7 +6,7 @@
 **GitHub repository:** [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder)
 **GitHub visibility:** Public, approved by the user on 2026-07-22
 **Runtime data:** `C:\Dev\PackageBuilder\runtime-data`
-**Last reviewed:** 2026-07-23
+**Last reviewed:** 2026-07-24
 
 ## 1. Purpose
 
@@ -106,7 +106,7 @@ The first Unreal implementation uses Python. A minimal C++ editor plugin is intr
 | Unity tests | Unity Test Framework for Editor tests |
 | Unreal tests | Python smoke tests plus Unreal Automation Tests where necessary |
 | CI | PB-0009 GitHub Actions repository-baseline plus core restore/build/format/Ruff/test validation on GitHub Free Windows runners; no-cost self-hosted Windows runner for future engine/UI/installer/performance tests; never required for local product operation |
-| Dependency updates | Dependabot or Renovate pull requests |
+| Dependency updates | Dependabot v2 pull-request proposals for NuGet and GitHub Actions |
 | Documentation | Markdown plus Architecture Decision Records |
 | Installer | Deferred decision; no-cost MSIX or permissively licensed Velopack evaluated during productization |
 | Coverage | Coverlet-compatible .NET collection plus a pinned no-cost report generator; line and branch thresholds enforced locally and in CI |
@@ -126,6 +126,8 @@ The PB-0008 test baseline keeps the four existing xUnit v3 projects on the centr
 The PB-0009 core pipeline is exposed through `scripts/Invoke-CoreCi.ps1` for Visual Studio Code, Windows PowerShell 5.1, and GitHub Actions `pwsh`. It performs repository-baseline validation, exact SDK verification, one locked restore, a warning-free Release build, non-mutating .NET formatting, checksum-verified Ruff `0.15.22` installation, Ruff lint/format checks, and all four Release test projects in a fixed fail-closed order. Local execution accepts only `tools/dotnet/10.0.302`; explicit GitHub Actions mode accepts the `actions/setup-dotnet` managed runner SDK only after the GitHub workspace and exact SDK version are verified. All Package Builder CLI state, NuGet/Ruff caches, temporary files, logs, and results remain beneath the selected repository workspace.
 
 PB-0010 establishes `README.md` and `CONTRIBUTING.md` as the contributor entry points without presenting planned product functionality as available. `scripts/Test-ContributionDocumentation.ps1` is a dependency-free PowerShell validator for required sections, real command/file references, local Markdown links, branch types, lifecycle markers, optional pull requests, direct merges, the permanent one-merge rollover, version boundaries, no-cost tooling, and public-repository safeguards. `scripts/Test-RepositoryBaseline.ps1` runs it in-process and through standalone Windows PowerShell 5.1 before the core pipeline proceeds.
+
+PB-0011 adds stable Markdown issue templates, an optional pull-request review template, `.github/CODEOWNERS`, bounded weekly Dependabot v2 proposals for NuGet and GitHub Actions, and a minimal `SECURITY.md`. It does not enable automerge, publication, private registries, repository settings, or a private vulnerability-reporting channel. GitHub public-repository secret scanning runs automatically for free; `.github/secret_scanning.yml` is intentionally absent because GitHub documents it only as a path-exclusion configuration. `scripts/Test-GitHubGovernance.ps1` validates the supported locations, template front matter, ownership, Dependabot policy, safe-reporting limitations, and absence of secret-scanning exclusions and Renovate configuration without external dependencies.
 
 ## 5. Why This Stack
 
@@ -345,6 +347,7 @@ C:\Dev\PackageBuilder\
 ├── .gitattributes
 ├── .editorconfig
 ├── .gitignore
+├── SECURITY.md
 ├── README.md
 ├── CONTRIBUTING.md
 ├── LICENSE                 # selected before public release
@@ -354,6 +357,7 @@ C:\Dev\PackageBuilder\
 │   ├── IMPLEMENTATION_BACKLOG.md
 │   ├── QUALITY_AND_RELEASE_GATES.md
 │   ├── PB-0010_CONTRIBUTION_WORKFLOW_EVIDENCE.md
+│   ├── PB-0011_GITHUB_GOVERNANCE_EVIDENCE.md
 │   └── adr/
 ├── schemas/
 │   ├── product-manifest.schema.json
@@ -395,9 +399,18 @@ C:\Dev\PackageBuilder\
 │   ├── PackageBuilder.Contract.Tests/
 │   └── fixtures/
 ├── scripts/
-│   └── Test-ContributionDocumentation.ps1
+│   ├── Test-ContributionDocumentation.ps1
+│   └── Test-GitHubGovernance.ps1
 ├── .vscode/                 # source-controlled tasks/launch settings; no machine paths
-├── .github/workflows/
+├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── bug_report.md
+│   │   ├── feature_request.md
+│   │   └── config.yml
+│   ├── CODEOWNERS
+│   ├── dependabot.yml
+│   ├── pull_request_template.md
+│   └── workflows/
 ├── tools/                   # ignored repository-local SDKs and engine installations
 ├── downloads/               # ignored verified installers, archives, and metadata
 ├── logs/                    # ignored setup/application/job logs
@@ -843,6 +856,7 @@ Expected external failures are represented as results rather than unhandled exce
 - Use atomic directory promotion for completed releases.
 - Retain the original source snapshot hash in the report.
 - Scan final packages for unexpected executables, secrets, absolute local paths, and unrelated files.
+- GitHub public-repository secret scanning remains active without repository path exclusions; do not add `.github/secret_scanning.yml` unless a future task documents a specific approved exclusion and its risk.
 
 ## 23. Git and Dependency Policy
 
@@ -851,12 +865,14 @@ Expected external failures are represented as results rather than unhandled exce
 - The approved GitHub repository is public: [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder).
 - Apply the public-repository safeguards in `AGENTS.md` to every tracked file and every handoff.
 - `main` must stay buildable.
-- Feature branches and pull requests for reviewed work.
+- Feature branches for reviewed work; pull requests remain optional, and direct merges follow the documented validation and user-controlled publication sequence.
 - Conventional or clearly scoped commit messages.
 - Repository-local `tools`, `downloads`, `logs`, `runtime-data`, and `artifacts` remain ignored even though they live beneath the workspace root.
 - No generated packages, engine caches, marketplace source models, credentials, or customer assets are tracked.
 - The categorized `.gitignore` policy is tested by `scripts/Test-GitIgnorePolicy.ps1` and the repository-baseline workflow; rules remain repository-relative, safe examples use explicit negation, shared `.vscode` configuration remains trackable, and legitimate source or licensed-fixture extensions are not ignored globally.
 - Git LFS only for small legally approved test fixtures when necessary.
+- Stable Markdown issue templates and the optional pull-request template prevent sensitive public reports and expose the review checklist without relying on preview Issue Forms.
+- `.github/CODEOWNERS` assigns `@avivperets26` by default and explicitly owns `.github/`; ownership routing does not imply that required code-owner review or branch protection is enabled.
 
 ### Version Pinning
 
@@ -874,7 +890,7 @@ Expected external failures are represented as results rather than unhandled exce
 
 ### Automated Updates
 
-Dependency update bots open pull requests. Updates merge only after:
+Dependabot v2 opens bounded weekly NuGet and GitHub Actions pull-request proposals against `main`. No private registry, credential, automerge, publication, paid service, or second dependency bot is configured. Updates merge only after user review and:
 
 - Core unit tests pass.
 - Contract/schema tests pass.
@@ -974,7 +990,7 @@ Generated test, coverage, mutation, benchmark, accessibility, usability, analyze
 
 PB-0002 established the initial GitHub Free repository-completion workflow before the .NET solution and test projects existed. PB-0009 preserves its `validate-repository-baseline` job in the same workflow file. The job still runs first on `windows-latest`, checks out full history with credentials disabled, and invokes the same dependency-free PowerShell validator used locally.
 
-The bootstrap validator is limited to required tracked files, the approved `global.json` SDK pin, PowerShell parsing, Markdown structure and local links, backlog task/dependency/branch/lifecycle/Completion Log consistency, current repository secret/personal-path/binary/generated/runtime exclusions, `git diff --check`, and reachable-history integrity. PB-0010 extends this dependency-free baseline with focused README and CONTRIBUTING validation for required sections, real commands and files, policy agreement, version boundaries, free tooling, public-repository safeguards, optional pull requests, direct merges, and the one-merge rollover. GitHub containment resolves from `GITHUB_WORKSPACE`; the workflow does not require the hosted checkout to use `C:\Dev\PackageBuilder`.
+The bootstrap validator is limited to required tracked files, the approved `global.json` SDK pin, PowerShell parsing, Markdown structure and local links, backlog task/dependency/branch/lifecycle/Completion Log consistency, current repository secret/personal-path/binary/generated/runtime exclusions, `git diff --check`, and reachable-history integrity. PB-0010 extends this dependency-free baseline with focused README and CONTRIBUTING validation for required sections, real commands and files, policy agreement, version boundaries, free tooling, public-repository safeguards, optional pull requests, direct merges, and the one-merge rollover. PB-0011 adds in-process and standalone Windows PowerShell 5.1 validation of templates, CODEOWNERS, Dependabot, `SECURITY.md`, and the enforced absence of secret-scanning exclusions. GitHub containment resolves from `GITHUB_WORKSPACE`; the workflow does not require the hosted checkout to use `C:\Dev\PackageBuilder`.
 
 The baseline job remains dependency-free: it does not restore or build the application, install .NET or an engine, upload artifacts, add telemetry, publish outputs, or require a paid service. It now also validates the PB-0009 workflow and local-entry configuration before the dependent core job can start.
 

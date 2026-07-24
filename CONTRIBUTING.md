@@ -67,6 +67,16 @@ Pull requests are optional. A direct merge is allowed after local validation; it
 
 Branch CI is not required when a direct task-branch push does not trigger a workflow. Never claim a branch, push, pull request, CI run, merge, tag, or release without direct evidence.
 
+## GitHub Governance
+
+- Use the stable Markdown [bug report](.github/ISSUE_TEMPLATE/bug_report.md) or [feature request](.github/ISSUE_TEMPLATE/feature_request.md) template for public issues.
+- Read [SECURITY.md](SECURITY.md) before raising a security concern. Never publish vulnerability details, credentials, private assets, unredacted logs, or personal data in an issue or pull request.
+- The [pull-request template](.github/pull_request_template.md) is a review aid and does not make pull requests mandatory.
+- [CODEOWNERS](.github/CODEOWNERS) routes review ownership but does not claim that branch protection or required code-owner review is enabled.
+- [Dependabot](.github/dependabot.yml) proposes bounded weekly NuGet and GitHub Actions updates against `main`. Each proposal requires user review and manual merge; no automerge or publication is configured.
+- GitHub public-repository secret scanning runs automatically for free. This repository intentionally has no `.github/secret_scanning.yml` because that file only defines scan exclusions, and no exclusion is approved.
+- PB-1611 remains responsible for future pinned local and CI dependency, licence, vulnerability, and secret scanning.
+
 ## Manual Git Ownership
 
 The user exclusively controls staging, commits, pushes, merges, pull requests, tags, releases, and GitHub settings. Codex or another automation agent may perform one of those actions only after the user explicitly authorizes that exact action; one authorization does not carry to a different or future action.
@@ -145,6 +155,7 @@ Set-Location C:\Dev\PackageBuilder
 . .\scripts\Enter-PackageBuilderEnvironment.ps1
 & .\scripts\Install-Ruff.ps1
 & .\scripts\Test-ContributionDocumentation.ps1
+& .\scripts\Test-GitHubGovernance.ps1
 & .\scripts\Test-RepositoryBaseline.ps1 -RequireTrackedFiles
 dotnet restore .\PackageBuilder.sln --locked-mode
 dotnet build .\PackageBuilder.sln --configuration Release --no-restore
@@ -157,4 +168,3 @@ dotnet format .\PackageBuilder.sln --no-restore --verify-no-changes --severity i
 `Invoke-CoreCi.ps1` is the authoritative complete local core pipeline. The preceding commands expose each setup, documentation, repository, restore, build, formatting, and test entry point for focused diagnosis. Run additional task-specific tests required by the active PB acceptance criteria.
 
 Before handoff, also inspect `git diff --check`, the changed-file scope, Markdown links, PowerShell parsing, secrets and personal paths, prohibited files, task/dependency state, Active Work, and the Completion Log. Report exact results rather than inferring success.
-

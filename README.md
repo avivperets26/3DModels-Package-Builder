@@ -4,7 +4,7 @@ Package Builder is a planned local-first Windows desktop application for turning
 
 ## Development Status
 
-Package Builder is in the repository-foundation stage. The reviewable implementation currently provides the pinned .NET development environment, solution and project skeleton, formatting and smoke-test baselines, repository validators, and core CI entry point.
+Package Builder is in the repository-foundation stage. The reviewable implementation currently provides the pinned .NET development environment, solution and project skeleton, formatting and smoke-test baselines, repository validators, core CI entry point, and review-only GitHub governance configuration.
 
 The application does not yet import models, build packages, provide the desktop workflow, or produce marketplace-ready releases. The targets and asset cases below are planned scope, not currently available product functionality. Read the [implementation backlog](docs/IMPLEMENTATION_BACKLOG.md) for task-level status.
 
@@ -73,6 +73,7 @@ Set-Location C:\Dev\PackageBuilder
 
 ```powershell
 & .\scripts\Test-ContributionDocumentation.ps1
+& .\scripts\Test-GitHubGovernance.ps1
 & .\scripts\Test-RepositoryBaseline.ps1 -RequireTrackedFiles
 ```
 
@@ -110,7 +111,7 @@ The core entry point runs repository validation, exact SDK verification, locked 
 
 ```text
 C:\Dev\PackageBuilder\
-├── .github\                 # Source-controlled GitHub workflow
+├── .github\                 # Review templates, ownership, dependency updates, and CI workflow
 ├── docs\                    # Plans, architecture, backlog, quality rules, and task evidence
 ├── scripts\                 # Repository setup, validation, formatting, test, and CI entry points
 ├── src\                     # Application and adapter project skeletons
@@ -137,9 +138,11 @@ C:\Dev\PackageBuilder\
 ## Project Documents
 
 - [Contributing workflow](CONTRIBUTING.md)
+- [Security reporting policy](SECURITY.md)
 - [Project rules](AGENTS.md)
 - [Product and implementation plan](docs/Package_Builder_Plan.md)
 - [Technology stack and architecture](docs/TECH_STACK_AND_ARCHITECTURE.md)
 - [Implementation backlog](docs/IMPLEMENTATION_BACKLOG.md)
 - [Quality and release gates](docs/QUALITY_AND_RELEASE_GATES.md)
 
+GitHub issues use the repository's stable Markdown templates. Pull requests remain optional, and Dependabot update pull requests are proposals that require user review and manual merge. The [GitHub governance evidence](docs/PB-0011_GITHUB_GOVERNANCE_EVIDENCE.md) records the current official-documentation basis, configuration limits, and validation results.
