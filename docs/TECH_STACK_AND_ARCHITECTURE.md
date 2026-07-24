@@ -369,6 +369,28 @@ serialization, engine behavior, marketplace behavior, networking, or UI. PB-0109
 findings, PB-0112 owns worker contracts, PB-0204 owns streamed hashes, PB-0210/PB-0211 own
 persistence, and PB-0213 owns orchestration and persisted execution behavior.
 
+PB-0109 adds immutable validation-finding intent in `PackageBuilder.Domain.Validation`:
+
+- `FindingCode` is a stable ordinal compatibility identity. Its grammar is
+  `[A-Z][A-Z0-9]*(?:_[A-Z][A-Z0-9]*)*`: one or more non-empty uppercase ASCII letter-led
+  alphanumeric segments separated by one underscore. It is never derived from filenames, user
+  data, timestamps, GUIDs, or changing diagnostic prose.
+- `FindingSeverity` exposes exactly Info, Warning, Error, and Fatal, in that order, with stable
+  serialization tokens `info`, `warning`, `error`, and `fatal`.
+- `FindingSourceComponent` is an extensible lowercase ASCII word identity using single hyphens,
+  consistent with other extensible Domain component identities.
+- `FindingExplanation` and optional `CorrectiveAction` preserve accepted Unicode exactly, reject
+  null/empty/whitespace-only, edge-whitespace, and control-character input, and impose no
+  arbitrary length limit. A corrective action may be absent when no safe, practical caller action
+  exists.
+- `ValidationFinding` retains code, severity, explanation, source, optional PB-0108
+  `BuildArtifactId`, optional corrective action, and explicit release-blocking state.
+
+Severity and release blocking are independent facts. All eight severity/blocking combinations are
+valid; PB-0109 introduces no policy that derives blocking from severity or prohibits a combination.
+Expected invalid input uses `ValidationFindingResult<T>` and `ValidationFindingError`, without
+filesystem, persistence, logging, engine, marketplace, network, WPF, or report-generation behavior.
+
 ### 7.2 Application Layer
 
 `PackageBuilder.Application` implements use cases and orchestration:
@@ -389,6 +411,16 @@ persistence, and PB-0213 owns orchestration and persisted execution behavior.
 ### 7.3 Contracts Layer
 
 `PackageBuilder.Contracts` defines stable interfaces and worker protocol DTOs.
+
+PB-0109 places the System.Text.Json boundary in Contracts so Domain remains serialization
+independent. `ValidationFindingJson` uses the exact ordered properties `code`, `severity`,
+`explanation`, `source`, optional `relatedArtifactId`, optional `suggestedAction`, and
+`blocksRelease`. Absent optional values are omitted rather than written as JSON `null`. Unknown or
+duplicate properties, missing required properties, invalid types, unknown severity tokens, and
+invalid Domain values return structured `ValidationFindingDeserializationResult` failures.
+Property names, severity tokens, ordering, and omission behavior are compatibility commitments;
+changes require an explicitly versioned migration. This finding contract is not the PB-0910
+validation-report schema and is not a PB-0112 worker envelope.
 
 Core interfaces:
 
@@ -974,6 +1006,17 @@ All findings have:
 - Related file or asset.
 - Suggested action.
 - Whether the finding blocks release.
+
+Stable codes use `[A-Z][A-Z0-9]*(?:_[A-Z][A-Z0-9]*)*`; each underscore-delimited segment starts
+with an uppercase ASCII letter and may continue with uppercase ASCII letters or digits. Codes
+remain culture independent, identify a condition rather than an occurrence, and therefore exclude
+filenames, user data, timestamps, GUIDs, paths, and changing prose.
+
+Severity uses the exact Info, Warning, Error, and Fatal values with stable JSON tokens `info`,
+`warning`, `error`, and `fatal`. Release blocking is explicit and independent: no
+severity/blocking combination is prohibited. The optional related artifact is a typed
+`BuildArtifactId`, not a path. Suggested corrective action is omitted only when there is no safe,
+practical action for the caller.
 
 Expected external failures are represented as results rather than unhandled exceptions. Unexpected programming defects are logged with stack traces and a correlation/job ID.
 

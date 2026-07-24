@@ -2,7 +2,7 @@
 
 **Task:** PB-0108 — Implement build job, step, artifact, and state models  
 **Branch:** `feat/PB-0108-build-job-domain`  
-**Lifecycle:** 🟡 **PROCESS**  
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-07-24
 
 ## Scope
@@ -20,8 +20,8 @@ streamed hashing remain deferred.
 This branch performs the approved PB-0107 rollover. PB-0107 is `[x]` / 🟢 **DONE**, is absent from
 Active Work, and appears exactly once in the Completion Log with reverified task commit, pull
 request, successful PR workflow, merge commit, successful required `main` workflow, user
-confirmation, and no exception. PB-0108 remains `[ ]` / 🟡 **PROCESS**, appears in Active Work, and
-is absent from the Completion Log.
+confirmation, and no exception. During the PB-0109 rollover, PB-0108 is `[x]` / 🟢 **DONE**, is
+removed from Active Work, and appears exactly once in the Completion Log.
 
 ## Public Types
 
@@ -120,9 +120,19 @@ and 100% branch coverage. Generated reports remain beneath ignored `artifacts/PB
 | Release build | Pass; 15 projects, 0 warnings, 0 errors. |
 | Formatting and public-repository scans | Pass; .NET and Ruff formatting/lint, `git diff --check`, and repository secret/personal-path/generated/prohibited-content scans. |
 
+## Publication and Completion Evidence
+
+- Final task commit: `3a1646e7b9897ee3cc810ed0a47370c2633884d8`.
+- Pull request: [#22](https://github.com/avivperets26/3DModels-Package-Builder/pull/22).
+- Successful PR CI: [workflow run 30111599624](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30111599624).
+- Merge commit on `main`: `dcc1c0b04837f08105e024cf088507a42e234248`.
+- Successful required `main` CI: [workflow run 30111832724](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30111832724).
+- Explicit user completion confirmation: 2026-07-24.
+- Exception used: none.
+
 ## Remaining Gates
 
-PB-0108 remains `[ ]` / 🟡 **PROCESS**, stays in Active Work, and remains absent from the
-Completion Log. Local implementation and the requested validation matrix pass. User-controlled
-staging, task commit, task-branch push, merge into and push of `main`, successful required `main`
-CI, explicit completion confirmation, and next-task rollover synchronization remain.
+None for PB-0108. Its acceptance, local validation, user-controlled publication, successful
+required `main` CI, explicit completion confirmation, and PB-0109 rollover synchronization are
+recorded. PB-0108 is `[x]` / 🟢 **DONE**, is absent from Active Work, and appears exactly once in
+the Completion Log.
