@@ -1,6 +1,6 @@
 # Package Builder Documentation
 
-This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. The repository remains in its foundation stage; documented decisions describe the intended architecture and do not claim that model import, engine workers, packaging, desktop UI, security hardening, or installation features are implemented.
+This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. The E00 repository foundation is complete. PB-0101 implements the first domain naming capability locally while it proceeds through its publication gates; planned model import, engine workers, packaging, desktop UI, security hardening, and installation features are not claimed as implemented.
 
 ## Primary Documentation
 
@@ -40,6 +40,10 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 - [PB-0011 GitHub governance evidence](PB-0011_GITHUB_GOVERNANCE_EVIDENCE.md)
 - [PB-0010 contribution workflow evidence](PB-0010_CONTRIBUTION_WORKFLOW_EVIDENCE.md)
 - [PB-0009 core CI evidence](PB-0009_CORE_CI_EVIDENCE.md)
+
+## Domain Evidence
+
+- [PB-0101 product identity and naming evidence](PB-0101_PRODUCT_IDENTITY_EVIDENCE.md)
 
 Generated validation and build evidence belongs beneath ignored `artifacts` or `logs` directories. Tracked evidence must remain safe for the approved public repository.
 
