@@ -35,12 +35,14 @@ The publisher root is configurable. `AvivPeretsFBX` is the default, but another 
 - Keep engine targets and marketplace targets independent. Unity, Unreal, FBX, and GLB describe deliverables; Fab and future stores describe packaging, media, documentation, and listing rules.
 - Keep all project files, managed tools, downloads, logs, runtime data, caches, and generated artifacts beneath `C:\Dev\PackageBuilder`; no sibling data root or user-profile fallback is permitted.
 - Require a no-cost development path using Visual Studio Code and command-line tooling. Paid Visual Studio, paid software editions, paid subscriptions, and paid hosted services are not prerequisites.
-- Treat `docs/QUALITY_AND_RELEASE_GATES.md` as the normative quality baseline for user experience, testing, performance, security, installation, engineering evidence, and release decisions.
+- Treat `docs/QUALITY_AND_RELEASE_GATES.md` as the normative source for the exact 68 stable user-experience, testing, performance, security, installation, engineering, and release requirements; other documents reference rather than redefine those requirement IDs.
+- The canonical release blockers are REL-001 through REL-008 in `docs/QUALITY_AND_RELEASE_GATES.md`; missing, stale, unreadable, contradictory, or failing evidence blocks release.
+- Keep staging, commits, pushes, merges, pull requests, tags, and releases under explicit user control as required by `AGENTS.md`; product automation must never perform them automatically.
 - Use a consistent accessible desktop design system with keyboard-only operation, screen-reader support, high contrast, scalable text, clear focus, guided defaults, progressive disclosure, and deterministic UI tests for critical workflows.
 - Preview planned file and package changes before execution; preserve reviewed input after failure; show stage, progress, elapsed time, cancellation, actionable errors, and safe retry without presenting raw stack traces as the primary user-facing error.
 - Maintain requirement-to-test traceability across every PB acceptance criterion, all five product cases, and all applicable targets. Coverage, mutation, benchmark, accessibility, security, installation, and package-integrity evidence are release inputs rather than optional metrics.
 - Define measured time, memory, disk, and regression budgets for representative fixture sizes; stream large data, bound concurrency, and optimize only from reproducible evidence.
-- Maintain a threat model, verify downloads and dependencies, prevent unsafe archive/process behavior, redact sensitive data, generate an SBOM, and require explicit consent before telemetry, uploads, or other external communication.
+- Maintain a threat model, verify downloads and dependencies, prevent path traversal, archive bombs, unsafe scripts, and unsafe process behavior, redact sensitive data, generate an SBOM, and require explicit consent before telemetry, uploads, or other external communication.
 - Fail closed at release time when required quality evidence is missing, stale, contradictory, or outside an approved threshold.
 
 ## 3. High-Level Architecture

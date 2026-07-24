@@ -16,7 +16,7 @@ The product is local and offline by default. Telemetry, uploads, cloud processin
 
 ## Decision
 
-Maintain a versioned threat model mapping each trust boundary and threat to controls and tests. Treat imported files and archives as untrusted; never execute embedded scripts or executables. Prevent and test traversal, archive bombs and decompression abuse, symlink or reparse-point escape, duplicate canonical destinations, filename collisions, command injection, argument confusion, unsafe processes, and resource exhaustion.
+Maintain a versioned threat model mapping each trust boundary and threat to controls and tests. Treat imported files and archives as untrusted; never execute embedded scripts or executables. Prevent and test path traversal, archive bombs and decompression abuse, symlink or reparse-point escape, duplicate canonical destinations, filename collisions, command injection, argument confusion, unsafe processes, and resource exhaustion.
 
 Never place tokens, credentials, private keys, personal data, customer assets, private configuration, or unlicensed marketplace content in source control. Keep large downloads, engines, caches, logs, runtime state, generated packages, and private assets beneath ignored repository-local directories. Redact secrets and sensitive paths from logs, reports, diagnostics, support bundles, process records, and user-facing errors.
 

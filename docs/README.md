@@ -35,6 +35,7 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 
 ## Foundation Evidence
 
+- [PB-0013 quality and release-gate evidence](PB-0013_QUALITY_RELEASE_GATES_EVIDENCE.md)
 - [PB-0012 initial ADR evidence](PB-0012_INITIAL_ADRS_EVIDENCE.md)
 - [PB-0011 GitHub governance evidence](PB-0011_GITHUB_GOVERNANCE_EVIDENCE.md)
 - [PB-0010 contribution workflow evidence](PB-0010_CONTRIBUTION_WORKFLOW_EVIDENCE.md)
@@ -51,3 +52,11 @@ Run the dependency-free ADR validator with Windows PowerShell 5.1 or PowerShell 
 ```
 
 The repository baseline invokes the same validator in-process and through standalone Windows PowerShell 5.1.
+
+Run the dependency-free permanent quality-baseline validator with either supported PowerShell:
+
+```powershell
+& .\scripts\Test-QualityAndReleaseGates.ps1
+```
+
+The repository baseline also invokes the quality validator in-process and through standalone Windows PowerShell 5.1.

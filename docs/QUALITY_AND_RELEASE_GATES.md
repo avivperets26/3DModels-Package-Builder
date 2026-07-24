@@ -13,6 +13,10 @@ The terms **must**, **must not**, **required**, and **blocked** are normative. A
 
 All work remains subject to `AGENTS.md`, including single-root containment, free-tooling, Visual Studio Code, user-controlled Git operations, and user confirmation of PB completion gates.
 
+The stable inventory contains exactly 68 requirements: UX-001–UX-009 (9), TEST-001–TEST-013 (13), PERF-001–PERF-008 (8), SEC-001–SEC-013 (13), INSTALL-001–INSTALL-010 (10), ENG-001–ENG-007 (7), and REL-001–REL-008 (8). These definitions are normative; other documents reference them without creating alternate requirement IDs or release-blocking rules.
+
+The canonical release blockers are REL-001 through REL-008 in `docs/QUALITY_AND_RELEASE_GATES.md`; missing, stale, unreadable, contradictory, or failing evidence blocks release.
+
 ## 2. UX and UI Requirements
 
 - **UX-001 — Design system:** The desktop application must use one consistent, documented, accessible design system for layout, spacing, typography, colours, controls, status, validation, and destructive-action treatment.
