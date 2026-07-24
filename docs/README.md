@@ -1,6 +1,6 @@
 # Package Builder Documentation
 
-This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. The E00 repository foundation, PB-0101 naming capability, and PB-0102 product-case/build-target identities are complete. PB-0103 source-asset and texture domain modeling is active; planned model import, engine workers, packaging, desktop UI, security hardening, and installation features are not claimed as implemented.
+This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. The E00 repository foundation and PB-0101 through PB-0103 Domain capabilities are complete. PB-0104 renderer-independent material modeling is active; planned model import, engine workers, packaging, desktop UI, security hardening, and installation features are not claimed as implemented.
 
 ## Primary Documentation
 
@@ -46,6 +46,7 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 - [PB-0101 product identity and naming evidence](PB-0101_PRODUCT_IDENTITY_EVIDENCE.md)
 - [PB-0102 product cases and targets evidence](PB-0102_PRODUCT_CASES_TARGETS_EVIDENCE.md)
 - [PB-0103 source assets and textures evidence](PB-0103_SOURCE_ASSETS_TEXTURES_EVIDENCE.md)
+- [PB-0104 material domain evidence](PB-0104_MATERIAL_DOMAIN_EVIDENCE.md)
 
 Generated validation and build evidence belongs beneath ignored `artifacts` or `logs` directories. Tracked evidence must remain safe for the approved public repository.
 

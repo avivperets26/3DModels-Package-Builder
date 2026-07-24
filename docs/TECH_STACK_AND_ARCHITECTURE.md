@@ -269,6 +269,18 @@ PB-0103 adds immutable source-asset and renderer-independent texture interpretat
 
 All PB-0103 canonical identity parsers reuse `CanonicalIdentifierParseResult<T>` and exact ordinal PB-0102 parsing behavior. Source-asset and assignment errors remain task-local expected-input results rather than pre-empting PB-0109's global validation-finding and stable-code model. PB-0103 adds no `SourceAssetSet`, material/shader model, classifier, channel packing, image decoding, engine import setting, filesystem implementation, marketplace rule, or JSON converter.
 
+PB-0104 adds immutable renderer-independent material intent in `PackageBuilder.Domain.Materials`:
+
+- `SurfaceMode` exposes exactly Opaque, Cutout, and Transparent in stable canonical order with exact ordinal parsing.
+- `EmissionProperties` stores non-negative finite linear RGB components and intensity. Values are not arbitrarily capped, so HDR material intent is preserved.
+- `UvTransform` stores finite horizontal/vertical scale and offset. Signed and zero scales remain valid renderer-independent mirroring or coordinate intent.
+- `MaterialDefinition` stores metallic and roughness factors, normal scale, emission, ambient-occlusion strength, signed height scale, opacity, surface mode, optional alpha cutoff, UV transform, double-sided intent, and PB-0103 `TextureAssignment` values.
+- Metallic, roughness, ambient-occlusion, opacity, and alpha-cutoff factors use the inclusive unit interval. Normal scale is non-negative and finite; height scale is any finite signed value.
+- Opaque requires opacity `1` and forbids alpha cutoff. Cutout requires a finite unit-interval alpha cutoff. Transparent permits unit-interval opacity and forbids alpha cutoff.
+- Texture assignments are copied into an immutable list in `TextureRole.All` order. Every canonical role is supported and duplicate assignments for one role are rejected.
+
+Creation uses task-local structured validation results for expected input failures. Equality and hashing include every retained property, use exact ordinal texture/source identity, and remain culture independent and deterministic. PB-0104 adds no material name or specular workflow, UV-set index, shader, packing, renderer asset, image conversion, filesystem, persistence, networking, marketplace, WPF, JSON, or PB-0109 global finding behavior.
+
 ### 7.2 Application Layer
 
 `PackageBuilder.Application` implements use cases and orchestration:
@@ -816,6 +828,8 @@ The domain stores a renderer-independent material definition:
 - Opacity/cutout mode and threshold.
 - Double-sided setting.
 - UV set and transform.
+
+PB-0104 implements the currently approved shared subset as metallic/roughness factors, normal scale, linear emission RGB and intensity, AO strength, finite signed height scale, opacity, Opaque/Cutout/Transparent mode, Cutout-only alpha threshold, UV scale/offset, double-sided intent, and canonical texture assignments. A UV-set index and base-colour factor remain unimplemented because PB-0104 has no approved semantics or acceptance requirement for them; they require a later explicit domain task rather than an undocumented default.
 
 Target material compilers convert this definition into:
 
