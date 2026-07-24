@@ -1,8 +1,8 @@
 # PB-0013 Permanent Quality and Release-Gate Baseline Evidence
 
-**Task:** PB-0013 — Establish the permanent quality and release-gate baseline  
-**Branch:** `docs/PB-0013-quality-release-gates`  
-**Lifecycle:** 🟡 **PROCESS**  
+**Task:** PB-0013 — Establish the permanent quality and release-gate baseline
+**Branch:** `docs/PB-0013-quality-release-gates`
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-07-24
 
 ## Scope and Current Interpretation
@@ -23,6 +23,22 @@ PB-0012 was committed, pushed, merged, passed required CI, and was explicitly co
 - No CI, completion, or quality exception was used.
 
 This PB-0013 rollover marks PB-0012 `[x]` / 🟢 **DONE**, removes it from Active Work, and adds exactly one chronological Completion Log row. The detailed original and final evidence remains in [PB-0012 initial ADR evidence](PB-0012_INITIAL_ADRS_EVIDENCE.md).
+
+## Final Publication and PB-0101 Rollover
+
+PB-0013 completed every required publication and confirmation gate:
+
+- Final task commit: `8f79883d9a78c1a211510ee4ea8c855405e12e3c`.
+- Pull request: [#14](https://github.com/avivperets26/3DModels-Package-Builder/pull/14).
+- Optional PR workflow: [run 30087261318](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30087261318), failed in the PB-0013 changed-file-history validator.
+- Merge commit: `859a97a83d6328b45e70cd515a058c10bc519205`.
+- Successful required `main` workflow: [run 30087267104](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30087267104).
+- Explicit user confirmation of the task commit, push, merge, required `main` CI, and completion: 2026-07-24.
+- No CI, completion, or quality exception was used.
+
+The optional PR workflow is not described as successful. GitHub checked out a detached synthetic merge commit; in detached HEAD, `git branch --show-current` returns no branch-name line. The changed-file-history validator indexed that empty result and produced `Index was outside the bounds of the array.` The required `main` workflow passed. Pull-request and branch CI are optional under `AGENTS.md`, while required `main` CI succeeded, so no CI exception was needed.
+
+At the beginning of `feat/PB-0101-product-identity`, the approved rollover marks PB-0013 `[x]` / 🟢 **DONE**, removes it from Active Work, records it exactly once in the Completion Log, and records E00/M0 complete.
 
 ## Historical PB-0013 Evidence
 
@@ -86,14 +102,14 @@ Each mapped task exists, names an owner, has concrete dependencies, and has a de
 5. Exact REL-001 through REL-008 definitions and the shared fail-closed summary.
 6. UX/accessibility, security/privacy, installation, containment, free-tooling, Visual Studio Code, and manual Git policy agreement.
 7. Markdown structure and contained local links for the PB-0013 sources and evidence.
-8. PB task IDs, dependencies, branches, lifecycle markers, Active Work, and Completion Log consistency.
-9. PB-0012 rollover and historical PB-0013 commit/merge evidence.
-10. Historical and current PB-0013 changed-file scope, rejecting application implementation.
+8. PB task IDs, dependencies, branches, lifecycle markers, PB-0013 completion, and PB-0101 Active Work/Completion Log consistency.
+9. PB-0012 rollover, historical PB-0013 evidence, and final PB-0013 publication evidence.
+10. Fixed historical PB-0013 changed-file scope plus safe normal-branch and detached-HEAD behavior, without treating successor-task files as PB-0013 changes.
 11. Unresolved placeholder language and unsupported quality claims.
 
 The validator is integrated into `scripts/Test-RepositoryBaseline.ps1` in-process and through standalone Windows PowerShell 5.1.
 
-## Validation Results
+## PB-0013 Branch Validation Results
 
 | Validation | Final local result |
 |---|---|
@@ -110,15 +126,15 @@ The validator is integrated into `scripts/Test-RepositoryBaseline.ps1` in-proces
 | Exact SDK, restore, and Release build | Pass; repository-local .NET SDK `10.0.302`, locked restore, 15 projects, 0 warnings, 0 errors. |
 | Formatting and lint | Pass; `dotnet format --verify-no-changes`, Ruff `0.15.22` lint, and Ruff formatting checks passed. |
 | Baseline smoke tests | Pass; 4 discovered, 4 passed, 0 failed, 0 skipped; source-candidate nonmutation check passed. |
-| Markdown, local links, task graph, lifecycle, and changed-file scope | Pass; PB-0012 is rolled over exactly once, PB-0013 remains active, and no application implementation is present. |
+| Markdown, local links, task graph, lifecycle, and changed-file scope | Pass on the PB-0013 branch; PB-0012 was rolled over exactly once, PB-0013 remained active before publication, and no application implementation was present. |
 | `git diff --check` and `git diff --cached --check` | Pass; no whitespace errors in unstaged or staged changes. |
 
 PowerShell 7 was absent from the host, so the official `PowerShell-7.6.4-win-x64.zip` was downloaded to the ignored repository-local `downloads` root, verified against published SHA-256 `80832551C52809301E6071C8BAC977BEB5A2F1EC953EB4DB9F94DEB953333793`, and expanded beneath the ignored repository-local `tools` root. This validation-only tool installation changed no tracked dependency or system installation.
 
 ## Documentation Impact
 
-PB-0013 synchronizes PB-0012 completion evidence, makes the 68-ID authority and fail-closed release summary explicit, records manual Git ownership in the product plan, removes an unsupported vendor quality characterization, updates the ADR lifecycle validator, adds this evidence, and adds the deterministic quality validator to the repository baseline. It changes no approved threshold, application behavior, dependency, engine installation, marketplace rule, GitHub setting, or installer selection.
+PB-0013 synchronizes PB-0012 completion evidence, makes the 68-ID authority and fail-closed release summary explicit, records manual Git ownership in the product plan, removes an unsupported vendor quality characterization, updates the ADR lifecycle validator, adds this evidence, and adds the deterministic quality validator to the repository baseline. The PB-0101 rollover adds final publication evidence and corrects detached-HEAD handling without changing any approved threshold, dependency, engine installation, marketplace rule, GitHub setting, or installer selection.
 
-## Remaining Gates
+## Completion State
 
-PB-0013 stays `[ ]` / 🟡 **PROCESS** and remains in Active Work. After local validation it still requires the user-controlled task commit, task-branch push, merge into and push of `main`, successful required `main` CI, explicit user completion confirmation, and next-task rollover synchronization. It is not added to the Completion Log on its own branch.
+PB-0013 is logically complete and is synchronized `[x]` / 🟢 **DONE** during the PB-0101 rollover. It is absent from Active Work and appears exactly once in the Completion Log. PB-0101 remains `[ ]` / 🟡 **PROCESS** and is not in the Completion Log.

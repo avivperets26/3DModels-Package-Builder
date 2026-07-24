@@ -158,7 +158,20 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0013 | 🟡 **PROCESS** | `docs/PB-0013-quality-release-gates` | Architecture and Quality Engineering for local work; user for Git gates | 2026-07-22 | Historical commits `fc34bffff838cac41198940ed54b91b25c33f838` and `a1032c48f2a8d0dc98d0c589f1a845605950952b` remain preserved. Historical pull request [#1](https://github.com/avivperets26/3DModels-Package-Builder/pull/1) merged the latter as `13e5875b686c3219e3571d45ceaa93c463e881ff`, but did not supply complete task-specific validation, successful-CI evidence, or explicit completion confirmation. This continuation is on the documented branch, fast-forwarded to current `main` merge `f4b5a5d39b2de97e404f837150bbe0d869e3a366`. PB-0012 rollover is synchronized exactly once. PB-0013 is implemented and validated locally: the quality validator passed 11/11 in PowerShell 7.6.4 and Windows PowerShell 5.1; ADR 8/8, contribution 11/11, governance 9/9, and repository baseline 29/29 passed; all nine core stages passed; the 15-project Release build had 0 warnings/errors; and all four smoke tests passed. | No local implementation or validation blocker. The task commit, task-branch push, merge into and push of `main`, successful required `main` CI, explicit user completion confirmation, and next-task rollover synchronization remain user-controlled gates. |
+| PB-0101 | 🟡 **PROCESS** | `feat/PB-0101-product-identity` | Domain Engineering for local work; user for Git gates | 2026-07-24 | PB-0013 and E00/M0 rollover is synchronized. Immutable display-name, internal-asset-ID, folder-name, publisher-root, and canonical `Albedo` naming types are implemented and locally validated. Focused naming tests pass 107/107; all Domain tests pass 108/108; each new naming production file has 100% line and branch coverage; normal and detached quality validation pass 11/11 in PowerShell 7.6.4 and Windows PowerShell 5.1; ADR validation passes 8/8; repository baseline passes 29/29; all nine core-CI stages pass with 111/111 tests and a 0-warning/0-error Release build. | No local implementation or validation blocker. The user-controlled PB-0101 commit, task-branch push, merge into and push of `main`, successful required `main` CI, explicit completion confirmation, and next-task rollover remain. |
+
+### PB-0013 Completion Evidence
+
+The detailed implementation, historical conflict, validation, and final publication evidence are recorded in `docs/PB-0013_QUALITY_RELEASE_GATES_EVIDENCE.md`.
+
+- Final task commit `8f79883d9a78c1a211510ee4ea8c855405e12e3c` was pushed on `docs/PB-0013-quality-release-gates`.
+- The task was merged through [pull request #14](https://github.com/avivperets26/3DModels-Package-Builder/pull/14) into `main` as `859a97a83d6328b45e70cd515a058c10bc519205`.
+- Optional [PR workflow run 30087261318](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30087261318) failed only in the PB-0013 changed-file-history validator because GitHub checked out a detached synthetic merge commit and the validator indexed the empty result of `git branch --show-current`, producing `Index was outside the bounds of the array.` It is not recorded as successful and no alternate cause is asserted.
+- Required [main workflow run 30087267104](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30087267104) completed successfully for the merge commit.
+- The user explicitly confirmed the task commit, push, merge, successful required `main` CI, and completion on 2026-07-24.
+- Pull-request and branch CI are optional while required `main` CI passed, so no CI exception was used. No completion or quality exception was used.
+- Historical PB-0013 commits `fc34bffff838cac41198940ed54b91b25c33f838` and `a1032c48f2a8d0dc98d0c589f1a845605950952b`, historical pull request [#1](https://github.com/avivperets26/3DModels-Package-Builder/pull/1), merge `13e5875b686c3219e3571d45ceaa93c463e881ff`, and the early one-task-per-branch conflict remain preserved.
+- This PB-0101 rollover marks PB-0013 `[x]` / 🟢 **DONE**, removes it from Active Work, adds exactly one chronological Completion Log row, and records E00/M0 complete.
 
 ### PB-0012 Completion Evidence
 
@@ -278,6 +291,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0010 | `docs/PB-0010-contribution-workflow` | `eaf8846df7bf4bb8edc82d8407da8c1a61130231` | [#11](https://github.com/avivperets26/3DModels-Package-Builder/pull/11) | 2026-07-24 | Merged into `main` as `b7396bf6b557da26df2f2d08a70c6f6d1b1a3796`; [PR workflow run 30077559953](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30077559953) and required [main workflow run 30077718661](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30077718661) succeeded. No exception was used; the user explicitly confirmed the commit, push, merge, green required `main` CI, and completion on 2026-07-24. |
 | PB-0011 | `chore/PB-0011-github-governance` | `02491ce01e32559c2b41ce886f5595c286677555` | [#12](https://github.com/avivperets26/3DModels-Package-Builder/pull/12) | 2026-07-24 | Merged into `main` as `5b37b3c8081d246c03eabe8dc3099b1a99f31ca1`; [PR workflow run 30080298582](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30080298582) and required [main workflow run 30080304495](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30080304495) succeeded. No exception was used; the user explicitly confirmed the task commit, push, merge, green required `main` CI, and completion on 2026-07-24. |
 | PB-0012 | `docs/PB-0012-initial-adrs` | `335691dcceeaa645231539a2ec83a3dae9db2a3e` | [#13](https://github.com/avivperets26/3DModels-Package-Builder/pull/13) | 2026-07-24 | Merged into `main` as `f4b5a5d39b2de97e404f837150bbe0d869e3a366`; [PR workflow run 30083665801](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30083665801) and required [main workflow run 30083674462](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30083674462) succeeded. No exception was used; the user explicitly confirmed all completion gates on 2026-07-24. |
+| PB-0013 | `docs/PB-0013-quality-release-gates` | `8f79883d9a78c1a211510ee4ea8c855405e12e3c` | [#14](https://github.com/avivperets26/3DModels-Package-Builder/pull/14) | 2026-07-24 | Merged into `main` as `859a97a83d6328b45e70cd515a058c10bc519205`; optional [PR workflow run 30087261318](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30087261318) failed in detached-HEAD changed-file validation as documented, while required [main workflow run 30087267104](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30087267104) succeeded. Pull-request CI was optional, no CI exception was used, and the user explicitly confirmed all completion gates on 2026-07-24. |
 
 ## 5. Milestones
 
@@ -293,6 +307,8 @@ During the approved next-task rollover, append exactly one row for the immediate
 | M7 — Unreal Complete | All five product cases work in Unreal | E11–E12 |
 | M8 — Operator Experience | WPF and CLI drive the same production pipeline | E13–E14 |
 | M9 — Release Candidate | Security, CI, installer, quality gates, and full regression pass | E15–E18 |
+
+M0 — Repository Ready is complete: every E00 task from PB-0001 through PB-0013 is `[x]` / 🟢 **DONE**, and each appears exactly once in the Completion Log.
 
 ## 6. Critical Path
 
@@ -387,13 +403,13 @@ flowchart LR
   - Depends on: PB-0010
   - Done when: ADRs 0001–0013 from the architecture document exist; each records status, date, context, decision, alternatives, consequences and trade-offs, evolution, implementation status, and repository links without claiming implementation completion; the documentation indexes and architecture inventory link every ADR; a dependency-free Windows PowerShell 5.1/PowerShell 7 validator checks the exact sequential inventory, required sections, valid statuses, unresolved local links, lifecycle distinction, placeholders, and permanent-policy consistency; and the validator runs through the repository baseline.
 
-- [ ] **PB-0013 — Establish the permanent quality and release-gate baseline** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0013 — Establish the permanent quality and release-gate baseline** — **P0** — 🟢 **DONE**
   - Branch: `docs/PB-0013-quality-release-gates`
   - Owner: Architecture and Quality Engineering
   - Depends on: none
   - Done when: `AGENTS.md`, the product plan, architecture, backlog, and `docs/QUALITY_AND_RELEASE_GATES.md` agree on the 68 stable UX, testing, performance, security, installation, engineering, and release requirements; every requirement group maps to an owned E18 task with a dependency and measurable `Done when` condition; release-blocking rules and required coverage thresholds are identical across documents; Markdown, requirement-ID, task-ID, dependency-reference, branch-format, changed-file-scope, and cross-document consistency tests pass; and no application implementation is included.
 
-**E00 exit:** M0 is complete when PB-0001 through PB-0013 are complete.
+**E00 exit:** M0 is complete because PB-0001 through PB-0013 are complete.
 
 ---
 
@@ -401,7 +417,7 @@ flowchart LR
 
 **Goal:** Stable typed models and versioned schemas describe every supported product case and worker exchange.
 
-- [ ] **PB-0101 — Implement product identity and naming value objects** — **P0**
+- [ ] **PB-0101 — Implement product identity and naming value objects** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0101-product-identity`
   - Depends on: PB-0005
   - Done when: display name, asset ID, folder name, publisher root, validation, and canonical `Albedo` spelling have unit tests.

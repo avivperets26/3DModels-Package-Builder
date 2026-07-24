@@ -238,6 +238,16 @@ Primary domain types:
 - `ValidationFinding`
 - `ValidationReport`
 
+PB-0101 implements the first immutable naming types in `PackageBuilder.Domain.Naming`:
+
+- `ProductDisplayName` preserves human-readable Unicode text exactly as supplied.
+- `InternalAssetId` uses `[A-Za-z][A-Za-z0-9]*`.
+- `ProductFolderName` uses `[A-Za-z0-9][A-Za-z0-9_-]*`.
+- `PublisherRoot` uses `[A-Za-z][A-Za-z0-9_]*` and remains configurable; `AvivPeretsFBX` is an example, not a hard-coded singleton.
+- `CanonicalTextureNameToken` currently exposes and accepts only ordinal `Albedo`. PB-0103 owns the complete texture-role model.
+
+Each type exposes `Create(string?)` returning `NamingValidationResult<T>`, with `NamingValidationError` identifying expected user-input failures without requiring exceptions. Inputs are never trimmed, normalized, case-folded, or transformed. Common validation rejects null, empty, whitespace-only, leading/trailing whitespace, controls, Windows-rooted or drive-qualified forms, traversal segments, and directory separators. Filesystem segments additionally reject trailing dots/spaces and Windows-reserved device names. Folder and identifier grammars reject all characters not listed above; no arbitrary length limit is imposed. Equality is type-specific and ordinal case-sensitive, and hash codes use a stable culture-independent ordinal algorithm.
+
 ### 7.2 Application Layer
 
 `PackageBuilder.Application` implements use cases and orchestration:

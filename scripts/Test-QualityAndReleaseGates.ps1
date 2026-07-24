@@ -267,6 +267,7 @@ $paths = [ordered]@{
     AdrInstallation = 'docs/adr/ADR-0013-installer-portable-and-lifecycle-safety.md'
     Pb0012Evidence = 'docs/PB-0012_INITIAL_ADRS_EVIDENCE.md'
     Pb0013Evidence = 'docs/PB-0013_QUALITY_RELEASE_GATES_EVIDENCE.md'
+    Pb0101Evidence = 'docs/PB-0101_PRODUCT_IDENTITY_EVIDENCE.md'
     DocsIndex = 'docs/README.md'
 }
 $texts = @{}
@@ -518,6 +519,7 @@ Invoke-Check 'Markdown and repository-local links are valid for PB-0013 sources'
         $paths['AdrInstallation'],
         $paths['Pb0012Evidence'],
         $paths['Pb0013Evidence'],
+        $paths['Pb0101Evidence'],
         $paths['DocsIndex']
     )) {
         Assert-MarkdownAndLocalLinks $relativePath
@@ -570,34 +572,45 @@ Invoke-Check 'PB task IDs, dependencies, branches, lifecycle, Active Work, and C
     }
     $pb0012 = $taskLookup['PB-0012']
     $pb0013 = $taskLookup['PB-0013']
+    $pb0101 = $taskLookup['PB-0101']
     if (-not $pb0012.Checked -or $pb0012.Header -notmatch '\*\*DONE\*\*') {
         throw 'PB-0012 must be checked and DONE after rollover.'
     }
     if ('PB-0012' -in $activeIds -or (@($loggedIds | Where-Object { $_ -eq 'PB-0012' }).Count -ne 1)) {
         throw 'PB-0012 must be absent from Active Work and logged exactly once.'
     }
-    if ($pb0013.Checked -or $pb0013.Header -notmatch '\*\*PROCESS\*\*') {
-        throw 'PB-0013 must remain unchecked and PROCESS on its own branch.'
+    if (-not $pb0013.Checked -or $pb0013.Header -notmatch '\*\*DONE\*\*') {
+        throw 'PB-0013 must be checked and DONE after the PB-0101 rollover.'
     }
-    if ('PB-0013' -notin $activeIds -or 'PB-0013' -in $loggedIds) {
-        throw 'PB-0013 must remain in Active Work and absent from the Completion Log.'
+    if ('PB-0013' -in $activeIds -or
+        (@($loggedIds | Where-Object { $_ -eq 'PB-0013' }).Count -ne 1)) {
+        throw 'PB-0013 must be absent from Active Work and logged exactly once.'
+    }
+    if ($pb0101.Checked -or $pb0101.Header -notmatch '\*\*PROCESS\*\*') {
+        throw 'PB-0101 must remain unchecked and PROCESS on its own branch.'
+    }
+    if ('PB-0101' -notin $activeIds -or 'PB-0101' -in $loggedIds) {
+        throw 'PB-0101 must remain in Active Work and absent from the Completion Log.'
     }
 }
 
-Invoke-Check 'PB-0012 rollover and historical PB-0013 evidence are preserved' {
+Invoke-Check 'PB-0013 completion rollover and historical evidence are preserved' {
     foreach ($commit in @(
         '335691dcceeaa645231539a2ec83a3dae9db2a3e',
         'f4b5a5d39b2de97e404f837150bbe0d869e3a366',
         'fc34bffff838cac41198940ed54b91b25c33f838',
         'a1032c48f2a8d0dc98d0c589f1a845605950952b',
-        '13e5875b686c3219e3571d45ceaa93c463e881ff'
+        '13e5875b686c3219e3571d45ceaa93c463e881ff',
+        '8f79883d9a78c1a211510ee4ea8c855405e12e3c',
+        '859a97a83d6328b45e70cd515a058c10bc519205'
     )) {
         Invoke-Git @('cat-file', '-e', ($commit + '^{commit}')) | Out-Null
     }
     foreach ($relation in @(
         @('a1032c48f2a8d0dc98d0c589f1a845605950952b', '13e5875b686c3219e3571d45ceaa93c463e881ff'),
         @('13e5875b686c3219e3571d45ceaa93c463e881ff', 'f4b5a5d39b2de97e404f837150bbe0d869e3a366'),
-        @('335691dcceeaa645231539a2ec83a3dae9db2a3e', 'f4b5a5d39b2de97e404f837150bbe0d869e3a366')
+        @('335691dcceeaa645231539a2ec83a3dae9db2a3e', 'f4b5a5d39b2de97e404f837150bbe0d869e3a366'),
+        @('8f79883d9a78c1a211510ee4ea8c855405e12e3c', '859a97a83d6328b45e70cd515a058c10bc519205')
     )) {
         & git -C $script:RepositoryRoot merge-base --is-ancestor $relation[0] $relation[1]
         if ($LASTEXITCODE -ne 0) {
@@ -615,6 +628,14 @@ Invoke-Check 'PB-0012 rollover and historical PB-0013 evidence are preserved' {
         'a1032c48f2a8d0dc98d0c589f1a845605950952b',
         '/pull/1',
         '13e5875b686c3219e3571d45ceaa93c463e881ff',
+        '8f79883d9a78c1a211510ee4ea8c855405e12e3c',
+        '/pull/14',
+        '/actions/runs/30087261318',
+        '859a97a83d6328b45e70cd515a058c10bc519205',
+        '/actions/runs/30087267104',
+        'detached synthetic merge commit',
+        'git branch --show-current',
+        'Index was outside the bounds of the array.',
         'No CI, completion, or quality exception was used'
     )) {
         if (-not $combinedEvidence.Contains($token)) {
@@ -627,21 +648,21 @@ Invoke-Check 'PB-0012 rollover and historical PB-0013 evidence are preserved' {
     if ($combinedEvidence -notmatch '(?is)correct documented.*branch.{0,500}fast-forwarded') {
         throw 'Current PB-0013 continuation branch interpretation is missing.'
     }
+    if ($combinedEvidence -notmatch '(?is)(successful required.{0,30}main.{0,30}workflow|required.{0,30}main.{0,30}workflow.{0,200}(passed|succeeded))' -or
+        $combinedEvidence -notmatch '(?i)no CI exception was used') {
+        throw 'PB-0013 required main-CI success and no-exception interpretation are missing.'
+    }
 }
 
-Invoke-Check 'PB-0013 changed-file history contains no application implementation' {
+Invoke-Check 'Historical PB-0013 changed-file scope remains documentation-only' {
     $allowedPattern = '^(AGENTS\.md|docs/.+\.md|scripts/Test-ArchitectureDecisionRecords\.ps1|scripts/Test-QualityAndReleaseGates\.ps1|scripts/Test-RepositoryBaseline\.ps1)$'
-    $commitLines = @(Invoke-Git @('log', '--all', '--format=%H%x09%s', '--grep=PB-0013'))
     $commitIds = @(
         'fc34bffff838cac41198940ed54b91b25c33f838',
-        'a1032c48f2a8d0dc98d0c589f1a845605950952b'
+        'a1032c48f2a8d0dc98d0c589f1a845605950952b',
+        '8f79883d9a78c1a211510ee4ea8c855405e12e3c'
     )
-    foreach ($line in $commitLines) {
-        $match = [regex]::Match($line, '^(?<commit>[0-9a-f]{40})\t')
-        if ($match.Success -and $match.Groups['commit'].Value -notin $commitIds) {
-            $commitIds += $match.Groups['commit'].Value
-        }
-    }
+    # Fixed historical IDs prevent successor-task commits and files from being
+    # reclassified as PB-0013 merely because a subject or document mentions it.
     foreach ($commit in $commitIds) {
         foreach ($path in @(Invoke-Git @('diff-tree', '--no-commit-id', '--name-only', '-r', $commit))) {
             $normalized = $path.Replace('\', '/')
@@ -651,14 +672,20 @@ Invoke-Check 'PB-0013 changed-file history contains no application implementatio
         }
     }
 
-    $currentBranch = @(Invoke-Git @('branch', '--show-current'))[0]
+    # Detached HEAD intentionally emits no branch-name line. Treat that as no
+    # active PB-0013 branch instead of indexing an empty PowerShell array.
+    $currentBranchLines = @(Invoke-Git @('branch', '--show-current') | Where-Object {
+        -not [string]::IsNullOrWhiteSpace($_)
+    })
+    $currentBranch = if ($currentBranchLines.Count -eq 0) { '' } else { $currentBranchLines[0] }
     if ($currentBranch -eq 'docs/PB-0013-quality-release-gates') {
         $candidatePaths = @(
             Invoke-Git @('diff', '--name-only', 'HEAD')
             Invoke-Git @('diff', '--cached', '--name-only')
             Invoke-Git @('ls-files', '--others', '--exclude-standard')
         ) | ForEach-Object { $_.Replace('\', '/') } | Sort-Object -Unique
-        if (@(Invoke-Git @('show-ref', '--verify', '--quiet', 'refs/heads/main')).Count -ge 0) {
+        & git -C $script:RepositoryRoot show-ref --verify --quiet 'refs/heads/main'
+        if ($LASTEXITCODE -eq 0) {
             $mergeBase = @(Invoke-Git @('merge-base', 'main', 'HEAD'))[0]
             $candidatePaths += @(Invoke-Git @('diff', '--name-only', ($mergeBase + '..HEAD'))) |
                 ForEach-Object { $_.Replace('\', '/') }
@@ -676,7 +703,7 @@ Invoke-Check 'No unresolved placeholders or unsupported quality claims remain' {
     foreach ($name in @(
         'Rules', 'Plan', 'Architecture', 'Backlog', 'Quality',
         'AdrTraceability', 'AdrUx', 'AdrSecurity', 'AdrQuality', 'AdrInstallation',
-        'Pb0012Evidence', 'Pb0013Evidence'
+        'Pb0012Evidence', 'Pb0013Evidence', 'Pb0101Evidence'
     )) {
         foreach ($line in ($texts[$name] -split '\r?\n')) {
             if ($line -match '(?i)\b(TODO|TBD|TBC|FIXME)\b|lorem ipsum|replace me|may\s+(?:initially|temporarily)\s+be\s+placeholder') {

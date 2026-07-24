@@ -411,7 +411,7 @@ Invoke-Check 'ADRs preserve permanent architecture and repository policies' {
     }
 }
 
-Invoke-Check 'PB-0012 rollover and PB-0013 lifecycle evidence are consistent' {
+Invoke-Check 'PB-0013 rollover and PB-0101 lifecycle evidence are consistent' {
     $backlog = Read-RepositoryText 'docs/IMPLEMENTATION_BACKLOG.md'
     $doneMarker = [char]::ConvertFromUtf32(0x1F7E2) + ' **DONE**'
     $processMarker = [char]::ConvertFromUtf32(0x1F7E1) + ' **PROCESS**'
@@ -419,8 +419,11 @@ Invoke-Check 'PB-0012 rollover and PB-0013 lifecycle evidence are consistent' {
         '- \[x\] \*\*PB-0012\b[^\r\n]*' + [regex]::Escape($doneMarker)
     ) 'PB-0012 completed task'
     Assert-Pattern $backlog (
-        '- \[ \] \*\*PB-0013\b[^\r\n]*' + [regex]::Escape($processMarker)
-    ) 'PB-0013 active task'
+        '- \[x\] \*\*PB-0013\b[^\r\n]*' + [regex]::Escape($doneMarker)
+    ) 'PB-0013 completed task'
+    Assert-Pattern $backlog (
+        '- \[ \] \*\*PB-0101\b[^\r\n]*' + [regex]::Escape($processMarker)
+    ) 'PB-0101 active task'
 
     $activeStart = $backlog.IndexOf('## 3. Active Work', [System.StringComparison]::Ordinal)
     $activeEnd = $backlog.IndexOf('## 4. Completion Log', [System.StringComparison]::Ordinal)
@@ -433,14 +436,20 @@ Invoke-Check 'PB-0012 rollover and PB-0013 lifecycle evidence are consistent' {
     if (@([regex]::Matches($activeSection, '(?m)^\|\s*PB-0012\s*\|')).Count -ne 0) {
         throw 'PB-0012 must be absent from Active Work after rollover.'
     }
-    if (@([regex]::Matches($activeSection, '(?m)^\|\s*PB-0013\s*\|')).Count -ne 1) {
-        throw 'PB-0013 must appear exactly once in Active Work.'
+    if (@([regex]::Matches($activeSection, '(?m)^\|\s*PB-0013\s*\|')).Count -ne 0) {
+        throw 'PB-0013 must be absent from Active Work after rollover.'
+    }
+    if (@([regex]::Matches($activeSection, '(?m)^\|\s*PB-0101\s*\|')).Count -ne 1) {
+        throw 'PB-0101 must appear exactly once in Active Work.'
     }
     if (@([regex]::Matches($completionSection, '(?m)^\|\s*PB-0012\s*\|')).Count -ne 1) {
         throw 'PB-0012 must appear exactly once in the Completion Log.'
     }
-    if (@([regex]::Matches($completionSection, '(?m)^\|\s*PB-0013\s*\|')).Count -ne 0) {
-        throw 'PB-0013 must not appear in the Completion Log on its task branch.'
+    if (@([regex]::Matches($completionSection, '(?m)^\|\s*PB-0013\s*\|')).Count -ne 1) {
+        throw 'PB-0013 must appear exactly once in the Completion Log.'
+    }
+    if (@([regex]::Matches($completionSection, '(?m)^\|\s*PB-0101\s*\|')).Count -ne 0) {
+        throw 'PB-0101 must not appear in the Completion Log on its task branch.'
     }
 
     $evidence = Read-RepositoryText 'docs/PB-0012_INITIAL_ADRS_EVIDENCE.md'
@@ -448,6 +457,11 @@ Invoke-Check 'PB-0012 rollover and PB-0013 lifecycle evidence are consistent' {
     Assert-Pattern $evidence 'installer technology remains deferred to PB-1612' 'PB-1612 boundary'
     Assert-Pattern $evidence '335691dcceeaa645231539a2ec83a3dae9db2a3e.*pull/13.*30083665801.*f4b5a5d39b2de97e404f837150bbe0d869e3a366.*30083674462' 'PB-0012 final publication evidence'
     Assert-Pattern $evidence 'No CI, quality, completion, or other exception was used' 'PB-0012 no-exception evidence'
+
+    $pb0013Evidence = Read-RepositoryText 'docs/PB-0013_QUALITY_RELEASE_GATES_EVIDENCE.md'
+    Assert-Pattern $pb0013Evidence '8f79883d9a78c1a211510ee4ea8c855405e12e3c.*pull/14.*30087261318.*859a97a83d6328b45e70cd515a058c10bc519205.*30087267104' 'PB-0013 final publication evidence'
+    Assert-Pattern $pb0013Evidence 'detached synthetic merge commit.*git branch --show-current.*Index was outside the bounds of the array' 'PB-0013 optional PR failure evidence'
+    Assert-Pattern $pb0013Evidence 'No CI, completion, or quality exception was used' 'PB-0013 no-exception evidence'
 }
 
 Write-Host ''
