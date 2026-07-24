@@ -307,6 +307,40 @@ PB-0106 adds immutable renderer-independent item-group intent in `PackageBuilder
 
 PB-0106 creation uses task-local structured `ItemValidationResult<T>` values rather than PB-0109 global finding codes. All retained collections are immutable snapshots; item order is intentionally user-controlled, while relationships, categories, shared declarations/references, assembled members, and compatibility metadata have deterministic ordinal ordering. Equality and FNV-based hashing are ordinal, case-sensitive, culture independent, renderer independent, and stable across supported processes. PB-0106 adds no source-file grouping, manifest mapping, transforms, retargeting, package generation, preview behavior, engine assets, marketplace identifiers, filesystem, persistence, networking, WPF, or JSON behavior.
 
+PB-0107 adds immutable publisher and generic marketplace profile intent in
+`PackageBuilder.Domain.Profiles`:
+
+- `PublisherDisplayName` and `CopyrightHolder` preserve accepted Unicode exactly, reject null,
+  empty, whitespace-only, edge-whitespace, control-character, and over-limit input, and compare
+  ordinally.
+- `SupportContact` is created explicitly as an email address or secure URL. Email validation is
+  deterministic syntactic validation; URL validation permits only absolute HTTPS without URI
+  credentials. Neither path performs DNS, HTTP, delivery, or other network verification.
+- `CopyrightYearPolicyKind` exposes `single-year`, `year-range`, and `publication-year`.
+  `CopyrightYearPolicy` requires explicit years, rejects missing, out-of-range, degenerate,
+  reversed, or contradictory combinations, and never consults the system clock.
+- `AiDisclosureState` exposes `undeclared`, `no-ai-assistance`, and `ai-assisted`.
+  `AiDisclosure` keeps that state separate from optional caller-authored text and forbids text
+  for the undeclared state.
+- `BrandingImage` reuses PB-0103 `SourceAsset`, requires `SourceAssetKind.Image`, and declares
+  only `logo` or `watermark` intent. `PublisherBranding` rejects empty, null, or duplicate-role
+  declarations and returns an immutable role-ordered snapshot.
+- `PublisherProfile` combines the existing configurable `PublisherRoot` with publisher display,
+  support, copyright, disclosure, and optional branding values.
+- `MarketplaceIdentifier`, `MarketplaceProfileIdentifier`, and `MarketplaceProfile` model
+  extensible lowercase ordinal identity independently from publisher identity and without any
+  Fab-specific listing rule.
+- Expected input failures use task-local `ProfileValidationResult<T>` values rather than
+  pre-empting PB-0109's global validation-finding model. Equality and FNV-based hashing are
+  culture-independent, deterministic, ordinal, and case-sensitive.
+
+PB-0107 adds no JSON schema or converter, file loading/saving/migration, profile resolution,
+documentation rendering, image processing, UI, credentials, engine setting, namespace/assembly,
+Unreal prefix, preview theme, marketplace rule, filesystem, persistence, or networking behavior.
+PB-0111 owns profile schemas; PB-0901/PB-0902 own documentation templates and profile resolution;
+PB-0602/PB-0605 and PB-1105 own engine naming behavior; PB-0306/PB-0308 own engine-version
+selection/locking; and PB-0906 owns preview presentation semantics.
+
 ### 7.2 Application Layer
 
 `PackageBuilder.Application` implements use cases and orchestration:

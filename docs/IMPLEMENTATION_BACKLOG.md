@@ -158,7 +158,18 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0106 | 🟡 **PROCESS** | `feat/PB-0106-set-collection-domain` | Domain Engineering for local work; user for Git gates | 2026-07-24 | PB-0105 rollover is synchronized. Immutable renderer-independent item IDs, user ordering, extensible categories/slots, undirected relationships, shared-source declarations, set assembly rules/compatibility metadata, and independent collection semantics are implemented and locally validated. Focused PB-0106 tests pass 36/36; all Domain tests pass 504/504; all 13 new production files (14 coverage class entries) have 100% line and branch coverage; solution architecture passes 7/7; quality validation passes 11/11 in PowerShell 7 and Windows PowerShell 5.1; ADR validation passes 8/8; repository baseline passes 29/29; and all nine core-CI stages pass with 507/507 core tests and a zero-warning/zero-error Release build. | No local implementation or validation blocker. User-controlled staging, commit, push, merge, required `main` CI, explicit completion confirmation, and next-task rollover remain. |
+| PB-0107 | 🟡 **PROCESS** | `feat/PB-0107-profile-domain` | Domain Engineering for local work; user for Git gates | 2026-07-24 | PB-0106 rollover is synchronized. Immutable publisher root/display/support/copyright/disclosure/branding models and separate generic marketplace identity are implemented and locally validated. Focused PB-0107 tests pass 96/96; all Domain tests pass 600/600; all 18 new production files have 100% line and branch coverage; solution architecture passes 7/7; quality validation passes 11/11 in PowerShell 7 and Windows PowerShell 5.1; ADR validation passes 8/8; repository baseline passes 29/29; and all nine core-CI stages pass with 603/603 core tests and a zero-warning/zero-error Release build. | No local implementation or validation blocker. User-controlled staging, task commit, task-branch push, merge into and push of `main`, successful required `main` CI, explicit completion confirmation, and next-task rollover remain. |
+
+### PB-0106 Completion Evidence
+
+The detailed implementation, validation, and final publication evidence are recorded in `docs/PB-0106_SET_COLLECTION_DOMAIN_EVIDENCE.md`.
+
+- Final task commit `7fa99ace7ea27fe4f036cd1525e4ec727eeceb57` was pushed on `feat/PB-0106-set-collection-domain`.
+- The task was merged through [pull request #20](https://github.com/avivperets26/3DModels-Package-Builder/pull/20) into `main` as `b97b5e3aa593cb317cae4fdfd193e07e39a482ba`.
+- [PR workflow run 30105134003](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30105134003) and required [main workflow run 30105643680](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30105643680) completed successfully.
+- The user explicitly confirmed the task commit, push, merge, successful required `main` CI, and completion on 2026-07-24.
+- No CI, completion, or quality exception was used.
+- This PB-0107 rollover marks PB-0106 `[x]` / 🟢 **DONE**, removes it from Active Work, and adds exactly one chronological Completion Log row.
 
 ### PB-0105 Completion Evidence
 
@@ -352,6 +363,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0103 | `feat/PB-0103-source-assets-textures` | `3e21b2aa118f43dc024a377eb855e08af4838c4b` | [#17](https://github.com/avivperets26/3DModels-Package-Builder/pull/17) | 2026-07-24 | Merged into `main` as `b562be3a69c97d1b8eb7924c48ea47b1b4727eb2`; [PR workflow run 30095076362](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30095076362) and required [main workflow run 30095081353](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30095081353) succeeded. No exception was used; the user explicitly confirmed the task commit, push, merge, successful required `main` CI, and completion on 2026-07-24. |
 | PB-0104 | `feat/PB-0104-material-domain` | `5d3f52c107f3de7fa5bac80d85559c80aeaad6b4` | [#18](https://github.com/avivperets26/3DModels-Package-Builder/pull/18) | 2026-07-24 | Merged into `main` as `1983201ea7a810aac4ca74db0351d73c5554a929`; [PR workflow run 30097711367](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30097711367) and required [main workflow run 30097716685](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30097716685) succeeded. No exception was used; the user explicitly confirmed the task commit, push, merge, successful required `main` CI, and completion on 2026-07-24. |
 | PB-0105 | `feat/PB-0105-rig-animation-domain` | `94a3caa147d1c196a9f21a54c2b47230d34c8753` | [#19](https://github.com/avivperets26/3DModels-Package-Builder/pull/19) | 2026-07-24 | Merged into `main` as `67aff0d6c4a1c7f19b7d88b13cd64bd7da998aab`; [PR workflow run 30102421376](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30102421376) and required [main workflow run 30102701368](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30102701368) succeeded. No exception was used; the user explicitly confirmed the task commit, push, merge, successful required `main` CI, and completion on 2026-07-24. |
+| PB-0106 | `feat/PB-0106-set-collection-domain` | `7fa99ace7ea27fe4f036cd1525e4ec727eeceb57` | [#20](https://github.com/avivperets26/3DModels-Package-Builder/pull/20) | 2026-07-24 | Merged into `main` as `b97b5e3aa593cb317cae4fdfd193e07e39a482ba`; [PR workflow run 30105134003](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30105134003) and required [main workflow run 30105643680](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30105643680) succeeded. No exception was used; the user explicitly confirmed the task commit, push, merge, successful required `main` CI, and completion on 2026-07-24. |
 
 ## 5. Milestones
 
@@ -502,12 +514,12 @@ flowchart LR
   - Depends on: PB-0102
   - Done when: skeleton, bones, root, rig type, clip name, frame range, FPS, loop, root motion, and pose data are represented and validated.
 
-- [ ] **PB-0106 — Implement set and collection item definitions** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0106 — Implement set and collection item definitions** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0106-set-collection-domain`
   - Depends on: PB-0102, PB-0104
   - Done when: item IDs, ordering, relationships, attachment slots, shared assets, categories, and assembled-set rules have tests.
 
-- [ ] **PB-0107 — Implement publisher and marketplace profile models** — **P0**
+- [ ] **PB-0107 — Implement publisher and marketplace profile models** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0107-profile-domain`
   - Depends on: PB-0101
   - Done when: configurable publisher root, display name, support, copyright, AI disclosure, branding, and marketplace profile identity are typed.
