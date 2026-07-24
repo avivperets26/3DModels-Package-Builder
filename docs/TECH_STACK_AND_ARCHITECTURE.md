@@ -129,6 +129,8 @@ PB-0010 establishes `README.md` and `CONTRIBUTING.md` as the contributor entry p
 
 PB-0011 adds stable Markdown issue templates, an optional pull-request review template, `.github/CODEOWNERS`, bounded weekly Dependabot v2 proposals for NuGet and GitHub Actions, and a minimal `SECURITY.md`. It does not enable automerge, publication, private registries, repository settings, or a private vulnerability-reporting channel. GitHub public-repository secret scanning runs automatically for free; `.github/secret_scanning.yml` is intentionally absent because GitHub documents it only as a path-exclusion configuration. `scripts/Test-GitHubGovernance.ps1` validates the supported locations, template front matter, ownership, Dependabot policy, safe-reporting limitations, and absence of secret-scanning exclusions and Renovate configuration without external dependencies.
 
+PB-0012 records the initial accepted architecture decisions in ADRs 0001–0013, adds documentation and ADR indexes, and validates the exact inventory, required sections, statuses, links, implementation boundaries, and permanent repository policies through dependency-free `scripts/Test-ArchitectureDecisionRecords.ps1`. ADR acceptance records an approved direction; it does not claim that the corresponding application, engine, packaging, UI, security, or installer behavior is implemented.
+
 ## 5. Why This Stack
 
 ### 5.1 Why .NET and WPF
@@ -356,9 +358,15 @@ C:\Dev\PackageBuilder\
 │   ├── TECH_STACK_AND_ARCHITECTURE.md
 │   ├── IMPLEMENTATION_BACKLOG.md
 │   ├── QUALITY_AND_RELEASE_GATES.md
+│   ├── README.md
 │   ├── PB-0010_CONTRIBUTION_WORKFLOW_EVIDENCE.md
 │   ├── PB-0011_GITHUB_GOVERNANCE_EVIDENCE.md
+│   ├── PB-0012_INITIAL_ADRS_EVIDENCE.md
 │   └── adr/
+│       ├── README.md
+│       ├── ADR-0001-dotnet-10-and-wpf.md
+│       ├── ...
+│       └── ADR-0013-installer-portable-and-lifecycle-safety.md
 ├── schemas/
 │   ├── product-manifest.schema.json
 │   ├── publisher-profile.schema.json
@@ -399,6 +407,7 @@ C:\Dev\PackageBuilder\
 │   ├── PackageBuilder.Contract.Tests/
 │   └── fixtures/
 ├── scripts/
+│   ├── Test-ArchitectureDecisionRecords.ps1
 │   ├── Test-ContributionDocumentation.ps1
 │   └── Test-GitHubGovernance.ps1
 ├── .vscode/                 # source-controlled tasks/launch settings; no machine paths
@@ -1086,23 +1095,23 @@ Blender, Unity, and Unreal are not redistributed in Package Builder releases. Fo
 
 ## 29. Architecture Decision Records
 
-The following ADRs should be created when implementation begins:
+The initial ADR inventory is:
 
-1. `ADR-0001-dotnet-10-and-wpf.md`
-2. `ADR-0002-external-engine-workers.md`
-3. `ADR-0003-json-file-worker-protocol.md`
-4. `ADR-0004-immutable-staging-and-atomic-promotion.md`
-5. `ADR-0005-latest-approved-stable-engine-policy.md`
-6. `ADR-0006-sqlite-build-history.md`
-7. `ADR-0007-compiled-in-adapters-for-v1.md`
-8. `ADR-0008-marketplace-requirements-profiles.md`
-9. `ADR-0009-requirements-traceability-and-release-evidence.md`
-10. `ADR-0010-accessible-guided-dry-run-workflow.md`
-11. `ADR-0011-threat-model-secrets-and-network-consent.md`
-12. `ADR-0012-quality-toolchain-and-thresholds.md`
-13. `ADR-0013-installer-portable-and-lifecycle-safety.md`
+1. [ADR-0001: .NET 10 LTS and WPF](adr/ADR-0001-dotnet-10-and-wpf.md)
+2. [ADR-0002: External Engine Workers](adr/ADR-0002-external-engine-workers.md)
+3. [ADR-0003: JSON File Worker Protocol](adr/ADR-0003-json-file-worker-protocol.md)
+4. [ADR-0004: Immutable Staging and Atomic Promotion](adr/ADR-0004-immutable-staging-and-atomic-promotion.md)
+5. [ADR-0005: Latest Approved Stable Engine Policy](adr/ADR-0005-latest-approved-stable-engine-policy.md)
+6. [ADR-0006: SQLite Build History](adr/ADR-0006-sqlite-build-history.md)
+7. [ADR-0007: Compiled-in Adapters for Version 1](adr/ADR-0007-compiled-in-adapters-for-v1.md)
+8. [ADR-0008: Marketplace Requirements Profiles](adr/ADR-0008-marketplace-requirements-profiles.md)
+9. [ADR-0009: Requirements Traceability and Release Evidence](adr/ADR-0009-requirements-traceability-and-release-evidence.md)
+10. [ADR-0010: Accessible Guided Dry-run Workflow](adr/ADR-0010-accessible-guided-dry-run-workflow.md)
+11. [ADR-0011: Threat Model, Secrets, and Network Consent](adr/ADR-0011-threat-model-secrets-and-network-consent.md)
+12. [ADR-0012: Quality Toolchain and Thresholds](adr/ADR-0012-quality-toolchain-and-thresholds.md)
+13. [ADR-0013: Installer, Portable Distribution, and Lifecycle Safety](adr/ADR-0013-installer-portable-and-lifecycle-safety.md)
 
-Each ADR records context, decision, alternatives, consequences, and migration considerations.
+All thirteen initial ADRs are **Accepted**. Each records context, decision, alternatives, consequences and trade-offs, migration or evolution considerations, implementation status and follow-up work, and relevant repository links. Accepted architecture direction does not mean its implementation is complete. The [ADR index](adr/README.md) defines status and evolution conventions.
 
 ## 30. Implementation Order
 

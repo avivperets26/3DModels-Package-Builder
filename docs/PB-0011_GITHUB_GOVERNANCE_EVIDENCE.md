@@ -2,15 +2,17 @@
 
 **Task:** PB-0011 — Add pull-request, issue, ownership, and dependency-update configuration
 **Branch:** `chore/PB-0011-github-governance`
-**Lifecycle:** 🟡 **PROCESS**
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-07-24
 **Official documentation review date:** 2026-07-24
 
 ## Scope and Current State
 
-PB-0011 adds review-only repository governance for public issues, optional pull requests, code ownership, dependency-update proposals, and present-day security reporting. It changes no GitHub repository setting and creates no dependency-update pull request. PB-0011 remains `[ ]` / 🟡 **PROCESS** and is not in the Completion Log.
+PB-0011 adds review-only repository governance for public issues, optional pull requests, code ownership, dependency-update proposals, and present-day security reporting. It changes no GitHub repository setting and creates no dependency-update pull request.
 
 PB-0010 was synchronized exactly once before this implementation. Its final task commit `eaf8846df7bf4bb8edc82d8407da8c1a61130231` was merged through PR #11 as `b7396bf6b557da26df2f2d08a70c6f6d1b1a3796`; PR run 30077559953 and required `main` run 30077718661 succeeded; and the user explicitly confirmed completion on 2026-07-24 without an exception.
+
+PB-0011 was published from final task commit `02491ce01e32559c2b41ce886f5595c286677555`, merged through [pull request #12](https://github.com/avivperets26/3DModels-Package-Builder/pull/12) as `5b37b3c8081d246c03eabe8dc3099b1a99f31ca1`, and validated by successful [PR workflow run 30080298582](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30080298582) and required [main workflow run 30080304495](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30080304495). The user explicitly confirmed the commit, push, merge, green required `main` CI, and completion on 2026-07-24. No CI, completion, or quality exception was used. The PB-0012 rollover records PB-0011 as `[x]` / 🟢 **DONE**, removes it from Active Work, and adds its one Completion Log row.
 
 ## Official GitHub Documentation Basis
 
@@ -78,7 +80,7 @@ PB-1611 remains responsible for future pinned local and CI dependency, licence, 
 6. Absence of secret-scanning exclusions and competing Renovate configuration.
 7. The current safe-reporting limitation in `SECURITY.md`.
 8. Absence of credential-shaped examples, personal paths, mandatory-PR claims, and unsupported automatic capability claims.
-9. PB-0011 evidence, Active Work, lifecycle, and Completion Log consistency.
+9. PB-0011 evidence, completed lifecycle, Active Work removal, and single Completion Log entry.
 
 `scripts/Test-RepositoryBaseline.ps1` runs the validator in-process and through standalone Windows PowerShell 5.1.
 
@@ -96,7 +98,7 @@ PB-1611 remains responsible for future pinned local and CI dependency, licence, 
 | Minimal honest security policy | `SECURITY.md` safe-reporting check |
 | No sensitive or unsupported template content | Governance prohibited-content check |
 | Baseline integration and PowerShell compatibility | In-process and standalone repository-baseline checks |
-| PB-0011 stays active and absent from Completion Log | Governance lifecycle check and repository baseline |
+| PB-0011 completion evidence and one-merge rollover state | Governance lifecycle check and repository baseline |
 
 ## Validation Results
 
@@ -116,11 +118,11 @@ PB-1611 remains responsible for future pinned local and CI dependency, licence, 
 | Secret and prohibited content | Pass; no secret-scanning exclusion, Renovate configuration, credential-shaped example, personal path, prohibited file, mandatory-PR claim, or unsupported automatic capability claim. |
 | PowerShell parsing | Pass for every reviewable PowerShell script in the repository baseline. |
 | `git diff --check` | Pass in the repository baseline and core pipeline. |
-| Task, dependency, lifecycle, Active Work, and Completion Log | Pass; PB-0010 has one Completion Log row and no Active Work row; PB-0011 has one Active Work row, remains `[ ]` / 🟡 **PROCESS**, and has no Completion Log row. |
+| Task, dependency, lifecycle, Active Work, and Completion Log | Pass at task-branch validation; PB-0011 had one Active Work row, remained `[ ]` / 🟡 **PROCESS**, and had no Completion Log row before publication. Its confirmed publication evidence and PB-0012 rollover state are recorded above. |
 | PB-0013 preservation | Pass; its Active Work row and complete task-definition block match `HEAD` across 15 compared lines. |
 
 ## External State and Remaining Gates
 
 No GitHub repository setting was changed or inferred. Private vulnerability reporting, branch protection, required code-owner reviews, Dependabot execution, dependency-update pull requests, and remote secret-scanning alert state remain unverified external settings or future events.
 
-PB-0011 is locally implemented and locally validated but remains in progress. The user-controlled task commit and push, merge into and push of `main`, successful required `main` CI, explicit user completion confirmation, and next-task rollover synchronization remain completion gates.
+PB-0011 is logically complete and its permanent rollover bookkeeping is recorded on the PB-0012 branch. No PB-0011 completion gate remains. GitHub repository settings and future PB-1611 security scanning work remain outside PB-0011's verified scope.

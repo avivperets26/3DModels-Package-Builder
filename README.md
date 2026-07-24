@@ -4,7 +4,7 @@ Package Builder is a planned local-first Windows desktop application for turning
 
 ## Development Status
 
-Package Builder is in the repository-foundation stage. The reviewable implementation currently provides the pinned .NET development environment, solution and project skeleton, formatting and smoke-test baselines, repository validators, core CI entry point, and review-only GitHub governance configuration.
+Package Builder is in the repository-foundation stage. The reviewable implementation currently provides the pinned .NET development environment, solution and project skeleton, formatting and smoke-test baselines, repository validators, core CI entry point, review-only GitHub governance configuration, and the initial accepted architecture decision record set.
 
 The application does not yet import models, build packages, provide the desktop workflow, or produce marketplace-ready releases. The targets and asset cases below are planned scope, not currently available product functionality. Read the [implementation backlog](docs/IMPLEMENTATION_BACKLOG.md) for task-level status.
 
@@ -72,6 +72,7 @@ Set-Location C:\Dev\PackageBuilder
 ### Documentation and Repository Validation
 
 ```powershell
+& .\scripts\Test-ArchitectureDecisionRecords.ps1
 & .\scripts\Test-ContributionDocumentation.ps1
 & .\scripts\Test-GitHubGovernance.ps1
 & .\scripts\Test-RepositoryBaseline.ps1 -RequireTrackedFiles
@@ -137,6 +138,7 @@ C:\Dev\PackageBuilder\
 
 ## Project Documents
 
+- [Documentation index](docs/README.md)
 - [Contributing workflow](CONTRIBUTING.md)
 - [Security reporting policy](SECURITY.md)
 - [Project rules](AGENTS.md)
