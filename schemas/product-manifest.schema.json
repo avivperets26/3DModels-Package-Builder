@@ -1,0 +1,882 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.packagebuilder.dev/product-manifest/v1",
+  "title": "Package Builder product manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "publisherProfileReference",
+    "product",
+    "targets",
+    "sourceAssets",
+    "materials",
+    "animations"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "publisherProfileReference": {
+      "$ref": "#/$defs/publisherRoot"
+    },
+    "product": {
+      "$ref": "#/$defs/product"
+    },
+    "targets": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "portable",
+          "unity",
+          "unreal"
+        ]
+      }
+    },
+    "sourceAssets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/sourceAsset"
+      }
+    },
+    "materials": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/material"
+      }
+    },
+    "rig": {
+      "$ref": "#/$defs/rig"
+    },
+    "animations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/animation"
+      }
+    },
+    "itemSet": {
+      "$ref": "#/$defs/itemSet"
+    },
+    "itemCollection": {
+      "$ref": "#/$defs/itemCollection"
+    },
+    "marketplaceProfileReference": {
+      "$ref": "#/$defs/marketplaceProfileReference"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "product": {
+            "properties": {
+              "case": {
+                "const": "static"
+              }
+            },
+            "required": [
+              "case"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "animations": {
+            "maxItems": 0
+          }
+        },
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "rig"
+              ]
+            },
+            {
+              "required": [
+                "itemSet"
+              ]
+            },
+            {
+              "required": [
+                "itemCollection"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "product": {
+            "properties": {
+              "case": {
+                "const": "rigged"
+              }
+            },
+            "required": [
+              "case"
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "rig"
+        ],
+        "properties": {
+          "animations": {
+            "maxItems": 0
+          }
+        },
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "itemSet"
+              ]
+            },
+            {
+              "required": [
+                "itemCollection"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "product": {
+            "properties": {
+              "case": {
+                "const": "rigged-animated"
+              }
+            },
+            "required": [
+              "case"
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "rig"
+        ],
+        "properties": {
+          "animations": {
+            "minItems": 1
+          }
+        },
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "itemSet"
+              ]
+            },
+            {
+              "required": [
+                "itemCollection"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "product": {
+            "properties": {
+              "case": {
+                "const": "item-set"
+              }
+            },
+            "required": [
+              "case"
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "itemSet"
+        ],
+        "properties": {
+          "animations": {
+            "maxItems": 0
+          }
+        },
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "rig"
+              ]
+            },
+            {
+              "required": [
+                "itemCollection"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "product": {
+            "properties": {
+              "case": {
+                "const": "item-collection"
+              }
+            },
+            "required": [
+              "case"
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "itemCollection"
+        ],
+        "properties": {
+          "animations": {
+            "maxItems": 0
+          }
+        },
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "rig"
+              ]
+            },
+            {
+              "required": [
+                "itemSet"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^\\S(?:[^\\u0000-\\u001F\\u007F]*\\S)?$"
+    },
+    "internalAssetId": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9]*$"
+    },
+    "folderName": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$"
+    },
+    "publisherRoot": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_]*$"
+    },
+    "canonicalIdentifier": {
+      "type": "string",
+      "pattern": "^[a-z]+(?:-[a-z]+)*$"
+    },
+    "logicalReference": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![/\\\\])(?![A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.?(/|$))(?!.*//)(?!.*:)(?!.*[\\u0000-\\u001F\\u007F])\\S(?:.*\\S)?$"
+    },
+    "product": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "displayName",
+        "assetId",
+        "folderName",
+        "case",
+        "version"
+      ],
+      "properties": {
+        "displayName": {
+          "$ref": "#/$defs/text"
+        },
+        "assetId": {
+          "$ref": "#/$defs/internalAssetId"
+        },
+        "folderName": {
+          "$ref": "#/$defs/folderName"
+        },
+        "case": {
+          "enum": [
+            "static",
+            "rigged",
+            "rigged-animated",
+            "item-set",
+            "item-collection"
+          ]
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]*)\\.(?:0|[1-9][0-9]*)\\.(?:0|[1-9][0-9]*)$"
+        }
+      }
+    },
+    "sourceAsset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "logicalReference"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "fbx",
+            "glb",
+            "archive",
+            "image"
+          ]
+        },
+        "logicalReference": {
+          "$ref": "#/$defs/logicalReference"
+        },
+        "originalFileName": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[^/\\\\\\u0000-\\u001F\\u007F]+$"
+        }
+      }
+    },
+    "textureAssignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "role",
+        "colourSpace"
+      ],
+      "properties": {
+        "source": {
+          "$ref": "#/$defs/sourceAsset"
+        },
+        "role": {
+          "enum": [
+            "albedo",
+            "normal",
+            "metallic",
+            "roughness",
+            "emission",
+            "ambient-occlusion",
+            "opacity",
+            "height"
+          ]
+        },
+        "colourSpace": {
+          "enum": [
+            "srgb",
+            "linear"
+          ]
+        },
+        "normalConvention": {
+          "enum": [
+            "auto",
+            "open-gl",
+            "direct-x"
+          ]
+        }
+      }
+    },
+    "material": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "metallicFactor",
+        "roughnessFactor",
+        "normalScale",
+        "emission",
+        "ambientOcclusionStrength",
+        "heightScale",
+        "opacity",
+        "surfaceMode",
+        "uvTransform",
+        "doubleSided",
+        "textureAssignments"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/internalAssetId"
+        },
+        "metallicFactor": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "roughnessFactor": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "normalScale": {
+          "type": "number",
+          "minimum": 0
+        },
+        "emission": {
+          "$ref": "#/$defs/emission"
+        },
+        "ambientOcclusionStrength": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "heightScale": {
+          "type": "number"
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "surfaceMode": {
+          "enum": [
+            "opaque",
+            "cutout",
+            "transparent"
+          ]
+        },
+        "alphaCutoff": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "uvTransform": {
+          "$ref": "#/$defs/uvTransform"
+        },
+        "doubleSided": {
+          "type": "boolean"
+        },
+        "textureAssignments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/textureAssignment"
+          }
+        }
+      }
+    },
+    "emission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "red",
+        "green",
+        "blue",
+        "intensity"
+      ],
+      "properties": {
+        "red": {
+          "type": "number",
+          "minimum": 0
+        },
+        "green": {
+          "type": "number",
+          "minimum": 0
+        },
+        "blue": {
+          "type": "number",
+          "minimum": 0
+        },
+        "intensity": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "uvTransform": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scaleU",
+        "scaleV",
+        "offsetU",
+        "offsetV"
+      ],
+      "properties": {
+        "scaleU": {
+          "type": "number"
+        },
+        "scaleV": {
+          "type": "number"
+        },
+        "offsetU": {
+          "type": "number"
+        },
+        "offsetV": {
+          "type": "number"
+        }
+      }
+    },
+    "rigTransform": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "translationX",
+        "translationY",
+        "translationZ",
+        "rotationX",
+        "rotationY",
+        "rotationZ",
+        "rotationW",
+        "scaleX",
+        "scaleY",
+        "scaleZ"
+      ],
+      "properties": {
+        "translationX": {
+          "type": "number"
+        },
+        "translationY": {
+          "type": "number"
+        },
+        "translationZ": {
+          "type": "number"
+        },
+        "rotationX": {
+          "type": "number"
+        },
+        "rotationY": {
+          "type": "number"
+        },
+        "rotationZ": {
+          "type": "number"
+        },
+        "rotationW": {
+          "type": "number"
+        },
+        "scaleX": {
+          "type": "number"
+        },
+        "scaleY": {
+          "type": "number"
+        },
+        "scaleZ": {
+          "type": "number"
+        }
+      }
+    },
+    "bone": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity"
+      ],
+      "properties": {
+        "identity": {
+          "$ref": "#/$defs/text"
+        },
+        "parentIdentity": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "bonePose": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "boneIdentity",
+        "transform"
+      ],
+      "properties": {
+        "boneIdentity": {
+          "$ref": "#/$defs/text"
+        },
+        "transform": {
+          "$ref": "#/$defs/rigTransform"
+        }
+      }
+    },
+    "rig": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "bones",
+        "referencePose"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "generic",
+            "humanoid"
+          ]
+        },
+        "bones": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/bone"
+          }
+        },
+        "referencePose": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/bonePose"
+          }
+        }
+      }
+    },
+    "animation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "startFrame",
+        "endFrame",
+        "framesPerSecond",
+        "loopBehavior",
+        "rootMotionStatus"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/text"
+        },
+        "startFrame": {
+          "type": "integer"
+        },
+        "endFrame": {
+          "type": "integer"
+        },
+        "framesPerSecond": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "loopBehavior": {
+          "enum": [
+            "once",
+            "loop"
+          ]
+        },
+        "rootMotionStatus": {
+          "enum": [
+            "none",
+            "root-bone"
+          ]
+        },
+        "rootMotionBoneIdentity": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "categories",
+        "sharedAssetReferences"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/internalAssetId"
+        },
+        "categories": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/canonicalIdentifier"
+          }
+        },
+        "attachmentSlot": {
+          "$ref": "#/$defs/canonicalIdentifier"
+        },
+        "sharedAssetReferences": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/internalAssetId"
+          }
+        }
+      }
+    },
+    "relationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "firstItemId",
+        "secondItemId"
+      ],
+      "properties": {
+        "firstItemId": {
+          "$ref": "#/$defs/internalAssetId"
+        },
+        "secondItemId": {
+          "$ref": "#/$defs/internalAssetId"
+        }
+      }
+    },
+    "sharedAsset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "source"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/internalAssetId"
+        },
+        "source": {
+          "$ref": "#/$defs/sourceAsset"
+        }
+      }
+    },
+    "assembledMember": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "itemId"
+      ],
+      "properties": {
+        "itemId": {
+          "$ref": "#/$defs/internalAssetId"
+        },
+        "attachmentSlot": {
+          "$ref": "#/$defs/canonicalIdentifier"
+        }
+      }
+    },
+    "compatibilityMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/internalAssetId"
+        },
+        "value": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "assembledSetRules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "members",
+        "requireUniqueAttachmentSlots",
+        "compatibilityMetadata"
+      ],
+      "properties": {
+        "members": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/assembledMember"
+          }
+        },
+        "requireUniqueAttachmentSlots": {
+          "type": "boolean"
+        },
+        "compatibilityMetadata": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/compatibilityMetadata"
+          }
+        }
+      }
+    },
+    "itemSet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "items",
+        "relationships",
+        "sharedAssets"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/item"
+          }
+        },
+        "relationships": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/relationship"
+          }
+        },
+        "sharedAssets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sharedAsset"
+          }
+        },
+        "assembledSetRules": {
+          "$ref": "#/$defs/assembledSetRules"
+        }
+      }
+    },
+    "itemCollection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "items",
+        "relationships",
+        "sharedAssets"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/item"
+          }
+        },
+        "relationships": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/relationship"
+          }
+        },
+        "sharedAssets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sharedAsset"
+          }
+        }
+      }
+    },
+    "marketplaceProfileReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "marketplace",
+        "profile"
+      ],
+      "properties": {
+        "marketplace": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+        },
+        "profile": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+        }
+      }
+    }
+  }
+}

@@ -30,9 +30,21 @@ $script:ExpectedProjects = @(
 
 $script:ExpectedPackageVersions = @{
     'coverlet.collector' = '10.0.1'
+    'JsonSchema.Net' = '9.3.0'
     'Microsoft.NET.Test.Sdk' = '18.8.1'
     'xunit.v3.mtp-off' = '3.2.2'
     'xunit.runner.visualstudio' = '3.1.5'
+}
+
+$script:ExpectedTestPackages = @(
+    'coverlet.collector',
+    'Microsoft.NET.Test.Sdk',
+    'xunit.v3.mtp-off',
+    'xunit.runner.visualstudio'
+)
+
+$script:ApprovedProductionPackages = @{
+    'src/PackageBuilder.Contracts/PackageBuilder.Contracts.csproj' = @('JsonSchema.Net')
 }
 
 $script:ForbiddenLegacyXunitPackages = @(
@@ -294,9 +306,16 @@ Invoke-Check 'All projects inherit central properties and package versions witho
 
         $isTestProject = $script:ExpectedTestProjects -contains $relativeProject
         $packageReferences = @($project.SelectNodes('/Project/ItemGroup/PackageReference'))
-        if (-not $isTestProject -and $packageReferences.Count -gt 0) {
-            throw "$relativeProject contains unapproved production PackageReference items."
+        $expectedReferences = if ($isTestProject) {
+            @($script:ExpectedTestPackages)
         }
+        elseif ($script:ApprovedProductionPackages.ContainsKey($relativeProject)) {
+            @($script:ApprovedProductionPackages[$relativeProject])
+        }
+        else {
+            @()
+        }
+        $expectedReferences = @($expectedReferences)
 
         $seenPackages = @{}
         foreach ($packageReference in $packageReferences) {
@@ -316,6 +335,13 @@ Invoke-Check 'All projects inherit central properties and package versions witho
                 throw "$relativeProject must not define an inline version for $name."
             }
         }
+        $missingPackages = @($expectedReferences | Where-Object {
+            -not $seenPackages.ContainsKey($_)
+        })
+        if ($missingPackages.Count -gt 0 -or $seenPackages.Count -ne $expectedReferences.Count) {
+            throw "$relativeProject does not reference its exact approved package set. Missing: $($missingPackages -join ', ')"
+        }
+
         if ($isTestProject) {
             Assert-PropertyValue -Xml $project -Name 'OutputType' -Expected 'Exe' -Source $relativeProject
             Assert-PropertyValue -Xml $project -Name 'IsTestProject' -Expected 'true' -Source $relativeProject
@@ -325,13 +351,6 @@ Invoke-Check 'All projects inherit central properties and package versions witho
                 if (@($project.SelectNodes("/Project/PropertyGroup/$mtpProperty")).Count -gt 0) {
                     throw "$relativeProject must not define $mtpProperty; VSTest is the approved dotnet test runner."
                 }
-            }
-
-            $missingPackages = @($script:ExpectedPackageVersions.Keys | Where-Object {
-                -not $seenPackages.ContainsKey($_)
-            })
-            if ($missingPackages.Count -gt 0 -or $seenPackages.Count -ne $script:ExpectedPackageVersions.Count) {
-                throw "$relativeProject must reference exactly the four approved test packages. Missing: $($missingPackages -join ', ')"
             }
 
             foreach ($restrictedPackage in @('coverlet.collector', 'xunit.runner.visualstudio')) {
@@ -493,6 +512,16 @@ Invoke-Check 'Every project has a consistent deterministic NuGet lock file witho
         }
 
         $isTestProject = $script:ExpectedTestProjects -contains $relativeProject
+        $expectedDirectPackages = if ($isTestProject) {
+            @($script:ExpectedTestPackages)
+        }
+        elseif ($script:ApprovedProductionPackages.ContainsKey($relativeProject)) {
+            @($script:ApprovedProductionPackages[$relativeProject])
+        }
+        else {
+            @()
+        }
+        $expectedDirectPackages = @($expectedDirectPackages)
         $directPackages = @{}
         foreach ($dependency in @($frameworks[0].Value.PSObject.Properties)) {
             if ($script:ForbiddenLegacyXunitPackages -contains $dependency.Name) {
@@ -506,7 +535,7 @@ Invoke-Check 'Every project has a consistent deterministic NuGet lock file witho
                 throw "$(Get-RepositoryRelativePath $lockPath) contains an unstable resolved version for $($dependency.Name): $resolved"
             }
             if ([string]$entry.type -eq 'Direct') {
-                if (-not $isTestProject) {
+                if ($expectedDirectPackages -notcontains $dependency.Name) {
                     throw "$(Get-RepositoryRelativePath $lockPath) contains unexpected direct package $($dependency.Name)."
                 }
                 if (-not $script:ExpectedPackageVersions.ContainsKey($dependency.Name)) {
@@ -520,11 +549,11 @@ Invoke-Check 'Every project has a consistent deterministic NuGet lock file witho
             }
         }
 
-        if ($isTestProject) {
-            $missingDirect = @($script:ExpectedPackageVersions.Keys | Where-Object {
+        if ($expectedDirectPackages.Count -gt 0) {
+            $missingDirect = @($expectedDirectPackages | Where-Object {
                 -not $directPackages.ContainsKey($_)
             })
-            if ($missingDirect.Count -gt 0 -or $directPackages.Count -ne $script:ExpectedPackageVersions.Count) {
+            if ($missingDirect.Count -gt 0 -or $directPackages.Count -ne $expectedDirectPackages.Count) {
                 throw "$(Get-RepositoryRelativePath $lockPath) is missing direct packages: $($missingDirect -join ', ')"
             }
         }

@@ -149,42 +149,32 @@ Every build is driven by a JSON manifest. The UI creates this file, so users nor
 ```json
 {
   "schemaVersion": 1,
-  "publisherProfile": "AvivPeretsFBX",
+  "publisherProfileReference": "AvivPeretsFBX",
   "product": {
-    "displayName": "Silverwing Talonbow",
-    "assetId": "SilverwingTalonbow",
-    "folderName": "Silverwing_Talonbow",
-    "case": "rigged_animated",
+    "displayName": "Stone Arch",
+    "assetId": "StoneArch",
+    "folderName": "Stone_Arch",
+    "case": "static",
     "version": "1.0.0"
   },
-  "source": {
-    "fbx": "SilverwingTalonbow.fbx",
-    "glb": "Silverwing_Talonbow_rigged.glb",
-    "unit": "meter",
-    "frontAxis": "-Z",
-    "upAxis": "Y",
-    "normalConvention": "auto"
-  },
-  "material": {
-    "surface": "opaque",
-    "workflow": "metallic",
-    "doubleSided": false
-  },
-  "animations": [
+  "targets": ["portable", "unity", "unreal"],
+  "sourceAssets": [
     {
-      "sourceName": "BowRig|Bow_Shot",
-      "outputName": "Bow_Shot",
-      "loop": false
+      "kind": "fbx",
+      "logicalReference": "models/stone-arch.fbx",
+      "originalFileName": "stone-arch.fbx"
     }
   ],
-  "preview": {
-    "heroView": "front_right",
-    "additionalViews": ["front", "back", "left", "right"],
-    "background": "dark_studio"
-  },
-  "targets": ["fbx", "glb", "unity", "unreal"]
+  "materials": [],
+  "animations": []
 }
 ```
+
+Schema version 1 uses the exact case tokens `static`, `rigged`, `rigged-animated`, `item-set`,
+and `item-collection`, and the exact target tokens `portable`, `unity`, and `unreal`. Rigged,
+animated, set, and collection manifests add their corresponding strictly validated section.
+Unknown properties, null required values, wrong JSON types, incomplete sections, contradictory
+case sections, duplicate identities, and unresolved source references are rejected.
 
 ### Required User Decisions
 

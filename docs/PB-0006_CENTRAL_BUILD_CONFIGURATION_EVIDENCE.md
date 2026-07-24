@@ -38,7 +38,9 @@ Project-specific target frameworks, output types, WPF settings, test settings, a
 
 ## Central Package Inventory
 
-Official NuGet Gallery metadata was reviewed on 2026-07-23. The selected versions are exact stable releases with no wildcard, range, or prerelease identifiers.
+Official NuGet Gallery metadata was reviewed on 2026-07-23 for the foundation packages and on
+2026-07-24 for the PB-0110 JsonSchema.Net addition. The selected versions are exact stable
+releases with no wildcard, range, or prerelease identifiers.
 
 | Package | Selected stable version | Official verification source | Notes |
 |---|---:|---|---|
@@ -46,8 +48,13 @@ Official NuGet Gallery metadata was reviewed on 2026-07-23. The selected version
 | `xunit.v3.mtp-off` | `3.2.2` | [NuGet Gallery](https://www.nuget.org/packages/xunit.v3.mtp-off/3.2.2) and [xUnit runner guidance](https://xunit.net/docs/getting-started/v3/microsoft-testing-platform) | Stable xUnit v3 meta-package with Microsoft Testing Platform support explicitly disabled; the newer xUnit 4 packages are prereleases and were not selected. |
 | `xunit.runner.visualstudio` | `3.1.5` | [NuGet Gallery](https://www.nuget.org/packages/xunit.runner.visualstudio) | `4.0.0-pre.*` entries were excluded because they are prereleases. |
 | `coverlet.collector` | `10.0.1` | [NuGet Gallery](https://www.nuget.org/packages/coverlet.collector) | Gallery showed `10.0.1` as the current stable package, last updated 2026-05-18. |
+| `JsonSchema.Net` | `9.3.0` | [NuGet Gallery](https://www.nuget.org/packages/JsonSchema.Net/9.3.0) | PB-0110-approved stable MIT runtime dependency for offline JSON Schema Draft 2020-12 validation. |
 
-`Directory.Packages.props` enables NuGet Central Package Management, disables `VersionOverride`, leaves transitive pinning disabled, and enables lock-file generation. The four approved test packages are the only direct NuGet dependencies. Production projects have no direct package references.
+`Directory.Packages.props` enables NuGet Central Package Management, disables `VersionOverride`, leaves transitive pinning disabled, and enables lock-file generation. The four approved test packages remain the exact direct dependency set of each test project. PB-0110 adds JsonSchema.Net as the sole approved direct production dependency, confined to `PackageBuilder.Contracts`; other production projects have no direct package references.
+
+The PB-0006 execution results below remain historical evidence of its four-package foundation.
+PB-0110 updates the permanent dependency validator to require exactly five central versions,
+permit JsonSchema.Net only in Contracts, and verify the corresponding deterministic lock graph.
 
 VSTest remains the selected `dotnet test` runner: `Microsoft.NET.Test.Sdk` and `xunit.runner.visualstudio` remain referenced, `global.json` contains no Microsoft Testing Platform runner selection, and no test project enables a Microsoft Testing Platform runner property. `coverlet.collector` and `xunit.runner.visualstudio` retain `PrivateAssets=all` and the approved restricted `IncludeAssets` list.
 
