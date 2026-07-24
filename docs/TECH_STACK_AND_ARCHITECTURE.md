@@ -341,6 +341,34 @@ PB-0111 owns profile schemas; PB-0901/PB-0902 own documentation templates and pr
 PB-0602/PB-0605 and PB-1105 own engine naming behavior; PB-0306/PB-0308 own engine-version
 selection/locking; and PB-0906 owns preview presentation semantics.
 
+PB-0108 adds immutable build execution intent in `PackageBuilder.Domain.BuildJobs`:
+
+- `BuildJobState` explicitly represents Queued, Preflight, Inspecting, AwaitingReview,
+  Normalizing, BuildingTargets, RenderingPreviews, Validating, PackagingMarketplace,
+  CleanReimport, Completed, Failed, and Cancelled. Its category distinguishes active,
+  review-waiting, terminal-success, terminal-failure, and terminal-cancelled states.
+- `BuildJobTransitionPolicy` is the single authoritative transition table and contains only the
+  edges in section 10. Self-transitions, unlisted edges, and every transition from a terminal
+  state are rejected through `BuildJobTransitionResult` without throwing.
+- `BuildJob` begins in Queued, accepts creation and transition timestamps from callers, requires
+  UTC, and retains copy-on-transition ordinal history in immutable collections.
+- `BuildStep` retains typed job/step identity, an extensible logical operation type, one execution
+  stage, pending/running/completed/failed/cancelled recorded status, stable non-negative order,
+  UTC timing, and completed-only logical input/output/tool-version/log metadata. Step status is
+  retained metadata, not an additional retry, resume, or orchestration state machine.
+- `BuildArtifact` retains typed artifact/job/owning-step identity, an extensible logical role,
+  optional Portable/Unity/Unreal association, safe logical reference, staged/validated/promoted
+  lifecycle metadata, and caller-supplied UTC timestamps.
+- Job construction rejects duplicate step identity/order, duplicate artifact identity, unknown
+  job or owning-step references, and timestamps predating the job. Returned collections are
+  immutable deterministic snapshots with ordinal culture-independent equality and stable hashing.
+
+PB-0108 performs no filesystem access, path resolution, hash calculation, persistence, process
+execution, orchestration, retry/resume behavior, validation-finding modeling, worker protocol,
+serialization, engine behavior, marketplace behavior, networking, or UI. PB-0109 owns validation
+findings, PB-0112 owns worker contracts, PB-0204 owns streamed hashes, PB-0210/PB-0211 own
+persistence, and PB-0213 owns orchestration and persisted execution behavior.
+
 ### 7.2 Application Layer
 
 `PackageBuilder.Application` implements use cases and orchestration:

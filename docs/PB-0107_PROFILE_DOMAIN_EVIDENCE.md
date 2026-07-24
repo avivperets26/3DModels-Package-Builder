@@ -2,7 +2,7 @@
 
 **Task:** PB-0107 — Implement publisher and marketplace profile models  
 **Branch:** `feat/PB-0107-profile-domain`  
-**Lifecycle:** 🟡 **PROCESS**  
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-07-24
 
 ## Scope
@@ -17,11 +17,8 @@ marketplace property, and `MarketplaceProfile` has no publisher root, publisher 
 or listing behavior. Production code contains no hard-coded publisher, marketplace, personal
 contact, or identity default.
 
-This branch also performs the approved PB-0106 rollover. PB-0106 is `[x]` / 🟢 **DONE**, is absent
-from Active Work, and appears exactly once in the Completion Log with its supplied task commit,
-pull request, successful PR CI, merge commit, successful required `main` CI, user confirmation,
-and no exception. PB-0107 remains `[ ]` / 🟡 **PROCESS**, appears in Active Work, and is absent from
-the Completion Log.
+This branch also performed the approved PB-0106 rollover. PB-0106 is `[x]` / 🟢 **DONE**, is absent
+from Active Work, and appears exactly once in the Completion Log.
 
 ## Public API
 
@@ -154,9 +151,20 @@ formatted focused run.
 | Release solution build | Pass; 15 projects, 0 warnings, 0 errors. |
 | Formatting and public-repository scans | Pass; `.NET` formatting, Ruff lint/format, `git diff --check`, and repository secret/personal-path/generated/prohibited-content scans. |
 
-## Remaining Gates
+## Publication and Completion Evidence
 
-PB-0107 remains `[ ]` / 🟡 **PROCESS**, stays in Active Work, and remains absent from the
-Completion Log. Local implementation and the requested validation matrix pass. User-controlled
-staging, task commit, task-branch push, merge into and push of `main`, successful required `main`
-CI, explicit completion confirmation, and next-task rollover synchronization remain.
+- Final task commit `7f82d16fe258d7cb81a2c9d3d01c1de8be85c37f` was pushed on
+  `feat/PB-0107-profile-domain`.
+- [Pull request #21](https://github.com/avivperets26/3DModels-Package-Builder/pull/21)
+  merged that exact task commit into `main` as
+  `236343156b69714376b5f48ec4267483bb991307`.
+- [PR workflow run 30109012948](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30109012948)
+  and required [main workflow run 30108791899](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30108791899)
+  were reverified on 2026-07-24. Each completed successfully with both `Validate repository
+  baseline` and `Validate core application` successful.
+- The user explicitly confirmed task commit, push, merge, successful required `main` CI, and
+  completion on 2026-07-24.
+- No CI, completion, or quality exception was used.
+
+The approved PB-0108 rollover now marks PB-0107 `[x]` / 🟢 **DONE**, removes it from Active Work,
+and records it exactly once in the Completion Log.
