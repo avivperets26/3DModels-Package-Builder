@@ -688,6 +688,14 @@ Immutable steps and artifacts retain typed logical ownership, ordering, UTC timi
 references, target association, and staged/validated/promoted lifecycle facts without performing
 filesystem access, hashing, persistence, process execution, or engine work.
 
+PB-0109 models each finding as immutable stable code, one of Info/Warning/Error/Fatal, explicit
+release-blocking state, extensible source component, human-readable explanation, optional related
+PB-0108 artifact identity, and optional corrective action. Severity does not silently determine
+blocking. Stable codes use uppercase ASCII letter-led alphanumeric segments separated by single
+underscores; human text remains separate so filenames, user data, timestamps, GUIDs, paths, and
+changing prose cannot destabilize machine identity. The standalone finding JSON contract is owned
+by Contracts; PB-0910 remains the owner of complete validation reports.
+
 ## 14. User Interface
 
 ### Interaction, Accessibility, and Recovery
