@@ -158,7 +158,18 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0102 | 🟡 **PROCESS** | `feat/PB-0102-product-cases-targets` | Domain Engineering for local work; user for Git gates | 2026-07-24 | PB-0101 rollover is synchronized. Closed immutable product-case and build-target identities, exact canonical identifiers, explicit non-throwing parsing results, and public-behavior tests are implemented and locally validated. Focused PB-0102 tests pass 53/53; all Domain tests pass 161/161, preserving the prior 108; every new production file has 100% line and branch coverage; the normal/main/detached quality and ADR matrix passes in PowerShell 7 and Windows PowerShell 5.1; solution architecture passes 7/7; repository baseline passes 29/29; all nine core-CI stages pass with 164/164 tests and a 0-warning/0-error Release build. | No local implementation or validation blocker. The user-controlled PB-0102 commit and push, merge into and push of `main`, successful required `main` CI, explicit completion confirmation, and next-task rollover remain. |
+| PB-0103 | 🟡 **PROCESS** | `feat/PB-0103-source-assets-textures` | Domain Engineering for local work; user for Git gates | 2026-07-24 | PB-0102 rollover is synchronized. Immutable source-asset kinds and metadata, safe logical-reference validation, all eight canonical texture roles, colour spaces, normal conventions, and renderer-independent texture assignments are implemented and locally validated. Focused PB-0103 tests pass 99/99; all Domain tests pass 260/260; all nine new production files have 100% line and branch coverage; solution architecture passes 7/7; quality validation passes 11/11 in PowerShell 7 and Windows PowerShell 5.1; ADR validation passes 8/8; repository baseline passes 29/29; and all nine core-CI stages pass with 263/263 core tests and a zero-warning/zero-error Release build. | No local implementation or validation blocker. User-controlled staging, commit, push, merge, required `main` CI, explicit completion confirmation, and next-task rollover remain. |
+
+### PB-0102 Completion Evidence
+
+The detailed implementation, validation, and final publication evidence are recorded in `docs/PB-0102_PRODUCT_CASES_TARGETS_EVIDENCE.md`.
+
+- Final task commit `16d89bddcac6d26680a20bd7a30956fde1d09dd2` was pushed on `feat/PB-0102-product-cases-targets`.
+- The task was merged through [pull request #16](https://github.com/avivperets26/3DModels-Package-Builder/pull/16) into `main` as `0ac28fbc61b7f5287c4161b1329b50df19dd7e22`.
+- [PR workflow run 30092231887](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30092231887) and required [main workflow run 30092238172](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30092238172) completed successfully.
+- The user explicitly confirmed the task commit, push, merge, successful required `main` CI, and completion on 2026-07-24.
+- No CI, completion, or quality exception was used.
+- This PB-0103 rollover marks PB-0102 `[x]` / 🟢 **DONE**, removes it from Active Work, and adds exactly one chronological Completion Log row.
 
 ### PB-0101 Completion Evidence
 
@@ -304,6 +315,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0012 | `docs/PB-0012-initial-adrs` | `335691dcceeaa645231539a2ec83a3dae9db2a3e` | [#13](https://github.com/avivperets26/3DModels-Package-Builder/pull/13) | 2026-07-24 | Merged into `main` as `f4b5a5d39b2de97e404f837150bbe0d869e3a366`; [PR workflow run 30083665801](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30083665801) and required [main workflow run 30083674462](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30083674462) succeeded. No exception was used; the user explicitly confirmed all completion gates on 2026-07-24. |
 | PB-0013 | `docs/PB-0013-quality-release-gates` | `8f79883d9a78c1a211510ee4ea8c855405e12e3c` | [#14](https://github.com/avivperets26/3DModels-Package-Builder/pull/14) | 2026-07-24 | Merged into `main` as `859a97a83d6328b45e70cd515a058c10bc519205`; optional [PR workflow run 30087261318](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30087261318) failed in detached-HEAD changed-file validation as documented, while required [main workflow run 30087267104](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30087267104) succeeded. Pull-request CI was optional, no CI exception was used, and the user explicitly confirmed all completion gates on 2026-07-24. |
 | PB-0101 | `feat/PB-0101-product-identity` | `915dda5d7cd6b93b741841336c4e06aea4ad99ef` | [#15](https://github.com/avivperets26/3DModels-Package-Builder/pull/15) | 2026-07-24 | Merged into `main` as `67d8884799a99bcfd5e1407fff534561206424d9`; [PR workflow run 30089954442](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30089954442) and required [main workflow run 30090184878](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30090184878) succeeded. No exception was used; the user explicitly confirmed the task commit, push, merge, successful required `main` CI, and completion on 2026-07-24. |
+| PB-0102 | `feat/PB-0102-product-cases-targets` | `16d89bddcac6d26680a20bd7a30956fde1d09dd2` | [#16](https://github.com/avivperets26/3DModels-Package-Builder/pull/16) | 2026-07-24 | Merged into `main` as `0ac28fbc61b7f5287c4161b1329b50df19dd7e22`; [PR workflow run 30092231887](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30092231887) and required [main workflow run 30092238172](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30092238172) succeeded. No exception was used; the user explicitly confirmed the task commit, push, merge, successful required `main` CI, and completion on 2026-07-24. |
 
 ## 5. Milestones
 
@@ -434,12 +446,12 @@ flowchart LR
   - Depends on: PB-0005
   - Done when: display name, asset ID, folder name, publisher root, validation, and canonical `Albedo` spelling have unit tests.
 
-- [ ] **PB-0102 — Implement product-case and target models** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0102 — Implement product-case and target models** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0102-product-cases-targets`
   - Depends on: PB-0101
   - Done when: static, rigged, rigged-animated, item-set, and item-collection cases plus Portable, Unity, and Unreal targets are represented without engine dependencies.
 
-- [ ] **PB-0103 — Implement source-asset and texture-assignment models** — **P0**
+- [ ] **PB-0103 — Implement source-asset and texture-assignment models** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0103-source-assets-textures`
   - Depends on: PB-0102
   - Done when: FBX, GLB, archive, image, texture-role, colour-space, and normal-convention data are typed and validated.
