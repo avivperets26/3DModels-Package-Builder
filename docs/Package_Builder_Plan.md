@@ -680,6 +680,14 @@ Build status is one of:
 - `PassedWithDisclosures` — only accepted, documented warnings remain.
 - `Failed` — no release package is produced.
 
+PB-0108 models the internal build lifecycle separately from this release-report status. A build
+job begins Queued and follows the exact architecture state machine through preflight, inspection,
+optional review, normalization, target building, preview rendering, validation, marketplace
+packaging, and clean reimport before terminal completion, failure, or approved cancellation.
+Immutable steps and artifacts retain typed logical ownership, ordering, UTC timing, completion
+references, target association, and staged/validated/promoted lifecycle facts without performing
+filesystem access, hashing, persistence, process execution, or engine work.
+
 ## 14. User Interface
 
 ### Interaction, Accessibility, and Recovery
