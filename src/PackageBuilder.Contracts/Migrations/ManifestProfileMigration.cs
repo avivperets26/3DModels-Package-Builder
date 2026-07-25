@@ -3,6 +3,7 @@ using System.Text.Json.Nodes;
 using PackageBuilder.Contracts.Json;
 using PackageBuilder.Contracts.Manifests;
 using PackageBuilder.Contracts.Profiles;
+using PackageBuilder.Domain.Validation;
 
 namespace PackageBuilder.Contracts.Migrations;
 
@@ -70,7 +71,7 @@ public sealed class ManifestProfileMigrationEngine(
         if (comparison == 0)
         {
             MigrationFinalizationResult finalized = _finalize(family, json!);
-            return finalized.IsSuccessful
+            return finalized.IsSuccessful && finalized.Document is not null
                 ? Result(
                     MigrationStatus.CurrentDocument,
                     family,
@@ -88,7 +89,9 @@ public sealed class ManifestProfileMigrationEngine(
                     json,
                     null,
                     null,
-                    finalized.DiagnosticCode ?? "MIGRATION_CURRENT_DOCUMENT_INVALID");
+                    DiagnosticOrFallback(
+                        finalized.DiagnosticCode,
+                        "MIGRATION_CURRENT_DOCUMENT_INVALID"));
         }
 
         if (!_registryResult.IsValid)
@@ -164,7 +167,10 @@ public sealed class ManifestProfileMigrationEngine(
                 stepResult.OutputJson is null ||
                 stepResult.Changes.Any(change => change is null || !change.IsStructurallyValid))
             {
-                return Failure(stepResult.DiagnosticCode ?? "MIGRATION_STEP_FAILED");
+                return Failure(
+                    DiagnosticOrFallback(
+                        stepResult.DiagnosticCode,
+                        "MIGRATION_STEP_FAILED"));
             }
 
             JsonInputError outputError = JsonInputSafeguards.TryParseObject(
@@ -194,7 +200,7 @@ public sealed class ManifestProfileMigrationEngine(
         }
 
         MigrationFinalizationResult finalization = _finalize(family, currentJson);
-        return finalization.IsSuccessful
+        return finalization.IsSuccessful && finalization.Document is not null
             ? Result(
                 MigrationStatus.SuccessfullyMigrated,
                 family,
@@ -204,7 +210,10 @@ public sealed class ManifestProfileMigrationEngine(
                 finalization.Document,
                 ledger,
                 "MIGRATION_SUCCEEDED")
-            : Failure(finalization.DiagnosticCode ?? "MIGRATION_FINAL_DOCUMENT_INVALID");
+            : Failure(
+                DiagnosticOrFallback(
+                    finalization.DiagnosticCode,
+                    "MIGRATION_FINAL_DOCUMENT_INVALID"));
 
         MigrationResult Failure(string code) =>
             Result(
@@ -386,6 +395,7 @@ public sealed class ManifestProfileMigrationEngine(
     {
         if (node is JsonObject objectNode)
         {
+            leaves[pointer] = "$object";
             foreach (KeyValuePair<string, JsonNode?> property in objectNode)
             {
                 Visit(
@@ -396,6 +406,7 @@ public sealed class ManifestProfileMigrationEngine(
         }
         else if (node is JsonArray arrayNode)
         {
+            leaves[pointer] = "$array";
             for (int index = 0; index < arrayNode.Count; index++)
             {
                 Visit(arrayNode[index], $"{pointer}/{index}", leaves);
@@ -403,13 +414,18 @@ public sealed class ManifestProfileMigrationEngine(
         }
         else
         {
-            leaves[pointer] = node?.ToJsonString() ?? "null";
+            leaves[pointer] = $"$value:{node?.ToJsonString() ?? "null"}";
         }
     }
 
     private static string EscapePointer(string value) =>
         value.Replace("~", "~0", StringComparison.Ordinal)
             .Replace("/", "~1", StringComparison.Ordinal);
+
+    private static string DiagnosticOrFallback(string? candidate, string fallback) =>
+        candidate is not null && FindingCode.Create(candidate).IsValid
+            ? candidate
+            : fallback;
 
     private static MigrationResult Result(
         MigrationStatus status,

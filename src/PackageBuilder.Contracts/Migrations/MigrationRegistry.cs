@@ -93,6 +93,18 @@ public sealed class MigrationRegistry
         }
 
         IJsonMigrationStep[] steps = [.. supplied.Cast<IJsonMigrationStep>()];
+        if (steps.Any(
+                step =>
+                    !Enum.IsDefined(step.Family) ||
+                    step.FromVersion is null ||
+                    step.ToVersion is null ||
+                    !versions.ContainsKey(step.Family)))
+        {
+            return MigrationRegistryResult.Failure(
+                MigrationRegistryError.InvalidRegistration,
+                versions);
+        }
+
         if (steps.GroupBy(
                 step => (step.Family, step.FromVersion.Value, step.ToVersion.Value))
             .Any(group => group.Count() != 1))

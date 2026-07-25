@@ -400,9 +400,9 @@ PB-0113 adds the shared manifest/profile migration boundary in Contracts:
   execution, never downgrades or selects a path silently, reparses every output with the existing
   input-size, depth, strict-parser, and recursive duplicate safeguards, and retains exact original
   input audit evidence without exposing raw JSON in diagnostics.
-- Every step supplies an explicit deterministic change ledger. Structural leaf comparison requires
-  additions, removals, renames, defaults, and conversions to be recorded; unrecorded removal or
-  transformation fails closed.
+- Every step supplies an explicit deterministic change ledger. Structural node comparison,
+  including empty objects and arrays, requires additions, removals, renames, defaults, and
+  conversions to be recorded; unrecorded removal or transformation fails closed.
 - Production finalization validates the current embedded schema, reconstructs and semantically
   validates the current Domain aggregate, and uses the existing canonical serializer.
 
