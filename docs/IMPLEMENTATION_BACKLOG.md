@@ -158,7 +158,18 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0110 | 🟡 **PROCESS** | `feat/PB-0110-product-manifest-schema` | Domain and Contracts Engineering for local work; user for Git gates | 2026-07-24 | PB-0109 rollover is synchronized. PB-0110 is locally implemented and its schema, five-case golden fixtures, hostile/invalid matrix, focused 100% branch coverage, four test projects, locked restore, builds, validators, and public-repository safeguards pass. | User-controlled task commit, push, merge, successful required `main` CI, and explicit completion confirmation remain. |
+| PB-0111 | 🟡 **PROCESS** | `feat/PB-0111-profile-schemas` | Domain and Contracts Engineering for local work; user for Git gates | 2026-07-24 | PB-0110 rollover is synchronized. PB-0111 publisher and marketplace profile schemas, strict JSON contracts, public examples, fixtures, and compatibility tests are implemented and validated locally; all 1,022 Release tests pass. | User-controlled staging, task commit, branch push, merge, `main` push, successful required `main` CI, and explicit completion confirmation remain. |
+
+### PB-0110 Completion Evidence
+
+The detailed implementation, validation, and final publication evidence are recorded in `docs/PB-0110_PRODUCT_MANIFEST_SCHEMA_EVIDENCE.md`.
+
+- Final task commit `a88ed992002b34ffdb96a8b1e7b7b596609d6891` was pushed on `feat/PB-0110-product-manifest-schema`.
+- The task was merged through [pull request #24](https://github.com/avivperets26/3DModels-Package-Builder/pull/24) into `main` as `1980b801147e673df23b8d741fe8b5f3bc59832b`.
+- [PR workflow run 30118538985](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30118538985) and required [main workflow run 30118545085](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30118545085) completed successfully.
+- The user explicitly confirmed the task commit, push, merge, successful required `main` CI, and completion on 2026-07-24.
+- No CI, completion, or quality exception was used.
+- This PB-0111 rollover marks PB-0110 `[x]` / 🟢 **DONE**, removes it from Active Work, and adds exactly one chronological Completion Log row.
 
 ### PB-0109 Completion Evidence
 
@@ -400,6 +411,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0107 | `feat/PB-0107-profile-domain` | `7f82d16fe258d7cb81a2c9d3d01c1de8be85c37f` | [#21](https://github.com/avivperets26/3DModels-Package-Builder/pull/21) | 2026-07-24 | Merged into `main` as `236343156b69714376b5f48ec4267483bb991307`; [PR workflow run 30109012948](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30109012948) and required [main workflow run 30108791899](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30108791899) were reverified with both jobs successful. No exception was used; the user explicitly confirmed the task commit, push, merge, successful required `main` CI, and completion on 2026-07-24. |
 | PB-0108 | `feat/PB-0108-build-job-domain` | `3a1646e7b9897ee3cc810ed0a47370c2633884d8` | [#22](https://github.com/avivperets26/3DModels-Package-Builder/pull/22) | 2026-07-24 | Merged into `main` as `dcc1c0b04837f08105e024cf088507a42e234248`; [PR workflow run 30111599624](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30111599624) and required [main workflow run 30111832724](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30111832724) succeeded. No exception was used; the user explicitly confirmed the task commit, push, merge, successful required `main` CI, and completion on 2026-07-24. |
 | PB-0109 | `feat/PB-0109-validation-findings` | `7f8f49bf4bc90166f84482e8dd30f32e195cce30` | [#23](https://github.com/avivperets26/3DModels-Package-Builder/pull/23) | 2026-07-24 | Merged into `main` as `15d41c288aa5718d359620e7e743f2384f894d93`; [PR workflow run 30115151917](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30115151917) and required [main workflow run 30115156865](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30115156865) succeeded. No exception was used; the user explicitly confirmed all completion gates on 2026-07-24. |
+| PB-0110 | `feat/PB-0110-product-manifest-schema` | `a88ed992002b34ffdb96a8b1e7b7b596609d6891` | [#24](https://github.com/avivperets26/3DModels-Package-Builder/pull/24) | 2026-07-24 | Merged into `main` as `1980b801147e673df23b8d741fe8b5f3bc59832b`; [PR workflow run 30118538985](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30118538985) and required [main workflow run 30118545085](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30118545085) succeeded. No exception was used; the user explicitly confirmed all completion gates on 2026-07-24. |
 
 ## 5. Milestones
 
@@ -570,12 +582,12 @@ flowchart LR
   - Depends on: PB-0108
   - Done when: stable codes, severity, blocking state, source, related artifact, explanation, and suggestion are serializable and tested.
 
-- [ ] **PB-0110 — Define and validate the product manifest schema** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0110 — Define and validate the product manifest schema** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0110-product-manifest-schema`
   - Depends on: PB-0103 through PB-0107
   - Done when: JSON Schema and C# models cover all five cases and reject incomplete or contradictory manifests.
 
-- [ ] **PB-0111 — Define publisher and marketplace profile schemas** — **P0**
+- [ ] **PB-0111 — Define publisher and marketplace profile schemas** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0111-profile-schemas`
   - Depends on: PB-0107
   - Done when: versioned schemas and valid example profiles exist for `AvivPeretsFBX` and Fab.

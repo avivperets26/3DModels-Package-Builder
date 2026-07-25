@@ -32,6 +32,15 @@
     <None Include="..\fixtures\manifests\**\*.json"
           Link="fixtures\manifests\%(RecursiveDir)%(Filename)%(Extension)"
           CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\fixtures\profiles\**\*.json"
+          Link="fixtures\profiles\%(RecursiveDir)%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\profiles\publishers\*.json"
+          Link="profiles\publishers\%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\profiles\marketplaces\*.json"
+          Link="profiles\marketplaces\%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

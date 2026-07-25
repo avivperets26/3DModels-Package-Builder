@@ -365,6 +365,30 @@ PB-0110 does not load files, migrate schema versions, resolve publisher/profile 
 product cases, perform engine conversion, or add marketplace-specific listing rules. Those
 responsibilities remain with their documented later PB owners.
 
+PB-0111 adds two separate strict profile boundaries:
+
+- `schemas/publisher-profile.schema.json` has identity
+  `https://schemas.packagebuilder.dev/publisher-profile/v1` and represents the exact PB-0107
+  publisher aggregate through `schemaVersion`, `root`, `displayName`, `supportContact`,
+  `copyright.yearPolicy`, `aiDisclosure`, and optional role-ordered `branding.images`.
+- `schemas/marketplace-profile.schema.json` has identity
+  `https://schemas.packagebuilder.dev/marketplace-profile/v1` and represents only
+  `schemaVersion`, generic `marketplace`, and `profile` identity.
+- `PublisherProfileJson` and `MarketplaceProfileJson` use embedded Draft 2020-12 schemas, the
+  PB-0110 1 MiB input and depth-64 limits, recursive duplicate-property rejection, strict offline
+  schema evaluation, Domain reconstruction, stable lower-camel-case output, omitted optionals,
+  and deterministic UTF-8 serialization.
+- Public retained examples live beneath `profiles/publishers` and `profiles/marketplaces`. The
+  Fab example is identity only; it is not the PB-1001 Fab requirements profile and adds no
+  packaging, media, listing, engine, documentation, upload, or submission behavior.
+
+The PB-0110 product-manifest `publisherProfileReference` is an exact ordinal reference to the
+publisher profile `root`. Its optional marketplace reference uses the same `marketplace` and
+`profile` identity pair as the marketplace profile contract; full profiles are not embedded.
+Profile migration, persistence, discovery, default resolution, documentation rendering, branding
+processing, engine defaults, editor UI, and marketplace requirements remain assigned to their
+existing later tasks.
+
 PB-0108 adds immutable build execution intent in `PackageBuilder.Domain.BuildJobs`:
 
 - `BuildJobState` explicitly represents Queued, Preflight, Inspecting, AwaitingReview,
@@ -559,13 +583,14 @@ C:\Dev\PackageBuilder\
 ├── schemas/
 │   ├── product-manifest.schema.json
 │   ├── publisher-profile.schema.json
+│   ├── marketplace-profile.schema.json
 │   ├── worker-request.schema.json
 │   └── worker-result.schema.json
 ├── profiles/
 │   ├── publishers/
 │   │   └── AvivPeretsFBX.example.json
 │   └── marketplaces/
-│       └── fab.requirements.json
+│       └── fab.identity.example.json
 ├── src/
 │   ├── PackageBuilder.Domain/
 │   ├── PackageBuilder.Application/

@@ -224,6 +224,19 @@ render-pipeline and engine defaults, preview themes, schema representation, pers
 profile resolution remain deferred to their documented PB owners. PB-0107 does not invent
 unapproved defaults for those fields.
 
+PB-0111 defines schema version 1 publisher and generic marketplace identity profiles using JSON
+Schema Draft 2020-12 and strict deterministic Contracts serialization. Publisher JSON contains
+`schemaVersion`, `root`, `displayName`, typed `supportContact`, `copyright` with a conditional
+`yearPolicy`, `aiDisclosure`, and optional `branding.images`. Marketplace JSON contains only
+`schemaVersion`, `marketplace`, and `profile`; the retained Fab example is identity configuration,
+not the independently versioned Fab requirements profile owned by PB-1001.
+
+The public `AvivPeretsFBX` example uses a reserved `example.com` support URL, an explicitly
+review-labelled copyright holder placeholder, and the `undeclared` AI state. These values require
+user review before real publication and are never replaced automatically. No logo binary,
+credential, personal contact, private path, marketplace rule, or final publication claim is
+included.
+
 Example Unity roots:
 
 ```text
