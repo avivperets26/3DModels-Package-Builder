@@ -290,11 +290,18 @@ public sealed class ManifestProfileMigrationTests
             source =>
             {
                 JsonObject output = JsonNode.Parse(source.GetRawText())!.AsObject();
+                string convertedValue = output["oldName"]!.GetValue<string>();
                 output["schemaVersion"] = 2;
                 _ = output.Remove("oldName");
+                output["converted"] = convertedValue;
                 return MigrationStepResult.Success(
                     output.ToJsonString(),
                     [
+                        Change(
+                            MigrationChangeKind.Warning,
+                            "/oldName",
+                            null,
+                            "A warning cannot authorize removal of the matching source."),
                         Change(
                             MigrationChangeKind.Conversion,
                             "/schemaVersion",
@@ -312,6 +319,95 @@ public sealed class ManifestProfileMigrationTests
         Assert.Equal(MigrationStatus.MigrationFailure, result.Status);
         Assert.Equal("MIGRATION_CHANGE_LEDGER_INCOMPLETE", result.DiagnosticCode);
         Assert.Equal(Representative(1, "\"oldName\":\"RetainMe\""), result.OriginalJson);
+
+        IJsonMigrationStep auditedConversion = Step(
+            1,
+            2,
+            source =>
+            {
+                JsonObject output = JsonNode.Parse(source.GetRawText())!.AsObject();
+                output["schemaVersion"] = 2;
+                _ = output.Remove("oldName");
+                return MigrationStepResult.Success(
+                    output.ToJsonString(),
+                    [
+                        Change(
+                            MigrationChangeKind.Conversion,
+                            "/schemaVersion",
+                            "/schemaVersion",
+                            "Advance the controlled schema version."),
+                        Change(
+                            MigrationChangeKind.Conversion,
+                            "/oldName",
+                            "/converted",
+                            "Explicitly audit a controlled conversion."),
+                    ]);
+            });
+        ManifestProfileMigrationEngine conversionEngine = new(
+            MigrationRegistry.Create([auditedConversion], Versions(product: 2)),
+            (_, json) => MigrationFinalizationResult.Success(
+                MigrationFinalDocument.Representative(json)));
+
+        MigrationResult converted = conversionEngine.Migrate(
+            Representative(1, "\"oldName\":\"RetainMe\""));
+
+        Assert.Equal(MigrationStatus.SuccessfullyMigrated, converted.Status);
+    }
+
+    [Theory]
+    [InlineData("{}")]
+    [InlineData("[]")]
+    public void EmptyContainersCannotBeAddedOrRemovedWithoutLedgerEvidence(
+        string emptyContainer)
+    {
+        IJsonMigrationStep silentRemoval = Step(
+            1,
+            2,
+            source =>
+            {
+                JsonObject output = JsonNode.Parse(source.GetRawText())!.AsObject();
+                output["schemaVersion"] = 2;
+                _ = output.Remove("empty");
+                return MigrationStepResult.Success(
+                    output.ToJsonString(),
+                    [
+                        Change(
+                            MigrationChangeKind.Conversion,
+                            "/schemaVersion",
+                            "/schemaVersion",
+                            "Advance the controlled schema version."),
+                    ]);
+            });
+        IJsonMigrationStep silentAddition = Step(
+            1,
+            2,
+            source =>
+            {
+                JsonObject output = JsonNode.Parse(source.GetRawText())!.AsObject();
+                output["schemaVersion"] = 2;
+                output["empty"] = JsonNode.Parse(emptyContainer);
+                return MigrationStepResult.Success(
+                    output.ToJsonString(),
+                    [
+                        Change(
+                            MigrationChangeKind.Conversion,
+                            "/schemaVersion",
+                            "/schemaVersion",
+                            "Advance the controlled schema version."),
+                    ]);
+            });
+
+        MigrationResult removal = Engine(
+            MigrationRegistry.Create([silentRemoval], Versions(product: 2))).Migrate(
+            Representative(1, $"\"empty\":{emptyContainer}"));
+        MigrationResult addition = Engine(
+            MigrationRegistry.Create([silentAddition], Versions(product: 2))).Migrate(
+            Representative(1, "\"oldName\":\"Asset\""));
+
+        Assert.Equal(MigrationStatus.MigrationFailure, removal.Status);
+        Assert.Equal("MIGRATION_CHANGE_LEDGER_INCOMPLETE", removal.DiagnosticCode);
+        Assert.Equal(MigrationStatus.MigrationFailure, addition.Status);
+        Assert.Equal("MIGRATION_CHANGE_LEDGER_INCOMPLETE", addition.DiagnosticCode);
     }
 
     [Fact]
@@ -386,6 +482,14 @@ public sealed class ManifestProfileMigrationTests
         MigrationResult fallback = fallbackDiagnosticEngine.Migrate(
             Representative(1, "\"oldName\":\"Asset\""));
         Assert.Equal("MIGRATION_FINAL_DOCUMENT_INVALID", fallback.DiagnosticCode);
+
+        ManifestProfileMigrationEngine nullDocumentEngine = new(
+            RepresentativeRegistry(),
+            (_, _) => MigrationFinalizationResult.Success(null!));
+        MigrationResult nullDocument = nullDocumentEngine.Migrate(
+            Representative(1, "\"oldName\":\"Asset\""));
+        Assert.Equal(MigrationStatus.MigrationFailure, nullDocument.Status);
+        Assert.Equal("MIGRATION_FINAL_DOCUMENT_INVALID", nullDocument.DiagnosticCode);
     }
 
     [Fact]
@@ -409,6 +513,16 @@ public sealed class ManifestProfileMigrationTests
         MigrationResult fallback = fallbackDiagnosticEngine.Inspect(
             Representative(1, "\"oldName\":\"Asset\""));
         Assert.Equal("MIGRATION_CURRENT_DOCUMENT_INVALID", fallback.DiagnosticCode);
+
+        ManifestProfileMigrationEngine nullDocumentEngine = new(
+            MigrationRegistry.Create([], Versions()),
+            (_, _) => MigrationFinalizationResult.Success(null!));
+        MigrationResult nullDocument = nullDocumentEngine.Inspect(
+            Representative(1, "\"oldName\":\"Asset\""));
+        Assert.Equal(MigrationStatus.InvalidDocument, nullDocument.Status);
+        Assert.Equal(
+            "MIGRATION_CURRENT_DOCUMENT_INVALID",
+            nullDocument.DiagnosticCode);
     }
 
     [Fact]
@@ -528,6 +642,60 @@ public sealed class ManifestProfileMigrationTests
         Assert.Equal(
             MigrationRegistryError.InvalidRegistration,
             MigrationRegistry.Create([], missingFamily).Error);
+
+        IJsonMigrationStep[] invalidSteps =
+        [
+            new InvalidMigrationStep(
+                (MigrationDocumentFamily)999,
+                Version(1),
+                Version(2)),
+            new InvalidMigrationStep(
+                MigrationDocumentFamily.ProductManifest,
+                null!,
+                Version(2)),
+            new InvalidMigrationStep(
+                MigrationDocumentFamily.ProductManifest,
+                Version(1),
+                null!),
+        ];
+        Assert.All(
+            invalidSteps,
+            step => Assert.Equal(
+                MigrationRegistryError.InvalidRegistration,
+                MigrationRegistry.Create([step], Versions(product: 2)).Error));
+    }
+
+    [Fact]
+    public void UntrustedDiagnosticTextFallsBackToStableNonSensitiveCodes()
+    {
+        IJsonMigrationStep leakingStep = Step(
+            1,
+            2,
+            _ => MigrationStepResult.Failure(
+                "{\"secret\":\"SensitiveValue\"}"));
+        MigrationResult stepResult = Engine(
+            MigrationRegistry.Create([leakingStep], Versions(product: 2))).Migrate(
+            Representative(1, "\"oldName\":\"SensitiveValue\""));
+
+        ManifestProfileMigrationEngine leakingFinalizer = new(
+            RepresentativeRegistry(),
+            (_, _) => MigrationFinalizationResult.Failure(
+                "{\"secret\":\"SensitiveValue\"}"));
+        MigrationResult finalizerResult = leakingFinalizer.Migrate(
+            Representative(1, "\"oldName\":\"SensitiveValue\""));
+
+        Assert.Equal("MIGRATION_STEP_FAILED", stepResult.DiagnosticCode);
+        Assert.Equal(
+            "MIGRATION_FINAL_DOCUMENT_INVALID",
+            finalizerResult.DiagnosticCode);
+        Assert.DoesNotContain(
+            "SensitiveValue",
+            stepResult.DiagnosticCode,
+            StringComparison.Ordinal);
+        Assert.DoesNotContain(
+            "SensitiveValue",
+            finalizerResult.DiagnosticCode,
+            StringComparison.Ordinal);
     }
 
     [Fact]
@@ -1007,4 +1175,19 @@ public sealed class ManifestProfileMigrationTests
 
     private static string Read(params string[] parts) =>
         File.ReadAllText(Path.Combine([AppContext.BaseDirectory, .. parts])).Trim();
+
+    private sealed class InvalidMigrationStep(
+        MigrationDocumentFamily family,
+        SchemaVersion fromVersion,
+        SchemaVersion toVersion) : IJsonMigrationStep
+    {
+        public MigrationDocumentFamily Family { get; } = family;
+
+        public SchemaVersion FromVersion { get; } = fromVersion;
+
+        public SchemaVersion ToVersion { get; } = toVersion;
+
+        public MigrationStepResult Migrate(JsonElement source) =>
+            MigrationStepResult.Failure("INVALID_REGISTRATION_MUST_NOT_EXECUTE");
+    }
 }

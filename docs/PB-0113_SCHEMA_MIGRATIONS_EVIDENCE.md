@@ -21,6 +21,26 @@ The PB-0112 rollover uses final task commit
 is `[x]` / 🟢 **DONE**, absent from Active Work, and logged exactly once. PB-0113 remains `[ ]` /
 🟡 **PROCESS**, active, and absent from the Completion Log.
 
+## One-time corrective-publication exception
+
+- **Original PB-0113 task commit:** `94ba52d85255649f8fd003b31943eef241431263`.
+- **Original merge:** `86a1f33cd33e38ab054eb5e47a41147a849259bd`.
+- **Reason:** final migration-audit validation discovered required hardening after the original
+  merge.
+- **Scope:** only these six existing PB-0113 corrective files:
+  - `src/PackageBuilder.Contracts/Migrations/ManifestProfileMigration.cs`
+  - `src/PackageBuilder.Contracts/Migrations/MigrationRegistry.cs`
+  - `tests/PackageBuilder.Contract.Tests/Migrations/ManifestProfileMigrationTests.cs`
+  - `docs/IMPLEMENTATION_BACKLOG.md`
+  - `docs/PB-0113_SCHEMA_MIGRATIONS_EVIDENCE.md`
+  - `docs/TECH_STACK_AND_ARCHITECTURE.md`
+- **Boundary:** the correction contains no new feature or unrelated functionality.
+- **No precedent:** the user-approved exception is one-time, applies only to PB-0113, and creates no
+  precedent for future tasks.
+- **Lifecycle:** PB-0113 remains `[ ]` / 🟡 **PROCESS** and absent from the Completion Log until the
+  corrections are committed and pushed, merged into and pushed on `main`, required corrected
+  `main` CI passes, and the user explicitly confirms completion.
+
 ## Production schema history
 
 No approved legacy production format exists.
@@ -67,14 +87,18 @@ public manifest/profile schema and cannot be selected by the production registry
   shapes fail; no family is guessed.
 - `schemaVersion` must be an exact positive integer representable by `int`.
 - Registrations are explicit, immutable, one-version forward steps. Duplicate registrations,
-  non-contiguous edges, gaps, cycles, downgrades, and multiple outgoing paths are rejected.
+  undefined families, null typed versions, non-contiguous edges, gaps, cycles, downgrades, and
+  multiple outgoing paths are rejected through structured results.
 - Inspection never executes a step. Migration never downgrades and never chooses among paths.
 - Steps receive a read-only `JsonElement` and return new JSON; caller-owned data is not mutated.
-- Every removed leaf, added leaf, or changed leaf must be covered by a compatible change entry.
+- Every removed, added, or changed JSON node, including empty objects and arrays, must be covered
+  by a compatible change entry.
   Silent removal, rename, default, or conversion fails with
   `MIGRATION_CHANGE_LEDGER_INCOMPLETE`.
 - The exact original string is retained as immutable audit evidence but is never interpolated into
-  diagnostics. Expected invalid input uses stable non-throwing status and diagnostic values.
+  diagnostics. Step and finalizer diagnostics must satisfy the PB-0109 stable finding-code grammar
+  or the engine replaces them with a safe fallback. Expected invalid input uses stable
+  non-throwing status and diagnostic values.
 - Each step output is reparsed with the same strict safeguards and must identify the same family
   and its exact registered target version.
 - Final production JSON must pass the current embedded Draft 2020-12 schema, reconstruct and
@@ -92,13 +116,14 @@ public manifest/profile schema and cannot be selected by the production registry
 | Older/newer and current distinction | `ProductionVersionOneDocumentsNeverInventALegacyMigration`, `ControlledRegistryDistinguishesUnsupportedOlderAndMissingStep` |
 | Single- and multi-step migrations | `InspectReportsAvailableWithoutExecutingAndMigrationRunsSingleOrMultipleSteps` |
 | Registry invariants | `RegistryRejectsDuplicatesGapsCyclesDowngradesAndAmbiguousPaths`, `InvalidRegistryIsReportedWithoutSelectingAPath` |
-| Explicit change ledger and no silent loss | `ChangeLedgerExplicitlyRecordsEverySupportedChangeCategory`, `RemovedRenamedOrTransformedDataCannotDisappearWithoutLedgerEvidence` |
+| Explicit change ledger and no silent loss | `ChangeLedgerExplicitlyRecordsEverySupportedChangeCategory`, `RemovedRenamedOrTransformedDataCannotDisappearWithoutLedgerEvidence`, `EmptyContainersCannotBeAddedOrRemovedWithoutLedgerEvidence` |
 | Step/output/final validation failures | `StepFailureExceptionMalformedOutputAndDuplicateOutputFailClosed`, `InvalidChangeShapeAndWrongFamilyOrVersionOutputAreRejected`, `FinalSchemaAndSemanticValidationFailureRejectsMigratedOutput` |
 | Current strict schema and semantic validation | `CurrentProductionDocumentMustPassStrictSchemaAndSemanticValidation` |
 | Immutability and audit retention | `CallerInputAndOriginalAuditEvidenceRemainUnchanged` |
 | Size, depth, duplicate, culture, and determinism boundaries | `MaximumInputSizeAndDepthBoundariesAreEnforced`, `DuplicateVersionAtEveryRepresentativeNestingLevelIsRejected`, `OutputAndDiagnosticsRemainDeterministicAndCultureIndependent` |
 | Typed schema-version behavior | `SchemaVersionValueHasValidatedOrdinalValueSemantics` |
 | Structured invalid registry input | `InvalidRegistryInputsFailWithoutThrowing` |
+| Stable non-sensitive diagnostics | `UntrustedDiagnosticTextFallsBackToStableNonSensitiveCodes` |
 
 ## Scope boundaries
 
@@ -112,20 +137,21 @@ existing owners.
 
 | Validation | Result |
 |---|---|
-| Focused PB-0113 tests | Pass; 43 passed, 0 failed, 0 skipped |
-| Complete Contracts suite | Pass; 381 passed, 0 failed, 0 skipped |
-| All four core test projects | Pass; 1,172 passed, 0 failed, 0 skipped: Domain 789, Application 1, Infrastructure 1, Contracts 381 |
-| Migration-critical coverage | Pass; all seven files report 100% line and 100% branch coverage in `artifacts/PB-0113/coverage-final-2/fabdfff9-6287-4b7a-b587-88cb51322d08/coverage.cobertura.xml` |
+| Focused PB-0113 tests | Pass; 46 passed, 0 failed, 0 skipped |
+| Complete Contracts suite | Pass; 384 passed, 0 failed, 0 skipped |
+| All four core test projects | Pass; 1,175 passed, 0 failed, 0 skipped: Domain 789, Application 1, Infrastructure 1, Contracts 384 |
+| Migration-critical coverage | Pass; every instrumented class in the seven migration source files plus shared `JsonInputSafeguards` reports 100% line and 100% branch coverage in `artifacts/PB-0113/coverage-corrective-final-5/498ade1e-b4b2-43ed-856c-2f52f2fb440a/coverage.cobertura.xml`; the family-only enum file has no executable lines |
 | Repository baseline | Pass; 29 checks, 0 failures |
 | Architecture validator | Pass; 7 checks, 0 failures |
 | ADR validator | Pass; 8 checks, 0 failures |
 | Quality validator | Pass in Windows PowerShell 5.1 and repository-local PowerShell 7.6.4; 11 checks, 0 failures in each |
-| Full local Core CI | Pass; all 9 stages, including locked restore, formatter, Ruff, Release build, and 1,172 tests |
+| Full local Core CI | Pass; all 9 stages, including locked restore, formatter, Ruff, warning-free Release build, and 1,175 tests |
 | Debug and Release builds | Pass; 15 projects, 0 warnings, 0 errors in each configuration |
 | Vulnerability audit | Pass; no vulnerable direct or transitive packages reported across all 15 projects |
 | Formatting and repository checks | Pass; `dotnet format --verify-no-changes --severity info`, Ruff through Core CI, and `git diff --check` |
 
 ## Remaining gates
 
-- User-controlled staging, task commit, branch push, merge, and `main` push.
-- Successful required `main` CI and explicit user completion confirmation.
+- User-controlled staging, corrective commit, branch push, corrective merge into and push of
+  `main`.
+- Successful required `main` CI for the corrections and explicit user completion confirmation.

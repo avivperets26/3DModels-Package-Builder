@@ -158,7 +158,26 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0113 | 🟡 **PROCESS** | `feat/PB-0113-schema-migrations` | Contracts Engineering for local work; user for Git gates | 2026-07-25 | PB-0112 rollover is synchronized. The migration framework, internal representative chain, fixtures, documentation, and exhaustive tests are implemented and validated locally; all 1,172 Release tests and the complete local Core CI entry point pass. | User-controlled staging, task commit, branch push, merge, `main` push, successful required `main` CI, and explicit completion confirmation remain. |
+| PB-0113 | 🟡 **PROCESS** | `feat/PB-0113-schema-migrations` | Contracts Engineering for local work; user for Git gates | 2026-07-25 | PB-0112 rollover is synchronized. The migration framework, internal representative chain, fixtures, documentation, and exhaustive tests are implemented and audit-hardened locally; all 1,175 Release tests, 100% migration-critical line/branch coverage, and the complete local Core CI entry point pass. The user approved the documented one-time PB-0113 corrective-publication exception below. | User-controlled staging, corrective commit, branch push, corrective merge into and push of `main`, successful required corrected `main` CI, and explicit completion confirmation remain. |
+
+### PB-0113 One-Time Corrective-Publication Exception
+
+- **Original task commit:** `94ba52d85255649f8fd003b31943eef241431263`.
+- **Original merge:** `86a1f33cd33e38ab054eb5e47a41147a849259bd`.
+- **Reason:** final migration-audit validation discovered required hardening after the original merge.
+- **Scope:** only these six existing PB-0113 corrective files:
+  - `src/PackageBuilder.Contracts/Migrations/ManifestProfileMigration.cs`
+  - `src/PackageBuilder.Contracts/Migrations/MigrationRegistry.cs`
+  - `tests/PackageBuilder.Contract.Tests/Migrations/ManifestProfileMigrationTests.cs`
+  - `docs/IMPLEMENTATION_BACKLOG.md`
+  - `docs/PB-0113_SCHEMA_MIGRATIONS_EVIDENCE.md`
+  - `docs/TECH_STACK_AND_ARCHITECTURE.md`
+- **Boundary:** the correction adds no new feature or unrelated functionality.
+- **No precedent:** this one-time exception applies only to PB-0113 and creates no precedent for
+  future tasks.
+- **Lifecycle:** PB-0113 remains `[ ]` / 🟡 **PROCESS** and absent from the Completion Log until the
+  corrections are committed and pushed, merged into and pushed on `main`, required corrected
+  `main` CI passes, and the user explicitly confirms completion.
 
 ### PB-0112 Completion Evidence
 
