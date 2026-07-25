@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.packagebuilder.dev/worker-result/v1",
+  "title": "Package Builder worker result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocolVersion",
+    "jobId",
+    "status",
+    "workerVersion",
+    "outputsPromoted",
+    "artifacts",
+    "findings",
+    "metrics",
+    "logReferences",
+    "retrySafety"
+  ],
+  "properties": {
+    "protocolVersion": { "const": 1 },
+    "jobId": { "$ref": "#/$defs/identity" },
+    "status": { "enum": [ "success", "failure", "cancelled" ] },
+    "workerVersion": { "$ref": "#/$defs/versionText" },
+    "engineVersion": { "$ref": "#/$defs/versionText" },
+    "outputsPromoted": { "type": "boolean" },
+    "artifacts": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/artifact" }
+    },
+    "findings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/finding" }
+    },
+    "metrics": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/metric" }
+    },
+    "logReferences": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/logicalReference" }
+    },
+    "retrySafety": { "enum": [ "safe", "unsafe", "requires-cleanup" ] },
+    "cancellation": { "$ref": "#/$defs/cancellation" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "success" } }, "required": [ "status" ] },
+      "then": {
+        "properties": {
+          "retrySafety": { "const": "unsafe" }
+        },
+        "not": { "required": [ "cancellation" ] }
+      }
+    },
+    {
+      "if": { "properties": { "status": { "const": "failure" } }, "required": [ "status" ] },
+      "then": {
+        "properties": { "outputsPromoted": { "const": false } },
+        "not": { "required": [ "cancellation" ] }
+      }
+    },
+    {
+      "if": { "properties": { "status": { "const": "cancelled" } }, "required": [ "status" ] },
+      "then": {
+        "required": [ "cancellation" ],
+        "properties": {
+          "outputsPromoted": { "const": false },
+          "retrySafety": { "enum": [ "safe", "requires-cleanup" ] }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "identity": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^\\S(?:[^\\u0000-\\u001F\\u007F]*\\S)?$"
+    },
+    "canonicalIdentifier": {
+      "type": "string",
+      "pattern": "^[a-z]+(?:-[a-z]+)*$"
+    },
+    "versionText": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._+-]*$"
+    },
+    "logicalReference": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![/\\\\])(?![A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.?(/|$))(?!.*//)(?!.*:)(?!.*[\\u0000-\\u001F\\u007F$%])\\S(?:.*\\S)?$"
+    },
+    "humanText": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^\\S(?:[^\\u0000-\\u001F\\u007F]*\\S)?$"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [ "artifactId", "jobId", "role", "logicalReference" ],
+      "properties": {
+        "artifactId": { "$ref": "#/$defs/identity" },
+        "jobId": { "$ref": "#/$defs/identity" },
+        "role": { "$ref": "#/$defs/canonicalIdentifier" },
+        "logicalReference": { "$ref": "#/$defs/logicalReference" },
+        "target": { "enum": [ "portable", "unity", "unreal" ] },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "byteCount": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "findingCode": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9]*(?:_[A-Z][A-Z0-9]*)*$"
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [ "code", "severity", "explanation", "source", "blocksRelease" ],
+      "properties": {
+        "code": { "$ref": "#/$defs/findingCode" },
+        "severity": { "enum": [ "info", "warning", "error", "fatal" ] },
+        "explanation": { "$ref": "#/$defs/humanText" },
+        "source": { "$ref": "#/$defs/canonicalIdentifier" },
+        "relatedArtifactId": { "$ref": "#/$defs/identity" },
+        "suggestedAction": { "$ref": "#/$defs/humanText" },
+        "blocksRelease": { "type": "boolean" }
+      }
+    },
+    "metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [ "metricId", "value", "unit" ],
+      "properties": {
+        "metricId": { "$ref": "#/$defs/canonicalIdentifier" },
+        "value": { "type": "number" },
+        "unit": { "enum": [ "milliseconds", "bytes", "count", "percent" ] }
+      }
+    },
+    "cancellation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [ "outcome" ],
+      "properties": {
+        "outcome": { "enum": [ "acknowledged", "partial" ] },
+        "details": { "$ref": "#/$defs/humanText" }
+      }
+    }
+  }
+}

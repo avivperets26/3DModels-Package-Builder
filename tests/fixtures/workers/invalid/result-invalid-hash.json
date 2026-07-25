@@ -1,0 +1,1 @@
+{"protocolVersion":1,"jobId":"Job-01","status":"success","workerVersion":"1.0.0","outputsPromoted":true,"artifacts":[{"artifactId":"Artifact-01","jobId":"Job-01","role":"unity-package","logicalReference":"targets/unity/Product.unitypackage","sha256":"ABCDEF"}],"findings":[],"metrics":[],"logReferences":[],"retrySafety":"unsafe"}

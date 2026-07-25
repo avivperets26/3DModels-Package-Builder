@@ -1,0 +1,1 @@
+{"protocolVersion":1,"eventKind":"finding","jobId":"Job-01","finding":{"code":"UNITY_TEXTURE_ALPHA_UNUSED","severity":"warning","explanation":"The texture alpha channel is not used.","source":"unity-worker","suggestedAction":"Review the material opacity intent.","blocksRelease":false}}
