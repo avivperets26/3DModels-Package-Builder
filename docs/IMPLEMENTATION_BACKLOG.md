@@ -158,26 +158,34 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0113 | 🟡 **PROCESS** | `feat/PB-0113-schema-migrations` | Contracts Engineering for local work; user for Git gates | 2026-07-25 | PB-0112 rollover is synchronized. The migration framework, internal representative chain, fixtures, documentation, and exhaustive tests are implemented and audit-hardened locally; all 1,175 Release tests, 100% migration-critical line/branch coverage, and the complete local Core CI entry point pass. The user approved the documented one-time PB-0113 corrective-publication exception below. | User-controlled staging, corrective commit, branch push, corrective merge into and push of `main`, successful required corrected `main` CI, and explicit completion confirmation remain. |
+| PB-0201 | 🟡 **PROCESS** | `feat/PB-0201-configuration-paths` | Core/Application and Infrastructure Engineering for local work; user for Git gates | 2026-07-25 | PB-0113 rollover is synchronized. Typed deterministic configuration loading, canonical Windows root containment, approved hierarchy validation, sanitized structured failures, isolated reparse-point inspection, exhaustive boundary/integration tests, 100% new-file line/branch coverage, and the complete local Core CI entry point pass. | User-controlled staging, task commit, branch push, merge into and push of `main`, successful required `main` CI, and explicit completion confirmation remain. |
 
-### PB-0113 One-Time Corrective-Publication Exception
+### PB-0113 Completion Evidence
 
-- **Original task commit:** `94ba52d85255649f8fd003b31943eef241431263`.
-- **Original merge:** `86a1f33cd33e38ab054eb5e47a41147a849259bd`.
-- **Reason:** final migration-audit validation discovered required hardening after the original merge.
-- **Scope:** only these six existing PB-0113 corrective files:
-  - `src/PackageBuilder.Contracts/Migrations/ManifestProfileMigration.cs`
-  - `src/PackageBuilder.Contracts/Migrations/MigrationRegistry.cs`
-  - `tests/PackageBuilder.Contract.Tests/Migrations/ManifestProfileMigrationTests.cs`
-  - `docs/IMPLEMENTATION_BACKLOG.md`
-  - `docs/PB-0113_SCHEMA_MIGRATIONS_EVIDENCE.md`
-  - `docs/TECH_STACK_AND_ARCHITECTURE.md`
-- **Boundary:** the correction adds no new feature or unrelated functionality.
-- **No precedent:** this one-time exception applies only to PB-0113 and creates no precedent for
-  future tasks.
-- **Lifecycle:** PB-0113 remains `[ ]` / 🟡 **PROCESS** and absent from the Completion Log until the
-  corrections are committed and pushed, merged into and pushed on `main`, required corrected
-  `main` CI passes, and the user explicitly confirms completion.
+The detailed implementation, validation, correction history, and final publication evidence are
+recorded in `docs/PB-0113_SCHEMA_MIGRATIONS_EVIDENCE.md`.
+
+- Original task commit `94ba52d85255649f8fd003b31943eef241431263` was pushed on
+  `feat/PB-0113-schema-migrations`.
+- The original task was merged through [pull request #27](https://github.com/avivperets26/3DModels-Package-Builder/pull/27)
+  into `main` as `86a1f33cd33e38ab054eb5e47a41147a849259bd`;
+  [PR workflow run 30157194135](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30157194135)
+  and original required [main workflow run 30157196092](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30157196092)
+  succeeded.
+- Final migration-audit validation discovered required hardening after the original merge. Under
+  the explicitly approved one-time PB-0113 corrective-publication exception, corrective commit
+  `db481f0b7af894534f854e7b890a10ed185ffcdb` was pushed on the same task branch and merged
+  directly into `main` as `64eddf0b5c8af839567796b87640a0d8119eeef5`.
+- Corrected required [main workflow run 30162027888](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30162027888)
+  was independently verified as a completed successful `push` run on `main` for that exact
+  corrective merge, created at `2026-07-25T14:38:28Z` and completed at
+  `2026-07-25T14:42:16Z`.
+- The user explicitly confirmed corrected green required `main` CI and PB-0113 completion on
+  2026-07-25.
+- The corrective exception applied only to PB-0113, changed no unrelated feature, and creates no
+  precedent for PB-0201 or any future task.
+- This PB-0201 rollover marks PB-0113 `[x]` / 🟢 **DONE**, removes it from Active Work, adds
+  exactly one chronological Completion Log row, and records E01 complete.
 
 ### PB-0112 Completion Evidence
 
@@ -455,6 +463,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0110 | `feat/PB-0110-product-manifest-schema` | `a88ed992002b34ffdb96a8b1e7b7b596609d6891` | [#24](https://github.com/avivperets26/3DModels-Package-Builder/pull/24) | 2026-07-24 | Merged into `main` as `1980b801147e673df23b8d741fe8b5f3bc59832b`; [PR workflow run 30118538985](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30118538985) and required [main workflow run 30118545085](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30118545085) succeeded. No exception was used; the user explicitly confirmed all completion gates on 2026-07-24. |
 | PB-0111 | `feat/PB-0111-profile-schemas` | `c49cf2755458c409fde41714a29a275f38ce9a92` | [#25](https://github.com/avivperets26/3DModels-Package-Builder/pull/25) | 2026-07-25 | Merged into `main` as `9e2f4f3dbf4cc8e313afdb1374db3af4fc0de653`; [PR workflow run 30152657016](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30152657016) and required [main workflow run 30152658843](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30152658843) succeeded. No exception was used; the user explicitly confirmed all completion gates on 2026-07-25. |
 | PB-0112 | `feat/PB-0112-worker-contracts` | `a22f913108870b24ead8dde38833ae3e56c02c47` | [#26](https://github.com/avivperets26/3DModels-Package-Builder/pull/26) | 2026-07-25 | Merged into `main` as `e8c31a221dedd49daac0e1e35d29fb5df2f43642`; [PR workflow run 30155442329](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30155442329) and required [main workflow run 30155444972](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30155444972) succeeded. No exception was used; the user explicitly confirmed all completion gates on 2026-07-25. |
+| PB-0113 | `feat/PB-0113-schema-migrations` | `db481f0b7af894534f854e7b890a10ed185ffcdb` | [#27](https://github.com/avivperets26/3DModels-Package-Builder/pull/27) — original cycle; corrective cycle had no PR | 2026-07-25 | Original task commit `94ba52d85255649f8fd003b31943eef241431263` merged through PR #27 as `86a1f33cd33e38ab054eb5e47a41147a849259bd`; [PR workflow run 30157194135](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30157194135) and original required [main workflow run 30157196092](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30157196092) succeeded. Under the explicitly approved one-time PB-0113 exception, corrective commit `db481f0b7af894534f854e7b890a10ed185ffcdb` merged directly into `main` as `64eddf0b5c8af839567796b87640a0d8119eeef5`; corrected required [main workflow run 30162027888](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30162027888) succeeded for that exact merge. The user explicitly confirmed corrected green required `main` CI and completion on 2026-07-25. The PB-0113-only exception creates no precedent. |
 
 ## 5. Milestones
 
@@ -640,12 +649,13 @@ flowchart LR
   - Depends on: PB-0108, PB-0109
   - Done when: request/result JSON schemas, JSON Lines progress events, protocol versioning, cancellation, artifacts, and retry safety have contract tests.
 
-- [ ] **PB-0113 — Add manifest/profile migration framework** — **P1** — 🟡 **PROCESS**
+- [x] **PB-0113 — Add manifest/profile migration framework** — **P1** — 🟢 **DONE**
   - Branch: `feat/PB-0113-schema-migrations`
   - Depends on: PB-0110, PB-0111
   - Done when: older schema versions can be detected and upgraded through explicit tested migrations without silent data loss.
 
-**E01 exit:** Typed models and schemas can describe valid examples for all five product cases.
+**E01 exit:** Complete. Typed models and schemas describe valid examples for all five product
+cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 ---
 
@@ -653,7 +663,7 @@ flowchart LR
 
 **Goal:** Source-safe staging, persistence, process execution, caching, and atomic release promotion.
 
-- [ ] **PB-0201 — Implement configuration loading and path-root validation** — **P0**
+- [ ] **PB-0201 — Implement configuration loading and path-root validation** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0201-configuration-paths`
   - Depends on: PB-0108
   - Done when: repository, tools, downloads, data, jobs, cache, temp, templates, builds, artifacts, and logs roots are typed and normalized; every writable/project-owned path is a descendant of `C:\Dev\PackageBuilder`; and sibling, user-profile, system-temp, root, unresolved, and reparse-point escapes are rejected.

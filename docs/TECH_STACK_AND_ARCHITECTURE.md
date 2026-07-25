@@ -729,6 +729,57 @@ C:\Dev\PackageBuilder\
 
 Source snapshots use hard links only when safety can be proven; otherwise they are copied. A job never writes into `runtime-data/source-assets`. All configured roots are canonicalized and rejected unless they are descendants of `C:\Dev\PackageBuilder`; the application does not fall back to user-profile, sibling, or system-temporary paths.
 
+### 9.1 PB-0201 path configuration
+
+PB-0201 uses one source-controlled repository-root file, `packagebuilder.paths.json`, with exact
+schema version 1. There is no environment-variable, command-line, AppData, user-profile,
+registry, `appsettings` profile, or current-working-directory precedence chain. The loader reads
+only `C:\Dev\PackageBuilder\packagebuilder.paths.json`; loading never creates a directory, rewrites
+configuration, expands placeholders, or silently repairs a rejected value.
+
+The exact JSON shape is:
+
+```json
+{
+  "schemaVersion": 1,
+  "roots": {
+    "repository": "C:\\Dev\\PackageBuilder",
+    "tools": "tools",
+    "downloads": "downloads",
+    "data": "runtime-data",
+    "sourceAssets": "runtime-data\\source-assets",
+    "jobs": "runtime-data\\jobs",
+    "cache": "runtime-data\\engine-caches",
+    "temp": "runtime-data\\temp",
+    "templates": "runtime-data\\engine-templates",
+    "builds": "artifacts\\Builds",
+    "artifacts": "artifacts",
+    "logs": "logs"
+  }
+}
+```
+
+Relative values resolve only against the approved repository root. Canonical values use
+case-insensitive ordinal Windows comparison, directory-boundary containment, immutable typed root
+identities, and stable culture-independent hashing. `sourceAssets`, `jobs`, `cache`, `temp`, and
+`templates` must be dedicated descendants of `data`; `builds` must be a dedicated descendant of
+`artifacts`; the top-level operational roots and same-parent children may not collide or use
+unapproved nesting.
+
+Validation rejects empty or unresolved values, malformed or unknown JSON, duplicate properties,
+drive-relative, separator-rooted, UNC, device/extended-length, alternate-data-stream, invalid,
+other-drive, sibling-prefix, traversal, user-profile, system, and project-root-as-child paths.
+Physical inspection is isolated behind `IReparsePointInspector`; the Windows implementation
+rejects any existing reparse point crossed by a configured root, including the nearest existing
+ancestor of a nonexistent descendant. Failures use stable codes, the logical property name, and
+sanitized actionable diagnostics rather than echoing the rejected physical value.
+
+This boundary validates a point-in-time configuration and its currently existing ancestors. It
+does not claim protection against a privileged or concurrent actor replacing a validated
+directory with a junction, symbolic link, or other reparse point after validation. Every later
+file operation must revalidate its exact source/destination as close to use as practical and use
+the narrower safe-operation controls owned by PB-0202, PB-0203, PB-0205, PB-0206, and PB-0214.
+
 ## 10. Build Job State Machine
 
 ```mermaid

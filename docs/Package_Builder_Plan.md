@@ -801,6 +801,17 @@ C:\Dev\PackageBuilder\
 
 No project operation may fall back to a sibling data directory, the user profile, or the system temporary directory. Runtime and generated directories remain outside Git through repository ignore rules, but they do not live outside the project root.
 
+PB-0201 makes these locations explicit in the repository-root
+`packagebuilder.paths.json` schema-version-1 file. The file has no environment or machine-level
+override precedence: relative roots resolve against `C:\Dev\PackageBuilder`, and all roots are
+validated without creating or repairing directories. The configured mapping is repository
+(`C:\Dev\PackageBuilder`), tools (`tools`), downloads (`downloads`), data (`runtime-data`),
+source assets (`runtime-data/source-assets`), jobs (`runtime-data/jobs`), cache
+(`runtime-data/engine-caches`), temp (`runtime-data/temp`), templates
+(`runtime-data/engine-templates`), builds (`artifacts/Builds`), artifacts (`artifacts`), and logs
+(`logs`). Physical reparse-point inspection is separate from pure configuration/path semantics,
+and point-in-time validation does not claim to eliminate later filesystem replacement races.
+
 The supported development workflow uses the repository-local .NET SDK through PowerShell and `dotnet` commands in Visual Studio Code. Paid Visual Studio is optional and no required task may depend on its IDE, designer, test runner, or build system. Every required technology must have a no-cost local path; optional remote hosting and CI cannot be necessary for local builds.
 
 The user-approved public GitHub repository is [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder). The original planned repository name is `package-builder`; its difference from the actual repository name remains unresolved until the user makes a separate decision. Code namespaces begin with `PackageBuilder`; marketplace-specific modules use names such as `PackageBuilder.Marketplaces.Fab`.

@@ -2,7 +2,7 @@
 
 **Task:** PB-0113 — Add manifest/profile migration framework  
 **Branch:** `feat/PB-0113-schema-migrations`  
-**Lifecycle:** 🟡 **PROCESS**  
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-07-25
 
 ## Scope and rollover
@@ -18,8 +18,9 @@ The PB-0112 rollover uses final task commit
 `a22f913108870b24ead8dde38833ae3e56c02c47`, pull request #26, merge
 `e8c31a221dedd49daac0e1e35d29fb5df2f43642`, successful PR run `30155442329`, successful required
 `main` run `30155444972`, and user confirmation dated 2026-07-25. No exception was used. PB-0112
-is `[x]` / 🟢 **DONE**, absent from Active Work, and logged exactly once. PB-0113 remains `[ ]` /
-🟡 **PROCESS**, active, and absent from the Completion Log.
+is `[x]` / 🟢 **DONE**, absent from Active Work, and logged exactly once. PB-0113 is synchronized
+as `[x]` / 🟢 **DONE**, absent from Active Work, and logged exactly once during the PB-0201
+rollover.
 
 ## One-time corrective-publication exception
 
@@ -37,9 +38,17 @@ is `[x]` / 🟢 **DONE**, absent from Active Work, and logged exactly once. PB-0
 - **Boundary:** the correction contains no new feature or unrelated functionality.
 - **No precedent:** the user-approved exception is one-time, applies only to PB-0113, and creates no
   precedent for future tasks.
-- **Lifecycle:** PB-0113 remains `[ ]` / 🟡 **PROCESS** and absent from the Completion Log until the
-  corrections are committed and pushed, merged into and pushed on `main`, required corrected
-  `main` CI passes, and the user explicitly confirms completion.
+- **Publication:** corrective commit `db481f0b7af894534f854e7b890a10ed185ffcdb` was pushed on the
+  task branch and merged directly into `main` as
+  `64eddf0b5c8af839567796b87640a0d8119eeef5`.
+- **Corrected CI:** required [main workflow run 30162027888](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30162027888)
+  was independently verified as a completed successful `push` run on `main` for the exact
+  corrective merge.
+- **Confirmation:** the user explicitly confirmed corrected green required `main` CI and PB-0113
+  completion on 2026-07-25.
+- **Lifecycle:** PB-0113 is `[x]` / 🟢 **DONE**, removed from Active Work, and recorded exactly once
+  in the Completion Log during the PB-0201 rollover. The PB-0113-only exception creates no
+  precedent.
 
 ## Production schema history
 
@@ -150,8 +159,16 @@ existing owners.
 | Vulnerability audit | Pass; no vulnerable direct or transitive packages reported across all 15 projects |
 | Formatting and repository checks | Pass; `dotnet format --verify-no-changes --severity info`, Ruff through Core CI, and `git diff --check` |
 
-## Remaining gates
+## Publication evidence
 
-- User-controlled staging, corrective commit, branch push, corrective merge into and push of
-  `main`.
-- Successful required `main` CI for the corrections and explicit user completion confirmation.
+- Original task commit `94ba52d85255649f8fd003b31943eef241431263` merged through
+  [pull request #27](https://github.com/avivperets26/3DModels-Package-Builder/pull/27) as
+  `86a1f33cd33e38ab054eb5e47a41147a849259bd`.
+- [PR workflow run 30157194135](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30157194135)
+  and original required [main workflow run 30157196092](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30157196092)
+  succeeded.
+- Corrective commit `db481f0b7af894534f854e7b890a10ed185ffcdb` merged directly into
+  `main` as `64eddf0b5c8af839567796b87640a0d8119eeef5`.
+- Corrected required [main workflow run 30162027888](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30162027888)
+  succeeded for that exact merge; the user confirmed corrected green CI and completion on
+  2026-07-25.
