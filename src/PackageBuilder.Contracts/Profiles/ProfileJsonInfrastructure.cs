@@ -2,13 +2,14 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using Json.Schema;
+using PackageBuilder.Contracts.Json;
 
 namespace PackageBuilder.Contracts.Profiles;
 
 internal static class ProfileJsonInfrastructure
 {
-    public const int MaximumInputCharacters = 1_048_576;
-    public const int MaximumDepth = 64;
+    public const int MaximumInputCharacters = JsonInputSafeguards.MaximumInputCharacters;
+    public const int MaximumDepth = JsonInputSafeguards.MaximumDepth;
     public const string SchemaDraft = "https://json-schema.org/draft/2020-12/schema";
 
     public static string ReadSchemaText(string resourceName)
@@ -69,36 +70,23 @@ internal static class ProfileJsonInfrastructure
         string? json,
         JsonSchema schema)
     {
-        if (json is null)
+        JsonInputError inputError = JsonInputSafeguards.TryParseObject(
+            json,
+            MaximumInputCharacters,
+            out JsonDocument? document);
+        if (inputError != JsonInputError.None)
         {
-            return new(false, "JSON is null.");
+            return new(false, inputError.ToString());
         }
 
-        if (json.Length > MaximumInputCharacters)
+        using (document!)
         {
-            return new(false, "JSON exceeds the approved 1 MiB character limit.");
-        }
-
-        try
-        {
-            using var document = JsonDocument.Parse(
-                json,
-                new JsonDocumentOptions { MaxDepth = MaximumDepth });
-            if (ContainsDuplicateProperty(document.RootElement))
-            {
-                return new(false, "JSON contains a duplicate property.");
-            }
-
             EvaluationResults results = schema.Evaluate(
-                document.RootElement,
+                document!.RootElement,
                 new EvaluationOptions { OutputFormat = OutputFormat.List });
             return new(
                 results.IsValid,
                 results.IsValid ? null : JsonSerializer.Serialize(results));
-        }
-        catch (JsonException exception)
-        {
-            return new(false, exception.Message);
         }
     }
 
@@ -107,54 +95,28 @@ internal static class ProfileJsonInfrastructure
         JsonSchema schema,
         out JsonDocument? document)
     {
-        document = null;
-        if (json is null)
+        JsonInputError inputError = JsonInputSafeguards.TryParseObject(
+            json,
+            MaximumInputCharacters,
+            out document);
+        ProfileJsonError error = inputError switch
         {
-            return ProfileJsonError.NullJson;
-        }
-
-        if (json.Length == 0)
+            JsonInputError.None => ProfileJsonError.None,
+            JsonInputError.Null => ProfileJsonError.NullJson,
+            JsonInputError.Empty => ProfileJsonError.EmptyJson,
+            JsonInputError.TooLarge => ProfileJsonError.InputTooLarge,
+            JsonInputError.Malformed => ProfileJsonError.MalformedJson,
+            JsonInputError.RootMustBeObject => ProfileJsonError.RootMustBeObject,
+            JsonInputError.DuplicateProperty => ProfileJsonError.DuplicateProperty,
+            _ => ProfileJsonError.MalformedJson,
+        };
+        if (error != ProfileJsonError.None)
         {
-            return ProfileJsonError.EmptyJson;
-        }
-
-        if (json.Length > MaximumInputCharacters)
-        {
-            return ProfileJsonError.InputTooLarge;
-        }
-
-        try
-        {
-            document = JsonDocument.Parse(
-                json,
-                new JsonDocumentOptions
-                {
-                    AllowTrailingCommas = false,
-                    CommentHandling = JsonCommentHandling.Disallow,
-                    MaxDepth = MaximumDepth,
-                });
-        }
-        catch (JsonException)
-        {
-            return ProfileJsonError.MalformedJson;
-        }
-
-        if (document.RootElement.ValueKind != JsonValueKind.Object)
-        {
-            document.Dispose();
-            document = null;
-            return ProfileJsonError.RootMustBeObject;
-        }
-
-        if (ContainsDuplicateProperty(document.RootElement))
-        {
-            document.Dispose();
-            document = null;
-            return ProfileJsonError.DuplicateProperty;
+            return error;
         }
 
         EvaluationResults schemaResult = schema.Evaluate(
-            document.RootElement,
+            document!.RootElement,
             new EvaluationOptions { OutputFormat = OutputFormat.Flag });
         if (!schemaResult.IsValid)
         {
@@ -164,33 +126,6 @@ internal static class ProfileJsonInfrastructure
         }
 
         return ProfileJsonError.None;
-    }
-
-    private static bool ContainsDuplicateProperty(JsonElement element)
-    {
-        if (element.ValueKind == JsonValueKind.Object)
-        {
-            var names = new HashSet<string>(StringComparer.Ordinal);
-            foreach (JsonProperty property in element.EnumerateObject())
-            {
-                if (!names.Add(property.Name) || ContainsDuplicateProperty(property.Value))
-                {
-                    return true;
-                }
-            }
-        }
-        else if (element.ValueKind == JsonValueKind.Array)
-        {
-            foreach (JsonElement item in element.EnumerateArray())
-            {
-                if (ContainsDuplicateProperty(item))
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 
     private static BuildOptions CreateBuildOptions() =>

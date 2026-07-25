@@ -247,6 +247,26 @@ metrics, safe logical log references, retry safety, and first-class cancellation
 contracts perform no filesystem, process, networking, hashing, retry, or cancellation-signalling
 work. PB-0201, PB-0204, PB-0207, PB-0208, PB-0209, and PB-0213 retain those responsibilities.
 
+PB-0113 adds a renderer- and filesystem-independent migration boundary for product manifests,
+publisher profiles, and generic marketplace identity profiles. It detects family and validated
+positive schema version deterministically, reuses the strict JSON size, depth, duplicate-property,
+and parsing safeguards, and reports current, available, migrated, invalid, unsupported, missing,
+ambiguous, or failed outcomes without silently choosing a path. An explicit immutable registry
+accepts only unique contiguous forward steps; every step returns a deterministic additions,
+removals, renames, defaults, conversions, warnings, and review ledger, and structural comparison
+rejects any unrecorded data loss or transformation. The exact original input is retained for
+audit, while diagnostics contain stable codes rather than raw JSON.
+
+Repository evidence confirms that the public production manifest and both profile families begin
+at version 1. No approved pre-version-1 production contract exists, so the production migration
+registry is intentionally empty and version-1 documents require no migration. The generic
+framework is tested through retained internal-only representative version 1 → 2 → 3 fixtures;
+these fixtures are not a public schema. Final migrated production JSON must pass the current
+strict schema, current Domain semantic validation, and existing canonical serializer. PB-0113
+does not change production schemas to version 2, fabricate legacy data, access files, migrate
+SQLite or engine templates, migrate marketplace-requirements profiles, communicate over a
+network, or add UI.
+
 Example Unity roots:
 
 ```text

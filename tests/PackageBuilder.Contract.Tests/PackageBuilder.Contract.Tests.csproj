@@ -38,6 +38,9 @@
     <None Include="..\fixtures\workers\**\*.json"
           Link="fixtures\workers\%(RecursiveDir)%(Filename)%(Extension)"
           CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\fixtures\migrations\**\*.json"
+          Link="fixtures\migrations\%(RecursiveDir)%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\..\profiles\publishers\*.json"
           Link="profiles\publishers\%(Filename)%(Extension)"
           CopyToOutputDirectory="PreserveNewest" />

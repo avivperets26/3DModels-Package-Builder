@@ -389,6 +389,31 @@ Profile migration, persistence, discovery, default resolution, documentation ren
 processing, engine defaults, editor UI, and marketplace requirements remain assigned to their
 existing later tasks.
 
+PB-0113 adds the shared manifest/profile migration boundary in Contracts:
+
+- `SchemaVersion` is a validated positive `int`-bounded compatibility value.
+- `MigrationDocumentFamily` covers product manifests, publisher profiles, and generic marketplace
+  identity profiles without including marketplace-requirements profiles.
+- `MigrationRegistry` contains explicit compiled steps and rejects duplicates, gaps, cycles,
+  downgrades, non-contiguous edges, and ambiguous outgoing paths before execution.
+- `ManifestProfileMigrationEngine` separates side-effect-free compatibility inspection from
+  execution, never downgrades or selects a path silently, reparses every output with the existing
+  input-size, depth, strict-parser, and recursive duplicate safeguards, and retains exact original
+  input audit evidence without exposing raw JSON in diagnostics.
+- Every step supplies an explicit deterministic change ledger. Structural leaf comparison requires
+  additions, removals, renames, defaults, and conversions to be recorded; unrecorded removal or
+  transformation fails closed.
+- Production finalization validates the current embedded schema, reconstructs and semantically
+  validates the current Domain aggregate, and uses the existing canonical serializer.
+
+The first tracked product-manifest schema (PB-0110) and both first tracked profile schemas
+(PB-0111) are version 1. No approved legacy production format exists. The production registry is
+therefore empty at PB-0113, version-1 inputs report current/no migration required, and positive
+future versions fail closed. Retained internal representative fixtures exercise a generic
+version 1 → 2 → 3 chain without changing a production schema or claiming a public legacy
+contract. File discovery/persistence, SQLite, engine-template, marketplace-requirements-profile,
+network, telemetry, and UI migration behavior remain outside PB-0113.
+
 PB-0108 adds immutable build execution intent in `PackageBuilder.Domain.BuildJobs`:
 
 - `BuildJobState` explicitly represents Queued, Preflight, Inspecting, AwaitingReview,

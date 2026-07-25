@@ -2,14 +2,15 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using Json.Schema;
+using PackageBuilder.Contracts.Json;
 
 namespace PackageBuilder.Contracts.Workers;
 
 internal static class WorkerJsonInfrastructure
 {
-    public const int MaximumInputCharacters = 1_048_576;
+    public const int MaximumInputCharacters = JsonInputSafeguards.MaximumInputCharacters;
     public const int MaximumEventCharacters = 65_536;
-    public const int MaximumDepth = 64;
+    public const int MaximumDepth = JsonInputSafeguards.MaximumDepth;
     public const string SchemaDraft = "https://json-schema.org/draft/2020-12/schema";
 
     public static string ReadSchemaText(string resourceName)
@@ -88,56 +89,30 @@ internal static class WorkerJsonInfrastructure
         int maximumCharacters,
         out JsonDocument? document)
     {
-        document = null;
-        if (json is null)
+        JsonInputError inputError = JsonInputSafeguards.TryParseObject(
+            json,
+            maximumCharacters,
+            out document);
+        WorkerJsonError error = inputError switch
         {
-            return WorkerJsonError.NullJson;
-        }
-
-        if (json.Length == 0)
+            JsonInputError.None => WorkerJsonError.None,
+            JsonInputError.Null => WorkerJsonError.NullJson,
+            JsonInputError.Empty => WorkerJsonError.EmptyJson,
+            JsonInputError.TooLarge when maximumCharacters == MaximumEventCharacters =>
+                WorkerJsonError.LineTooLarge,
+            JsonInputError.TooLarge => WorkerJsonError.InputTooLarge,
+            JsonInputError.Malformed => WorkerJsonError.MalformedJson,
+            JsonInputError.RootMustBeObject => WorkerJsonError.RootMustBeObject,
+            JsonInputError.DuplicateProperty => WorkerJsonError.DuplicateProperty,
+            _ => WorkerJsonError.MalformedJson,
+        };
+        if (error != WorkerJsonError.None)
         {
-            return WorkerJsonError.EmptyJson;
-        }
-
-        if (json.Length > maximumCharacters)
-        {
-            return maximumCharacters == MaximumEventCharacters
-                ? WorkerJsonError.LineTooLarge
-                : WorkerJsonError.InputTooLarge;
-        }
-
-        try
-        {
-            document = JsonDocument.Parse(
-                json,
-                new JsonDocumentOptions
-                {
-                    AllowTrailingCommas = false,
-                    CommentHandling = JsonCommentHandling.Disallow,
-                    MaxDepth = MaximumDepth,
-                });
-        }
-        catch (JsonException)
-        {
-            return WorkerJsonError.MalformedJson;
-        }
-
-        if (document.RootElement.ValueKind != JsonValueKind.Object)
-        {
-            document.Dispose();
-            document = null;
-            return WorkerJsonError.RootMustBeObject;
-        }
-
-        if (ContainsDuplicateProperty(document.RootElement))
-        {
-            document.Dispose();
-            document = null;
-            return WorkerJsonError.DuplicateProperty;
+            return error;
         }
 
         EvaluationResults result = schema.Evaluate(
-            document.RootElement,
+            document!.RootElement,
             new EvaluationOptions { OutputFormat = OutputFormat.Flag });
         if (!result.IsValid)
         {
@@ -151,30 +126,4 @@ internal static class WorkerJsonInfrastructure
 
     public static bool IsFinite(double value) => !double.IsNaN(value) && !double.IsInfinity(value);
 
-    private static bool ContainsDuplicateProperty(JsonElement element)
-    {
-        if (element.ValueKind == JsonValueKind.Object)
-        {
-            var names = new HashSet<string>(StringComparer.Ordinal);
-            foreach (JsonProperty property in element.EnumerateObject())
-            {
-                if (!names.Add(property.Name) || ContainsDuplicateProperty(property.Value))
-                {
-                    return true;
-                }
-            }
-        }
-        else if (element.ValueKind == JsonValueKind.Array)
-        {
-            foreach (JsonElement item in element.EnumerateArray())
-            {
-                if (ContainsDuplicateProperty(item))
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
 }
