@@ -158,7 +158,18 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0112 | 🟡 **PROCESS** | `feat/PB-0112-worker-contracts` | Contracts Engineering for local work; user for Git gates | 2026-07-25 | PB-0111 rollover is synchronized. Worker request, progress-event, and result schemas, immutable C# contracts, fixtures, documentation, and exhaustive contract tests are implemented and validated locally; all 1,129 Release tests and the complete local Core CI entry point pass. | User-controlled staging, task commit, branch push, merge, `main` push, successful required `main` CI, and explicit completion confirmation remain. |
+| PB-0113 | 🟡 **PROCESS** | `feat/PB-0113-schema-migrations` | Contracts Engineering for local work; user for Git gates | 2026-07-25 | PB-0112 rollover is synchronized. The migration framework, internal representative chain, fixtures, documentation, and exhaustive tests are implemented and validated locally; all 1,172 Release tests and the complete local Core CI entry point pass. | User-controlled staging, task commit, branch push, merge, `main` push, successful required `main` CI, and explicit completion confirmation remain. |
+
+### PB-0112 Completion Evidence
+
+The detailed implementation, validation, and final publication evidence are recorded in `docs/PB-0112_WORKER_CONTRACTS_EVIDENCE.md`.
+
+- Final task commit `a22f913108870b24ead8dde38833ae3e56c02c47` was pushed on `feat/PB-0112-worker-contracts`.
+- The task was merged through [pull request #26](https://github.com/avivperets26/3DModels-Package-Builder/pull/26) into `main` as `e8c31a221dedd49daac0e1e35d29fb5df2f43642`.
+- [PR workflow run 30155442329](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30155442329) and required [main workflow run 30155444972](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30155444972) completed successfully.
+- The user explicitly confirmed the task commit, push, merge, successful required `main` CI, and completion on 2026-07-25.
+- No CI, completion, or quality exception was used.
+- This PB-0113 rollover marks PB-0112 `[x]` / 🟢 **DONE**, removes it from Active Work, and adds exactly one chronological Completion Log row.
 
 ### PB-0111 Completion Evidence
 
@@ -424,6 +435,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0109 | `feat/PB-0109-validation-findings` | `7f8f49bf4bc90166f84482e8dd30f32e195cce30` | [#23](https://github.com/avivperets26/3DModels-Package-Builder/pull/23) | 2026-07-24 | Merged into `main` as `15d41c288aa5718d359620e7e743f2384f894d93`; [PR workflow run 30115151917](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30115151917) and required [main workflow run 30115156865](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30115156865) succeeded. No exception was used; the user explicitly confirmed all completion gates on 2026-07-24. |
 | PB-0110 | `feat/PB-0110-product-manifest-schema` | `a88ed992002b34ffdb96a8b1e7b7b596609d6891` | [#24](https://github.com/avivperets26/3DModels-Package-Builder/pull/24) | 2026-07-24 | Merged into `main` as `1980b801147e673df23b8d741fe8b5f3bc59832b`; [PR workflow run 30118538985](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30118538985) and required [main workflow run 30118545085](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30118545085) succeeded. No exception was used; the user explicitly confirmed all completion gates on 2026-07-24. |
 | PB-0111 | `feat/PB-0111-profile-schemas` | `c49cf2755458c409fde41714a29a275f38ce9a92` | [#25](https://github.com/avivperets26/3DModels-Package-Builder/pull/25) | 2026-07-25 | Merged into `main` as `9e2f4f3dbf4cc8e313afdb1374db3af4fc0de653`; [PR workflow run 30152657016](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30152657016) and required [main workflow run 30152658843](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30152658843) succeeded. No exception was used; the user explicitly confirmed all completion gates on 2026-07-25. |
+| PB-0112 | `feat/PB-0112-worker-contracts` | `a22f913108870b24ead8dde38833ae3e56c02c47` | [#26](https://github.com/avivperets26/3DModels-Package-Builder/pull/26) | 2026-07-25 | Merged into `main` as `e8c31a221dedd49daac0e1e35d29fb5df2f43642`; [PR workflow run 30155442329](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30155442329) and required [main workflow run 30155444972](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30155444972) succeeded. No exception was used; the user explicitly confirmed all completion gates on 2026-07-25. |
 
 ## 5. Milestones
 
@@ -604,12 +616,12 @@ flowchart LR
   - Depends on: PB-0107
   - Done when: versioned schemas and valid example profiles exist for `AvivPeretsFBX` and Fab.
 
-- [ ] **PB-0112 — Define worker request, progress, and result contracts** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0112 — Define worker request, progress, and result contracts** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0112-worker-contracts`
   - Depends on: PB-0108, PB-0109
   - Done when: request/result JSON schemas, JSON Lines progress events, protocol versioning, cancellation, artifacts, and retry safety have contract tests.
 
-- [ ] **PB-0113 — Add manifest/profile migration framework** — **P1**
+- [ ] **PB-0113 — Add manifest/profile migration framework** — **P1** — 🟡 **PROCESS**
   - Branch: `feat/PB-0113-schema-migrations`
   - Depends on: PB-0110, PB-0111
   - Done when: older schema versions can be detected and upgraded through explicit tested migrations without silent data loss.

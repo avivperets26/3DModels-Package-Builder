@@ -2,7 +2,7 @@
 
 **Task:** PB-0112 — Define worker request, progress, and result contracts
 **Branch:** `feat/PB-0112-worker-contracts`
-**Lifecycle:** 🟡 **PROCESS**
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-07-25
 
 ## Scope and rollover
@@ -17,8 +17,14 @@ The PB-0111 rollover uses final task commit
 `c49cf2755458c409fde41714a29a275f38ce9a92`, pull request #25, merge
 `9e2f4f3dbf4cc8e313afdb1374db3af4fc0de653`, successful PR run `30152657016`, successful required
 `main` run `30152658843`, and user confirmation dated 2026-07-25. No exception was used. PB-0111
-is `[x]` / 🟢 **DONE**, absent from Active Work, and logged exactly once. PB-0112 remains `[ ]` /
-🟡 **PROCESS**, active, and absent from the Completion Log.
+is `[x]` / 🟢 **DONE**, absent from Active Work, and logged exactly once.
+
+PB-0112 was published from final task commit
+`a22f913108870b24ead8dde38833ae3e56c02c47`, merged through pull request #26 as
+`e8c31a221dedd49daac0e1e35d29fb5df2f43642`, validated by successful PR and required `main`
+workflows, and explicitly confirmed complete by the user on 2026-07-25. The PB-0113 rollover
+records PB-0112 as `[x]` / 🟢 **DONE**, removes it from Active Work, and adds its single Completion
+Log row. No exception was used.
 
 ## Version policy and schemas
 
@@ -153,8 +159,17 @@ Coverage tooling note: after the repository formatter made analyzer-directed sty
 the tests successfully but emitted empty reports. The retained non-empty report above is therefore
 the branch-coverage evidence; no coverage claim is derived from the empty follow-up reports.
 
-## Remaining gates
+## Publication and completion evidence
 
-- User-controlled staging, task commit, branch push, merge, and `main` push.
-- Successful required `main` CI.
-- Explicit user completion confirmation after required `main` CI.
+- Final task commit: `a22f913108870b24ead8dde38833ae3e56c02c47`.
+- Pull request: [#26](https://github.com/avivperets26/3DModels-Package-Builder/pull/26).
+- Successful PR workflow:
+  [run 30155442329](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30155442329).
+- Merge commit: `e8c31a221dedd49daac0e1e35d29fb5df2f43642`.
+- Successful required main workflow:
+  [run 30155444972](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30155444972).
+- The user explicitly confirmed completion on 2026-07-25.
+- No CI, completion, or quality exception was used.
+
+PB-0112 is logically complete. The PB-0113 rollover marks it `[x]` / 🟢 **DONE**, removes it from
+Active Work, and records it exactly once in the Completion Log.

@@ -1,6 +1,6 @@
 # Package Builder Documentation
 
-This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. The E00 repository foundation and PB-0101 through PB-0111 capabilities are complete. PB-0112 worker request, individual progress-event, and result contracts are locally implemented and remain active on their task branch; JSON Lines stream framing, process execution, model import, engine workers, packaging, desktop UI, security hardening, and installation features are not claimed as implemented.
+This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. The E00 repository foundation and PB-0101 through PB-0112 capabilities are complete. PB-0113 manifest/profile migration work is active: the local framework, explicit registry, audit ledger, strict finalization, representative internal migration chain, and tests are implemented, but its publication gates remain pending. JSON Lines stream framing, process execution, model import, engine workers, packaging, desktop UI, security hardening, and installation features are not claimed as implemented.
 
 ## Primary Documentation
 
@@ -55,6 +55,7 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 - [PB-0110 product manifest schema evidence](PB-0110_PRODUCT_MANIFEST_SCHEMA_EVIDENCE.md)
 - [PB-0111 profile schema evidence](PB-0111_PROFILE_SCHEMAS_EVIDENCE.md)
 - [PB-0112 worker contract evidence](PB-0112_WORKER_CONTRACTS_EVIDENCE.md)
+- [PB-0113 manifest/profile migration evidence](PB-0113_SCHEMA_MIGRATIONS_EVIDENCE.md)
 
 ## Dependency and Licence Records
 
