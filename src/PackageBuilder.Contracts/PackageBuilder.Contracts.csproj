@@ -16,6 +16,12 @@
     <EmbeddedResource Include="..\..\schemas\product-manifest.schema.json"
                       Link="Schemas\product-manifest.schema.json"
                       LogicalName="PackageBuilder.Contracts.Schemas.product-manifest.schema.json" />
+    <EmbeddedResource Include="..\..\schemas\publisher-profile.schema.json"
+                      Link="Schemas\publisher-profile.schema.json"
+                      LogicalName="PackageBuilder.Contracts.Schemas.publisher-profile.schema.json" />
+    <EmbeddedResource Include="..\..\schemas\marketplace-profile.schema.json"
+                      Link="Schemas\marketplace-profile.schema.json"
+                      LogicalName="PackageBuilder.Contracts.Schemas.marketplace-profile.schema.json" />
   </ItemGroup>
 
 </Project>

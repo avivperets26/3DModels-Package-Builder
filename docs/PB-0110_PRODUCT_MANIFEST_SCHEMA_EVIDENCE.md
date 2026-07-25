@@ -2,7 +2,7 @@
 
 **Task:** PB-0110 — Define and validate the product manifest schema
 **Branch:** `feat/PB-0110-product-manifest-schema`
-**Lifecycle:** 🟡 **PROCESS**
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-07-24
 
 ## Scope
@@ -15,8 +15,11 @@ policy is introduced.
 
 PB-0109 publication was synchronized at the start of this branch from the supplied final task
 commit, pull request, merge, successful required `main` CI, and explicit user confirmation.
-PB-0110 remains `[ ]` / 🟡 **PROCESS**, appears in Active Work, and is absent from the Completion
-Log while its Git and completion gates remain.
+PB-0110 was published from final task commit `a88ed992002b34ffdb96a8b1e7b7b596609d6891`,
+merged through pull request #24 as `1980b801147e673df23b8d741fe8b5f3bc59832b`,
+validated by successful PR and required `main` workflows, and explicitly confirmed complete by
+the user. The PB-0111 rollover records PB-0110 as `[x]` / 🟢 **DONE**, removes it from Active Work,
+and adds its single Completion Log row.
 
 ## Versioned Contract
 
@@ -133,8 +136,16 @@ dependency links are recorded in `docs/THIRD_PARTY_NOTICES.md`.
 | Secret, personal-path, generated/binary, and prohibited-file scans | Pass; no match or prohibited changed path |
 | Full core CI | Pass; all nine stages completed in 2 minutes 11.638 seconds with 976/976 tests |
 
-## Remaining Gates
+## Publication and Completion Evidence
 
-- User-controlled staging, task commit, branch push, merge, and `main` push.
-- Successful required `main` CI.
-- Explicit user completion confirmation after required `main` CI.
+- Final task commit `a88ed992002b34ffdb96a8b1e7b7b596609d6891` was pushed on
+  `feat/PB-0110-product-manifest-schema`.
+- [Pull request #24](https://github.com/avivperets26/3DModels-Package-Builder/pull/24)
+  merged that task commit into `main` as
+  `1980b801147e673df23b8d741fe8b5f3bc59832b`.
+- [PR workflow run 30118538985](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30118538985)
+  and required [main workflow run 30118545085](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30118545085)
+  completed successfully.
+- The user explicitly confirmed the task commit, push, merge, successful required `main` CI, and
+  completion on 2026-07-24.
+- No CI, completion, or quality exception was used.
