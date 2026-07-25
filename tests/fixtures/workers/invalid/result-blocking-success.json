@@ -1,0 +1,1 @@
+{"protocolVersion":1,"jobId":"Job-01","status":"success","workerVersion":"1.0.0","outputsPromoted":true,"artifacts":[],"findings":[{"code":"OUTPUT_INVALID","severity":"error","explanation":"The output is invalid.","source":"unity-worker","blocksRelease":true}],"metrics":[],"logReferences":[],"retrySafety":"unsafe"}

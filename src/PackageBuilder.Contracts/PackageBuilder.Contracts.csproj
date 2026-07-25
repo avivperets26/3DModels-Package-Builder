@@ -22,6 +22,15 @@
     <EmbeddedResource Include="..\..\schemas\marketplace-profile.schema.json"
                       Link="Schemas\marketplace-profile.schema.json"
                       LogicalName="PackageBuilder.Contracts.Schemas.marketplace-profile.schema.json" />
+    <EmbeddedResource Include="..\..\schemas\worker-request.schema.json"
+                      Link="Schemas\worker-request.schema.json"
+                      LogicalName="PackageBuilder.Contracts.Schemas.worker-request.schema.json" />
+    <EmbeddedResource Include="..\..\schemas\worker-progress-event.schema.json"
+                      Link="Schemas\worker-progress-event.schema.json"
+                      LogicalName="PackageBuilder.Contracts.Schemas.worker-progress-event.schema.json" />
+    <EmbeddedResource Include="..\..\schemas\worker-result.schema.json"
+                      Link="Schemas\worker-result.schema.json"
+                      LogicalName="PackageBuilder.Contracts.Schemas.worker-result.schema.json" />
   </ItemGroup>
 
 </Project>

@@ -237,6 +237,16 @@ user review before real publication and are never replaced automatically. No log
 credential, personal contact, private path, marketplace rule, or final publication claim is
 included.
 
+PB-0112 defines protocol version 1 worker request, individual JSON Lines event, and result
+contracts. Requests use existing build-job identity, an extensible operation token, logical
+manifest/input/output/result references, and optional target and engine-version identity. Events
+are exactly `progress`, `finding`, or `metric`; progress percent is optional for indeterminate
+work, findings reuse PB-0109 unchanged, and metrics use finite values with explicit units. Results
+are exactly `success`, `failure`, or `cancelled`, retain typed artifact ownership, findings,
+metrics, safe logical log references, retry safety, and first-class cancellation details. These
+contracts perform no filesystem, process, networking, hashing, retry, or cancellation-signalling
+work. PB-0201, PB-0204, PB-0207, PB-0208, PB-0209, and PB-0213 retain those responsibilities.
+
 Example Unity roots:
 
 ```text

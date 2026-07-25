@@ -1,0 +1,1 @@
+{"protocolVersion":1,"jobId":"Job-01","status":"cancelled","workerVersion":"1.0.0","outputsPromoted":false,"artifacts":[],"findings":[],"metrics":[],"logReferences":["logs/unity.log"],"retrySafety":"requires-cleanup","cancellation":{"outcome":"partial","details":"Staged worker output may require cleanup before retry."}}

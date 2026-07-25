@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.packagebuilder.dev/worker-request/v1",
+  "title": "Package Builder worker request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocolVersion",
+    "jobId",
+    "operation",
+    "productManifestReference",
+    "inputDirectoryReference",
+    "outputDirectoryReference",
+    "resultFileReference"
+  ],
+  "properties": {
+    "protocolVersion": { "const": 1 },
+    "jobId": { "$ref": "#/$defs/identity" },
+    "operation": { "$ref": "#/$defs/canonicalIdentifier" },
+    "productManifestReference": { "$ref": "#/$defs/logicalReference" },
+    "inputDirectoryReference": { "$ref": "#/$defs/logicalReference" },
+    "outputDirectoryReference": { "$ref": "#/$defs/logicalReference" },
+    "resultFileReference": { "$ref": "#/$defs/logicalReference" },
+    "engineVersion": { "$ref": "#/$defs/versionText" },
+    "target": {
+      "enum": [ "portable", "unity", "unreal" ]
+    }
+  },
+  "$defs": {
+    "identity": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^\\S(?:[^\\u0000-\\u001F\\u007F]*\\S)?$"
+    },
+    "canonicalIdentifier": {
+      "type": "string",
+      "pattern": "^[a-z]+(?:-[a-z]+)*$"
+    },
+    "versionText": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._+-]*$"
+    },
+    "logicalReference": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![/\\\\])(?![A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.?(/|$))(?!.*//)(?!.*:)(?!.*[\\u0000-\\u001F\\u007F$%])\\S(?:.*\\S)?$"
+    }
+  }
+}

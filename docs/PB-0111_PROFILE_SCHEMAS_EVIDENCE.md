@@ -1,9 +1,9 @@
 # PB-0111 Publisher and Marketplace Profile Schema Evidence
 
-**Task:** PB-0111 — Define publisher and marketplace profile schemas  
-**Branch:** `feat/PB-0111-profile-schemas`  
-**Lifecycle:** 🟡 **PROCESS**  
-**Evidence date:** 2026-07-24
+**Task:** PB-0111 — Define publisher and marketplace profile schemas
+**Branch:** `feat/PB-0111-profile-schemas`
+**Lifecycle:** 🟢 **DONE**
+**Evidence date:** 2026-07-25
 
 ## Scope and Rollover
 
@@ -168,8 +168,15 @@ copies.
 | Dependency vulnerability audit | Pass; no known vulnerable direct or transitive packages |
 | Formatting and repository safeguards | Pass; .NET format, Ruff, `git diff --check`, repository baseline, and prohibited-content checks |
 
-## Remaining Gates
+## Publication and Completion Evidence
 
-- User-controlled staging, task commit, branch push, merge, and `main` push.
-- Successful required `main` CI.
-- Explicit user completion confirmation after required `main` CI.
+- Final task commit: `c49cf2755458c409fde41714a29a275f38ce9a92`.
+- Pull request: [#25](https://github.com/avivperets26/3DModels-Package-Builder/pull/25).
+- Successful PR workflow: [run 30152657016](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30152657016).
+- Merge commit: `9e2f4f3dbf4cc8e313afdb1374db3af4fc0de653`.
+- Successful required main workflow: [run 30152658843](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30152658843).
+- The user explicitly confirmed completion on 2026-07-25.
+- No CI, completion, or quality exception was used.
+
+PB-0111 is logically complete. The PB-0112 rollover marks it `[x]` / 🟢 **DONE**, removes it
+from Active Work, and records it exactly once in the Completion Log.

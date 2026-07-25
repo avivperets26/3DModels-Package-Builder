@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.packagebuilder.dev/worker-progress-event/v1",
+  "title": "Package Builder worker progress event",
+  "oneOf": [
+    { "$ref": "#/$defs/progressEvent" },
+    { "$ref": "#/$defs/findingEvent" },
+    { "$ref": "#/$defs/metricEvent" }
+  ],
+  "$defs": {
+    "identity": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^\\S(?:[^\\u0000-\\u001F\\u007F]*\\S)?$"
+    },
+    "canonicalIdentifier": {
+      "type": "string",
+      "pattern": "^[a-z]+(?:-[a-z]+)*$"
+    },
+    "humanText": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^\\S(?:[^\\u0000-\\u001F\\u007F]*\\S)?$"
+    },
+    "findingCode": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9]*(?:_[A-Z][A-Z0-9]*)*$"
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [ "code", "severity", "explanation", "source", "blocksRelease" ],
+      "properties": {
+        "code": { "$ref": "#/$defs/findingCode" },
+        "severity": { "enum": [ "info", "warning", "error", "fatal" ] },
+        "explanation": { "$ref": "#/$defs/humanText" },
+        "source": { "$ref": "#/$defs/canonicalIdentifier" },
+        "relatedArtifactId": { "$ref": "#/$defs/identity" },
+        "suggestedAction": { "$ref": "#/$defs/humanText" },
+        "blocksRelease": { "type": "boolean" }
+      }
+    },
+    "metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [ "metricId", "value", "unit" ],
+      "properties": {
+        "metricId": { "$ref": "#/$defs/canonicalIdentifier" },
+        "value": { "type": "number" },
+        "unit": { "enum": [ "milliseconds", "bytes", "count", "percent" ] }
+      }
+    },
+    "progressEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [ "protocolVersion", "eventKind", "jobId", "stage" ],
+      "properties": {
+        "protocolVersion": { "const": 1 },
+        "eventKind": { "const": "progress" },
+        "jobId": { "$ref": "#/$defs/identity" },
+        "stage": { "$ref": "#/$defs/canonicalIdentifier" },
+        "message": { "$ref": "#/$defs/humanText" },
+        "percent": { "type": "number", "minimum": 0, "maximum": 100 }
+      }
+    },
+    "findingEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [ "protocolVersion", "eventKind", "jobId", "finding" ],
+      "properties": {
+        "protocolVersion": { "const": 1 },
+        "eventKind": { "const": "finding" },
+        "jobId": { "$ref": "#/$defs/identity" },
+        "finding": { "$ref": "#/$defs/finding" }
+      }
+    },
+    "metricEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [ "protocolVersion", "eventKind", "jobId", "metric" ],
+      "properties": {
+        "protocolVersion": { "const": 1 },
+        "eventKind": { "const": "metric" },
+        "jobId": { "$ref": "#/$defs/identity" },
+        "metric": { "$ref": "#/$defs/metric" }
+      }
+    }
+  }
+}

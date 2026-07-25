@@ -6,7 +6,7 @@
 **GitHub repository:** [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder)
 **GitHub visibility:** Public, approved by the user on 2026-07-22
 **Runtime data:** `C:\Dev\PackageBuilder\runtime-data`
-**Last reviewed:** 2026-07-24
+**Last reviewed:** 2026-07-25
 
 ## 1. Purpose
 
@@ -470,6 +470,22 @@ Property names, severity tokens, ordering, and omission behavior are compatibili
 changes require an explicitly versioned migration. This finding contract is not the PB-0910
 validation-report schema and is not a PB-0112 worker envelope.
 
+PB-0112 adds three strict Draft 2020-12 worker schemas and corresponding immutable Contracts
+values. Protocol version `1` is the only accepted version. Request, result, and every individual
+event carry `protocolVersion`; unknown versions fail closed. Request references are syntax-checked
+logical references only and do not claim canonical filesystem safety. Event kinds are `progress`,
+`finding`, and `metric`; result statuses are `success`, `failure`, and `cancelled`; retry safety is
+`safe`, `unsafe`, or `requires-cleanup`; metric units are `milliseconds`, `bytes`, `count`, and
+`percent`; cancellation outcomes are `acknowledged` and `partial`. Findings reuse the PB-0109 JSON
+contract and artifact/job identity reuses PB-0108. Individual event input is limited to 65,536
+characters; request/result input retains the approved 1,048,576-character and depth-64 limits.
+
+PB-0112 never reads a request/result file, frames or recovers JSON Lines, canonicalizes or checks
+filesystem paths, calculates a hash, executes a process, signals cancellation, performs cleanup,
+or retries work. PB-0201 owns path roots and containment, PB-0204 hashing, PB-0207 execution,
+PB-0208 signalling/timeout/termination/cleanup, PB-0209 stream framing and malformed-line
+recovery, and PB-0213 orchestration and retry/resume behavior.
+
 Core interfaces:
 
 ```csharp
@@ -585,6 +601,7 @@ C:\Dev\PackageBuilder\
 │   ├── publisher-profile.schema.json
 │   ├── marketplace-profile.schema.json
 │   ├── worker-request.schema.json
+│   ├── worker-progress-event.schema.json
 │   └── worker-result.schema.json
 ├── profiles/
 │   ├── publishers/
@@ -790,39 +807,50 @@ Every state transition is persisted. Completed steps record input hashes, output
 
 ## 12. Worker Protocol
 
-Each external worker receives a versioned request:
+Each external worker receives a protocol-version-1 request. The values below are logical
+contract references; PB-0201 must later resolve and prove actual filesystem containment:
 
 ```json
 {
   "protocolVersion": 1,
   "jobId": "01J...",
   "operation": "build-unity-target",
-  "manifestPath": ".../product.json",
-  "inputDirectory": ".../normalized",
-  "outputDirectory": ".../targets/unity",
-  "resultPath": ".../targets/unity/result.json",
-  "engineVersion": "6000.3.10f1"
+  "productManifestReference": "request/product.json",
+  "inputDirectoryReference": "normalized",
+  "outputDirectoryReference": "targets/unity",
+  "resultFileReference": "targets/unity/result.json",
+  "engineVersion": "6000.3.10f1",
+  "target": "unity"
 }
 ```
 
 Progress is emitted as one JSON object per line:
 
 ```json
-{"type":"progress","step":"Importing textures","percent":35}
-{"type":"finding","severity":"warning","code":"UNITY_TEXTURE_ALPHA_UNUSED"}
+{"protocolVersion":1,"eventKind":"progress","jobId":"01J...","stage":"importing-textures","percent":35}
+{"protocolVersion":1,"eventKind":"finding","jobId":"01J...","finding":{"code":"UNITY_TEXTURE_ALPHA_UNUSED","severity":"warning","explanation":"The texture alpha channel is not used.","source":"unity-worker","blocksRelease":false}}
 ```
+
+Percent is optional for indeterminate progress. Metric events contain a stable `metricId`, finite
+numeric `value`, and one explicit unit: `milliseconds`, `bytes`, `count`, or `percent`. Each event
+serializes as one compact JSON object without a physical newline; PB-0209 owns stream framing.
 
 The result contains:
 
-- Success/failure status.
+- `success`, `failure`, or first-class `cancelled` status.
 - Worker and engine versions.
 - Produced artifacts and SHA-256 hashes.
 - Validation findings.
 - Structured metrics.
 - Log file paths.
-- Retry safety information.
+- `safe`, `unsafe`, or `requires-cleanup` retry safety.
+- `acknowledged` or `partial` cancellation outcome for cancelled results.
 
-Unknown protocol versions fail clearly rather than being interpreted loosely.
+SHA-256 values, when supplied, are exactly 64 lowercase hexadecimal characters. Hash calculation
+remains PB-0204. A successful result cannot contain a release-blocking finding; failed or
+cancelled results cannot claim promoted output; cancellation state does not represent a .NET
+`CancellationToken` or process signal. Unknown protocol versions fail clearly rather than being
+interpreted loosely.
 
 ## 13. Process Execution Rules
 

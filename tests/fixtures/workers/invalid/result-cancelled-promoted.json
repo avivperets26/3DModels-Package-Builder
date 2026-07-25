@@ -1,0 +1,1 @@
+{"protocolVersion":1,"jobId":"Job-01","status":"cancelled","workerVersion":"1.0.0","outputsPromoted":true,"artifacts":[],"findings":[],"metrics":[],"logReferences":[],"retrySafety":"safe","cancellation":{"outcome":"acknowledged"}}

@@ -1,0 +1,1 @@
+{"protocolVersion":2,"jobId":"Job-01","operation":"build-unity-target","productManifestReference":"request/product.json","inputDirectoryReference":"normalized","outputDirectoryReference":"targets/unity","resultFileReference":"targets/unity/result.json"}
