@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "roots": {
+    "repository": "C:\\Dev\\PackageBuilder",
+    "tools": "tools",
+    "downloads": "downloads",
+    "data": "runtime-data",
+    "sourceAssets": "runtime-data\\source-assets",
+    "jobs": "runtime-data\\jobs",
+    "cache": "runtime-data\\engine-caches",
+    "temp": "runtime-data\\temp",
+    "templates": "runtime-data\\engine-templates",
+    "builds": "artifacts\\Builds",
+    "artifacts": "artifacts",
+    "logs": "logs"
+  }
+}

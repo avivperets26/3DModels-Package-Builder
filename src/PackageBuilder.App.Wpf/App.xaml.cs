@@ -2,6 +2,6 @@ using System.Windows;
 
 namespace PackageBuilder.App.Wpf;
 
-public partial class App : Application
+public partial class App : System.Windows.Application
 {
 }
