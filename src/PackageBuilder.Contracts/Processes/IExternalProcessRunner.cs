@@ -4,4 +4,8 @@ namespace PackageBuilder.Contracts.Processes;
 public interface IExternalProcessRunner
 {
     Task<ProcessExecutionOperationResult> RunAsync(ExternalProcessRequest request);
+
+    Task<ProcessExecutionOperationResult> RunAsync(
+        ExternalProcessRequest request,
+        CancellationToken cancellationToken);
 }

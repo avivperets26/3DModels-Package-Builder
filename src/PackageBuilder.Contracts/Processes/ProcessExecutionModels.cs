@@ -27,7 +27,8 @@ public sealed class ExternalProcessRequest
         string logDirectory,
         IEnumerable<string> arguments,
         IEnumerable<ProcessEnvironmentVariable> environmentVariables,
-        int maximumCapturedCharactersPerStream)
+        int maximumCapturedCharactersPerStream,
+        ProcessExecutionPolicy? executionPolicy = null)
     {
         ArgumentNullException.ThrowIfNull(arguments);
         ArgumentNullException.ThrowIfNull(environmentVariables);
@@ -42,6 +43,7 @@ public sealed class ExternalProcessRequest
         _arguments = Array.AsReadOnly(arguments.ToArray());
         _environmentVariables = Array.AsReadOnly(environmentVariables.ToArray());
         MaximumCapturedCharactersPerStream = maximumCapturedCharactersPerStream;
+        ExecutionPolicy = executionPolicy ?? ProcessExecutionPolicy.Default;
     }
 
     public BuildJobId JobId { get; }
@@ -63,6 +65,8 @@ public sealed class ExternalProcessRequest
     public IReadOnlyList<ProcessEnvironmentVariable> EnvironmentVariables => _environmentVariables;
 
     public int MaximumCapturedCharactersPerStream { get; }
+
+    public ProcessExecutionPolicy ExecutionPolicy { get; }
 }
 
 /// <summary>Records immutable identity metadata for the executable that was started.</summary>
@@ -120,7 +124,9 @@ public sealed class ExternalProcessReceipt(
     ExecutableMetadata executable,
     int exitCode,
     ProcessStreamCapture standardOutput,
-    ProcessStreamCapture standardError)
+    ProcessStreamCapture standardError,
+    ProcessCompletionMetadata? completion = null,
+    ProcessLogMetadata? logs = null)
 {
     public BuildJobId JobId { get; } = jobId ?? throw new ArgumentNullException(nameof(jobId));
 
@@ -134,4 +140,8 @@ public sealed class ExternalProcessReceipt(
 
     public ProcessStreamCapture StandardError { get; } = standardError
         ?? throw new ArgumentNullException(nameof(standardError));
+
+    public ProcessCompletionMetadata Completion { get; } = completion ?? ProcessCompletionMetadata.Exited;
+
+    public ProcessLogMetadata? Logs { get; } = logs;
 }

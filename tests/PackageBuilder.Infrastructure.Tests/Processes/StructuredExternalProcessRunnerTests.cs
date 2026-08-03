@@ -21,7 +21,7 @@ public sealed class StructuredExternalProcessRunnerTests(ProcessRunnerTestWorksp
             "amp&ersand",
             "$(whoami)",
             "%PATH%",
-            "ユニコード",
+            "ãƒ¦ãƒ‹ã‚³ãƒ¼ãƒ‰",
             string.Empty,
             "--exit-code=7",
         ];
@@ -31,7 +31,7 @@ public sealed class StructuredExternalProcessRunnerTests(ProcessRunnerTestWorksp
             new("PROBE_VALUE", "literal value & ; $(ignored)"),
         ];
 
-        ProcessExecutionOperationResult result = await new StructuredExternalProcessRunner().RunAsync(
+        ProcessExecutionOperationResult result = await ProcessRunnerTestWorkspace.RunAsync(
             workspace.Request(arguments: arguments, environment: environment));
 
         Assert.True(result.IsSuccess);
@@ -63,7 +63,7 @@ public sealed class StructuredExternalProcessRunnerTests(ProcessRunnerTestWorksp
     [Fact]
     public async Task BoundedCaptureDrainsBothStreamsAndReportsTruncation()
     {
-        ProcessExecutionOperationResult result = await new StructuredExternalProcessRunner().RunAsync(
+        ProcessExecutionOperationResult result = await ProcessRunnerTestWorkspace.RunAsync(
             workspace.Request(
                 arguments: ["--stdout-count=5000", "--stderr-count=6000"],
                 captureLimit: 101));
@@ -82,7 +82,7 @@ public sealed class StructuredExternalProcessRunnerTests(ProcessRunnerTestWorksp
     [InlineData(16_777_217)]
     public async Task RejectsInvalidCaptureLimits(int limit)
     {
-        ProcessExecutionOperationResult result = await new StructuredExternalProcessRunner().RunAsync(
+        ProcessExecutionOperationResult result = await ProcessRunnerTestWorkspace.RunAsync(
             workspace.Request(captureLimit: limit));
 
         AssertFailure(result, "PROCESS_CAPTURE_LIMIT_INVALID", "maximumCapturedCharactersPerStream");
@@ -91,7 +91,7 @@ public sealed class StructuredExternalProcessRunnerTests(ProcessRunnerTestWorksp
     [Fact]
     public async Task RejectsNullAndNullContainingArgumentsWithoutInterpretingOtherText()
     {
-        ProcessExecutionOperationResult result = await new StructuredExternalProcessRunner().RunAsync(
+        ProcessExecutionOperationResult result = await ProcessRunnerTestWorkspace.RunAsync(
             workspace.Request(arguments: [null!, "bad\0value", "safe & literal"]));
 
         Assert.False(result.IsSuccess);
@@ -120,7 +120,7 @@ public sealed class StructuredExternalProcessRunnerTests(ProcessRunnerTestWorksp
             "reserved" => [new ProcessEnvironmentVariable("TEMP", "value")],
             _ => [new ProcessEnvironmentVariable("SAFE", "bad\0value")],
         };
-        ProcessExecutionOperationResult result = await new StructuredExternalProcessRunner().RunAsync(
+        ProcessExecutionOperationResult result = await ProcessRunnerTestWorkspace.RunAsync(
             workspace.Request(environment: environment));
 
         Assert.Contains(result.Failures, failure => failure.Code == code);
@@ -132,11 +132,11 @@ public sealed class StructuredExternalProcessRunnerTests(ProcessRunnerTestWorksp
         string missingExecutable = Path.Combine(workspace.Root, "missing.exe");
         string outsideDirectory = Path.GetPathRoot(workspace.ProjectRoot)!;
 
-        ProcessExecutionOperationResult missing = await new StructuredExternalProcessRunner().RunAsync(
+        ProcessExecutionOperationResult missing = await ProcessRunnerTestWorkspace.RunAsync(
             workspace.Request(executablePath: missingExecutable));
-        ProcessExecutionOperationResult outside = await new StructuredExternalProcessRunner().RunAsync(
+        ProcessExecutionOperationResult outside = await ProcessRunnerTestWorkspace.RunAsync(
             workspace.Request(workingDirectory: outsideDirectory));
-        ProcessExecutionOperationResult rootAlias = await new StructuredExternalProcessRunner().RunAsync(
+        ProcessExecutionOperationResult rootAlias = await ProcessRunnerTestWorkspace.RunAsync(
             workspace.Request(cacheDirectory: workspace.ProjectRoot));
 
         AssertFailure(missing, "PROCESS_EXECUTABLE_MISSING", "executable");
@@ -164,7 +164,7 @@ public sealed class StructuredExternalProcessRunnerTests(ProcessRunnerTestWorksp
             _ => throw new InvalidOperationException("Unknown test location."),
         };
 
-        ProcessExecutionOperationResult result = await new StructuredExternalProcessRunner().RunAsync(request);
+        ProcessExecutionOperationResult result = await ProcessRunnerTestWorkspace.RunAsync(request);
 
         AssertFailure(result, "PROCESS_PATH_OUTSIDE_PROJECT", location);
     }
@@ -175,11 +175,11 @@ public sealed class StructuredExternalProcessRunnerTests(ProcessRunnerTestWorksp
         string nonCanonical = Path.Combine(workspace.Root, "working", "..", "working");
         string missingDirectory = Path.Combine(workspace.Root, "missing-directory");
 
-        ProcessExecutionOperationResult relative = await new StructuredExternalProcessRunner().RunAsync(
+        ProcessExecutionOperationResult relative = await ProcessRunnerTestWorkspace.RunAsync(
             workspace.Request(projectRoot: "relative"));
-        ProcessExecutionOperationResult canonical = await new StructuredExternalProcessRunner().RunAsync(
+        ProcessExecutionOperationResult canonical = await ProcessRunnerTestWorkspace.RunAsync(
             workspace.Request(temporaryDirectory: nonCanonical));
-        ProcessExecutionOperationResult missing = await new StructuredExternalProcessRunner().RunAsync(
+        ProcessExecutionOperationResult missing = await ProcessRunnerTestWorkspace.RunAsync(
             workspace.Request(logDirectory: missingDirectory));
 
         AssertFailure(relative, "PROCESS_PATH_INVALID", "projectRoot");
@@ -193,9 +193,9 @@ public sealed class StructuredExternalProcessRunnerTests(ProcessRunnerTestWorksp
         string nonCanonical = workspace.ProbeExecutablePath.Replace('\\', '/');
         string invalid = string.Concat(workspace.Root, Path.DirectorySeparatorChar, "bad", '\0', ".exe");
 
-        ProcessExecutionOperationResult canonical = await new StructuredExternalProcessRunner().RunAsync(
+        ProcessExecutionOperationResult canonical = await ProcessRunnerTestWorkspace.RunAsync(
             workspace.Request(executablePath: nonCanonical));
-        ProcessExecutionOperationResult malformed = await new StructuredExternalProcessRunner().RunAsync(
+        ProcessExecutionOperationResult malformed = await ProcessRunnerTestWorkspace.RunAsync(
             workspace.Request(executablePath: invalid));
 
         AssertFailure(canonical, "PROCESS_PATH_NOT_CANONICAL", "executable");
@@ -211,9 +211,9 @@ public sealed class StructuredExternalProcessRunnerTests(ProcessRunnerTestWorksp
         string linkedExecutable = Path.Combine(workspace.Root, "linked-probe.exe");
         _ = File.CreateSymbolicLink(linkedExecutable, workspace.ProbeExecutablePath);
 
-        ProcessExecutionOperationResult directoryResult = await new StructuredExternalProcessRunner().RunAsync(
+        ProcessExecutionOperationResult directoryResult = await ProcessRunnerTestWorkspace.RunAsync(
             workspace.Request(temporaryDirectory: linkedDirectory));
-        ProcessExecutionOperationResult executableResult = await new StructuredExternalProcessRunner().RunAsync(
+        ProcessExecutionOperationResult executableResult = await ProcessRunnerTestWorkspace.RunAsync(
             workspace.Request(executablePath: linkedExecutable));
 
         AssertFailure(directoryResult, "PROCESS_REPARSE_BOUNDARY", "temporaryDirectory");
@@ -245,7 +245,7 @@ public sealed class StructuredExternalProcessRunnerTests(ProcessRunnerTestWorksp
             [new ProcessEnvironmentVariable("DOTNET_ROOT", workspace.DotnetRoot)],
             100);
 
-        ProcessExecutionOperationResult result = await new StructuredExternalProcessRunner().RunAsync(request);
+        ProcessExecutionOperationResult result = await ProcessRunnerTestWorkspace.RunAsync(request);
 
         AssertFailure(result, "PROCESS_REPARSE_BOUNDARY", "projectRoot");
     }
@@ -255,7 +255,7 @@ public sealed class StructuredExternalProcessRunnerTests(ProcessRunnerTestWorksp
     {
         string invalidExecutable = workspace.CreateFile("invalid/not-an-executable.exe", "not executable");
 
-        ProcessExecutionOperationResult result = await new StructuredExternalProcessRunner().RunAsync(
+        ProcessExecutionOperationResult result = await ProcessRunnerTestWorkspace.RunAsync(
             workspace.Request(executablePath: invalidExecutable));
 
         AssertFailure(result, "PROCESS_EXECUTION_FAILED", "$");

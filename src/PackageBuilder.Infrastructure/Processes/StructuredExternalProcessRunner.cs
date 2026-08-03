@@ -12,6 +12,9 @@ public sealed class StructuredExternalProcessRunner : IExternalProcessRunner
     internal const int StreamBufferSize = 4_096;
     internal const int HashBufferSize = 65_536;
     internal const int MaximumCaptureLimit = 16_777_216;
+    internal static readonly TimeSpan MaximumTimeout = TimeSpan.FromDays(7);
+
+    private static readonly TimeSpan _monitorInterval = TimeSpan.FromMilliseconds(20);
 
     private static readonly HashSet<string> _managedEnvironmentNames = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -21,6 +24,7 @@ public sealed class StructuredExternalProcessRunner : IExternalProcessRunner
         "LOCALAPPDATA",
         "NUGET_PACKAGES",
         "PACKAGEBUILDER_CACHE_ROOT",
+        "PACKAGEBUILDER_CANCELLATION_FILE",
         "PACKAGEBUILDER_LOG_ROOT",
         "TEMP",
         "TMP",
@@ -31,7 +35,12 @@ public sealed class StructuredExternalProcessRunner : IExternalProcessRunner
         "XDG_CACHE_HOME",
     };
 
-    public async Task<ProcessExecutionOperationResult> RunAsync(ExternalProcessRequest request)
+    public Task<ProcessExecutionOperationResult> RunAsync(ExternalProcessRequest request) =>
+        RunAsync(request, CancellationToken.None);
+
+    public async Task<ProcessExecutionOperationResult> RunAsync(
+        ExternalProcessRequest request,
+        CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request);
 
@@ -42,6 +51,14 @@ public sealed class StructuredExternalProcessRunner : IExternalProcessRunner
             {
                 return ProcessExecutionResult.Failed([.. validationFailures]);
             }
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            string executionId = Guid.NewGuid().ToString("N");
+            string controlFile = Path.Combine(
+                request.TemporaryDirectory,
+                $".packagebuilder-cancel-{executionId}.request");
+            using ExecutionLogFiles logs = CreateExecutionLogs(request, executionId);
 
             // Lock the selected executable against writes and replacement while identity is measured and launch begins.
             using FileStream executable = new(
@@ -55,22 +72,45 @@ public sealed class StructuredExternalProcessRunner : IExternalProcessRunner
             ExecutableMetadata metadata = await InspectExecutableAsync(
                     request.ProjectRoot,
                     request.ExecutablePath,
-                    executable)
+                    executable,
+                    cancellationToken)
                 .ConfigureAwait(false);
 
-            ProcessStartInfo startInfo = CreateStartInfo(request);
+            ProcessStartInfo startInfo = CreateStartInfo(request, controlFile);
             using var process = new Process { StartInfo = startInfo };
             _ = process.Start();
 
+            var activity = new ProcessActivityTracker();
             Task<ProcessStreamCapture> outputTask = CaptureAsync(
                 process.StandardOutput,
-                request.MaximumCapturedCharactersPerStream);
+                logs.StandardOutput,
+                request.MaximumCapturedCharactersPerStream,
+                activity);
             Task<ProcessStreamCapture> errorTask = CaptureAsync(
                 process.StandardError,
-                request.MaximumCapturedCharactersPerStream);
+                logs.StandardError,
+                request.MaximumCapturedCharactersPerStream,
+                activity);
 
-            await process.WaitForExitAsync().ConfigureAwait(false);
+            Task exitTask = process.WaitForExitAsync(CancellationToken.None);
+            ProcessCompletionKind completionKind = await WaitForCompletionAsync(
+                    exitTask,
+                    activity,
+                    request.ExecutionPolicy,
+                    cancellationToken)
+                .ConfigureAwait(false);
+            ProcessCompletionMetadata completion = completionKind == ProcessCompletionKind.Exited
+                ? ProcessCompletionMetadata.Exited
+                : await TerminateAsync(
+                        process,
+                        exitTask,
+                        completionKind,
+                        controlFile,
+                        request.ExecutionPolicy.GracefulTerminationTimeout)
+                    .ConfigureAwait(false);
+
             ProcessStreamCapture[] captures = await Task.WhenAll(outputTask, errorTask).ConfigureAwait(false);
+            logs.Flush();
 
             return ProcessExecutionResult.Success(
                 new ExternalProcessReceipt(
@@ -78,7 +118,16 @@ public sealed class StructuredExternalProcessRunner : IExternalProcessRunner
                     metadata,
                     process.ExitCode,
                     captures[0],
-                    captures[1]));
+                    captures[1],
+                    completion,
+                    logs.Metadata));
+        }
+        catch (OperationCanceledException)
+        {
+            return Failed(
+                "PROCESS_CANCELLED_BEFORE_START",
+                "$",
+                "The external process was cancelled before it started.");
         }
         catch (Exception exception) when (IsExpectedProcessFailure(exception))
         {
@@ -90,7 +139,7 @@ public sealed class StructuredExternalProcessRunner : IExternalProcessRunner
     }
 
     /// <summary>Builds a shell-free start description with literal arguments and an explicit child environment.</summary>
-    private static ProcessStartInfo CreateStartInfo(ExternalProcessRequest request)
+    private static ProcessStartInfo CreateStartInfo(ExternalProcessRequest request, string cancellationFile)
     {
         var startInfo = new ProcessStartInfo
         {
@@ -118,7 +167,12 @@ public sealed class StructuredExternalProcessRunner : IExternalProcessRunner
         }
 
         // These roots are controlled by the runner so child tools cannot redirect project-owned state elsewhere.
-        SetManagedEnvironment(startInfo, request.TemporaryDirectory, request.CacheDirectory, request.LogDirectory);
+        SetManagedEnvironment(
+            startInfo,
+            request.TemporaryDirectory,
+            request.CacheDirectory,
+            request.LogDirectory,
+            cancellationFile);
         return startInfo;
     }
 
@@ -137,7 +191,8 @@ public sealed class StructuredExternalProcessRunner : IExternalProcessRunner
         ProcessStartInfo startInfo,
         string temporaryDirectory,
         string cacheDirectory,
-        string logDirectory)
+        string logDirectory,
+        string cancellationFile)
     {
         foreach (string name in new[] { "APPDATA", "HOME", "LOCALAPPDATA", "TEMP", "TMP", "TMPDIR", "USERPROFILE" })
         {
@@ -149,11 +204,16 @@ public sealed class StructuredExternalProcessRunner : IExternalProcessRunner
             startInfo.Environment[name] = cacheDirectory;
         }
 
+        startInfo.Environment["PACKAGEBUILDER_CANCELLATION_FILE"] = cancellationFile;
         startInfo.Environment["PACKAGEBUILDER_LOG_ROOT"] = logDirectory;
     }
 
     /// <summary>Drains one stream completely while retaining at most the caller-approved character limit.</summary>
-    private static async Task<ProcessStreamCapture> CaptureAsync(StreamReader reader, int maximumCharacters)
+    private static async Task<ProcessStreamCapture> CaptureAsync(
+        StreamReader reader,
+        StreamWriter log,
+        int maximumCharacters,
+        ProcessActivityTracker activity)
     {
         char[] buffer = ArrayPool<char>.Shared.Rent(StreamBufferSize);
         var captured = new StringBuilder(Math.Min(maximumCharacters, StreamBufferSize));
@@ -167,6 +227,10 @@ public sealed class StructuredExternalProcessRunner : IExternalProcessRunner
                 {
                     break;
                 }
+
+                activity.Record();
+                await log.WriteAsync(buffer.AsMemory(0, read)).ConfigureAwait(false);
+                await log.FlushAsync().ConfigureAwait(false);
 
                 int remaining = maximumCharacters - captured.Length;
                 int retained = Math.Min(Math.Max(remaining, 0), read);
@@ -190,7 +254,8 @@ public sealed class StructuredExternalProcessRunner : IExternalProcessRunner
     private static async Task<ExecutableMetadata> InspectExecutableAsync(
         string projectRoot,
         string executablePath,
-        Stream executable)
+        Stream executable,
+        CancellationToken cancellationToken)
     {
         using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
         byte[] buffer = ArrayPool<byte>.Shared.Rent(HashBufferSize);
@@ -199,7 +264,10 @@ public sealed class StructuredExternalProcessRunner : IExternalProcessRunner
         {
             while (true)
             {
-                int read = await executable.ReadAsync(buffer.AsMemory(0, HashBufferSize)).ConfigureAwait(false);
+                int read = await executable.ReadAsync(
+                        buffer.AsMemory(0, HashBufferSize),
+                        cancellationToken)
+                    .ConfigureAwait(false);
                 if (read == 0)
                 {
                     break;
@@ -236,6 +304,7 @@ public sealed class StructuredExternalProcessRunner : IExternalProcessRunner
 
         ValidateArguments(request.Arguments, failures);
         ValidateEnvironment(request.EnvironmentVariables, failures);
+        ValidateExecutionPolicy(request.ExecutionPolicy, failures);
         if (request.MaximumCapturedCharactersPerStream is <= 0 or > MaximumCaptureLimit)
         {
             failures.Add(Failure(
@@ -285,6 +354,168 @@ public sealed class StructuredExternalProcessRunner : IExternalProcessRunner
         }
 
         return failures;
+    }
+
+    /// <summary>Rejects nonpositive, excessive, or internally contradictory process deadlines.</summary>
+    private static void ValidateExecutionPolicy(
+        ProcessExecutionPolicy policy,
+        List<ProcessExecutionFailure> failures)
+    {
+        foreach ((TimeSpan value, string location) in new[]
+                 {
+                     (policy.StartupTimeout, "executionPolicy.startupTimeout"),
+                     (policy.IdleTimeout, "executionPolicy.idleTimeout"),
+                     (policy.TotalTimeout, "executionPolicy.totalTimeout"),
+                     (policy.GracefulTerminationTimeout, "executionPolicy.gracefulTerminationTimeout"),
+                 })
+        {
+            if (value <= TimeSpan.Zero || value > MaximumTimeout)
+            {
+                failures.Add(Failure(
+                    "PROCESS_TIMEOUT_INVALID",
+                    location,
+                    "A process timeout must be positive and no greater than seven days."));
+            }
+        }
+
+        if (policy.StartupTimeout > policy.TotalTimeout)
+        {
+            failures.Add(Failure(
+                "PROCESS_TIMEOUT_ORDER_INVALID",
+                "executionPolicy.startupTimeout",
+                "The startup timeout must not exceed the total timeout."));
+        }
+
+        if (policy.IdleTimeout > policy.TotalTimeout)
+        {
+            failures.Add(Failure(
+                "PROCESS_TIMEOUT_ORDER_INVALID",
+                "executionPolicy.idleTimeout",
+                "The idle timeout must not exceed the total timeout."));
+        }
+    }
+
+    /// <summary>Observes external cancellation and startup, inactivity, and total-runtime deadlines.</summary>
+    private static async Task<ProcessCompletionKind> WaitForCompletionAsync(
+        Task exitTask,
+        ProcessActivityTracker activity,
+        ProcessExecutionPolicy policy,
+        CancellationToken cancellationToken)
+    {
+        while (!exitTask.IsCompleted)
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return ProcessCompletionKind.Cancelled;
+            }
+
+            TimeSpan elapsed = activity.Elapsed;
+            if (elapsed >= policy.TotalTimeout)
+            {
+                return ProcessCompletionKind.TotalTimedOut;
+            }
+
+            if (!activity.HasActivity && elapsed >= policy.StartupTimeout)
+            {
+                return ProcessCompletionKind.StartupTimedOut;
+            }
+
+            if (activity.HasActivity && activity.Idle >= policy.IdleTimeout)
+            {
+                return ProcessCompletionKind.IdleTimedOut;
+            }
+
+            _ = await Task.WhenAny(
+                    exitTask,
+                    Task.Delay(_monitorInterval, CancellationToken.None))
+                .ConfigureAwait(false);
+        }
+
+        await exitTask.ConfigureAwait(false);
+        return ProcessCompletionKind.Exited;
+    }
+
+    /// <summary>Signals the contained worker cooperatively, then kills its entire tree after the grace period.</summary>
+    private static async Task<ProcessCompletionMetadata> TerminateAsync(
+        Process process,
+        Task exitTask,
+        ProcessCompletionKind completionKind,
+        string controlFile,
+        TimeSpan gracefulTerminationTimeout)
+    {
+        bool signalCreated = TryCreateCancellationSignal(controlFile);
+        bool forced = false;
+
+        if (!exitTask.IsCompleted)
+        {
+            _ = await Task.WhenAny(exitTask, Task.Delay(gracefulTerminationTimeout)).ConfigureAwait(false);
+        }
+
+        if (!exitTask.IsCompleted && !process.HasExited)
+        {
+            process.Kill(entireProcessTree: true);
+            forced = true;
+        }
+
+        await exitTask.ConfigureAwait(false);
+        bool cleanupSucceeded = !signalCreated || TryDeleteCancellationSignal(controlFile);
+        return new ProcessCompletionMetadata(
+            completionKind,
+            signalCreated,
+            gracefulTerminationAcknowledged: signalCreated && !forced,
+            forced,
+            cleanupSucceeded);
+    }
+
+    /// <summary>Creates one empty cancellation request atomically without replacing existing state.</summary>
+    private static bool TryCreateCancellationSignal(string controlFile)
+    {
+        try
+        {
+            using FileStream signal = new(
+                controlFile,
+                FileMode.CreateNew,
+                FileAccess.Write,
+                FileShare.Read,
+                bufferSize: 1,
+                FileOptions.WriteThrough);
+            signal.Flush(flushToDisk: true);
+            return true;
+        }
+        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
+        {
+            return false;
+        }
+    }
+
+    /// <summary>Removes only the exact runner-owned signal file and reports cleanup failure explicitly.</summary>
+    private static bool TryDeleteCancellationSignal(string controlFile)
+    {
+        try
+        {
+            File.Delete(controlFile);
+            return !File.Exists(controlFile);
+        }
+        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
+        {
+            return false;
+        }
+    }
+
+    /// <summary>Creates unique complete stream logs beneath the validated contained log root.</summary>
+    private static ExecutionLogFiles CreateExecutionLogs(ExternalProcessRequest request, string executionId)
+    {
+        string jobKey = Convert.ToHexString(
+                SHA256.HashData(Encoding.UTF8.GetBytes(request.JobId.Value)))
+            .ToLowerInvariant()[..16];
+        string directory = Path.Combine(request.LogDirectory, "processes", jobKey, executionId);
+        _ = Directory.CreateDirectory(directory);
+        string standardOutput = Path.Combine(directory, "stdout.log");
+        string standardError = Path.Combine(directory, "stderr.log");
+        return new ExecutionLogFiles(
+            request.ProjectRoot,
+            standardOutput,
+            standardError);
     }
 
     /// <summary>Validates arguments without trimming or interpreting shell metacharacters.</summary>
@@ -504,4 +735,58 @@ public sealed class StructuredExternalProcessRunner : IExternalProcessRunner
 
     private static ProcessExecutionOperationResult Failed(string code, string location, string diagnostic) =>
         ProcessExecutionResult.Failed(Failure(code, location, diagnostic));
+
+    private sealed class ProcessActivityTracker
+    {
+        private readonly long _started = Stopwatch.GetTimestamp();
+        private long _lastActivity;
+
+        public bool HasActivity => Volatile.Read(ref _lastActivity) != 0;
+
+        public TimeSpan Elapsed => Stopwatch.GetElapsedTime(_started);
+
+        public TimeSpan Idle => Stopwatch.GetElapsedTime(Volatile.Read(ref _lastActivity));
+
+        public void Record() => Volatile.Write(ref _lastActivity, Stopwatch.GetTimestamp());
+    }
+
+    private sealed class ExecutionLogFiles(
+        string projectRoot,
+        string standardOutputPath,
+        string standardErrorPath) : IDisposable
+    {
+        public StreamWriter StandardOutput { get; } = CreateWriter(standardOutputPath);
+
+        public StreamWriter StandardError { get; } = CreateWriter(standardErrorPath);
+
+        public ProcessLogMetadata Metadata { get; } = new ProcessLogMetadata(
+                RelativeReference(projectRoot, standardOutputPath),
+                RelativeReference(projectRoot, standardErrorPath));
+
+        public void Flush()
+        {
+            StandardOutput.Flush();
+            StandardError.Flush();
+        }
+
+        public void Dispose()
+        {
+            StandardOutput.Dispose();
+            StandardError.Dispose();
+        }
+
+        private static StreamWriter CreateWriter(string path) =>
+            new(
+                new FileStream(
+                    path,
+                    FileMode.CreateNew,
+                    FileAccess.Write,
+                    FileShare.Read,
+                    StreamBufferSize,
+                    FileOptions.SequentialScan),
+                new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+
+        private static string RelativeReference(string projectRoot, string path) =>
+            Path.GetRelativePath(projectRoot, path).Replace(Path.DirectorySeparatorChar, '/');
+    }
 }

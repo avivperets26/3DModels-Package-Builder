@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using PackageBuilder.Contracts.Processes;
 using PackageBuilder.Domain.BuildJobs;
+using PackageBuilder.Infrastructure.Processes;
 
 namespace PackageBuilder.Infrastructure.Tests.Processes;
 
@@ -9,7 +10,7 @@ public sealed class ProcessRunnerTestWorkspace : IDisposable
     public ProcessRunnerTestWorkspace()
     {
         ProjectRoot = FindProjectRoot();
-        Root = Path.Combine(ProjectRoot, "artifacts", "PB-0207", "tests", Guid.NewGuid().ToString("N"));
+        Root = Path.Combine(ProjectRoot, "artifacts", "PB-0208", "tests", Guid.NewGuid().ToString("N"));
         WorkingDirectory = CreateDirectory("working");
         TemporaryDirectory = CreateDirectory("temporary");
         CacheDirectory = CreateDirectory("cache");
@@ -47,7 +48,8 @@ public sealed class ProcessRunnerTestWorkspace : IDisposable
         string? logDirectory = null,
         IEnumerable<string>? arguments = null,
         IEnumerable<ProcessEnvironmentVariable>? environment = null,
-        int captureLimit = 65_536) =>
+        int captureLimit = 65_536,
+        ProcessExecutionPolicy? executionPolicy = null) =>
         new(
             BuildJobId.Create("Job-PB0207").Value!,
             projectRoot ?? ProjectRoot,
@@ -58,7 +60,19 @@ public sealed class ProcessRunnerTestWorkspace : IDisposable
             logDirectory ?? LogDirectory,
             arguments ?? [],
             environment ?? [new ProcessEnvironmentVariable("DOTNET_ROOT", DotnetRoot)],
-            captureLimit);
+            captureLimit,
+            executionPolicy);
+
+    public string ResolveReference(string reference) =>
+        Path.Combine(ProjectRoot, reference.Replace('/', Path.DirectorySeparatorChar));
+
+    public static Task<ProcessExecutionOperationResult> RunAsync(ExternalProcessRequest request) =>
+        new StructuredExternalProcessRunner().RunAsync(request, TestContext.Current.CancellationToken);
+
+    public static Task<ProcessExecutionOperationResult> RunWithCancellationAsync(
+        ExternalProcessRequest request,
+        CancellationTokenSource cancellation) =>
+        new StructuredExternalProcessRunner().RunAsync(request, cancellation.Token);
 
     public string CreateDirectory(string relativePath)
     {
