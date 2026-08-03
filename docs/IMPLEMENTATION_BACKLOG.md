@@ -158,7 +158,25 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0206 | 🟡 **PROCESS** | `feat/PB-0206-atomic-promotion` | Infrastructure Engineering for local work; user for Git gates | 2026-08-03 | PB-0205 completion is synchronized from final task commit `f8ea3330726ed314db0d51b8cc2d4e87290f4332`, PR #34, merge `9d8510480fdb5f1497ecc81530d11df8f206143c`, successful PR run 30825282015, successful required main run 30825288015, and explicit user confirmation. Validated-only promotion, hidden per-job same-volume staging, content revalidation, atomic journal/final renames, deterministic bounded collision versions, strict recovery journals, interrupted resume, root/path/reparse defense, and sanitized failure behavior are implemented. Focused tests pass 59/59; all 21 new executable components have 100% line/branch coverage; the 15-project Release build has zero warnings/errors; all 1,512 core tests, repository baseline 29/29, formatting, Ruff, and all nine local Core CI stages pass. | User-controlled commit/push and merge, successful required `main` CI, explicit completion confirmation, and next-task rollover remain. |
+| PB-0207 | 🟡 **PROCESS** | `feat/PB-0207-process-runner` | Infrastructure Engineering for local work; user for Git gates | 2026-08-03 | PB-0206 completion is synchronized from final task commit `b4aec5ebb1edcbcc9b29b43ffc3c9f175d69eed9`, PR #35, merge `570182210df18c7af2f2cac1a3ffdc09279aa46a`, successful PR run 30840565528, successful required main run 30840576320, and explicit user confirmation. A direct shell-free process runner now provides literal `ArgumentList` invocation, explicit isolated environment roots, exact working-directory control, bounded separate stdout/stderr capture, exit code and executable metadata, and strict contained canonical path/reparse validation. Focused tests pass 34/34; all 14 new production/compiler-generated components have 100% line/branch coverage; the 15-project Debug and Release builds have zero warnings/errors; all 1,546 core tests, repository baseline 29/29, formatting, Ruff, and all nine local Core CI stages pass. | User-controlled commit/push and merge, successful required `main` CI, explicit completion confirmation, and next-task rollover remain. |
+
+### PB-0206 Completion Evidence
+
+Detailed implementation, validation, and final publication evidence are recorded in
+`docs/PB-0206_ATOMIC_PROMOTION_EVIDENCE.md`.
+
+- Final task commit `b4aec5ebb1edcbcc9b29b43ffc3c9f175d69eed9` was pushed on
+  `feat/PB-0206-atomic-promotion`.
+- The task merged through [pull request #35](https://github.com/avivperets26/3DModels-Package-Builder/pull/35)
+  into `main` as `570182210df18c7af2f2cac1a3ffdc09279aa46a`.
+- [PR workflow run 30840565528](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30840565528)
+  and required [main workflow run 30840576320](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30840576320)
+  completed successfully.
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-03.
+- No CI, completion, or quality exception was used.
+- This PB-0207 rollover marks PB-0206 `[x]` / 🟢 **DONE**, removes it from Active Work, and adds
+  exactly one chronological Completion Log row.
 
 ### PB-0205 Completion Evidence
 
@@ -487,6 +505,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0203 | `feat/PB-0203-source-snapshots` | `0cb2b033ffe3f35cad411aea8d79023d7d8e1123` | [#32](https://github.com/avivperets26/3DModels-Package-Builder/pull/32) | 2026-08-03 | Original implementation commit `770cbdd` and final corrective commit `0cb2b033ffe3f35cad411aea8d79023d7d8e1123` merged into `main` as `f9d99c9f9f400c46c2c0ba3e25a8983b946b5c3`; corrected [PR workflow run 30817505318](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30817505318) and required [main workflow run 30817611922](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30817611922) succeeded. No exception was used; the user explicitly confirmed the merge and green required `main` CI on 2026-08-03. |
 | PB-0204 | `feat/PB-0204-artifact-hashing` | `e04d8ffbcf796be18601a79b51855a84c20a56a8` | [#33](https://github.com/avivperets26/3DModels-Package-Builder/pull/33) | 2026-08-03 | Merged into `main` as `bc500825c93fbcbe16a65b92728dda2424a248ee`; [PR workflow run 30821592450](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30821592450) and required [main workflow run 30821598836](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30821598836) succeeded. No exception was used; the user explicitly confirmed the merge and green required `main` CI on 2026-08-03. |
 | PB-0205 | `feat/PB-0205-artifact-store` | `f8ea3330726ed314db0d51b8cc2d4e87290f4332` | [#34](https://github.com/avivperets26/3DModels-Package-Builder/pull/34) | 2026-08-03 | Merged into `main` as `9d8510480fdb5f1497ecc81530d11df8f206143c`; [PR workflow run 30825282015](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30825282015) and required [main workflow run 30825288015](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30825288015) succeeded. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-03. |
+| PB-0206 | `feat/PB-0206-atomic-promotion` | `b4aec5ebb1edcbcc9b29b43ffc3c9f175d69eed9` | [#35](https://github.com/avivperets26/3DModels-Package-Builder/pull/35) | 2026-08-03 | Merged into `main` as `570182210df18c7af2f2cac1a3ffdc09279aa46a`; [PR workflow run 30840565528](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30840565528) and required [main workflow run 30840576320](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30840576320) succeeded. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-03. |
 
 ## 5. Milestones
 
@@ -711,12 +730,12 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0203, PB-0204
   - Done when: job artifacts beneath `C:\Dev\PackageBuilder\artifacts` have typed paths, hashes, sizes, roles, and lifecycle rules.
 
-- [ ] **PB-0206 — Implement atomic release promotion** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0206 — Implement atomic release promotion** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0206-atomic-promotion`
   - Depends on: PB-0205
   - Done when: only validated outputs can move into `Builds`, collisions are versioned safely, and interrupted promotion recovers without partial releases.
 
-- [ ] **PB-0207 — Implement structured external process runner** — **P0**
+- [ ] **PB-0207 — Implement structured external process runner** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0207-process-runner`
   - Depends on: PB-0112
   - Done when: `ArgumentList`, stdout/stderr capture, environment, working directory, exit code, and executable metadata are tested without shell-string interpolation; executable, temp, cache, and log paths are contained beneath the project root.

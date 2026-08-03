@@ -830,6 +830,14 @@ deterministic `Name (2).ext` collision versions through a bounded search. A stri
 journal resumes interruption before or after rename without exposing an incomplete release or
 creating a duplicate, after which the artifact lifecycle advances to `promoted`.
 
+PB-0207 adds the shell-free external-tool execution boundary. Executables, working directories,
+and tool-owned temporary/cache/log roots must be existing canonical reparse-free descendants of
+the project root. Literal arguments use the platform argument list rather than a shell command;
+the child receives an explicit isolated environment. The resulting receipt records executable
+identity, exit code, and separately bounded stdout/stderr captures. Cancellation, timeout,
+process-tree termination, cleanup, JSON Lines framing, orchestration, and user-facing progress
+remain assigned to their later planned tasks.
+
 The supported development workflow uses the repository-local .NET SDK through PowerShell and `dotnet` commands in Visual Studio Code. Paid Visual Studio is optional and no required task may depend on its IDE, designer, test runner, or build system. Every required technology must have a no-cost local path; optional remote hosting and CI cannot be necessary for local builds.
 
 The user-approved public GitHub repository is [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder). The original planned repository name is `package-builder`; its difference from the actual repository name remains unresolved until the user makes a separate decision. Code namespaces begin with `PackageBuilder`; marketplace-specific modules use names such as `PackageBuilder.Marketplaces.Fab`.

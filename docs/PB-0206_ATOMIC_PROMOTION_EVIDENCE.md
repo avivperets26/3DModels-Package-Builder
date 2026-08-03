@@ -2,7 +2,7 @@
 
 **Task:** PB-0206 — Implement atomic release promotion
 **Branch:** `feat/PB-0206-atomic-promotion`
-**Lifecycle:** 🟡 **PROCESS**
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-08-03
 
 ## Scope and rollover
@@ -17,8 +17,17 @@ and required
 completed successfully. The user explicitly confirmed the push, merge, green required `main` CI,
 and completion on 2026-08-03. No exception was used.
 
-PB-0206 remains `[ ]` / 🟡 **PROCESS** and absent from the Completion Log until its
-user-controlled publication, required `main` CI, explicit confirmation, and next-task rollover.
+PB-0206 is `[x]` / 🟢 **DONE**, absent from Active Work, and recorded exactly once in the
+Completion Log during the PB-0207 rollover.
+
+Final task commit `b4aec5ebb1edcbcc9b29b43ffc3c9f175d69eed9` merged through
+[pull request #35](https://github.com/avivperets26/3DModels-Package-Builder/pull/35) as
+`570182210df18c7af2f2cac1a3ffdc09279aa46a`.
+[PR workflow run 30840565528](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30840565528)
+and required
+[main workflow run 30840576320](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30840576320)
+completed successfully. The user explicitly confirmed the push, merge, green required `main` CI,
+and completion on 2026-08-03. No exception was used.
 
 ## Implemented boundary
 
@@ -91,8 +100,7 @@ perform real contained filesystem publication, collision, tampering, interruptio
 reparse, and bounded-exhaustion scenarios. The first supported visual workflow remains the later
 WPF vertical slice; no package preview is claimed here.
 
-## Remaining gates
+## Final state
 
-Final exact-worktree validation, user-controlled commit and branch push, merge into and push of
-`main`, successful required `main` CI, explicit completion confirmation, and PB-0207 rollover
-remain.
+Every PB-0206 implementation, validation, publication, required `main` CI, user-confirmation, and
+rollover gate is complete. No PB-0206 work remains.
