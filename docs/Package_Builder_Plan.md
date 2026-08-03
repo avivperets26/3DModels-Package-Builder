@@ -821,6 +821,15 @@ create-new writes. It does not execute archive content or modify the source. Pro
 defaults, immutable snapshots/hashes, cleanup, and atomic promotion remain owned by their later
 planned tasks.
 
+PB-0206 adds the contained atomic publication boundary. Only a PB-0205 artifact whose persisted
+bytes/hash revalidate and whose lifecycle is `validated` may begin promotion into
+`artifacts/Builds`. Bytes are streamed into a hidden artifact-root same-volume partial outside the
+Builds release tree, rehashed, and made
+visible only through a non-overwriting atomic rename. Existing names are preserved and receive
+deterministic `Name (2).ext` collision versions through a bounded search. A strict persisted
+journal resumes interruption before or after rename without exposing an incomplete release or
+creating a duplicate, after which the artifact lifecycle advances to `promoted`.
+
 The supported development workflow uses the repository-local .NET SDK through PowerShell and `dotnet` commands in Visual Studio Code. Paid Visual Studio is optional and no required task may depend on its IDE, designer, test runner, or build system. Every required technology must have a no-cost local path; optional remote hosting and CI cannot be necessary for local builds.
 
 The user-approved public GitHub repository is [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder). The original planned repository name is `package-builder`; its difference from the actual repository name remains unresolved until the user makes a separate decision. Code namespaces begin with `PackageBuilder`; marketplace-specific modules use names such as `PackageBuilder.Marketplaces.Fab`.

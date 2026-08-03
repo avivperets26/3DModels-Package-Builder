@@ -2,7 +2,7 @@
 
 **Task:** PB-0205 — Implement artifact-store layout and metadata  
 **Branch:** `feat/PB-0205-artifact-store`  
-**Lifecycle:** 🟡 **PROCESS**  
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-08-03
 
 ## Scope and rollover
@@ -14,8 +14,15 @@ Completion Log. Final task commit `e04d8ffbcf796be18601a79b51855a84c20a56a8` mer
 [main workflow run 30821598836](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30821598836)
 succeeded. The user explicitly confirmed completion on 2026-08-03. No exception was used.
 
-PB-0205 remains `[ ]` / 🟡 **PROCESS** and absent from the Completion Log until its
-user-controlled publication, required `main` CI, explicit confirmation, and next-task rollover.
+PB-0205 final task commit `f8ea3330726ed314db0d51b8cc2d4e87290f4332` merged through
+[pull request #34](https://github.com/avivperets26/3DModels-Package-Builder/pull/34) as
+`9d8510480fdb5f1497ecc81530d11df8f206143c`.
+[PR workflow run 30825282015](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30825282015)
+and required
+[main workflow run 30825288015](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30825288015)
+completed successfully. The user explicitly confirmed completion on 2026-08-03. No exception was
+used. This PB-0206 rollover marks PB-0205 `[x]` / 🟢 **DONE**, removes it from Active Work, and
+adds exactly one chronological Completion Log row.
 
 ## Implemented boundary
 
@@ -77,8 +84,7 @@ physically create, read, tamper with, and transition disposable artifact entries
 project-contained ignored evidence root. The first supported visual workflow remains the later
 WPF vertical slice; no preview or package-build UI is claimed here.
 
-## Remaining gates
+## Completion
 
-Final exact-worktree validation, user-controlled commit and branch push, merge into and push of
-`main`, successful required `main` CI, explicit completion confirmation, and PB-0206 rollover
-remain.
+No PB-0205 gate remains. PB-0206 owns the physical atomic release-promotion boundary without
+reopening the completed artifact-store task.
