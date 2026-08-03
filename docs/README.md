@@ -1,6 +1,6 @@
 # Package Builder Documentation
 
-This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. The E00 repository foundation, E01 domain/contracts work through PB-0113, PB-0201 configuration/path-root validation, PB-0202 safe ZIP processing, and PB-0203 immutable source snapshots are complete. PB-0204 streamed artifact identity is active. JSON Lines stream framing, process execution, model import, engine workers, packaging, desktop UI, broader security hardening, and installation features are not claimed as implemented.
+This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. The E00 repository foundation, E01 domain/contracts work through PB-0113, PB-0201 configuration/path-root validation, PB-0202 safe ZIP processing, PB-0203 immutable source snapshots, and PB-0204 streamed artifact identity are complete. PB-0205 artifact-store layout and metadata are active. Atomic release promotion, JSON Lines stream framing, process execution, model import, engine workers, packaging, desktop UI, broader security hardening, and installation features are not claimed as implemented.
 
 ## Primary Documentation
 
@@ -63,6 +63,7 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 - [PB-0202 safe archive inspection and extraction evidence](PB-0202_SAFE_ARCHIVE_EVIDENCE.md)
 - [PB-0203 immutable source snapshot evidence](PB-0203_SOURCE_SNAPSHOT_EVIDENCE.md)
 - [PB-0204 streamed artifact identity evidence](PB-0204_ARTIFACT_HASHING_EVIDENCE.md)
+- [PB-0205 artifact-store layout and metadata evidence](PB-0205_ARTIFACT_STORE_EVIDENCE.md)
 
 ## Dependency and Licence Records
 

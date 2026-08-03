@@ -2,7 +2,7 @@
 
 **Task:** PB-0204 — Implement streamed hashing and artifact identity
 **Branch:** `feat/PB-0204-artifact-hashing`
-**Lifecycle:** 🟡 **PROCESS**
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-08-03
 
 ## Scope and rollover
@@ -13,8 +13,13 @@ request #32 as `f9d99c9f9f400c46c2c0ba3e25a8983b946b5c3`; corrected pull-request
 workflow run `30817505318` and required `main` workflow run `30817611922` succeeded. The user
 explicitly confirmed completion on 2026-08-03. No exception was used.
 
-PB-0204 remains `[ ]` / 🟡 **PROCESS** and absent from the Completion Log until its implementation,
-user-controlled publication, required `main` CI, confirmation, and next-task rollover gates pass.
+PB-0204 is `[x]` / 🟢 **DONE**, absent from Active Work, and recorded exactly once in the
+Completion Log. Final task commit `e04d8ffbcf796be18601a79b51855a84c20a56a8` merged through
+[pull request #33](https://github.com/avivperets26/3DModels-Package-Builder/pull/33) as
+`bc500825c93fbcbe16a65b92728dda2424a248ee`. PR workflow run `30821592450` and required
+[main workflow run 30821598836](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30821598836)
+succeeded. The user explicitly confirmed the merge and green required `main` CI on 2026-08-03.
+No exception was used.
 
 ## Implemented boundary
 
@@ -80,7 +85,7 @@ test proves bounded reads and duplicate detection. A developer may also run the 
 and inspect its ignored evidence beneath `artifacts/PB-0204`; no supported packaging preview is
 claimed. The first genuinely visual test remains the later WPF/preview vertical slice.
 
-## Remaining gates
+## Completion
 
-Final exact-worktree validation, user-controlled commit and branch push, merge into and push of
-`main`, successful required `main` CI, explicit user confirmation, and PB-0205 rollover remain.
+No PB-0204 gate remains. PB-0205 owns artifact-store layout and metadata without reopening the
+completed streamed-hashing task.
