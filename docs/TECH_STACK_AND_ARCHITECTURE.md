@@ -906,6 +906,28 @@ orchestration, database, engine, UI, marketplace, or network behavior. PB-0214 o
 cache storage, PB-0215 owns aggregate resource/concurrency guards, and PB-1506 retains the later
 cross-cutting destructive-target containment suite.
 
+### 9.7 PB-0207 structured external process boundary
+
+PB-0207 implements `IExternalProcessRunner` as the single shell-free boundary for contained
+external tools. Requests carry typed job ownership, canonical project/executable/working/temp/
+cache/log paths, immutable literal arguments, explicit environment entries, and a bounded
+per-stream capture limit. `ProcessStartInfo.UseShellExecute` is false and only `ArgumentList` is
+used; command-string interpolation and shell quoting are absent.
+
+The child begins with an empty environment. Only reviewed Windows bootstrap variables are copied,
+while common profile, temporary, cache, and log variables are forced to contained request roots.
+Every launch path must already be an existing canonical absolute strict descendant of the project
+root and must not cross an existing reparse point. The executable is locked against replacement
+while its byte count, SHA-256, safe relative path, and available version metadata are measured and
+launch begins.
+
+Standard output and error are drained independently and concurrently, retained only to the
+caller-approved bound, and returned with truncation flags and the exact exit code. Expected
+validation, access, launch, metadata, and I/O failures use sanitized structured results that do not
+repeat rejected paths, argument values, or environment values. PB-0208 owns cancellation,
+timeouts, process-tree termination, and cleanup; PB-0209 owns JSON Lines framing and recovery;
+PB-0212 owns structured redacted logs; PB-0213 owns orchestration and retry/resume behavior.
+
 ## 10. Build Job State Machine
 
 ```mermaid

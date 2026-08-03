@@ -65,6 +65,7 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 - [PB-0204 streamed artifact identity evidence](PB-0204_ARTIFACT_HASHING_EVIDENCE.md)
 - [PB-0205 artifact-store layout and metadata evidence](PB-0205_ARTIFACT_STORE_EVIDENCE.md)
 - [PB-0206 atomic release promotion evidence](PB-0206_ATOMIC_PROMOTION_EVIDENCE.md)
+- [PB-0207 structured external process runner evidence](PB-0207_STRUCTURED_PROCESS_RUNNER_EVIDENCE.md)
 
 ## Dependency and Licence Records
 
