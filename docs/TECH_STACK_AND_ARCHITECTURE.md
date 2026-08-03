@@ -872,6 +872,40 @@ that operation. PB-0214 retains cleanup/recovery and cache ownership, and PB-021
 and concurrency guards. PB-0205 adds no deletion, network, database, engine, UI, or marketplace
 behavior.
 
+### 9.6 PB-0206 atomic release promotion
+
+PB-0206 implements `IArtifactPromotionService` between PB-0205's validated artifact store and the
+configured project-contained `artifacts/Builds` root. The service reuses PB-0205 integrity reads;
+only a record in `validated` state may begin physical promotion, while an already `promoted`
+record may only resume from its matching persisted journal.
+
+The artifact's safe logical reference becomes a portable Builds-relative file path. Promotion
+revalidates canonical project/artifact/Builds containment and existing reparse boundaries, rejects
+Windows device names, invalid/reserved characters, controls, and trailing dots/spaces, then
+streams the payload through a pooled 64 KiB buffer into the hidden same-volume
+artifact-root `.packagebuilder-promotion/{job-key}/{artifact-key}.partial` path, outside the Builds
+release tree but on the same volume. Independent job and artifact keys prevent same-ID staging
+collisions across jobs. The complete partial is rehashed against
+the validated PB-0205 content identity before a non-overwriting `File.Move` atomically exposes the
+final release.
+
+Existing releases are immutable collision inputs rather than overwrite targets. Version 1 uses
+the requested name; later versions use `Name (2).ext` through a bounded 10,000-name search. A
+collision appearing after selection but before rename advances the same persisted intent and
+retries without replacing either file.
+
+Each artifact stores one strict bounded version-one `promotion.json` recovery journal before
+copying. A restart can reuse an identity-matching complete partial, rebuild a corrupt partial,
+recognize a completed atomic rename, and finish the optimistic `validated` to `promoted` metadata
+transition without creating a second release. A promoted record with a missing/inconsistent
+journal or changed release fails closed. No final release path is visible before the complete
+same-volume rename.
+
+PB-0206 adds no release deletion, package composition, product/version naming defaults, job
+orchestration, database, engine, UI, marketplace, or network behavior. PB-0214 owns deterministic
+cache storage, PB-0215 owns aggregate resource/concurrency guards, and PB-1506 retains the later
+cross-cutting destructive-target containment suite.
+
 ## 10. Build Job State Machine
 
 ```mermaid
