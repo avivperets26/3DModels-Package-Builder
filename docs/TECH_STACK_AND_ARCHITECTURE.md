@@ -928,6 +928,27 @@ repeat rejected paths, argument values, or environment values. PB-0208 owns canc
 timeouts, process-tree termination, and cleanup; PB-0209 owns JSON Lines framing and recovery;
 PB-0212 owns structured redacted logs; PB-0213 owns orchestration and retry/resume behavior.
 
+### 9.8 PB-0208 process lifecycle boundary
+
+PB-0208 extends the process runner with explicit positive startup, idle, total-runtime, and
+graceful-termination intervals. Startup requires the first stdout or stderr activity, either
+stream resets the idle timer, and total runtime remains absolute. External cancellation propagates
+through `CancellationToken` into the runner; cancellation before launch produces no child or
+runtime state.
+
+After a started process is cancelled or exceeds a deadline, the runner atomically creates one
+unpredictable marker beneath the validated temporary root and exposes its exact path through the
+runner-owned `PACKAGEBUILDER_CANCELLATION_FILE` child environment variable. Cooperative workers
+may exit during the bounded grace period. Otherwise the runner terminates the complete process
+tree and waits for exit. Only a marker successfully created by the runner is deleted, preventing a
+collision from authorizing deletion of unowned state.
+
+Every started process receives unique complete stdout/stderr files beneath the validated contained
+log root in addition to bounded in-memory captures. Receipts use safe project-relative references
+and record the completion cause, signal creation, graceful acknowledgement, forced escalation, and
+cleanup result. PB-0209 owns JSON Lines parsing; PB-0212 owns structured redaction and correlation;
+PB-0213 owns persisted orchestration and retry/resume behavior; PB-1314 owns user controls.
+
 ## 10. Build Job State Machine
 
 ```mermaid

@@ -98,8 +98,72 @@ public sealed class ProcessExecutionContractTests
             new ProcessExecutionFailure("CODE", "location", "diagnostic"));
         Assert.False(failed.IsSuccess);
         _ = Assert.Single(failed.Failures);
+        MethodInfo noTokenOverload = typeof(StructuredExternalProcessRunner).GetMethod(
+            nameof(StructuredExternalProcessRunner.RunAsync),
+            [typeof(ExternalProcessRequest)])
+            ?? throw new InvalidOperationException("The no-token process overload was not found.");
+        var noTokenTask = (Task<ProcessExecutionOperationResult>)(noTokenOverload.Invoke(
+            new StructuredExternalProcessRunner(),
+            [null!]) ?? throw new InvalidOperationException("The no-token process overload returned no task."));
+        _ = await Assert.ThrowsAsync<ArgumentNullException>(async () => await noTokenTask);
         _ = await Assert.ThrowsAsync<ArgumentNullException>(async () =>
-            await new StructuredExternalProcessRunner().RunAsync(null!));
+            await new StructuredExternalProcessRunner().RunAsync(null!, TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    public void LifecycleContractsExposeDefaultsAndExplicitReceiptMetadata()
+    {
+        ProcessExecutionPolicy policy = ProcessExecutionPolicy.Default;
+        Assert.Equal(TimeSpan.FromMinutes(2), policy.StartupTimeout);
+        Assert.Equal(TimeSpan.FromMinutes(10), policy.IdleTimeout);
+        Assert.Equal(TimeSpan.FromHours(4), policy.TotalTimeout);
+        Assert.Equal(TimeSpan.FromSeconds(15), policy.GracefulTerminationTimeout);
+
+        var logs = new ProcessLogMetadata("logs/stdout.log", "logs/stderr.log");
+        Assert.Equal("logs/stdout.log", logs.StandardOutputReference);
+        Assert.Equal("logs/stderr.log", logs.StandardErrorReference);
+
+        BuildJobId jobId = BuildJobId.Create("Job-1").Value!;
+        var executable = new ExecutableMetadata("tool.exe", 0, new string('a', 64), null, null);
+        var capture = new ProcessStreamCapture(string.Empty, false);
+        var completion = new ProcessCompletionMetadata(
+            ProcessCompletionKind.Cancelled,
+            cancellationSignalCreated: true,
+            gracefulTerminationAcknowledged: true,
+            forcedTermination: false,
+            controlFileCleanupSucceeded: true);
+        var explicitReceipt = new ExternalProcessReceipt(
+            jobId,
+            executable,
+            42,
+            capture,
+            capture,
+            completion,
+            logs);
+        var defaultReceipt = new ExternalProcessReceipt(jobId, executable, 0, capture, capture);
+
+        Assert.Same(completion, explicitReceipt.Completion);
+        Assert.Same(logs, explicitReceipt.Logs);
+        Assert.Same(ProcessCompletionMetadata.Exited, defaultReceipt.Completion);
+        Assert.Null(defaultReceipt.Logs);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    [InlineData("C:/logs/stdout.log")]
+    [InlineData("logs\\stdout.log")]
+    [InlineData("logs:stdout.log")]
+    [InlineData("logs\n/stdout.log")]
+    [InlineData("logs//stdout.log")]
+    [InlineData("logs/./stdout.log")]
+    [InlineData("logs/../stdout.log")]
+    public void LogReferencesRejectUnsafeValues(string? reference)
+    {
+        _ = reference is null
+            ? Assert.Throws<ArgumentNullException>(() => new ProcessLogMetadata(reference!, "stderr.log"))
+            : Assert.Throws<ArgumentException>(() => new ProcessLogMetadata(reference, "stderr.log"));
     }
 
     [Theory]

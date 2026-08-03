@@ -2,7 +2,7 @@
 
 **Task:** PB-0207 — Implement structured external process runner  
 **Branch:** `feat/PB-0207-process-runner`  
-**Lifecycle:** 🟡 **PROCESS**  
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-08-03
 
 ## Scope and rollover
@@ -17,8 +17,20 @@ and required
 completed successfully. The user explicitly confirmed the push, merge, green required `main` CI,
 and completion on 2026-08-03. No exception was used.
 
-PB-0207 remains `[ ]` / 🟡 **PROCESS** and absent from the Completion Log until its one
-user-controlled publication, required `main` CI, explicit confirmation, and next-task rollover.
+PB-0207 is `[x]` / 🟢 **DONE**, absent from Active Work, and recorded exactly once in the
+Completion Log by the PB-0208 rollover.
+
+## Final publication
+
+- Final task commit `3b49e6e0b5aa390680ce18d93a5a4f15eb988d94` was pushed on
+  `feat/PB-0207-process-runner`.
+- [Pull request #36](https://github.com/avivperets26/3DModels-Package-Builder/pull/36) merged the
+  task into `main` as `9ebc50c5bceab42e79201c6cf9c898150d270669`.
+- [PR workflow run 30844336598](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30844336598)
+  and required [main workflow run 30845827814](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30845827814)
+  completed successfully.
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-03. No exception was used.
 
 ## Implemented boundary
 
@@ -91,6 +103,4 @@ behavior. The first supported visual workflow remains the later WPF vertical sli
 
 ## Remaining gates
 
-Final exact-worktree validation, user-controlled commit and branch push, merge into and push of
-`main`, successful required `main` CI, explicit completion confirmation, and PB-0208 rollover
-remain.
+None. PB-0207 is complete.

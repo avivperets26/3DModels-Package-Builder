@@ -838,6 +838,14 @@ identity, exit code, and separately bounded stdout/stderr captures. Cancellation
 process-tree termination, cleanup, JSON Lines framing, orchestration, and user-facing progress
 remain assigned to their later planned tasks.
 
+PB-0208 adds bounded process lifecycle control. Requests define startup, idle, total, and graceful
+shutdown intervals; caller cancellation is cooperative first and escalates to complete process-tree
+termination only after the grace period. Cancellation markers stay beneath the job-owned temporary
+root, exact marker ownership controls cleanup, and complete stdout/stderr files remain beneath the
+contained log root even when bounded receipt captures truncate. JSON Lines framing, structured
+redaction, persisted orchestration, retry/resume, and user-facing cancellation remain assigned to
+their later planned tasks.
+
 The supported development workflow uses the repository-local .NET SDK through PowerShell and `dotnet` commands in Visual Studio Code. Paid Visual Studio is optional and no required task may depend on its IDE, designer, test runner, or build system. Every required technology must have a no-cost local path; optional remote hosting and CI cannot be necessary for local builds.
 
 The user-approved public GitHub repository is [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder). The original planned repository name is `package-builder`; its difference from the actual repository name remains unresolved until the user makes a separate decision. Code namespaces begin with `PackageBuilder`; marketplace-specific modules use names such as `PackageBuilder.Marketplaces.Fab`.
