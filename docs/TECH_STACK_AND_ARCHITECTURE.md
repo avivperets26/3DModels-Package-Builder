@@ -801,6 +801,31 @@ promotion (PB-0206/PB-0214), product-specific quota defaults (PB-0215), or the l
 archive suites (PB-1501/PB-1502). Failed partial output remains confined to the new job-owned
 destination and is reported for those later cleanup boundaries.
 
+### 9.3 PB-0203 immutable source snapshots
+
+PB-0203 separates immutable snapshot contracts from physical filesystem I/O. A caller names the
+trusted project root, an accepted source directory, an existing dedicated job root, a new
+`source-snapshot` destination, and explicit file-count, per-file-byte, and total-byte limits. The
+service has no hidden production quota defaults.
+
+The complete source tree is preflighted before the destination is created. Project, source, job,
+and snapshot paths must already be absolute and canonical. Source and job roots must be strict
+project descendants, the snapshot must be a strict job descendant, and source/destination trees
+must not overlap. Existing components and enumerated entries are rejected when they cross a
+reparse point; names must be portable across the supported Windows/engine toolchain.
+
+Accepted files are always copied rather than hard-linked. Each source is opened without
+write/delete sharing, copied asynchronously with a bounded 64 KiB buffer and create-new output
+semantics, and hashed with SHA-256 during that same stream. A successful immutable receipt lists
+logical `/`-separated paths, exact byte counts, and lowercase digests in deterministic order.
+Copied files are marked read-only after flush. The service exposes no mutation operation and never
+writes into `runtime-data/source-assets`.
+
+PB-0203 intentionally does not define reusable artifact identity, duplicate-content detection, or
+cache keys (PB-0204), artifact-store metadata (PB-0205), cleanup/recovery (PB-0214), or approved
+product defaults and aggregate resource guards (PB-0215). A failed partial destination remains
+job-contained and must be discarded by the later cleanup boundary.
+
 ## 10. Build Job State Machine
 
 ```mermaid

@@ -2,7 +2,7 @@
 
 **Task:** PB-0202 — Implement safe archive inspection and extraction
 **Branch:** `security/PB-0202-safe-archive-extraction`
-**Lifecycle:** 🟡 **PROCESS**
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-08-03
 
 ## Scope and rollover
@@ -13,8 +13,11 @@ using corrective commit `ada453196578c7233e5545451e5a44f792d0ec9c`, pull request
 `dccb1696baa742c5024344ad8802b82a25a1b342`, and successful required `main` workflow
 `30807459397`.
 
-PB-0202 remains `[ ]` / 🟡 **PROCESS** and absent from the Completion Log until the user-controlled
-publication, required `main` CI, confirmation, and next-task rollover gates pass.
+PB-0202 is `[x]` / 🟢 **DONE**, removed from Active Work, and recorded exactly once in the
+Completion Log. Task commit `8fb5730fa345e6e535167ea3abe725ed348cd361` merged through pull
+request #31 as `69e667c948ff8b9bf56ea5b26e814fbc9dd03343`; required `main` workflow
+run `30810800726` succeeded for that exact merge. The user explicitly confirmed completion on
+2026-08-03. No exception was used.
 
 ## Design
 
@@ -97,7 +100,7 @@ Not applicable. PB-0202 is filesystem/security infrastructure and adds no UI or 
 The first useful visual manual workflow remains deferred until the desktop workflow and preview
 pipeline exist.
 
-## Remaining gates
+## Publication result
 
-User-controlled commit and task-branch push, merge into and push of `main`, successful required
-`main` CI, explicit user confirmation, and PB-0203 rollover remain.
+All PB-0202 implementation, publication, required `main` CI, confirmation, and rollover gates
+passed. PB-0203 owns subsequent immutable source snapshots; no PB-0202 gate remains.
