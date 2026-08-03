@@ -1,8 +1,8 @@
 # PB-0201 Configuration and Path-Root Validation Evidence
 
-**Task:** PB-0201 — Implement configuration loading and path-root validation  
-**Branch:** `feat/PB-0201-configuration-paths`  
-**Lifecycle:** 🟡 **PROCESS**  
+**Task:** PB-0201 — Implement configuration loading and path-root validation
+**Branch:** `feat/PB-0201-configuration-paths`
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-08-03
 
 ## Scope and rollover
@@ -48,8 +48,8 @@ On 2026-08-03 the user explicitly approved a one-time PB-0201 corrective-publica
 because PR #28 had already merged before its failing checks completed. The exception is limited
 to `PackageBuilderPathConfigurationLoaderTests.cs`, this evidence document, and PB-0201 Active
 Work synchronization in `IMPLEMENTATION_BACKLOG.md`; it adds no feature scope and creates no
-precedent. PB-0201 remains `[ ]` / 🟡 **PROCESS** and absent from the Completion Log until the
-correction is published, required corrected `main` CI succeeds, and the user confirms completion.
+precedent. Corrective publication and completion evidence are recorded below; PB-0201 is now
+`[x]` / 🟢 **DONE** and appears exactly once in the Completion Log.
 
 ## Configuration decision
 
@@ -180,8 +180,14 @@ engine integration, marketplace behavior, UI, or PB-0202 work.
 
 ## Remaining gates
 
-- User-controlled corrective staging and commit, task-branch push, corrective merge into and push
-  of `main`, successful required corrected `main` CI, and explicit completion confirmation.
+None. Corrective commit `ada453196578c7233e5545451e5a44f792d0ec9c` passed
+[PR workflow run 30807451695](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30807451695)
+and merged through [pull request #30](https://github.com/avivperets26/3DModels-Package-Builder/pull/30)
+as `dccb1696baa742c5024344ad8802b82a25a1b342`. Corrected required
+[main workflow run 30807459397](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30807459397)
+succeeded for that exact merge. The user explicitly confirmed corrected green required `main` CI
+and completion on 2026-08-03. PB-0201 is removed from Active Work and recorded exactly once in the
+Completion Log during the PB-0202 rollover. The one-time PB-0201 exception creates no precedent.
 
 ## Manual visual testing
 

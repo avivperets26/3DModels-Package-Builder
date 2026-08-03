@@ -780,6 +780,27 @@ directory with a junction, symbolic link, or other reparse point after validatio
 file operation must revalidate its exact source/destination as close to use as practical and use
 the narrower safe-operation controls owned by PB-0202, PB-0203, PB-0205, PB-0206, and PB-0214.
 
+### 9.2 PB-0202 safe ZIP boundary
+
+PB-0202 separates immutable policy/contracts from physical I/O. Callers provide explicit archive,
+entry-count, depth, per-entry expanded-size, total expanded-size, expansion-ratio, and extension
+limits; the service has no hidden product defaults. A complete streaming preflight builds an
+immutable canonical plan before a dedicated destination is created. It rejects traversal,
+absolute paths, Windows aliases/device names, unsafe characters, links/reparse metadata, special
+files, duplicate/case-equivalent targets, file/directory collisions, unexpected extensions,
+corrupt data, and quota violations.
+
+The physical adapter holds the source ZIP without write/delete sharing, creates output files with
+create-new semantics, and uses bounded asynchronous streaming. Every existing source and
+destination component is inspected for reparse points, every planned file target is a strict
+canonical descendant of the dedicated destination, and the destination is checked again between
+preflight and creation. The operation never executes content and never writes to its source.
+
+PB-0202 intentionally does not own source snapshot hashes (PB-0203/PB-0204), cleanup or atomic
+promotion (PB-0206/PB-0214), product-specific quota defaults (PB-0215), or the later broad hostile
+archive suites (PB-1501/PB-1502). Failed partial output remains confined to the new job-owned
+destination and is reported for those later cleanup boundaries.
+
 ## 10. Build Job State Machine
 
 ```mermaid

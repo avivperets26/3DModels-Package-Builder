@@ -812,6 +812,15 @@ source assets (`runtime-data/source-assets`), jobs (`runtime-data/jobs`), cache
 (`logs`). Physical reparse-point inspection is separate from pure configuration/path semantics,
 and point-in-time validation does not claim to eliminate later filesystem replacement races.
 
+PB-0202 adds the contained ZIP intake boundary. Callers must supply explicit archive, entry-count,
+path-depth, expanded-size, expansion-ratio, and extension policies. The system completes a
+streaming preflight before creating a new dedicated destination, rejects traversal, rooted paths,
+links/reparse metadata, duplicate or colliding targets, unsafe Windows names, unexpected content,
+corrupt data, and quota violations, then extracts from the same locked source using bounded
+create-new writes. It does not execute archive content or modify the source. Product-specific
+defaults, immutable snapshots/hashes, cleanup, and atomic promotion remain owned by their later
+planned tasks.
+
 The supported development workflow uses the repository-local .NET SDK through PowerShell and `dotnet` commands in Visual Studio Code. Paid Visual Studio is optional and no required task may depend on its IDE, designer, test runner, or build system. Every required technology must have a no-cost local path; optional remote hosting and CI cannot be necessary for local builds.
 
 The user-approved public GitHub repository is [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder). The original planned repository name is `package-builder`; its difference from the actual repository name remains unresolved until the user makes a separate decision. Code namespaces begin with `PackageBuilder`; marketplace-specific modules use names such as `PackageBuilder.Marketplaces.Fab`.

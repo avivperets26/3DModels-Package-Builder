@@ -1,6 +1,6 @@
 # Package Builder Documentation
 
-This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. The E00 repository foundation and E01 domain/contracts work through PB-0113 are complete. PB-0201 configuration and path-root validation is active and locally implemented; publication gates remain pending. JSON Lines stream framing, process execution, model import, engine workers, packaging, desktop UI, broader security hardening, and installation features are not claimed as implemented.
+This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. The E00 repository foundation, E01 domain/contracts work through PB-0113, and PB-0201 configuration/path-root validation are complete. PB-0202 safe ZIP inspection and extraction is active and locally implemented; publication gates remain pending. JSON Lines stream framing, process execution, model import, engine workers, packaging, desktop UI, broader security hardening, and installation features are not claimed as implemented.
 
 ## Primary Documentation
 
@@ -60,6 +60,7 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 ## Infrastructure Evidence
 
 - [PB-0201 configuration and path-root validation evidence](PB-0201_CONFIGURATION_PATHS_EVIDENCE.md)
+- [PB-0202 safe archive inspection and extraction evidence](PB-0202_SAFE_ARCHIVE_EVIDENCE.md)
 
 ## Dependency and Licence Records
 
