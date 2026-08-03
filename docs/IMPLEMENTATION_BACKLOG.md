@@ -158,7 +158,7 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0204 | 🟡 **PROCESS** | `feat/PB-0204-artifact-hashing` | Infrastructure Engineering for local work; user for Git gates | 2026-08-03 | PB-0203 completion is synchronized from final task commit `0cb2b033ffe3f35cad411aea8d79023d7d8e1123`, PR #32, merge `f9d99c9f9f400c46c2c0ba3e25a8983b946b5c3`, successful corrected PR run 30817505318, successful required main run 30817611922, and explicit user confirmation. Generic immutable SHA-256 identities, bounded streamed hashing, contained/reparse-safe physical reads, structured failures, and deterministic duplicate-content detection are implemented. Focused tests pass 35/35; every executable artifact class has 100% line/branch coverage; the 15-project Release build has zero warnings/errors; all 1,409 core tests, repository baseline 29/29, formatting, Ruff, and all nine local Core CI stages pass. | User-controlled commit/push, merge and `main` push, successful required `main` CI, explicit completion confirmation, and next-task rollover remain. |
+| PB-0205 | 🟡 **PROCESS** | `feat/PB-0205-artifact-store` | Infrastructure Engineering for local work; user for Git gates | 2026-08-03 | PB-0204 completion is synchronized from final task commit `e04d8ffbcf796be18601a79b51855a84c20a56a8`, PR #33, merge `bc500825c93fbcbe16a65b92728dda2424a248ee`, successful PR run 30821592450, successful required main run 30821598836, and explicit user confirmation. Typed deterministic artifact-store layout, strict metadata, bounded staging, integrity reads, reparse/containment defense, and optimistic staged/validated/promoted lifecycle rules are implemented. Focused tests pass 44/44; all 23 new executable components have 100% line/branch coverage; the 15-project Release build has zero warnings/errors; all 1,453 core tests, repository baseline 29/29, formatting, Ruff, and all nine local Core CI stages pass. | User-controlled commit/push and merge, successful required `main` CI, explicit completion confirmation, and next-task rollover remain. |
 
 ### PB-0113 Completion Evidence
 
@@ -467,6 +467,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0201 | `feat/PB-0201-configuration-paths` | `ada453196578c7233e5545451e5a44f792d0ec9c` | [#28](https://github.com/avivperets26/3DModels-Package-Builder/pull/28) — original cycle; [#30](https://github.com/avivperets26/3DModels-Package-Builder/pull/30) — approved corrective cycle | 2026-08-03 | Original task commit `e64ca3a3b249163b96d08554d7ef59fa1f0c44c7` merged through PR #28 as `c89d5afab69540e640e7f4d1dfd2215c64015ada`, but PR run `30167796737` and required `main` run `30167799680` failed on a non-portable test precondition. Under the explicitly approved one-time PB-0201 exception, corrective commit `ada453196578c7233e5545451e5a44f792d0ec9c` passed [PR workflow run 30807451695](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30807451695) and merged through PR #30 as `dccb1696baa742c5024344ad8802b82a25a1b342`; corrected required [main workflow run 30807459397](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30807459397) succeeded. The user explicitly confirmed corrected green required `main` CI and completion on 2026-08-03. The PB-0201-only exception creates no precedent. |
 | PB-0202 | `security/PB-0202-safe-archive-extraction` | `8fb5730fa345e6e535167ea3abe725ed348cd361` | [#31](https://github.com/avivperets26/3DModels-Package-Builder/pull/31) | 2026-08-03 | Merged into `main` as `69e667c948ff8b9bf56ea5b26e814fbc9dd03343`; required [main workflow run 30810800726](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30810800726) completed successfully for that exact merge. No exception was used; the user explicitly confirmed the task push, merge, successful required `main` CI, and completion on 2026-08-03. |
 | PB-0203 | `feat/PB-0203-source-snapshots` | `0cb2b033ffe3f35cad411aea8d79023d7d8e1123` | [#32](https://github.com/avivperets26/3DModels-Package-Builder/pull/32) | 2026-08-03 | Original implementation commit `770cbdd` and final corrective commit `0cb2b033ffe3f35cad411aea8d79023d7d8e1123` merged into `main` as `f9d99c9f9f400c46c2c0ba3e25a8983b946b5c3`; corrected [PR workflow run 30817505318](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30817505318) and required [main workflow run 30817611922](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30817611922) succeeded. No exception was used; the user explicitly confirmed the merge and green required `main` CI on 2026-08-03. |
+| PB-0204 | `feat/PB-0204-artifact-hashing` | `e04d8ffbcf796be18601a79b51855a84c20a56a8` | [#33](https://github.com/avivperets26/3DModels-Package-Builder/pull/33) | 2026-08-03 | Merged into `main` as `bc500825c93fbcbe16a65b92728dda2424a248ee`; [PR workflow run 30821592450](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30821592450) and required [main workflow run 30821598836](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30821598836) succeeded. No exception was used; the user explicitly confirmed the merge and green required `main` CI on 2026-08-03. |
 
 ## 5. Milestones
 
@@ -681,12 +682,12 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0201, PB-0202
   - Done when: source files are copied safely into a job, hashes are recorded, and tests prove originals remain unchanged.
 
-- [ ] **PB-0204 — Implement streamed hashing and artifact identity** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0204 — Implement streamed hashing and artifact identity** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0204-artifact-hashing`
   - Depends on: PB-0201
   - Done when: large files are SHA-256 hashed without full memory loading and duplicate content is detected.
 
-- [ ] **PB-0205 — Implement artifact-store layout and metadata** — **P0**
+- [ ] **PB-0205 — Implement artifact-store layout and metadata** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0205-artifact-store`
   - Depends on: PB-0203, PB-0204
   - Done when: job artifacts beneath `C:\Dev\PackageBuilder\artifacts` have typed paths, hashes, sizes, roles, and lifecycle rules.

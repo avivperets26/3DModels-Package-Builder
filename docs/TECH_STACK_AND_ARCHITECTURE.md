@@ -847,6 +847,31 @@ Groups and their members are returned in deterministic ordinal order. PB-0204 do
 artifact-store paths or persistence (PB-0205), cleanup/recovery (PB-0214), cache eviction, or
 product-wide resource defaults (PB-0215).
 
+### 9.5 PB-0205 artifact store
+
+PB-0205 implements `IArtifactStore` beneath the configured project-contained `artifacts` root.
+Physical directories never reuse untrusted logical IDs: ordinal, case-sensitive job and artifact
+IDs are converted to lowercase SHA-256 directory keys, while the version-one metadata document
+retains the original typed IDs. Each entry has the deterministic portable layout
+`Jobs/{job-key}/{artifact-key}/payload` plus `artifact.json`. This avoids traversal, reserved-name,
+Unicode, length, and case-insensitive filesystem collisions without normalizing domain identity.
+
+Staging copies one project-contained source through a pooled 64 KiB buffer, then uses PB-0204's
+locked streamed hasher to persist exact byte length and canonical SHA-256. Reads strictly parse a
+bounded metadata object, reject missing, duplicate, unknown, malformed, or inconsistent fields,
+revalidate the typed path identity, and rehash the payload before returning it. Expected path,
+state, cancellation, integrity, and I/O failures are structured and do not disclose untrusted
+physical paths. Existing path components and source files are rejected when they cross a reparse
+point.
+
+New records begin only as `staged`. Optimistic transitions permit exactly `staged` to `validated`
+and `validated` to `promoted`, require the caller's expected current state, and replace the small
+metadata sidecar through a same-directory next file. PB-0206 remains responsible for the physical,
+collision-safe, recoverable promotion into `Builds`; callers must not record `promoted` before
+that operation. PB-0214 retains cleanup/recovery and cache ownership, and PB-0215 retains quotas
+and concurrency guards. PB-0205 adds no deletion, network, database, engine, UI, or marketplace
+behavior.
+
 ## 10. Build Job State Machine
 
 ```mermaid
