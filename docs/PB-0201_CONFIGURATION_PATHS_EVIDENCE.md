@@ -3,7 +3,7 @@
 **Task:** PB-0201 — Implement configuration loading and path-root validation  
 **Branch:** `feat/PB-0201-configuration-paths`  
 **Lifecycle:** 🟡 **PROCESS**  
-**Evidence date:** 2026-07-25
+**Evidence date:** 2026-08-03
 
 ## Scope and rollover
 
@@ -21,6 +21,35 @@ corrective commit `db481f0b7af894534f854e7b890a10ed185ffcdb` merged directly int
 was independently verified successful for that exact merge. The user confirmed corrected green
 CI and PB-0113 completion on 2026-07-25. PB-0113 is `[x]` / 🟢 **DONE**, removed from Active Work,
 and recorded exactly once in the Completion Log. The exception creates no precedent.
+
+## GitHub CI corrective cycle
+
+Original PB-0201 task commit `e64ca3a3b249163b96d08554d7ef59fa1f0c44c7` was merged through
+[pull request #28](https://github.com/avivperets26/3DModels-Package-Builder/pull/28) as
+`c89d5afab69540e640e7f4d1dfd2215c64015ada`. Both
+[PR workflow run 30167796737](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30167796737)
+and required
+[main workflow run 30167799680](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30167799680)
+failed in `RelativeResolutionDoesNotDependOnCurrentWorkingDirectory`. The test assigned
+`Environment.CurrentDirectory` to `C:\Dev\PackageBuilder\runtime-data`; that directory existed
+on the development machine but not in GitHub's `D:\a\...` checkout, so
+`Environment.set_CurrentDirectoryCore` threw `DirectoryNotFoundException` before configuration
+resolution was exercised. The repository baseline, restore, Release build, formatting, Ruff, 789
+Domain tests, 52 other Application tests, 13 Infrastructure tests, and 384 Contract tests passed;
+the failure was isolated to this non-portable test precondition.
+
+The correction uses the existing repository/test-contained `AppContext.BaseDirectory`, verifies
+that it exists and differs from the approved project root using ordinal case-insensitive Windows
+semantics, preserves the nonparallel collection, and restores the original current directory in
+`finally`. No production behavior, dependency, workflow, configuration contract, or security
+rule changed.
+
+On 2026-08-03 the user explicitly approved a one-time PB-0201 corrective-publication exception
+because PR #28 had already merged before its failing checks completed. The exception is limited
+to `PackageBuilderPathConfigurationLoaderTests.cs`, this evidence document, and PB-0201 Active
+Work synchronization in `IMPLEMENTATION_BACKLOG.md`; it adds no feature scope and creates no
+precedent. PB-0201 remains `[ ]` / 🟡 **PROCESS** and absent from the Completion Log until the
+correction is published, required corrected `main` CI succeeds, and the user confirms completion.
 
 ## Configuration decision
 
@@ -134,10 +163,25 @@ engine integration, marketplace behavior, UI, or PB-0202 work.
 | Formatting | Pass; `dotnet format --verify-no-changes --severity info`; Ruff lint/format pass through Core CI |
 | Dependency change | None; no package version, direct dependency, or transitive dependency changed |
 
+### Corrective validation
+
+| Validation | Result |
+|---|---|
+| Original PR and `main` CI | Failed; runs `30167796737` and `30167799680` each reached the test stage and failed only the hard-coded CWD precondition |
+| Previously failing test after correction | Pass; 1 passed, 0 failed, 0 skipped |
+| Complete Application suite after correction | Pass; 53 passed, 0 failed, 0 skipped |
+| Complete core suite after correction | Pass; 1,239 passed, 0 failed, 0 skipped: Domain 789, Application 53, Infrastructure 13, Contracts 384 |
+| Full local Core CI after correction | Pass; all 9 stages in 3m 39s, including repository baseline, locked restore, Release build, .NET/Ruff formatting, and all four test projects |
+| Debug and Release builds after correction | Pass; exact 15-project solution, 0 warnings and 0 errors in each configuration |
+| Relevant corrective coverage | Pass; the four executable Application configuration files remain at 100% line and 100% branch coverage in `artifacts/PB-0201/coverage-corrective-application` |
+| Repository and content validation | Pass through Core CI; repository baseline, Git diff, secrets, personal paths, prohibited/generated content, lifecycle, links, and history checks succeeded |
+| Vulnerability audit after correction | Pass; no vulnerable direct or transitive package reported for any of the 15 projects |
+| Dependency and production-code change | None; the correction changes only one test and two synchronized PB-0201 documents |
+
 ## Remaining gates
 
-- User-controlled staging, task commit, branch push, merge into and push of `main`, successful
-  required `main` CI, and explicit completion confirmation.
+- User-controlled corrective staging and commit, task-branch push, corrective merge into and push
+  of `main`, successful required corrected `main` CI, and explicit completion confirmation.
 
 ## Manual visual testing
 
