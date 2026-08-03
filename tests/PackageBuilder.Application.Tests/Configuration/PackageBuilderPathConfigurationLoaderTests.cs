@@ -107,11 +107,18 @@ public sealed class PackageBuilderPathConfigurationLoaderTests
     public void RelativeResolutionDoesNotDependOnCurrentWorkingDirectory()
     {
         string original = Environment.CurrentDirectory;
+        // The test output directory exists on local and GitHub runners without relying on a machine-specific root.
+        string alternateWorkingDirectory = AppContext.BaseDirectory;
+
+        Assert.True(Directory.Exists(alternateWorkingDirectory));
+        Assert.False(
+            StringComparer.OrdinalIgnoreCase.Equals(
+                PackageBuilderPathConfigurationLoader.ApprovedProjectRoot,
+                alternateWorkingDirectory.TrimEnd(Path.DirectorySeparatorChar)));
+
         try
         {
-            Environment.CurrentDirectory = Path.Combine(
-                PackageBuilderPathConfigurationLoader.ApprovedProjectRoot,
-                "runtime-data");
+            Environment.CurrentDirectory = alternateWorkingDirectory;
 
             PackageBuilderPathConfigurationResult result = Parse(ValidJson);
 
