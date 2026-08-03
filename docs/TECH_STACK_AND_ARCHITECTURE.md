@@ -826,6 +826,27 @@ cache keys (PB-0204), artifact-store metadata (PB-0205), cleanup/recovery (PB-02
 product defaults and aggregate resource guards (PB-0215). A failed partial destination remains
 job-contained and must be discarded by the later cleanup boundary.
 
+### 9.4 PB-0204 streamed artifact identity
+
+PB-0204 defines a reusable content identity as an exact non-negative byte length plus one canonical
+lowercase SHA-256 digest. Logical build artifact IDs remain separate from content identity: two
+different logical artifacts may intentionally share one content identity. Equality, ordering, and
+hashing are ordinal, culture-independent, and deterministic.
+
+The physical hashing service accepts an already trusted project root, a canonical strictly
+contained file path, and a logical artifact ID. It rejects missing paths, project-root aliases,
+outside paths, and any existing reparse-point boundary. The file is opened read-only without
+write/delete sharing and consumed asynchronously through a pooled 64 KiB buffer. Exact byte counts
+are checked before and during hashing so replacement, truncation, growth, cancellation, and I/O
+errors fail closed through sanitized structured results. Complete files are never loaded into
+memory and source bytes are never modified.
+
+Duplicate detection consumes completed receipts rather than reopening files. It rejects duplicate
+logical artifact IDs and groups only identities with both equal length and equal SHA-256 digest.
+Groups and their members are returned in deterministic ordinal order. PB-0204 does not define
+artifact-store paths or persistence (PB-0205), cleanup/recovery (PB-0214), cache eviction, or
+product-wide resource defaults (PB-0215).
+
 ## 10. Build Job State Machine
 
 ```mermaid

@@ -2,7 +2,7 @@
 
 **Task:** PB-0203 — Implement immutable source snapshots  
 **Branch:** `feat/PB-0203-source-snapshots`  
-**Lifecycle:** 🟡 **PROCESS**  
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-08-03
 
 ## Scope and rollover
@@ -13,8 +13,11 @@ request #31 as `69e667c948ff8b9bf56ea5b26e814fbc9dd03343`; required `main` workf
 run `30810800726` succeeded, and the user explicitly confirmed completion on 2026-08-03. No
 exception was used.
 
-PB-0203 remains `[ ]` / 🟡 **PROCESS** and absent from the Completion Log until its local,
-user-controlled publication, required `main` CI, confirmation, and next-task rollover gates pass.
+PB-0203 is `[x]` / 🟢 **DONE**, removed from Active Work, and recorded exactly once in the
+Completion Log. Final task commit `0cb2b033ffe3f35cad411aea8d79023d7d8e1123` merged through
+pull request #32 as `f9d99c9f9f400c46c2c0ba3e25a8983b946b5c3`; corrected pull-request
+workflow run `30817505318` and required `main` workflow run `30817611922` succeeded. The user
+explicitly confirmed the merge and green required `main` CI on 2026-08-03. No exception was used.
 
 ## Implemented boundary
 
@@ -78,7 +81,8 @@ files, and recorded hashes at the filesystem level, but there is not yet a suppo
 manual command or visual 3D preview. The first genuinely visual test remains the desktop/preview
 slice; this task must not claim that milestone early.
 
-## Remaining gates
+## Completion
 
-Final local validation, user-controlled commit and branch push, merge into and push of `main`,
-successful required `main` CI, explicit user confirmation, and PB-0204 rollover remain.
+All PB-0203 acceptance, publication, required `main` CI, confirmation, and rollover gates are
+complete. Generic artifact identity and duplicate-content detection continue in PB-0204 without
+changing the immutable snapshot boundary.
