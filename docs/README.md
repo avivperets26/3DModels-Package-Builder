@@ -67,6 +67,7 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 - [PB-0206 atomic release promotion evidence](PB-0206_ATOMIC_PROMOTION_EVIDENCE.md)
 - [PB-0207 structured external process runner evidence](PB-0207_STRUCTURED_PROCESS_RUNNER_EVIDENCE.md)
 - [PB-0208 process cancellation and cleanup evidence](PB-0208_PROCESS_CANCELLATION_EVIDENCE.md)
+- [PB-0209 JSON Lines progress reader evidence](PB-0209_JSONL_PROGRESS_READER_EVIDENCE.md)
 
 ## Dependency and Licence Records
 

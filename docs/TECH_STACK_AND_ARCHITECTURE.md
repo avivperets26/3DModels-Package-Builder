@@ -949,6 +949,27 @@ and record the completion cause, signal creation, graceful acknowledgement, forc
 cleanup result. PB-0209 owns JSON Lines parsing; PB-0212 owns structured redaction and correlation;
 PB-0213 owns persisted orchestration and retry/resume behavior; PB-1314 owns user controls.
 
+### 9.9 PB-0209 JSON Lines progress boundary
+
+`WorkerProgressJsonLinesReader.ReadAsync` consumes a caller-owned `TextReader` incrementally and
+returns one `WorkerProgressJsonLineReadResult` for every physical worker-output line. Results carry
+the one-based physical line number, either the existing typed PB-0112 event or its stable
+`WorkerJsonError`, and only sanitized parser details. Untrusted raw line content is never returned
+or repeated.
+
+The reader supports LF and CRLF framing and processes a final unterminated line at end of stream.
+It uses a fixed pooled read buffer and retains no more than the approved 65,536-character event
+limit plus the single CR needed to distinguish an exact-limit CRLF record. Once a line exceeds the
+bound, the remaining characters are discarded until the next LF and a `LineTooLarge` result is
+emitted. Empty, malformed, duplicate-property, schema-invalid, and domain-invalid records likewise
+produce one structured failure without preventing later valid progress, finding, or metric events
+from being parsed. Caller cancellation propagates through asynchronous stream reads.
+
+This boundary performs no process launch, filesystem access, logging, redaction, persistence,
+retry, or orchestration. PB-0208 retains process lifecycle ownership, PB-0212 owns structured
+redaction and correlation, PB-0213 owns persisted orchestration and retry/resume behavior, and the
+caller remains responsible for opening and disposing the stream.
+
 ## 10. Build Job State Machine
 
 ```mermaid
