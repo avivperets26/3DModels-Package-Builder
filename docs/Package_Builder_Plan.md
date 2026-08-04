@@ -886,6 +886,22 @@ external detection may be reported, but only an installation beneath the configu
 `tools` root may be selected. Discovery, executable verification, download catalogs, version
 approval, persistence, and UI remain assigned to their later planned tasks.
 
+PB-0302 implements the first engine-specific locator. Explicit configured Blender executable paths
+and portable `blender.exe` files found through a bounded, deterministic scan beneath
+`tools\blender` become candidates. The scan skips reparse-point files and directories, limits depth,
+directory count, and candidate count, and performs no network or registry lookup. A configured
+executable outside the approved tools root is retained only as an informational detection; it is
+never executed and cannot become a selectable `ToolInstallation`.
+
+Each contained candidate is verified through PB-0207's shell-free process boundary using the
+official `--version` argument, explicit contained working/temp/cache/log roots, bounded capture,
+and startup, idle, total, and graceful-shutdown timeouts. Only a normal zero exit whose first
+non-empty output line is `Blender <canonical-version>` creates an unselected contained
+`ToolInstallation`. Missing files, unsafe paths, reparse boundaries, abnormal process completion,
+nonzero exit, truncated output, and invalid versions remain explicit deterministic detection
+outcomes. Downloading, installation, external execution, selection policy, persistence, and UI
+remain assigned to later tasks.
+
 The supported development workflow uses the repository-local .NET SDK through PowerShell and `dotnet` commands in Visual Studio Code. Paid Visual Studio is optional and no required task may depend on its IDE, designer, test runner, or build system. Every required technology must have a no-cost local path; optional remote hosting and CI cannot be necessary for local builds.
 
 The user-approved public GitHub repository is [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder). The original planned repository name is `package-builder`; its difference from the actual repository name remains unresolved until the user makes a separate decision. Code namespaces begin with `PackageBuilder`; marketplace-specific modules use names such as `PackageBuilder.Marketplaces.Fab`.

@@ -102,5 +102,6 @@ checkpoint, but it intentionally does not yet accept a model or render a 3D prev
 ## Remaining gates
 
 All local, publication, visual-acceptance, required `main` CI, confirmation, and rollover gates are
-complete. PB-0301 now owns the next active implementation boundary; PB-1302 remains dependency-blocked
-until PB-0302 through PB-0304 are complete.
+complete. PB-0301 subsequently completed and was synchronized during the PB-0302 rollover. PB-0302
+now owns the active implementation boundary; PB-1302 remains dependency-blocked until PB-0302
+through PB-0304 are complete.
