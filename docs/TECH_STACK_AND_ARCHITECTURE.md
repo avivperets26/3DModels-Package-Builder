@@ -1629,6 +1629,27 @@ JSON Lines boundary without adding a third-party logging dependency, paid servic
 network activity. PB-0912 remains responsible for support-bundle policy and PB-1811 for the final
 cross-system redaction/security suite.
 
+### Persisted Job Orchestration
+
+PB-0213 defines `PersistedBuildJobOrchestrator` in the Application layer. It creates the queued job
+before work begins, reads the exact persisted state on resume, and delegates all state changes to the
+PB-0211 repository through the PB-0108 transition policy. The orchestrator never invents a parallel
+state machine. Optimistic expected-state transitions prevent concurrent or stale callers from
+silently overwriting job progress.
+
+Workers implement one-stage `IBuildJobStageWorker` calls and cannot mutate persistence or promote
+releases. The deterministic fake worker provides the first end-to-end, no-engine execution slice and
+can model success, failure, interruption, or inspection review without filesystem, process, network,
+or engine access. Each stage requires a PB-0212 structured job log before execution. A logging or
+persistence failure stops forward progress with a sanitized result.
+
+Ordinary resume continues the exact stored execution stage and leaves `AwaitingReview` paused;
+explicit review continuation returns it to `Inspecting`. Cancellation persists `Cancelled` only where
+the authoritative graph allows it. Release promotion is invoked only after successful
+`CleanReimport`, and `Completed` is persisted only after promotion succeeds. No failed or incomplete
+execution path can return a successful promotion receipt. Retry policy remains PB-0215, caching
+remains PB-0214, and real engine workers retain their dedicated milestones.
+
 Logs:
 
 - `application.log`

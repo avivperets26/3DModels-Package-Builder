@@ -2,7 +2,7 @@
 
 **Task:** PB-0212 — Implement structured logging and correlation IDs  
 **Branch:** `feat/PB-0212-structured-logging`  
-**Lifecycle:** 🟡 **PROCESS**  
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-08-04
 
 ## Scope and rollover
@@ -15,8 +15,13 @@ Log. Final task commit `a94570587634509c388502abce0768c622674634` merged through
 completed successfully for that exact merge commit. The user explicitly confirmed the push, merge,
 green required `main` CI, and completion on 2026-08-04. No exception was used.
 
-PB-0212 remains `[ ]` / 🟡 **PROCESS**, stays in Active Work, and has no Completion Log row until
-its user-controlled publication, required `main` CI, explicit confirmation, and PB-0213 rollover.
+PB-0212 is `[x]` / 🟢 **DONE**, absent from Active Work, and recorded exactly once in the Completion
+Log. Final task commit `c4fc812391323ea74c67ea9958a52e9855873ff4` merged through
+[pull request #41](https://github.com/avivperets26/3DModels-Package-Builder/pull/41) as
+`b2da53e3592c813f34a4e50c5290c3dcd2c003f2`. Required
+[main workflow run 30906984461](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30906984461)
+completed successfully for that exact merge. The user explicitly confirmed the push, merge, green
+required `main` CI, and completion on 2026-08-04. No exception was used.
 
 ## Implemented boundary
 
@@ -91,7 +96,7 @@ boundary is the focused test suite, which writes and parses disposable contained
 ignored `artifacts/PB-0212` and removes them afterward. The first supported visual checkpoint
 remains PB-1301 after PB-0213 supplies the fake-worker vertical slice.
 
-## Remaining gates
+## Completion state
 
-User-controlled staging, commit, task-branch push, merge into and push of `main`, successful
-required `main` CI, explicit completion confirmation, and PB-0213 rollover remain.
+All PB-0212 implementation, validation, publication, required `main` CI, confirmation, and rollover
+gates are complete. PB-0213 owns persisted orchestration and the fake-worker vertical slice.
