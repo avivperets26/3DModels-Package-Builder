@@ -158,7 +158,24 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0210 | 🟡 **PROCESS** | `feat/PB-0210-sqlite-schema` | Infrastructure Engineering for local work; user for Git gates | 2026-08-04 | PB-0209 completion is synchronized from final task commit `67d8e3027bd16f05d66ee40f67c6faa0082b9291`, PR #38, merge `ade315b13accf75f65d739d689eed7e5cfa44473`, successful PR run 30892047009, successful required main run 30892053123, and explicit user confirmation. PB-0210 implements all eleven approved SQLite v1 tables, strict constraints/indexes, contained consistent pre-upgrade backups, one-transaction migration and rollback, integrity/version checks, sanitized failures, and patched native SQLite dependency 2.1.12. Focused tests pass 29/29; Debug/Release builds have zero warnings/errors; all 1,618 tests, repository baseline 29/29, vulnerability audit, formatting, Ruff, and all nine local Core CI stages pass. | User-controlled commit/push and merge, successful required `main` CI, explicit completion confirmation, and PB-0211 rollover remain. |
+| PB-0211 | 🟡 **PROCESS** | `feat/PB-0211-sqlite-repositories` | Infrastructure Engineering for local work; user for Git gates | 2026-08-04 | PB-0210 completion is synchronized from final task commit `131342a0eb5adc23e11af4657b33515b51863ac5`, PR #39, merge `e2ceb8c90162b543413c917f98de23765eb0cbf8`, successful required main run 30897157981, and explicit user confirmation. PB-0211 implements persistence-neutral typed contracts plus contained SQLite repositories for atomic job creation/transitions, resumable queries, artifact/finding correlation, and tool discovery. Focused tests pass 17/17; all 1,635 tests and all nine Core CI stages pass; Debug/Release builds have zero warnings/errors; repository baseline passes 29/29; the vulnerability audit is clean; Microsoft coverage measures the main repository at 95.65% line / 81.13% branch and the new contract result/record types at 100% line/branch. | User-controlled commit/push and merge, successful required `main` CI, explicit completion confirmation, and PB-0212 rollover remain. |
+
+### PB-0210 Completion Evidence
+
+Detailed implementation, validation, dependency, and final publication evidence are recorded in
+`docs/PB-0210_SQLITE_SCHEMA_MIGRATIONS_EVIDENCE.md`.
+
+- Final task commit `131342a0eb5adc23e11af4657b33515b51863ac5` was pushed on
+  `feat/PB-0210-sqlite-schema`.
+- The task was merged through [pull request #39](https://github.com/avivperets26/3DModels-Package-Builder/pull/39)
+  into `main` as `e2ceb8c90162b543413c917f98de23765eb0cbf8`.
+- Required [main workflow run 30897157981](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30897157981)
+  completed successfully for that exact merge commit.
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-04.
+- No CI, completion, quality, or workflow exception was used.
+- This PB-0211 rollover marks PB-0210 `[x]` / 🟢 **DONE**, removes it from Active Work, and adds
+  exactly one chronological Completion Log row.
 
 ### PB-0209 Completion Evidence
 
@@ -563,6 +580,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0207 | `feat/PB-0207-process-runner` | `3b49e6e0b5aa390680ce18d93a5a4f15eb988d94` | [#36](https://github.com/avivperets26/3DModels-Package-Builder/pull/36) | 2026-08-03 | Merged into `main` as `9ebc50c5bceab42e79201c6cf9c898150d270669`; [PR workflow run 30844336598](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30844336598) and required [main workflow run 30845827814](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30845827814) succeeded. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-03. |
 | PB-0208 | `feat/PB-0208-process-cancellation` | `0eba2a95ad71e8888e23e4805241bb58c02877c8` | [#37](https://github.com/avivperets26/3DModels-Package-Builder/pull/37) | 2026-08-03 | Merged into `main` as `8fca7e0175c6244260156969925d4293059493a6`; [PR workflow run 30850975774](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30850975774) and required [main workflow run 30850980897](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30850980897) succeeded. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-03. |
 | PB-0209 | `feat/PB-0209-jsonl-progress` | `67d8e3027bd16f05d66ee40f67c6faa0082b9291` | [#38](https://github.com/avivperets26/3DModels-Package-Builder/pull/38) | 2026-08-04 | Merged into `main` as `ade315b13accf75f65d739d689eed7e5cfa44473`; [PR workflow run 30892047009](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30892047009) and required [main workflow run 30892053123](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30892053123) succeeded. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-04. |
+| PB-0210 | `feat/PB-0210-sqlite-schema` | `131342a0eb5adc23e11af4657b33515b51863ac5` | [#39](https://github.com/avivperets26/3DModels-Package-Builder/pull/39) | 2026-08-04 | Merged into `main` as `e2ceb8c90162b543413c917f98de23765eb0cbf8`; required [main workflow run 30897157981](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30897157981) succeeded for that exact merge. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-04. |
 
 ## 5. Milestones
 
@@ -807,12 +825,12 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0112, PB-0207
   - Done when: progress, finding, metric, and malformed-line behavior are covered by contract tests.
 
-- [ ] **PB-0210 — Implement SQLite schema and migrations** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0210 — Implement SQLite schema and migrations** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0210-sqlite-schema`
   - Depends on: PB-0108, PB-0109
   - Done when: tables from the architecture document are created transactionally and migrations are tested against backups.
 
-- [ ] **PB-0211 — Implement job, artifact, tool, and finding repositories** — **P0**
+- [ ] **PB-0211 — Implement job, artifact, tool, and finding repositories** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0211-sqlite-repositories`
   - Depends on: PB-0210
   - Done when: jobs can be created, resumed, failed, cancelled, queried, and correlated with artifacts/findings.
