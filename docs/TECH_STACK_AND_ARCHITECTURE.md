@@ -1278,6 +1278,27 @@ modification. Integrity checks run before and after upgrades. Diagnostics return
 never include physical paths, SQL text, or database content. PB-0211 remains the owner of typed
 job, artifact, tool, and finding repository operations; PB-0210 does not introduce CRUD behavior.
 
+PB-0211 exposes persistence-neutral contracts in `PackageBuilder.Contracts.Persistence` and a
+single SQLite implementation in `PackageBuilder.Infrastructure.Persistence`. Callers consume
+separate job, artifact, finding, and tool interfaces; they never issue SQL or depend on the
+managed SQLite provider. The repository opens only an existing, current-version database whose
+physical path is contained beneath the approved project root and crosses no reparse point. It
+verifies database integrity and the complete table inventory before becoming usable.
+
+Job creation accepts only the initial queued state. State updates require both the expected state
+and previous update timestamp, validate the PB-0108 transition policy, and update atomically in a
+transaction. Failed transitions require a stable finding-code-compatible failure code;
+non-failure states reject one. Resumable queries return only nonterminal jobs in deterministic
+creation/identity order. PB-0213 remains responsible for orchestration and for deciding when to
+request transitions.
+
+Artifact and finding operations verify same-job correlation before insertion. SQLite stores only
+logical artifact references, optional lowercase SHA-256 values, byte counts, and typed metadata;
+binary content remains in the artifact store. Tool discovery is an idempotent upsert keyed by its
+stable installation identity, with deterministic approval filtering. All SQL is parameterized,
+cancellation propagates, expected constraint conflicts return stable results, malformed stored
+metadata fails closed, and diagnostics omit physical paths, SQL, and stored values.
+
 ## 17. Caching and Incremental Builds
 
 A cache key includes:
