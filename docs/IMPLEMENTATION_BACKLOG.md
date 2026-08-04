@@ -158,7 +158,25 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0208 | 🟡 **PROCESS** | `feat/PB-0208-process-cancellation` | Infrastructure Engineering for local work; user for Git gates | 2026-08-03 | PB-0207 completion is synchronized from final task commit `3b49e6e0b5aa390680ce18d93a5a4f15eb988d94`, PR #36, merge `9ebc50c5bceab42e79201c6cf9c898150d270669`, successful PR run 30844336598, successful required main run 30845827814, and explicit user confirmation. PB-0208 now has typed startup/idle/total/grace policies, cooperative contained cancellation markers, bounded escalation to whole-tree termination, exact control-file ownership cleanup, complete per-stream logs, and lifecycle receipts. Focused process tests pass 59/59; all 18 changed production/compiler-generated components report 100% line/branch coverage; Debug/Release builds have zero warnings/errors; all 1,571 tests, repository baseline 29/29, formatting, Ruff, and all nine local Core CI stages pass. | User-controlled commit/push and merge, successful required `main` CI, explicit completion confirmation, and PB-0209 rollover remain. |
+| PB-0209 | 🟡 **PROCESS** | `feat/PB-0209-jsonl-progress` | Contracts Engineering for local work; user for Git gates | 2026-08-03 | PB-0208 completion is synchronized from final task commit `0eba2a95ad71e8888e23e4805241bb58c02877c8`, PR #37, merge `8fca7e0175c6244260156969925d4293059493a6`, successful PR run 30850975774, successful required main run 30850980897, and explicit user confirmation. PB-0209 incrementally frames LF/CRLF worker output, accepts a final unterminated record, bounds retained line content, returns typed line-numbered results, and recovers after malformed or oversized lines without repeating their content. Focused contract tests pass 18/18; the two new source types report 100% line/branch coverage and the compiler-generated async iterator reports 100% line/92.86% branch; Debug/Release builds have zero warnings/errors; all 1,589 tests, repository baseline 29/29, vulnerability audit, formatting, Ruff, and all nine local Core CI stages pass. | User-controlled commit/push and merge, successful required `main` CI, explicit completion confirmation, and PB-0210 rollover remain. |
+
+### PB-0208 Completion Evidence
+
+Detailed implementation, validation, and final publication evidence are recorded in
+`docs/PB-0208_PROCESS_CANCELLATION_EVIDENCE.md`.
+
+- Final task commit `0eba2a95ad71e8888e23e4805241bb58c02877c8` was pushed on
+  `feat/PB-0208-process-cancellation`.
+- The task merged through [pull request #37](https://github.com/avivperets26/3DModels-Package-Builder/pull/37)
+  into `main` as `8fca7e0175c6244260156969925d4293059493a6`.
+- [PR workflow run 30850975774](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30850975774)
+  and required [main workflow run 30850980897](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30850980897)
+  completed successfully.
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-03.
+- No CI, completion, quality, or workflow exception was used.
+- This PB-0209 rollover marks PB-0208 `[x]` / 🟢 **DONE**, removes it from Active Work, and adds
+  exactly one chronological Completion Log row.
 
 ### PB-0207 Completion Evidence
 
@@ -525,6 +543,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0205 | `feat/PB-0205-artifact-store` | `f8ea3330726ed314db0d51b8cc2d4e87290f4332` | [#34](https://github.com/avivperets26/3DModels-Package-Builder/pull/34) | 2026-08-03 | Merged into `main` as `9d8510480fdb5f1497ecc81530d11df8f206143c`; [PR workflow run 30825282015](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30825282015) and required [main workflow run 30825288015](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30825288015) succeeded. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-03. |
 | PB-0206 | `feat/PB-0206-atomic-promotion` | `b4aec5ebb1edcbcc9b29b43ffc3c9f175d69eed9` | [#35](https://github.com/avivperets26/3DModels-Package-Builder/pull/35) | 2026-08-03 | Merged into `main` as `570182210df18c7af2f2cac1a3ffdc09279aa46a`; [PR workflow run 30840565528](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30840565528) and required [main workflow run 30840576320](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30840576320) succeeded. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-03. |
 | PB-0207 | `feat/PB-0207-process-runner` | `3b49e6e0b5aa390680ce18d93a5a4f15eb988d94` | [#36](https://github.com/avivperets26/3DModels-Package-Builder/pull/36) | 2026-08-03 | Merged into `main` as `9ebc50c5bceab42e79201c6cf9c898150d270669`; [PR workflow run 30844336598](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30844336598) and required [main workflow run 30845827814](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30845827814) succeeded. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-03. |
+| PB-0208 | `feat/PB-0208-process-cancellation` | `0eba2a95ad71e8888e23e4805241bb58c02877c8` | [#37](https://github.com/avivperets26/3DModels-Package-Builder/pull/37) | 2026-08-03 | Merged into `main` as `8fca7e0175c6244260156969925d4293059493a6`; [PR workflow run 30850975774](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30850975774) and required [main workflow run 30850980897](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30850980897) succeeded. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-03. |
 
 ## 5. Milestones
 
@@ -759,12 +778,12 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0112
   - Done when: `ArgumentList`, stdout/stderr capture, environment, working directory, exit code, and executable metadata are tested without shell-string interpolation; executable, temp, cache, and log paths are contained beneath the project root.
 
-- [ ] **PB-0208 — Implement process timeout, cancellation, and cleanup** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0208 — Implement process timeout, cancellation, and cleanup** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0208-process-cancellation`
   - Depends on: PB-0207
   - Done when: graceful cancellation, idle/total timeout, forced termination, child-process cleanup, and preserved logs are tested.
 
-- [ ] **PB-0209 — Implement JSON Lines progress reader** — **P0**
+- [ ] **PB-0209 — Implement JSON Lines progress reader** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0209-jsonl-progress`
   - Depends on: PB-0112, PB-0207
   - Done when: progress, finding, metric, and malformed-line behavior are covered by contract tests.

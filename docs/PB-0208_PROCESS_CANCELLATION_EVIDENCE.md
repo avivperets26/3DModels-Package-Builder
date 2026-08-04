@@ -2,7 +2,7 @@
 
 **Task:** PB-0208 — Implement process timeout, cancellation, and cleanup
 **Branch:** `feat/PB-0208-process-cancellation`
-**Lifecycle:** 🟡 **PROCESS**
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-08-03
 
 ## Scope and rollover
@@ -17,8 +17,15 @@ and required
 completed successfully. The user explicitly confirmed the push, merge, green required `main` CI,
 and completion on 2026-08-03. No exception was used.
 
-PB-0208 remains `[ ]` / 🟡 **PROCESS** and absent from the Completion Log until its one
-user-controlled publication, required `main` CI, explicit confirmation, and PB-0209 rollover.
+Final task commit `0eba2a95ad71e8888e23e4805241bb58c02877c8` merged through
+[pull request #37](https://github.com/avivperets26/3DModels-Package-Builder/pull/37) as
+`8fca7e0175c6244260156969925d4293059493a6`.
+[PR workflow run 30850975774](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30850975774)
+and required
+[main workflow run 30850980897](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30850980897)
+completed successfully. The user explicitly confirmed the push, merge, green required `main` CI,
+and completion on 2026-08-03. No exception was used. This PB-0209 rollover marks PB-0208 `[x]` /
+🟢 **DONE**, removes it from Active Work, and records it exactly once in the Completion Log.
 
 ## Implemented lifecycle boundary
 
@@ -91,8 +98,7 @@ available yet. The focused suite does perform real child-process cancellation an
 including cooperative exit and forced cleanup of a spawned descendant. The first supported visual
 workflow remains the later WPF vertical slice.
 
-## Remaining gates
+## Completion
 
-Final exact-worktree validation, user-controlled commit and branch push, merge into and push of
-`main`, successful required `main` CI, explicit completion confirmation, and PB-0209 rollover
-remain.
+All PB-0208 implementation, validation, publication, required `main` CI, confirmation, and
+rollover gates are complete. No exception or follow-up publication cycle was used.

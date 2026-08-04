@@ -846,6 +846,15 @@ contained log root even when bounded receipt captures truncate. JSON Lines frami
 redaction, persisted orchestration, retry/resume, and user-facing cancellation remain assigned to
 their later planned tasks.
 
+PB-0209 adds bounded JSON Lines framing for PB-0112 worker progress. The asynchronous reader
+supports LF, CRLF, and a final unterminated record; reports one-based physical line numbers; and
+returns typed progress, finding, or metric events. Empty, malformed, duplicate-property,
+schema-invalid, domain-invalid, and oversized lines produce structured failures without stopping
+later records. Retained content is capped at the approved 65,536-character event limit plus the
+single CR needed for exact-limit CRLF framing, and rejected raw content is neither returned nor
+repeated. Process execution, redaction, persistence, retry, orchestration, and UI remain assigned
+to their existing later tasks.
+
 The supported development workflow uses the repository-local .NET SDK through PowerShell and `dotnet` commands in Visual Studio Code. Paid Visual Studio is optional and no required task may depend on its IDE, designer, test runner, or build system. Every required technology must have a no-cost local path; optional remote hosting and CI cannot be necessary for local builds.
 
 The user-approved public GitHub repository is [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder). The original planned repository name is `package-builder`; its difference from the actual repository name remains unresolved until the user makes a separate decision. Code namespaces begin with `PackageBuilder`; marketplace-specific modules use names such as `PackageBuilder.Marketplaces.Fab`.
