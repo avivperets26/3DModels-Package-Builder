@@ -123,7 +123,7 @@ The root `.gitattributes` rule `* text=auto eol=lf` makes text-file checkout lin
 
 The PB-0008 test baseline keeps the four existing xUnit v3 projects on the centrally pinned VSTest-compatible package set. Each project has a deterministic offline `Category=Smoke` test that loads its directly referenced production assembly and verifies the expected assembly identity. `scripts/Test-TestProjects.ps1` validates the exact project inventory, production references, package configuration, and discoverable smoke-test source without external dependencies. `scripts/Test-BaselineUnitTests.ps1` defaults to repository-local SDK `10.0.302`, a locked restore, Debug configuration, and PB-0008 result paths. It also supports the PB-0009 controlled Release pipeline with no repeated restore or build, while preserving zero-discovery, failure, skip, stale/missing-result, unclassified-outcome, source-nonmutation, and minimum-total protections.
 
-The PB-0009 core pipeline is exposed through `scripts/Invoke-CoreCi.ps1` for Visual Studio Code, Windows PowerShell 5.1, and GitHub Actions `pwsh`. It performs repository-baseline validation, exact SDK verification, one locked restore, a warning-free Release build, non-mutating .NET formatting, checksum-verified Ruff `0.15.22` installation, Ruff lint/format checks, and all four Release test projects in a fixed fail-closed order. Local execution accepts only `tools/dotnet/10.0.302`; explicit GitHub Actions mode accepts the `actions/setup-dotnet` managed runner SDK only after the GitHub workspace and exact SDK version are verified. All Package Builder CLI state, NuGet/Ruff caches, temporary files, logs, and results remain beneath the selected repository workspace.
+The PB-0009 core pipeline is exposed through `scripts/Invoke-CoreCi.ps1` for Visual Studio Code, Windows PowerShell 5.1, and GitHub Actions `pwsh`. It performs repository-baseline validation, exact SDK verification, one locked restore, a warning-free Release build, non-mutating .NET formatting, checksum-verified Ruff `0.15.22` installation, Ruff lint/format checks, and all five Release test projects in a fixed fail-closed order. Local execution accepts only `tools/dotnet/10.0.302`; explicit GitHub Actions mode accepts the `actions/setup-dotnet` managed runner SDK only after the GitHub workspace and exact SDK version are verified. All Package Builder CLI state, NuGet/Ruff caches, temporary files, logs, and results remain beneath the selected repository workspace.
 
 PB-0010 establishes `README.md` and `CONTRIBUTING.md` as the contributor entry points without presenting planned product functionality as available. `scripts/Test-ContributionDocumentation.ps1` is a dependency-free PowerShell validator for required sections, real command/file references, local Markdown links, branch types, lifecycle markers, optional pull requests, direct merges, the permanent one-merge rollover, version boundaries, no-cost tooling, and public-repository safeguards. `scripts/Test-RepositoryBaseline.ps1` runs it in-process and through standalone Windows PowerShell 5.1 before the core pipeline proceeds.
 
@@ -588,7 +588,21 @@ It does not import models or create engine-native assets.
 
 Both call the same application services and produce identical build behavior.
 
-The WPF layer uses one accessible design system and contains no build policy. View models expose explicit loading, progress, validation, cancellation, failure, retry, and completion states. Critical setup-to-results workflows support keyboard-only and screen-reader operation, high contrast, scalable text, visible focus, predictable focus order, sensible defaults, and progressive disclosure. User input is retained independently of transient job state so a failed worker cannot erase reviewed configuration.
+The WPF layer uses one accessible design system and contains no build policy. PB-1301 introduces a
+local `Microsoft.Extensions.Hosting` composition root, a CommunityToolkit.Mvvm presentation model,
+and an ordinal route-based navigation service. Its five shell modules are Overview, Products, Build
+queue, Validation, and Settings. Future workflows are represented only by honest, read-only preview
+copy; no unavailable action is exposed as operational. The shell has accessible names, visible
+keyboard focus, deterministic tab order, arrow-key list navigation, and Alt+O/P/B/V/S access keys.
+Full high-contrast, screen-reader, scalable-text, and failure-state review remains owned by PB-1316
+and the later accessibility milestone.
+
+Desktop startup builds and starts the local host, resolves `MainWindow`, and disposes the host on
+exit. An unexpected composition/startup exception is converted into the stable
+`APP_STARTUP_FAILED` operator surface; exception type, message, path, and stack details are not
+shown. View models expose testable state independently of XAML. Later loading, progress,
+validation, cancellation, retry, and completion screens must continue to call shared application
+services so a WPF failure cannot erase reviewed configuration or move build policy into the UI.
 
 Dry run is an application use case, not a visual mock. It resolves and validates the same manifest, paths, names, tool versions, target plan, and estimated resource requirements used by execution without changing source or generating target files. Execution records the approved plan identity and reports material differences before proceeding.
 
@@ -1572,7 +1586,7 @@ The reviewed action pins are:
 - `actions/checkout` `v7.0.1` at immutable commit `3d3c42e5aac5ba805825da76410c181273ba90b1`.
 - `actions/setup-dotnet` `v6.0.0` at immutable commit `a98b56852c35b8e3190ac28c8c2271da59106c68`.
 
-The core entry point runs repository validation, exact SDK verification, one locked restore, the complete Release build, `dotnet format --verify-no-changes`, checksum-verified Ruff `0.15.22` installation, Ruff lint and format verification, then all four baseline test projects with no repeated restore/build. Each project must discover and pass at least one test; the aggregate must contain at least four passes and no failed, skipped, missing, stale, or unclassified result.
+The core entry point runs repository validation, exact SDK verification, one locked restore, the complete Release build, `dotnet format --verify-no-changes`, checksum-verified Ruff `0.15.22` installation, Ruff lint and format verification, then all five baseline test projects with no repeated restore/build. Each project must discover and pass at least one test; the aggregate must contain at least five passes and no failed, skipped, missing, stale, or unclassified result.
 
 The action-managed SDK path is runner infrastructure and is not described as repository-contained. Explicit GitHub Actions mode verifies `GITHUB_ACTIONS`, exact `GITHUB_WORKSPACE`, and SDK `10.0.302`; every project-owned CLI home, NuGet package/cache, Ruff cache, scratch, temporary, log, and result path remains below `GITHUB_WORKSPACE`. Local execution continues to require `tools/dotnet/10.0.302`.
 

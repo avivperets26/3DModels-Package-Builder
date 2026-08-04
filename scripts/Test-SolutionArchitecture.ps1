@@ -218,6 +218,13 @@ $projectSpecifications = @(
         Framework = 'net10.0'
         Kind = 'Test'
         References = @('PackageBuilder.Contracts')
+    },
+    [pscustomobject]@{
+        Name = 'PackageBuilder.App.Wpf.Tests'
+        Path = 'tests/PackageBuilder.App.Wpf.Tests/PackageBuilder.App.Wpf.Tests.csproj'
+        Framework = 'net10.0-windows'
+        Kind = 'Test'
+        References = @('PackageBuilder.App.Wpf')
     }
 )
 
@@ -253,7 +260,7 @@ Invoke-Check 'Required solution and project inventory is exact' {
     if ($differences.Count -gt 0) {
         $script:InventoryReady = $false
         $description = @($differences | ForEach-Object { "$($_.SideIndicator) $($_.InputObject)" })
-        throw "Project inventory differs from the required 15 projects: $($description -join '; ')"
+        throw "Project inventory differs from the required $($projectSpecifications.Count) projects: $($description -join '; ')"
     }
 }
 
@@ -275,7 +282,7 @@ foreach ($match in [regex]::Matches(
 
 Invoke-Check 'Every required project is included in the solution exactly once' {
     if ($solutionProjects.Count -ne $projectSpecifications.Count) {
-        throw "Expected 15 project entries in PackageBuilder.sln; found $($solutionProjects.Count)."
+        throw "Expected $($projectSpecifications.Count) project entries in PackageBuilder.sln; found $($solutionProjects.Count)."
     }
 
     foreach ($specification in $projectSpecifications) {

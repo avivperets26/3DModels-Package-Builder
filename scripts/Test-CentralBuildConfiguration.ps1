@@ -23,6 +23,7 @@ $script:ExpectedProjects = @(
     'src/PackageBuilder.Targets.Unreal/PackageBuilder.Targets.Unreal.csproj',
     'src/PackageBuilder.Tools.Blender/PackageBuilder.Tools.Blender.csproj',
     'tests/PackageBuilder.Application.Tests/PackageBuilder.Application.Tests.csproj',
+    'tests/PackageBuilder.App.Wpf.Tests/PackageBuilder.App.Wpf.Tests.csproj',
     'tests/PackageBuilder.Contract.Tests/PackageBuilder.Contract.Tests.csproj',
     'tests/PackageBuilder.Domain.Tests/PackageBuilder.Domain.Tests.csproj',
     'tests/PackageBuilder.Infrastructure.Tests/PackageBuilder.Infrastructure.Tests.csproj'
@@ -30,8 +31,10 @@ $script:ExpectedProjects = @(
 
 $script:ExpectedPackageVersions = @{
     'coverlet.collector' = '10.0.1'
+    'CommunityToolkit.Mvvm' = '8.4.2'
     'JsonSchema.Net' = '9.3.0'
     'Microsoft.Data.Sqlite' = '10.0.10'
+    'Microsoft.Extensions.Hosting' = '10.0.10'
     'SQLitePCLRaw.lib.e_sqlite3' = '2.1.12'
     'Microsoft.NET.Test.Sdk' = '18.8.1'
     'xunit.v3.mtp-off' = '3.2.2'
@@ -46,6 +49,10 @@ $script:ExpectedTestPackages = @(
 )
 
 $script:ApprovedProductionPackages = @{
+    'src/PackageBuilder.App.Wpf/PackageBuilder.App.Wpf.csproj' = @(
+        'CommunityToolkit.Mvvm',
+        'Microsoft.Extensions.Hosting'
+    )
     'src/PackageBuilder.Contracts/PackageBuilder.Contracts.csproj' = @('JsonSchema.Net')
     'src/PackageBuilder.Infrastructure/PackageBuilder.Infrastructure.csproj' = @(
         'Microsoft.Data.Sqlite',
@@ -64,6 +71,7 @@ $script:ForbiddenLegacyXunitPackages = @(
 
 $script:ExpectedTestProjects = @(
     'tests/PackageBuilder.Application.Tests/PackageBuilder.Application.Tests.csproj',
+    'tests/PackageBuilder.App.Wpf.Tests/PackageBuilder.App.Wpf.Tests.csproj',
     'tests/PackageBuilder.Contract.Tests/PackageBuilder.Contract.Tests.csproj',
     'tests/PackageBuilder.Domain.Tests/PackageBuilder.Domain.Tests.csproj',
     'tests/PackageBuilder.Infrastructure.Tests/PackageBuilder.Infrastructure.Tests.csproj'
@@ -163,7 +171,7 @@ if (-not (Test-Path -LiteralPath $script:RepositoryRoot -PathType Container)) {
     throw "Repository root does not exist: $script:RepositoryRoot"
 }
 
-Invoke-Check 'Required central configuration and exact 15-project inventory exist' {
+Invoke-Check 'Required central configuration and exact 16-project inventory exist' {
     $requiredFiles = @(
         'global.json',
         'Directory.Build.props',
@@ -189,7 +197,7 @@ Invoke-Check 'Required central configuration and exact 15-project inventory exis
     $differences = @(Compare-Object -ReferenceObject ($script:ExpectedProjects | Sort-Object) -DifferenceObject $actualProjects)
     if ($differences.Count -gt 0) {
         $details = @($differences | ForEach-Object { "$($_.SideIndicator) $($_.InputObject)" })
-        throw "Project inventory differs from the approved 15 projects: $($details -join '; ')"
+        throw "Project inventory differs from the approved 16 projects: $($details -join '; ')"
     }
 }
 

@@ -73,6 +73,10 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 - [PB-0212 structured logging and correlation evidence](PB-0212_STRUCTURED_LOGGING_EVIDENCE.md)
 - [PB-0213 persisted job orchestrator evidence](PB-0213_JOB_ORCHESTRATOR_EVIDENCE.md)
 
+## Desktop Application Evidence
+
+- [PB-1301 WPF shell, composition, navigation, and visual evidence](PB-1301_WPF_SHELL_EVIDENCE.md)
+
 ## Dependency and Licence Records
 
 - [Third-party dependency notices](THIRD_PARTY_NOTICES.md)

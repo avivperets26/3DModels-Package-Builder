@@ -3,9 +3,9 @@ using PackageBuilder.App.Wpf.ViewModels;
 
 namespace PackageBuilder.App.Wpf;
 
-public partial class MainWindow : Window
+public partial class StartupFailureWindow : Window
 {
-    public MainWindow(MainWindowViewModel viewModel)
+    public StartupFailureWindow(StartupFailureViewModel viewModel)
     {
         ArgumentNullException.ThrowIfNull(viewModel);
         InitializeComponent();

@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\PackageBuilder.Application\PackageBuilder.Application.csproj" />
     <ProjectReference Include="..\PackageBuilder.Infrastructure\PackageBuilder.Infrastructure.csproj" />
     <ProjectReference Include="..\PackageBuilder.Marketplaces.Fab\PackageBuilder.Marketplaces.Fab.csproj" />

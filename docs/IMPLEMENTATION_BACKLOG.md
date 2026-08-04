@@ -158,7 +158,24 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0213 | 🟡 **PROCESS** | `feat/PB-0213-job-orchestrator` | Application Engineering for local work; user for Git gates | 2026-08-04 | PB-0212 completion is synchronized from final task commit `c4fc812391323ea74c67ea9958a52e9855873ff4`, PR #41, merge `b2da53e3592c813f34a4e50c5290c3dcd2c003f2`, successful required main run 30906984461, and explicit user confirmation. The persisted orchestrator, deterministic fake worker, restart/resume path, structured stage logging, release-promotion gate, documentation, 31 focused tests, 96.96% line/86.30% branch coverage, and final nine-stage Core CI are locally validated. | User-controlled commit/push and merge, successful required `main` CI, explicit completion confirmation, and next-task rollover remain. |
+| PB-1301 | 🟡 **PROCESS** | `feat/PB-1301-wpf-shell` | Desktop UX/Application Engineering for local work; user for Git gates | 2026-08-04 | PB-0213 completion is synchronized. The launchable WPF shell, local host/DI composition, five-module MVVM navigation, sanitized fatal-startup surface, dedicated WPF test project, dependency locks/notices, and documentation are implemented. Manual visual launch and UI Automation navigation passed. Full Core CI passed all nine stages: 1,729 tests passed, 16-project Release build produced 0 warnings/errors, repository baseline passed 29/29, and the vulnerability audit reported no vulnerable package. | Local gates are complete. User-controlled commit, task-branch push, merge and `main` push, successful required `main` CI, explicit confirmation, and PB-1302 rollover remain. |
+
+### PB-0213 Completion Evidence
+
+Detailed implementation, validation, and final publication evidence are recorded in
+`docs/PB-0213_JOB_ORCHESTRATOR_EVIDENCE.md`.
+
+- Final task commit `9b377e4ce7ad9fc750b2b3ff8a6115a5fc5f3fe2` was pushed on
+  `feat/PB-0213-job-orchestrator`.
+- The task was merged through [pull request #42](https://github.com/avivperets26/3DModels-Package-Builder/pull/42)
+  into `main` as `206d999661a96ebf71ccf3e1dcf87342114ff06a`.
+- Required [main workflow run 30910471888](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30910471888)
+  completed successfully for that exact merge commit.
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-04.
+- No CI, completion, quality, or workflow exception was used.
+- This PB-1301 rollover marks PB-0213 `[x]` / 🟢 **DONE**, removes it from Active Work, and adds
+  exactly one chronological Completion Log row.
 
 ### PB-0212 Completion Evidence
 
@@ -617,6 +634,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0210 | `feat/PB-0210-sqlite-schema` | `131342a0eb5adc23e11af4657b33515b51863ac5` | [#39](https://github.com/avivperets26/3DModels-Package-Builder/pull/39) | 2026-08-04 | Merged into `main` as `e2ceb8c90162b543413c917f98de23765eb0cbf8`; required [main workflow run 30897157981](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30897157981) succeeded for that exact merge. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-04. |
 | PB-0211 | `feat/PB-0211-sqlite-repositories` | `a94570587634509c388502abce0768c622674634` | [#40](https://github.com/avivperets26/3DModels-Package-Builder/pull/40) | 2026-08-04 | Merged into `main` as `50c9caff34e7b48676cfa931aa4ce85dc3fc8b0e`; required [main workflow run 30901236339](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30901236339) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-04. |
 | PB-0212 | `feat/PB-0212-structured-logging` | `c4fc812391323ea74c67ea9958a52e9855873ff4` | [#41](https://github.com/avivperets26/3DModels-Package-Builder/pull/41) | 2026-08-04 | Merged into `main` as `b2da53e3592c813f34a4e50c5290c3dcd2c003f2`; required [main workflow run 30906984461](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30906984461) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-04. |
+| PB-0213 | `feat/PB-0213-job-orchestrator` | `9b377e4ce7ad9fc750b2b3ff8a6115a5fc5f3fe2` | [#42](https://github.com/avivperets26/3DModels-Package-Builder/pull/42) | 2026-08-04 | Merged into `main` as `206d999661a96ebf71ccf3e1dcf87342114ff06a`; required [main workflow run 30910471888](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30910471888) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-04. |
 
 ## 5. Milestones
 
@@ -876,7 +894,7 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0207, PB-0211
   - Done when: application and per-job logs beneath `C:\Dev\PackageBuilder\logs` include correlation IDs, component, step, severity, and redaction, with no user-profile or system log fallback.
 
-- [ ] **PB-0213 — Implement job orchestrator and persisted state transitions** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0213 — Implement job orchestrator and persisted state transitions** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0213-job-orchestrator`
   - Depends on: PB-0203, PB-0206, PB-0208, PB-0211, PB-0212
   - Done when: a fake-worker job completes the full state machine, resumes after restart, and never promotes a failed job.
@@ -1614,7 +1632,7 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** A clear desktop workflow drives every application use case without containing build logic in the UI.
 
-- [ ] **PB-1301 — Create WPF shell, dependency injection, and navigation** — **P0**
+- [ ] **PB-1301 — Create WPF shell, dependency injection, and navigation** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-1301-wpf-shell`
   - Depends on: PB-0005, PB-0213
   - Done when: application starts, composes services, navigates modules, handles fatal startup errors, and has view-model tests.

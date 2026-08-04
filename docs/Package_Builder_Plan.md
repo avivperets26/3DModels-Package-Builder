@@ -872,6 +872,13 @@ successful `CleanReimport`; failed, cancelled, interrupted, review-paused, or in
 cannot complete or claim promotion. This backend checkpoint satisfies PB-1301's final dependency and
 therefore unlocks the first launchable WPF shell without coupling the UI to worker implementations.
 
+PB-1301 implements that first launchable shell. A local generic host composes the WPF presentation,
+an MVVM navigation service exposes Overview, Products, Build queue, Validation, and Settings, and a
+sanitized fatal-startup window prevents raw exception details from reaching the operator. The shell
+is deliberately honest: later product, audit, queue, report, and settings workflows are visible only
+as clearly labelled previews until their owning tasks implement them. It is the first checkpoint the
+user can run and inspect visually; it does not yet import, render, build, or publish a model package.
+
 The supported development workflow uses the repository-local .NET SDK through PowerShell and `dotnet` commands in Visual Studio Code. Paid Visual Studio is optional and no required task may depend on its IDE, designer, test runner, or build system. Every required technology must have a no-cost local path; optional remote hosting and CI cannot be necessary for local builds.
 
 The user-approved public GitHub repository is [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder). The original planned repository name is `package-builder`; its difference from the actual repository name remains unresolved until the user makes a separate decision. Code namespaces begin with `PackageBuilder`; marketplace-specific modules use names such as `PackageBuilder.Marketplaces.Fab`.
