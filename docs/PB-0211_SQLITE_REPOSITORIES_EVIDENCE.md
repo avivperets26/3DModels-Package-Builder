@@ -2,7 +2,7 @@
 
 **Task:** PB-0211 — Implement job, artifact, tool, and finding repositories
 **Branch:** `feat/PB-0211-sqlite-repositories`
-**Lifecycle:** 🟡 **PROCESS**
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-08-04
 
 ## Scope and rollover
@@ -15,8 +15,13 @@ Completion Log. Final task commit `131342a0eb5adc23e11af4657b33515b51863ac5` mer
 completed successfully for that exact merge. The user explicitly confirmed the push, merge,
 green required `main` CI, and completion on 2026-08-04. No exception was used.
 
-PB-0211 remains `[ ]` / 🟡 **PROCESS** and absent from the Completion Log until its user-controlled
-publication, required `main` CI, explicit confirmation, and PB-0212 rollover.
+PB-0211 is `[x]` / 🟢 **DONE**, absent from Active Work, and recorded exactly once in the Completion
+Log. Final task commit `a94570587634509c388502abce0768c622674634` merged through
+[pull request #40](https://github.com/avivperets26/3DModels-Package-Builder/pull/40) as
+`50c9caff34e7b48676cfa931aa4ce85dc3fc8b0e`. Required
+[main workflow run 30901236339](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30901236339)
+completed successfully for that exact merge. The user explicitly confirmed the push, merge, green
+required `main` CI, and completion on 2026-08-04. No exception was used.
 
 ## Implemented repository boundary
 
@@ -83,7 +88,7 @@ observable boundary is the focused integration suite, which creates only disposa
 SQLite databases beneath ignored build output and removes them afterward. The first supported
 launchable WPF checkpoint remains PB-1301, after PB-0213 supplies the fake-worker vertical slice.
 
-## Remaining gates
+## Completion state
 
-User-controlled commit and branch push, merge into and push of `main`, successful required `main`
-CI, explicit completion confirmation, and PB-0212 rollover remain.
+All PB-0211 implementation, validation, publication, required `main` CI, confirmation, and rollover
+gates are complete. PB-0212 owns structured logging and correlation IDs.

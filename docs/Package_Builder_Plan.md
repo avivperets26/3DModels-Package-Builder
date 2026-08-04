@@ -855,6 +855,15 @@ single CR needed for exact-limit CRLF framing, and rejected raw content is neith
 repeated. Process execution, redaction, persistence, retry, orchestration, and UI remain assigned
 to their existing later tasks.
 
+PB-0212 adds persistence-neutral structured log events plus deterministic contained UTF-8 JSON
+Lines sinks. Application records use `logs/application.log`; per-job records use a SHA-256-derived
+job folder and `job.log`. Every record carries a caller-supplied UTC timestamp, correlation ID,
+component, step, severity, message, and ordinally sorted properties. Credential-like property names,
+common inline authorization/secret assignments, and Windows user-profile prefixes are redacted
+before persistence. Writes are serialized, cancellation-aware, reparse-checked, sanitized on
+expected failure, and never fall back to user-profile, system-log, system-temporary, telemetry, or
+network destinations. Persisted orchestration remains PB-0213 and support bundles remain PB-0912.
+
 The supported development workflow uses the repository-local .NET SDK through PowerShell and `dotnet` commands in Visual Studio Code. Paid Visual Studio is optional and no required task may depend on its IDE, designer, test runner, or build system. Every required technology must have a no-cost local path; optional remote hosting and CI cannot be necessary for local builds.
 
 The user-approved public GitHub repository is [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder). The original planned repository name is `package-builder`; its difference from the actual repository name remains unresolved until the user makes a separate decision. Code namespaces begin with `PackageBuilder`; marketplace-specific modules use names such as `PackageBuilder.Marketplaces.Fab`.

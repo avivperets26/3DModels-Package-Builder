@@ -75,7 +75,7 @@ As of this document's review date, .NET 10 is the current LTS line, Unity 6.3 is
 | Hosting/DI | `Microsoft.Extensions.Hosting` and dependency injection | Consistent configuration, logging, lifetime, and service composition |
 | Serialization | `System.Text.Json` | Built into .NET, fast, source-generation support |
 | Schema validation | JsonSchema.Net 9.3.0 (MIT) | Pinned offline Draft 2020-12 validation of manifests and worker contracts |
-| Logging | Serilog with text and JSON sinks | Structured per-job logs and readable local diagnostics |
+| Logging | Dependency-free `System.Text.Json` JSON Lines sink | Deterministic redacted application/per-job logs without an additional runtime package or external service |
 | Persistence | SQLite through `Microsoft.Data.Sqlite` 10.0.10 with patched `SQLitePCLRaw.lib.e_sqlite3` 2.1.12 | Pinned local build history without a server or vulnerable native 2.1.11 runtime |
 | Image processing | SkiaSharp | Resize, inspect, and compress preview media with a permissive ecosystem |
 | Archives | `System.IO.Compression.ZipArchive` | Built-in deterministic ZIP construction |
@@ -1602,6 +1602,32 @@ The same gate is runnable from a Visual Studio Code terminal without a paid host
 ## 26. Observability and Supportability
 
 Every job has a correlation ID visible in the UI and all logs.
+
+PB-0212 defines persistence-neutral log contracts in `PackageBuilder.Contracts.Logging` and the
+contained sink in `PackageBuilder.Infrastructure.Logging`. Callers supply a UTC timestamp,
+correlation ID, component, optional step, severity, message, and a bounded set of ordinally sorted
+properties. Invalid expected inputs return sanitized structured failures. Application records are
+UTF-8 JSON Lines in `logs/application.log`; per-job records are in
+`logs/jobs/<sha256-job-id>/job.log`. The original typed job ID remains in each job record, while the
+SHA-256 directory prevents untrusted job identities from becoming path segments.
+
+The writer derives its log root exclusively from the approved project root. It never consults a
+user profile, system log, system temporary directory, or environment-variable fallback. Existing
+and newly created directories are checked for reparse boundaries, existing log-file reparse points
+are rejected, and writes are serialized within the writer so concurrent callers cannot interleave
+JSON records. Caller cancellation is honored before and while waiting for persistence. Expected
+path, access, cancellation, and I/O failures expose stable codes without physical paths or rejected
+content.
+
+Redaction happens before JSON serialization and persistence. Properties whose normalized names
+contain credential-bearing terms are replaced wholesale. Common Bearer/Basic authorization values,
+inline password/token/key/secret assignments, and Windows user-profile prefixes are also redacted
+from non-sensitive messages and property values. Log messages and properties are length-bounded and
+reject control characters, preventing multiline record injection. This focused built-in sink
+replaces the earlier aspirational Serilog selection for version 1: it meets the current deterministic
+JSON Lines boundary without adding a third-party logging dependency, paid service, telemetry, or
+network activity. PB-0912 remains responsible for support-bundle policy and PB-1811 for the final
+cross-system redaction/security suite.
 
 Logs:
 
