@@ -902,6 +902,23 @@ nonzero exit, truncated output, and invalid versions remain explicit determinist
 outcomes. Downloading, installation, external execution, selection policy, persistence, and UI
 remain assigned to later tasks.
 
+PB-0303 adds the corresponding Unity Editor locator without invoking Unity Hub or reading state
+outside the project. It scans the conventional contained `tools\unity\Hub\Editor` root plus
+explicit contained Hub editor roots, and it accepts explicit configured `Unity.exe` paths. Hub
+enumeration is deterministic and bounded to 32 unique roots, 256 direct editor directories, and
+256 executable candidates. Configured editors outside the approved tools root remain
+informational-only; external Hub roots are never enumerated; and reparse-point boundaries fail
+closed.
+
+Candidates must use Unity's `<version>\Editor\Unity.exe` layout. Callers provide typed, traversal-
+free relative file or directory markers for the modules required by their target. Every marker
+must exist beneath the editor installation without crossing a reparse point before the editor is
+executed. A contained candidate is then verified through PB-0207 using Unity's official
+`-version` argument and the same contained process roots, bounded capture, and timeout policy as
+Blender discovery. Only canonical PB-0301 Unity version output creates an unselected contained
+`ToolInstallation`. The locator performs no download, installation, licence acceptance, Hub
+execution, registry lookup, network request, selection, persistence, or UI work.
+
 The supported development workflow uses the repository-local .NET SDK through PowerShell and `dotnet` commands in Visual Studio Code. Paid Visual Studio is optional and no required task may depend on its IDE, designer, test runner, or build system. Every required technology must have a no-cost local path; optional remote hosting and CI cannot be necessary for local builds.
 
 The user-approved public GitHub repository is [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder). The original planned repository name is `package-builder`; its difference from the actual repository name remains unresolved until the user makes a separate decision. Code namespaces begin with `PackageBuilder`; marketplace-specific modules use names such as `PackageBuilder.Marketplaces.Fab`.

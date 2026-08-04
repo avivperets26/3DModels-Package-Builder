@@ -2,7 +2,7 @@
 
 **Task:** PB-0302 — Implement Blender installation discovery  
 **Branch:** `feat/PB-0302-blender-locator`  
-**Lifecycle:** 🟡 **PROCESS**  
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-08-04
 
 ## Scope
@@ -88,9 +88,15 @@ Generated coverage and test output remains beneath ignored `artifacts/PB-0302`.
 Not applicable. PB-0302 changes Contracts and Infrastructure only and does not modify WPF. The
 PB-1301 shell remains the current visual checkpoint.
 
-## Remaining Gates
+## Final Publication Evidence
 
-PB-0302 remains `[ ]` / 🟡 **PROCESS** and absent from the Completion Log. All local implementation
-and validation gates pass. User-controlled commit and branch push, merge into and push of `main`,
-successful required `main` CI, explicit user completion confirmation, and next-task rollover
-remain. No exception is used.
+- Final task commit `35858af4635e8eb1be7d173714870b5c7af8a18e` was pushed on
+  `feat/PB-0302-blender-locator`.
+- The task was merged through [pull request #45](https://github.com/avivperets26/3DModels-Package-Builder/pull/45)
+  into `main` as `7cdd964a582decf77eae093cb41e5f958d8387c0`.
+- Required [main workflow run 30941209801](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30941209801)
+  completed successfully for that exact merge commit.
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-04.
+- No CI, completion, quality, or workflow exception was used.
+- PB-0302 is recorded exactly once in the Completion Log during the PB-0303 rollover.

@@ -1,6 +1,6 @@
 # Package Builder Documentation
 
-This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. Repository, core domain/contracts, contained infrastructure through the persisted orchestrator, the first WPF shell, and PB-0301 tool-version/installation modeling are complete. PB-0302 contained Blender discovery and executable verification is active. Unity/Unreal discovery, model import, engine workers, packaging workflows, and the remaining desktop screens are not claimed as implemented.
+This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. Repository, core domain/contracts, contained infrastructure through the persisted orchestrator, the first WPF shell, PB-0301 tool-version/installation modeling, and PB-0302 contained Blender discovery are complete. PB-0303 contained Unity Editor and required-module discovery is active. Unreal discovery, model import, engine workers, packaging workflows, and the remaining desktop screens are not claimed as implemented.
 
 ## Primary Documentation
 
@@ -77,6 +77,7 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 
 - [PB-0301 tool-version and installation model evidence](PB-0301_TOOL_VERSION_MODELS_EVIDENCE.md)
 - [PB-0302 Blender installation discovery evidence](PB-0302_BLENDER_INSTALLATION_DISCOVERY_EVIDENCE.md)
+- [PB-0303 Unity installation discovery evidence](PB-0303_UNITY_INSTALLATION_DISCOVERY_EVIDENCE.md)
 
 ## Desktop Application Evidence
 

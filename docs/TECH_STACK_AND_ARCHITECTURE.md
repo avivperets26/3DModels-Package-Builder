@@ -1207,6 +1207,34 @@ matching `Blender <canonical PB-0301 version>`. Raw output is not copied into di
 locator does not download or install Blender, inspect the registry, execute external detections,
 select or persist an installation, contact a network, accept a licence, or implement UI.
 
+PB-0303 implements `IUnityInstallationLocator` through the same Contracts/Infrastructure split.
+Its request carries the job and contained process roots, explicit configured `Unity.exe` paths,
+zero or more contained Hub editor roots, and typed required-module markers. Each module marker has
+a bounded safe ID, a traversal-free relative Windows path beneath the editor installation, and a
+file-or-directory kind. Duplicate IDs and marker paths are rejected at the contract boundary.
+Detections record configured, Hub, or combined provenance; per-module installed, missing,
+reparse-rejected, or unreadable outcomes; and an installation value only when the editor and every
+required module are verified.
+
+The conventional contained Hub location is `tools\unity\Hub\Editor`; additional Hub editor roots
+must also be strict descendants of the approved tools root. Discovery enumerates only the direct
+version directories described by Unity's `<Hub editor root>\<version>\Editor\Unity.exe` layout.
+It is deterministic and bounded to 32 unique Hub roots, 256 Hub editor directories, and 256 unique
+executable candidates. Reparse-point roots, version directories, executables, and module markers
+fail closed. External configured executables are retained without execution as informational
+detections, while external Hub roots are never enumerated.
+
+Required modules are proven by caller-selected markers beneath the candidate installation, such
+as `Editor\Data\PlaybackEngines\<platform>`. A missing or unsafe required marker rejects the
+candidate before process execution. Remaining candidates run directly through
+`IExternalProcessRunner` with the single literal `-version` argument, no caller environment
+variables, a 4,096-character capture limit, and 15-second startup/idle, 30-second total, and
+5-second graceful-shutdown limits. Verification requires normal completion, exit code zero,
+untruncated output, and a first non-empty line exactly matching the canonical PB-0301 Unity
+version grammar. PB-0303 does not execute Unity Hub, parse external Hub state, download or install
+an editor/module, accept a Unity licence, inspect the registry, contact a network, select or
+persist an installation, or implement UI.
+
 ### 14.2 Version Lifecycle
 
 ```mermaid
