@@ -62,6 +62,10 @@ $script:ProjectSpecifications = @(
     [pscustomobject]@{
         Name = 'PackageBuilder.Contract.Tests'
         Path = 'tests/PackageBuilder.Contract.Tests/PackageBuilder.Contract.Tests.csproj'
+    },
+    [pscustomobject]@{
+        Name = 'PackageBuilder.App.Wpf.Tests'
+        Path = 'tests/PackageBuilder.App.Wpf.Tests/PackageBuilder.App.Wpf.Tests.csproj'
     }
 )
 

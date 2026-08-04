@@ -1,6 +1,62 @@
-﻿<Application x:Class="PackageBuilder.App.Wpf.App"
+<Application x:Class="PackageBuilder.App.Wpf.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             StartupUri="MainWindow.xaml">
-    <Application.Resources />
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Application.Resources>
+        <SolidColorBrush x:Key="ShellBackgroundBrush" Color="#F3F5F8" />
+        <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF" />
+        <SolidColorBrush x:Key="SurfaceMutedBrush" Color="#E9EEF5" />
+        <SolidColorBrush x:Key="NavigationBrush" Color="#101827" />
+        <SolidColorBrush x:Key="NavigationHoverBrush" Color="#1C2940" />
+        <SolidColorBrush x:Key="NavigationSelectedBrush" Color="#263854" />
+        <SolidColorBrush x:Key="AccentBrush" Color="#4F8CFF" />
+        <SolidColorBrush x:Key="AccentSoftBrush" Color="#DCE9FF" />
+        <SolidColorBrush x:Key="SuccessBrush" Color="#147D64" />
+        <SolidColorBrush x:Key="TextPrimaryBrush" Color="#162033" />
+        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#5C687A" />
+        <SolidColorBrush x:Key="TextOnDarkBrush" Color="#F8FAFC" />
+        <SolidColorBrush x:Key="TextOnDarkMutedBrush" Color="#A9B6C8" />
+        <SolidColorBrush x:Key="BorderBrush" Color="#DCE2EA" />
+
+        <Style TargetType="Window">
+            <Setter Property="FontFamily" Value="Segoe UI Variable Text, Segoe UI" />
+            <Setter Property="TextOptions.TextFormattingMode" Value="Display" />
+            <Setter Property="UseLayoutRounding" Value="True" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+        </Style>
+
+        <Style x:Key="NavigationItemStyle" TargetType="ListBoxItem">
+            <Setter Property="Foreground" Value="{StaticResource TextOnDarkMutedBrush}" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="12,10" />
+            <Setter Property="Margin" Value="0,2" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="ItemBorder"
+                                Padding="{TemplateBinding Padding}"
+                                Background="Transparent"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              RecognizesAccessKey="True" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ItemBorder" Property="Background" Value="{StaticResource NavigationHoverBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource TextOnDarkBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="ItemBorder" Property="Background" Value="{StaticResource NavigationSelectedBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource TextOnDarkBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter TargetName="ItemBorder" Property="BorderBrush" Value="{StaticResource AccentBrush}" />
+                                <Setter TargetName="ItemBorder" Property="BorderThickness" Value="2" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Application.Resources>
 </Application>

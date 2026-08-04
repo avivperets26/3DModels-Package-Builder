@@ -20,8 +20,10 @@ $script:ExpectedPackages = [ordered]@{
     'xunit.runner.visualstudio' = '3.1.5'
 }
 $script:ExpectedProductionPackages = [ordered]@{
+    'CommunityToolkit.Mvvm' = '8.4.2'
     'JsonSchema.Net' = '9.3.0'
     'Microsoft.Data.Sqlite' = '10.0.10'
+    'Microsoft.Extensions.Hosting' = '10.0.10'
     'SQLitePCLRaw.lib.e_sqlite3' = '2.1.12'
 }
 $script:ProjectSpecifications = @(
@@ -48,6 +50,12 @@ $script:ProjectSpecifications = @(
         Path = 'tests/PackageBuilder.Contract.Tests/PackageBuilder.Contract.Tests.csproj'
         ProductionProject = 'src/PackageBuilder.Contracts/PackageBuilder.Contracts.csproj'
         ProductionAssembly = 'PackageBuilder.Contracts'
+    },
+    [pscustomobject]@{
+        Name = 'PackageBuilder.App.Wpf.Tests'
+        Path = 'tests/PackageBuilder.App.Wpf.Tests/PackageBuilder.App.Wpf.Tests.csproj'
+        ProductionProject = 'src/PackageBuilder.App.Wpf/PackageBuilder.App.Wpf.csproj'
+        ProductionAssembly = 'PackageBuilder.App.Wpf'
     }
 )
 
@@ -133,7 +141,7 @@ if (-not [System.StringComparer]::OrdinalIgnoreCase.Equals($gitRoot, $script:Rep
     throw "RepositoryRoot must be the Git top level. Git reports: $gitRoot"
 }
 
-Invoke-Check 'Exactly the four approved test projects exist' {
+Invoke-Check 'Exactly the five approved test projects exist' {
     $expected = @($script:ProjectSpecifications | ForEach-Object { $_.Path } | Sort-Object)
     $actual = @(
         Get-ChildItem -LiteralPath (Join-Path $script:RepositoryRoot 'tests') -Recurse -File -Filter '*.csproj' |
@@ -185,7 +193,13 @@ Invoke-Check 'Central test package versions remain exactly pinned' {
 Invoke-Check 'Each test project uses xUnit v3 and references only its production assembly' {
     foreach ($specification in $script:ProjectSpecifications) {
         $project = Get-XmlDocument $specification.Path
-        if ((Get-ProjectProperty -Project $project -Name 'TargetFramework') -cne 'net10.0' -or
+        $expectedFramework = if ($specification.Name -ceq 'PackageBuilder.App.Wpf.Tests') {
+            'net10.0-windows'
+        }
+        else {
+            'net10.0'
+        }
+        if ((Get-ProjectProperty -Project $project -Name 'TargetFramework') -cne $expectedFramework -or
             (Get-ProjectProperty -Project $project -Name 'OutputType') -cne 'Exe' -or
             (Get-ProjectProperty -Project $project -Name 'IsTestProject') -cne 'true' -or
             (Get-ProjectProperty -Project $project -Name 'IsPackable') -cne 'false') {

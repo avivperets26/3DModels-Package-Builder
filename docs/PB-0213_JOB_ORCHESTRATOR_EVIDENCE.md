@@ -2,7 +2,7 @@
 
 **Task:** PB-0213 — Implement job orchestrator and persisted state transitions
 **Branch:** `feat/PB-0213-job-orchestrator`
-**Lifecycle:** 🟡 **PROCESS**
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-08-04
 
 ## Scope and rollover
@@ -15,8 +15,13 @@ Log. Final task commit `c4fc812391323ea74c67ea9958a52e9855873ff4` merged through
 completed successfully for that exact merge commit. The user explicitly confirmed the push, merge,
 green required `main` CI, and completion on 2026-08-04. No exception was used.
 
-PB-0213 is `[ ]` / 🟡 **PROCESS**, appears exactly once in Active Work, and is absent from the
-Completion Log.
+PB-0213 is `[x]` / 🟢 **DONE**, absent from Active Work, and recorded exactly once in the Completion
+Log. Final task commit `9b377e4ce7ad9fc750b2b3ff8a6115a5fc5f3fe2` merged through
+[pull request #42](https://github.com/avivperets26/3DModels-Package-Builder/pull/42) as
+`206d999661a96ebf71ccf3e1dcf87342114ff06a`. Required
+[main workflow run 30910471888](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30910471888)
+completed successfully for that exact merge commit. The user explicitly confirmed the push, merge,
+green required `main` CI, and completion on 2026-08-04. No exception was used.
 
 ## Implemented boundary
 
@@ -100,8 +105,7 @@ branch. Its observable boundary is the focused deterministic orchestration suite
 merged and required `main` CI is green, PB-1301's dependencies are satisfied and the next branch can
 deliver the first launchable WPF shell for direct visual testing.
 
-## Remaining gates
+## Completion state
 
-PB-0213 still requires user-controlled commit and push, integration into `main`, successful required
-`main` CI, explicit user completion confirmation, and next-task rollover.
-It must remain `[ ]` / 🟡 **PROCESS** and absent from the Completion Log until those gates pass.
+All PB-0213 implementation, validation, publication, required `main` CI, confirmation, and rollover
+gates are complete. PB-1301 owns the first launchable WPF shell and visual checkpoint.
