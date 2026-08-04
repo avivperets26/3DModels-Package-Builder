@@ -158,7 +158,24 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0212 | 🟡 **PROCESS** | `feat/PB-0212-structured-logging` | Infrastructure Engineering for local work; user for Git gates | 2026-08-04 | PB-0211 completion is synchronized from final task commit `a94570587634509c388502abce0768c622674634`, PR #40, merge `50c9caff34e7b48676cfa931aa4ce85dc3fc8b0e`, successful required main run 30901236339, and explicit user confirmation. PB-0212 implements persistence-neutral structured event contracts and deterministic contained UTF-8 JSON Lines application/per-job logs with correlation IDs, component, step, severity, hashed job folders, serialized writes, cancellation, reparse checks, and pre-persistence credential/profile-path redaction. Focused tests pass 48/48; all 1,683 tests and all nine Core CI stages pass; Debug/Release builds have zero warnings/errors; repository baseline passes 29/29; the vulnerability audit is clean; changed production branches have 100% coverage and all executable changed production lines are covered. | User-controlled commit/push and merge, successful required `main` CI, explicit completion confirmation, and PB-0213 rollover remain. |
+| PB-0213 | 🟡 **PROCESS** | `feat/PB-0213-job-orchestrator` | Application Engineering for local work; user for Git gates | 2026-08-04 | PB-0212 completion is synchronized from final task commit `c4fc812391323ea74c67ea9958a52e9855873ff4`, PR #41, merge `b2da53e3592c813f34a4e50c5290c3dcd2c003f2`, successful required main run 30906984461, and explicit user confirmation. The persisted orchestrator, deterministic fake worker, restart/resume path, structured stage logging, release-promotion gate, documentation, 31 focused tests, 96.96% line/86.30% branch coverage, and final nine-stage Core CI are locally validated. | User-controlled commit/push and merge, successful required `main` CI, explicit completion confirmation, and next-task rollover remain. |
+
+### PB-0212 Completion Evidence
+
+Detailed implementation, validation, and final publication evidence are recorded in
+`docs/PB-0212_STRUCTURED_LOGGING_EVIDENCE.md`.
+
+- Final task commit `c4fc812391323ea74c67ea9958a52e9855873ff4` was pushed on
+  `feat/PB-0212-structured-logging`.
+- The task was merged through [pull request #41](https://github.com/avivperets26/3DModels-Package-Builder/pull/41)
+  into `main` as `b2da53e3592c813f34a4e50c5290c3dcd2c003f2`.
+- Required [main workflow run 30906984461](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30906984461)
+  completed successfully for that exact merge commit.
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-04.
+- No CI, completion, quality, or workflow exception was used.
+- This PB-0213 rollover marks PB-0212 `[x]` / 🟢 **DONE**, removes it from Active Work, and adds
+  exactly one chronological Completion Log row.
 
 ### PB-0211 Completion Evidence
 
@@ -599,6 +616,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0209 | `feat/PB-0209-jsonl-progress` | `67d8e3027bd16f05d66ee40f67c6faa0082b9291` | [#38](https://github.com/avivperets26/3DModels-Package-Builder/pull/38) | 2026-08-04 | Merged into `main` as `ade315b13accf75f65d739d689eed7e5cfa44473`; [PR workflow run 30892047009](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30892047009) and required [main workflow run 30892053123](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30892053123) succeeded. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-04. |
 | PB-0210 | `feat/PB-0210-sqlite-schema` | `131342a0eb5adc23e11af4657b33515b51863ac5` | [#39](https://github.com/avivperets26/3DModels-Package-Builder/pull/39) | 2026-08-04 | Merged into `main` as `e2ceb8c90162b543413c917f98de23765eb0cbf8`; required [main workflow run 30897157981](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30897157981) succeeded for that exact merge. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-04. |
 | PB-0211 | `feat/PB-0211-sqlite-repositories` | `a94570587634509c388502abce0768c622674634` | [#40](https://github.com/avivperets26/3DModels-Package-Builder/pull/40) | 2026-08-04 | Merged into `main` as `50c9caff34e7b48676cfa931aa4ce85dc3fc8b0e`; required [main workflow run 30901236339](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30901236339) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-04. |
+| PB-0212 | `feat/PB-0212-structured-logging` | `c4fc812391323ea74c67ea9958a52e9855873ff4` | [#41](https://github.com/avivperets26/3DModels-Package-Builder/pull/41) | 2026-08-04 | Merged into `main` as `b2da53e3592c813f34a4e50c5290c3dcd2c003f2`; required [main workflow run 30906984461](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30906984461) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-04. |
 
 ## 5. Milestones
 
@@ -853,12 +871,12 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0210
   - Done when: jobs can be created, resumed, failed, cancelled, queried, and correlated with artifacts/findings.
 
-- [ ] **PB-0212 — Implement structured logging and correlation IDs** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0212 — Implement structured logging and correlation IDs** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0212-structured-logging`
   - Depends on: PB-0207, PB-0211
   - Done when: application and per-job logs beneath `C:\Dev\PackageBuilder\logs` include correlation IDs, component, step, severity, and redaction, with no user-profile or system log fallback.
 
-- [ ] **PB-0213 — Implement job orchestrator and persisted state transitions** — **P0**
+- [ ] **PB-0213 — Implement job orchestrator and persisted state transitions** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0213-job-orchestrator`
   - Depends on: PB-0203, PB-0206, PB-0208, PB-0211, PB-0212
   - Done when: a fake-worker job completes the full state machine, resumes after restart, and never promotes a failed job.

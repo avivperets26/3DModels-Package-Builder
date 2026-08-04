@@ -71,6 +71,7 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 - [PB-0210 SQLite schema and migration evidence](PB-0210_SQLITE_SCHEMA_MIGRATIONS_EVIDENCE.md)
 - [PB-0211 SQLite repository evidence](PB-0211_SQLITE_REPOSITORIES_EVIDENCE.md)
 - [PB-0212 structured logging and correlation evidence](PB-0212_STRUCTURED_LOGGING_EVIDENCE.md)
+- [PB-0213 persisted job orchestrator evidence](PB-0213_JOB_ORCHESTRATOR_EVIDENCE.md)
 
 ## Dependency and Licence Records
 

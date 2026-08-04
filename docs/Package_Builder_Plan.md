@@ -864,6 +864,14 @@ before persistence. Writes are serialized, cancellation-aware, reparse-checked, 
 expected failure, and never fall back to user-profile, system-log, system-temporary, telemetry, or
 network destinations. Persisted orchestration remains PB-0213 and support bundles remain PB-0912.
 
+PB-0213 adds the persistence-neutral application orchestrator and deterministic fake-worker vertical
+slice. It creates the queued record before execution, advances only through optimistic persisted
+domain transitions, logs before every stage, pauses explicitly for review, and resumes from the exact
+stored state after restart without replaying completed work. Release promotion is gated behind a
+successful `CleanReimport`; failed, cancelled, interrupted, review-paused, or invalid worker outcomes
+cannot complete or claim promotion. This backend checkpoint satisfies PB-1301's final dependency and
+therefore unlocks the first launchable WPF shell without coupling the UI to worker implementations.
+
 The supported development workflow uses the repository-local .NET SDK through PowerShell and `dotnet` commands in Visual Studio Code. Paid Visual Studio is optional and no required task may depend on its IDE, designer, test runner, or build system. Every required technology must have a no-cost local path; optional remote hosting and CI cannot be necessary for local builds.
 
 The user-approved public GitHub repository is [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder). The original planned repository name is `package-builder`; its difference from the actual repository name remains unresolved until the user makes a separate decision. Code namespaces begin with `PackageBuilder`; marketplace-specific modules use names such as `PackageBuilder.Marketplaces.Fab`.
