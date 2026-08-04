@@ -1180,6 +1180,33 @@ selected path must be a strict descendant of a canonical root whose final segmen
 The later PB-0302 through PB-0304 locators own filesystem discovery and executable verification.
 PB-0305 owns official release metadata, and PB-0306 owns Latest Approved Stable selection.
 
+PB-0302 implements `IBlenderInstallationLocator` in Infrastructure and keeps its consumer-facing
+request/report contract in Contracts. One request carries the existing build-job correlation ID,
+canonical project/tools roots, contained process working/temp/cache/log roots, and zero or more
+explicit configured executable paths. Each reported detection records configured, portable, or
+combined provenance; verified, external-informational, missing, reparse-rejected,
+verification-failed, or invalid-version-output status; and a `ToolInstallation` only for a verified
+contained candidate. External detections therefore have no installation value and cannot be
+selected.
+
+Portable discovery is an offline deterministic breadth-first scan rooted only at
+`tools\blender`. It sorts entries ordinally, accepts only `blender.exe`, skips reparse-point files
+and directories, and is bounded to depth 4, 1,024 scanned directories, and 256 unique executable
+candidates. Explicit configured paths may identify contained candidates anywhere beneath the
+approved tools root. Existing configured paths outside that root are recorded without execution;
+missing or noncanonical configured paths are explicit outcomes. The physical filesystem surface is
+behind `IBlenderDiscoveryFileSystem` so hostile, unreadable, reparse, limit, and race-adjacent
+conditions remain deterministic to test. PB-0207 revalidates exact process paths immediately before
+launch, closing the gap between discovery and execution as far as practical.
+
+Contained candidates run directly through `IExternalProcessRunner` with the single literal
+`--version` argument, no caller environment variables, a 4,096-character capture limit, and
+15-second startup/idle, 30-second total, and 5-second graceful-shutdown limits. Verification
+requires normal completion, exit code zero, untruncated output, and a first non-empty line exactly
+matching `Blender <canonical PB-0301 version>`. Raw output is not copied into diagnostics. The
+locator does not download or install Blender, inspect the registry, execute external detections,
+select or persist an installation, contact a network, accept a licence, or implement UI.
+
 ### 14.2 Version Lifecycle
 
 ```mermaid

@@ -2,7 +2,7 @@
 
 **Task:** PB-0301 — Implement tool-installation and semantic engine-version models
 **Branch:** `feat/PB-0301-tool-version-models`
-**Lifecycle:** 🟡 **PROCESS**
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-08-04
 
 ## Scope
@@ -83,9 +83,12 @@ classes introduced by PB-0301 must report 100% line and branch coverage before p
 Not applicable. PB-0301 is a pure Domain model and does not change the WPF shell or render assets.
 PB-1301 remains the current runnable visual checkpoint.
 
-## Remaining Gates
+## Completion Gates
 
-PB-0301 remains `[ ]` / 🟡 **PROCESS** and absent from the Completion Log. All local implementation
-and validation gates are complete. User-controlled commit and branch push, merge into and push of
-`main`, successful required `main` CI, explicit user completion confirmation, and next-task
-rollover remain. No exception is used.
+All local validation and publication gates are complete. Final task commit
+`99c312147175021c7114a0f71f55170e9d085081` was pushed on
+`feat/PB-0301-tool-version-models` and merged through pull request #44 into `main` as
+`7380f747b77cd47dcf2335dc1d65f3103588b3f2`. Required `main` workflow run `30930450125`
+succeeded for that exact merge commit. The user explicitly confirmed the push, merge, green
+required `main` CI, and completion on 2026-08-04. The PB-0302 rollover records PB-0301 once in
+the Completion Log. No exception was used.
