@@ -158,7 +158,25 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0209 | 🟡 **PROCESS** | `feat/PB-0209-jsonl-progress` | Contracts Engineering for local work; user for Git gates | 2026-08-03 | PB-0208 completion is synchronized from final task commit `0eba2a95ad71e8888e23e4805241bb58c02877c8`, PR #37, merge `8fca7e0175c6244260156969925d4293059493a6`, successful PR run 30850975774, successful required main run 30850980897, and explicit user confirmation. PB-0209 incrementally frames LF/CRLF worker output, accepts a final unterminated record, bounds retained line content, returns typed line-numbered results, and recovers after malformed or oversized lines without repeating their content. Focused contract tests pass 18/18; the two new source types report 100% line/branch coverage and the compiler-generated async iterator reports 100% line/92.86% branch; Debug/Release builds have zero warnings/errors; all 1,589 tests, repository baseline 29/29, vulnerability audit, formatting, Ruff, and all nine local Core CI stages pass. | User-controlled commit/push and merge, successful required `main` CI, explicit completion confirmation, and PB-0210 rollover remain. |
+| PB-0210 | 🟡 **PROCESS** | `feat/PB-0210-sqlite-schema` | Infrastructure Engineering for local work; user for Git gates | 2026-08-04 | PB-0209 completion is synchronized from final task commit `67d8e3027bd16f05d66ee40f67c6faa0082b9291`, PR #38, merge `ade315b13accf75f65d739d689eed7e5cfa44473`, successful PR run 30892047009, successful required main run 30892053123, and explicit user confirmation. PB-0210 implements all eleven approved SQLite v1 tables, strict constraints/indexes, contained consistent pre-upgrade backups, one-transaction migration and rollback, integrity/version checks, sanitized failures, and patched native SQLite dependency 2.1.12. Focused tests pass 29/29; Debug/Release builds have zero warnings/errors; all 1,618 tests, repository baseline 29/29, vulnerability audit, formatting, Ruff, and all nine local Core CI stages pass. | User-controlled commit/push and merge, successful required `main` CI, explicit completion confirmation, and PB-0211 rollover remain. |
+
+### PB-0209 Completion Evidence
+
+Detailed implementation, validation, and final publication evidence are recorded in
+`docs/PB-0209_JSONL_PROGRESS_READER_EVIDENCE.md`.
+
+- Final task commit `67d8e3027bd16f05d66ee40f67c6faa0082b9291` was pushed on
+  `feat/PB-0209-jsonl-progress`.
+- The task was merged through [pull request #38](https://github.com/avivperets26/3DModels-Package-Builder/pull/38)
+  into `main` as `ade315b13accf75f65d739d689eed7e5cfa44473`.
+- [PR workflow run 30892047009](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30892047009)
+  and required [main workflow run 30892053123](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30892053123)
+  completed successfully.
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-04.
+- No CI, completion, quality, or workflow exception was used.
+- This PB-0210 rollover marks PB-0209 `[x]` / 🟢 **DONE**, removes it from Active Work, and adds
+  exactly one chronological Completion Log row.
 
 ### PB-0208 Completion Evidence
 
@@ -544,6 +562,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0206 | `feat/PB-0206-atomic-promotion` | `b4aec5ebb1edcbcc9b29b43ffc3c9f175d69eed9` | [#35](https://github.com/avivperets26/3DModels-Package-Builder/pull/35) | 2026-08-03 | Merged into `main` as `570182210df18c7af2f2cac1a3ffdc09279aa46a`; [PR workflow run 30840565528](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30840565528) and required [main workflow run 30840576320](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30840576320) succeeded. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-03. |
 | PB-0207 | `feat/PB-0207-process-runner` | `3b49e6e0b5aa390680ce18d93a5a4f15eb988d94` | [#36](https://github.com/avivperets26/3DModels-Package-Builder/pull/36) | 2026-08-03 | Merged into `main` as `9ebc50c5bceab42e79201c6cf9c898150d270669`; [PR workflow run 30844336598](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30844336598) and required [main workflow run 30845827814](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30845827814) succeeded. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-03. |
 | PB-0208 | `feat/PB-0208-process-cancellation` | `0eba2a95ad71e8888e23e4805241bb58c02877c8` | [#37](https://github.com/avivperets26/3DModels-Package-Builder/pull/37) | 2026-08-03 | Merged into `main` as `8fca7e0175c6244260156969925d4293059493a6`; [PR workflow run 30850975774](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30850975774) and required [main workflow run 30850980897](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30850980897) succeeded. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-03. |
+| PB-0209 | `feat/PB-0209-jsonl-progress` | `67d8e3027bd16f05d66ee40f67c6faa0082b9291` | [#38](https://github.com/avivperets26/3DModels-Package-Builder/pull/38) | 2026-08-04 | Merged into `main` as `ade315b13accf75f65d739d689eed7e5cfa44473`; [PR workflow run 30892047009](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30892047009) and required [main workflow run 30892053123](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30892053123) succeeded. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-04. |
 
 ## 5. Milestones
 
@@ -783,12 +802,12 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0207
   - Done when: graceful cancellation, idle/total timeout, forced termination, child-process cleanup, and preserved logs are tested.
 
-- [ ] **PB-0209 — Implement JSON Lines progress reader** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0209 — Implement JSON Lines progress reader** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0209-jsonl-progress`
   - Depends on: PB-0112, PB-0207
   - Done when: progress, finding, metric, and malformed-line behavior are covered by contract tests.
 
-- [ ] **PB-0210 — Implement SQLite schema and migrations** — **P0**
+- [ ] **PB-0210 — Implement SQLite schema and migrations** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0210-sqlite-schema`
   - Depends on: PB-0108, PB-0109
   - Done when: tables from the architecture document are created transactionally and migrations are tested against backups.

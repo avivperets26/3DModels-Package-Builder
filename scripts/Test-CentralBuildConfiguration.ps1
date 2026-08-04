@@ -31,6 +31,8 @@ $script:ExpectedProjects = @(
 $script:ExpectedPackageVersions = @{
     'coverlet.collector' = '10.0.1'
     'JsonSchema.Net' = '9.3.0'
+    'Microsoft.Data.Sqlite' = '10.0.10'
+    'SQLitePCLRaw.lib.e_sqlite3' = '2.1.12'
     'Microsoft.NET.Test.Sdk' = '18.8.1'
     'xunit.v3.mtp-off' = '3.2.2'
     'xunit.runner.visualstudio' = '3.1.5'
@@ -45,6 +47,10 @@ $script:ExpectedTestPackages = @(
 
 $script:ApprovedProductionPackages = @{
     'src/PackageBuilder.Contracts/PackageBuilder.Contracts.csproj' = @('JsonSchema.Net')
+    'src/PackageBuilder.Infrastructure/PackageBuilder.Infrastructure.csproj' = @(
+        'Microsoft.Data.Sqlite',
+        'SQLitePCLRaw.lib.e_sqlite3'
+    )
 }
 
 $script:ForbiddenLegacyXunitPackages = @(
