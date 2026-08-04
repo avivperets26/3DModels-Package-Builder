@@ -158,7 +158,24 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-1301 | 🟡 **PROCESS** | `feat/PB-1301-wpf-shell` | Desktop UX/Application Engineering for local work; user for Git gates | 2026-08-04 | PB-0213 completion is synchronized. The launchable WPF shell, local host/DI composition, five-module MVVM navigation, sanitized fatal-startup surface, dedicated WPF test project, dependency locks/notices, and documentation are implemented. Manual visual launch and UI Automation navigation passed. Full Core CI passed all nine stages: 1,729 tests passed, 16-project Release build produced 0 warnings/errors, repository baseline passed 29/29, and the vulnerability audit reported no vulnerable package. | Local gates are complete. User-controlled commit, task-branch push, merge and `main` push, successful required `main` CI, explicit confirmation, and PB-1302 rollover remain. |
+| PB-0301 | 🟡 **PROCESS** | `feat/PB-0301-tool-version-models` | Domain Engineering for local work; user for Git gates | 2026-08-04 | PB-1301 completion is synchronized. PB-0301 tool kinds, stable/preview channels, strict vendor-aware semantic versions, canonical contained/external installation paths, and immutable selection are implemented. Focused tests are 57/57 with 100% line and branch coverage for all executable production classes; Domain tests are 846/846; all 1,786 tests and all 9 Core CI stages pass; Debug and Release builds have zero warnings/errors. | User-controlled commit, branch push, merge and `main` push, successful required `main` CI, explicit confirmation, and next-task rollover remain. |
+
+### PB-1301 Completion Evidence
+
+Detailed implementation, validation, visual acceptance, and final publication evidence are recorded
+in `docs/PB-1301_WPF_SHELL_EVIDENCE.md`.
+
+- Final task commit `fd92b87ba2be1ad2f8aabc9792e429aab9074c6f` was pushed on
+  `feat/PB-1301-wpf-shell`.
+- The task was merged through [pull request #43](https://github.com/avivperets26/3DModels-Package-Builder/pull/43)
+  into `main` as `c7a61f338cb908c4d574ce895bb040b7d6f49c14`.
+- Required [main workflow run 30919099522](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30919099522)
+  completed successfully for that exact merge commit.
+- The user manually exercised navigation and keyboard behavior, accepted the visual checkpoint, and
+  explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-04.
+- No CI, completion, quality, or workflow exception was used.
+- This PB-0301 rollover marks PB-1301 `[x]` / 🟢 **DONE**, removes it from Active Work, and adds
+  exactly one chronological Completion Log row.
 
 ### PB-0213 Completion Evidence
 
@@ -635,6 +652,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0211 | `feat/PB-0211-sqlite-repositories` | `a94570587634509c388502abce0768c622674634` | [#40](https://github.com/avivperets26/3DModels-Package-Builder/pull/40) | 2026-08-04 | Merged into `main` as `50c9caff34e7b48676cfa931aa4ce85dc3fc8b0e`; required [main workflow run 30901236339](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30901236339) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-04. |
 | PB-0212 | `feat/PB-0212-structured-logging` | `c4fc812391323ea74c67ea9958a52e9855873ff4` | [#41](https://github.com/avivperets26/3DModels-Package-Builder/pull/41) | 2026-08-04 | Merged into `main` as `b2da53e3592c813f34a4e50c5290c3dcd2c003f2`; required [main workflow run 30906984461](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30906984461) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-04. |
 | PB-0213 | `feat/PB-0213-job-orchestrator` | `9b377e4ce7ad9fc750b2b3ff8a6115a5fc5f3fe2` | [#42](https://github.com/avivperets26/3DModels-Package-Builder/pull/42) | 2026-08-04 | Merged into `main` as `206d999661a96ebf71ccf3e1dcf87342114ff06a`; required [main workflow run 30910471888](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30910471888) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-04. |
+| PB-1301 | `feat/PB-1301-wpf-shell` | `fd92b87ba2be1ad2f8aabc9792e429aab9074c6f` | [#43](https://github.com/avivperets26/3DModels-Package-Builder/pull/43) | 2026-08-04 | Merged into `main` as `c7a61f338cb908c4d574ce895bb040b7d6f49c14`; required [main workflow run 30919099522](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30919099522) succeeded for that exact merge commit. No exception was used; the user manually accepted the visual shell and explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-04. |
 
 ## 5. Milestones
 
@@ -917,7 +935,7 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** Discover installed tools, track vendor releases, test candidates, and pin exact build versions.
 
-- [ ] **PB-0301 — Implement tool-installation and semantic engine-version models** — **P0**
+- [ ] **PB-0301 — Implement tool-installation and semantic engine-version models** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0301-tool-version-models`
   - Depends on: PB-0108
   - Done when: Blender, Unity, Unreal, and .NET installations plus stable/preview channels are represented and comparable without naive string sorting, and selected installations are valid only beneath `C:\Dev\PackageBuilder\tools`.
@@ -1632,7 +1650,7 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** A clear desktop workflow drives every application use case without containing build logic in the UI.
 
-- [ ] **PB-1301 — Create WPF shell, dependency injection, and navigation** — **P0** — 🟡 **PROCESS**
+- [x] **PB-1301 — Create WPF shell, dependency injection, and navigation** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-1301-wpf-shell`
   - Depends on: PB-0005, PB-0213
   - Done when: application starts, composes services, navigates modules, handles fatal startup errors, and has view-model tests.

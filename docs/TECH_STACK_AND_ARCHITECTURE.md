@@ -1165,6 +1165,21 @@ For Unity, current non-preview production Update releases can become candidates 
 
 For Unreal, the newest non-preview launcher release becomes a candidate and must pass the same promotion suite.
 
+PB-0301 defines the shared Domain boundary used before discovery and promotion. `ToolVersion`
+parses and compares canonical vendor versions numerically instead of sorting display strings:
+.NET, Blender, and Unreal use three numeric components with an approved vendor prerelease label
+and numeric suffixes; Unity uses `<major>.<minor>.<patch><a|b|f|p><revision>`. Unity `a` and `b`
+are preview channels while `f` and `p` are stable; approved semantic prerelease labels are preview
+and stable versions have no prerelease marker. Cross-tool ordering is deterministic but has no
+compatibility meaning.
+
+`ToolInstallation` is immutable and records the tool, matching canonical version, executable path,
+approved tools root, containment, and selection state. Canonical Windows paths are validated
+without opening the filesystem. External paths remain informational and cannot be selected; a
+selected path must be a strict descendant of a canonical root whose final segment is `tools`.
+The later PB-0302 through PB-0304 locators own filesystem discovery and executable verification.
+PB-0305 owns official release metadata, and PB-0306 owns Latest Approved Stable selection.
+
 ### 14.2 Version Lifecycle
 
 ```mermaid
