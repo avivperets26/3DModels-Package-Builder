@@ -158,7 +158,24 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0302 | 🟡 **PROCESS** | `feat/PB-0302-blender-locator` | Infrastructure Engineering for local work; user for Git gates | 2026-08-04 | PB-0301 completion is synchronized. Configured and bounded portable Blender discovery, external informational-only detections, reparse safeguards, and shell-free `--version` verification are implemented. Focused tests are 55/55 with 100% line and branch coverage for every new executable production class; Infrastructure tests are 494/494; all 1,841 tests and all 9 Core CI stages pass; Debug and Release builds have zero warnings/errors; repository baseline is 29/29. | User-controlled commit and branch push, merge and `main` push, successful required `main` CI, explicit confirmation, and next-task rollover remain. |
+| PB-0303 | 🟡 **PROCESS** | `feat/PB-0303-unity-locator` | Infrastructure Engineering for local work; user for Git gates | 2026-08-04 | PB-0302 completion is synchronized. Contained configured/Hub Unity discovery, typed required-module markers, bounded enumeration, external informational-only detections, reparse safeguards, and shell-free `-version` verification are implemented. Focused tests are 54/54 with 100% line and branch coverage for every new executable production class; Infrastructure tests are 548/548; all 1,895 tests and all 9 Core CI stages pass; Debug and Release builds have zero warnings/errors; repository baseline is 29/29. | User-controlled commit and branch push, merge and `main` push, successful required `main` CI, explicit confirmation, and next-task rollover remain. |
+
+### PB-0302 Completion Evidence
+
+Detailed implementation, validation, and final publication evidence are recorded in
+`docs/PB-0302_BLENDER_INSTALLATION_DISCOVERY_EVIDENCE.md`.
+
+- Final task commit `35858af4635e8eb1be7d173714870b5c7af8a18e` was pushed on
+  `feat/PB-0302-blender-locator`.
+- The task was merged through [pull request #45](https://github.com/avivperets26/3DModels-Package-Builder/pull/45)
+  into `main` as `7cdd964a582decf77eae093cb41e5f958d8387c0`.
+- Required [main workflow run 30941209801](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30941209801)
+  completed successfully for that exact merge commit.
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-04.
+- No CI, completion, quality, or workflow exception was used.
+- This PB-0303 rollover marks PB-0302 `[x]` / 🟢 **DONE**, removes it from Active Work, and adds
+  exactly one chronological Completion Log row.
 
 ### PB-0301 Completion Evidence
 
@@ -671,6 +688,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0213 | `feat/PB-0213-job-orchestrator` | `9b377e4ce7ad9fc750b2b3ff8a6115a5fc5f3fe2` | [#42](https://github.com/avivperets26/3DModels-Package-Builder/pull/42) | 2026-08-04 | Merged into `main` as `206d999661a96ebf71ccf3e1dcf87342114ff06a`; required [main workflow run 30910471888](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30910471888) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-04. |
 | PB-1301 | `feat/PB-1301-wpf-shell` | `fd92b87ba2be1ad2f8aabc9792e429aab9074c6f` | [#43](https://github.com/avivperets26/3DModels-Package-Builder/pull/43) | 2026-08-04 | Merged into `main` as `c7a61f338cb908c4d574ce895bb040b7d6f49c14`; required [main workflow run 30919099522](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30919099522) succeeded for that exact merge commit. No exception was used; the user manually accepted the visual shell and explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-04. |
 | PB-0301 | `feat/PB-0301-tool-version-models` | `99c312147175021c7114a0f71f55170e9d085081` | [#44](https://github.com/avivperets26/3DModels-Package-Builder/pull/44) | 2026-08-04 | Merged into `main` as `7380f747b77cd47dcf2335dc1d65f3103588b3f2`; required [main workflow run 30930450125](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30930450125) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-04. |
+| PB-0302 | `feat/PB-0302-blender-locator` | `35858af4635e8eb1be7d173714870b5c7af8a18e` | [#45](https://github.com/avivperets26/3DModels-Package-Builder/pull/45) | 2026-08-04 | Merged into `main` as `7cdd964a582decf77eae093cb41e5f958d8387c0`; required [main workflow run 30941209801](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30941209801) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-04. |
 
 ## 5. Milestones
 
@@ -958,12 +976,12 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0108
   - Done when: Blender, Unity, Unreal, and .NET installations plus stable/preview channels are represented and comparable without naive string sorting, and selected installations are valid only beneath `C:\Dev\PackageBuilder\tools`.
 
-- [ ] **PB-0302 — Implement Blender installation discovery** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0302 — Implement Blender installation discovery** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0302-blender-locator`
   - Depends on: PB-0301, PB-0207
   - Done when: contained configured and portable Blender installations are found beneath the project tool root and verified by executable version output; external detections are informational and cannot be selected.
 
-- [ ] **PB-0303 — Implement Unity Hub editor discovery** — **P0**
+- [ ] **PB-0303 — Implement Unity Hub editor discovery** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0303-unity-locator`
   - Depends on: PB-0301
   - Done when: Unity editors and required modules installed beneath the project tool root are discovered from contained Hub/configured paths and verified; external detections are informational and cannot be selected.
