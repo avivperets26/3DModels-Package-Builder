@@ -76,7 +76,7 @@ As of this document's review date, .NET 10 is the current LTS line, Unity 6.3 is
 | Serialization | `System.Text.Json` | Built into .NET, fast, source-generation support |
 | Schema validation | JsonSchema.Net 9.3.0 (MIT) | Pinned offline Draft 2020-12 validation of manifests and worker contracts |
 | Logging | Serilog with text and JSON sinks | Structured per-job logs and readable local diagnostics |
-| Persistence | SQLite through `Microsoft.Data.Sqlite` | Local build history without requiring a server |
+| Persistence | SQLite through `Microsoft.Data.Sqlite` 10.0.10 with patched `SQLitePCLRaw.lib.e_sqlite3` 2.1.12 | Pinned local build history without a server or vulnerable native 2.1.11 runtime |
 | Image processing | SkiaSharp | Resize, inspect, and compress preview media with a permissive ecosystem |
 | Archives | `System.IO.Compression.ZipArchive` | Built-in deterministic ZIP construction |
 | Cryptographic hashes | `System.Security.Cryptography` SHA-256 | Artifact identity, cache keys, and duplicate detection |
@@ -1262,6 +1262,21 @@ Initial tables:
 - `Settings`
 
 Large files remain in the artifact store and are addressed by path plus SHA-256. Database migrations are versioned and backed up before upgrade.
+
+PB-0210 implements schema version 1 in `PackageBuilder.Infrastructure.Persistence` with SQLite
+`PRAGMA user_version` as the single migration-version source. Database and backup locations must
+be absolute, exist beneath the approved project root, and cross no existing reparse point. The
+runtime database remains `runtime-data/packagebuilder.db`; callers explicitly supply a contained
+backup directory.
+
+The initial migration creates all eleven approved tables, their foreign keys, canonical state
+constraints, uniqueness constraints, and query indexes in one transaction. An existing version-0
+database receives a consistent SQLite online backup before that transaction begins. A failed
+migration rolls back every schema statement and leaves the pre-upgrade backup available; current
+version-1 databases are idempotent, and databases with a newer schema version fail closed without
+modification. Integrity checks run before and after upgrades. Diagnostics return stable codes and
+never include physical paths, SQL text, or database content. PB-0211 remains the owner of typed
+job, artifact, tool, and finding repository operations; PB-0210 does not introduce CRUD behavior.
 
 ## 17. Caching and Incremental Builds
 

@@ -2,8 +2,8 @@
 
 **Task:** PB-0209 — Implement JSON Lines progress reader
 **Branch:** `feat/PB-0209-jsonl-progress`
-**Lifecycle:** 🟡 **PROCESS**
-**Evidence date:** 2026-08-03
+**Lifecycle:** 🟢 **DONE**
+**Evidence date:** 2026-08-04
 
 ## Scope and rollover
 
@@ -17,8 +17,16 @@ and required
 completed successfully. The user explicitly confirmed the push, merge, green required `main` CI,
 and completion on 2026-08-03. No exception was used.
 
-PB-0209 remains `[ ]` / 🟡 **PROCESS** and absent from the Completion Log until its one
-user-controlled publication, required `main` CI, explicit confirmation, and PB-0210 rollover.
+PB-0209 is `[x]` / 🟢 **DONE**, absent from Active Work, and recorded exactly once in the
+Completion Log. Final task commit `67d8e3027bd16f05d66ee40f67c6faa0082b9291` merged through
+[pull request #38](https://github.com/avivperets26/3DModels-Package-Builder/pull/38) as
+`ade315b13accf75f65d739d689eed7e5cfa44473`.
+[PR workflow run 30892047009](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30892047009)
+and required
+[main workflow run 30892053123](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30892053123)
+completed successfully. The user explicitly confirmed the push, merge, green required `main` CI,
+and completion on 2026-08-04. No exception was used. This completion state is synchronized during
+the approved PB-0210 rollover.
 
 ## Implemented contract boundary
 
@@ -80,7 +88,6 @@ no end-user visual test yet. Its behavior is observable through deterministic co
 feed representative JSON Lines streams and inspect each typed line result. The first supported
 visual workflow remains the later WPF vertical slice.
 
-## Remaining gates
+## Completion
 
-User-controlled commit and branch push, merge into and push of `main`, successful required `main`
-CI, explicit completion confirmation, and PB-0210 rollover remain.
+No PB-0209 implementation, validation, publication, CI, confirmation, or rollover gate remains.

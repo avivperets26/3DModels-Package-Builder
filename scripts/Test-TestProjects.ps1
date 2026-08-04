@@ -21,6 +21,8 @@ $script:ExpectedPackages = [ordered]@{
 }
 $script:ExpectedProductionPackages = [ordered]@{
     'JsonSchema.Net' = '9.3.0'
+    'Microsoft.Data.Sqlite' = '10.0.10'
+    'SQLitePCLRaw.lib.e_sqlite3' = '2.1.12'
 }
 $script:ProjectSpecifications = @(
     [pscustomobject]@{
