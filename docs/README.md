@@ -1,6 +1,6 @@
 # Package Builder Documentation
 
-This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. The E00 repository foundation, E01 domain/contracts work through PB-0113, PB-0201 configuration/path-root validation, PB-0202 safe ZIP processing, PB-0203 immutable source snapshots, and PB-0204 streamed artifact identity are complete. PB-0205 artifact-store layout and metadata are active. Atomic release promotion, JSON Lines stream framing, process execution, model import, engine workers, packaging, desktop UI, broader security hardening, and installation features are not claimed as implemented.
+This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. Repository, core domain/contracts, contained infrastructure through the persisted orchestrator, and the first WPF shell are complete. PB-0301 tool-version and installation modeling is active. Tool discovery and verification, model import, engine workers, packaging workflows, and the remaining desktop screens are not claimed as implemented.
 
 ## Primary Documentation
 
@@ -72,6 +72,10 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 - [PB-0211 SQLite repository evidence](PB-0211_SQLITE_REPOSITORIES_EVIDENCE.md)
 - [PB-0212 structured logging and correlation evidence](PB-0212_STRUCTURED_LOGGING_EVIDENCE.md)
 - [PB-0213 persisted job orchestrator evidence](PB-0213_JOB_ORCHESTRATOR_EVIDENCE.md)
+
+## Tool Discovery Evidence
+
+- [PB-0301 tool-version and installation model evidence](PB-0301_TOOL_VERSION_MODELS_EVIDENCE.md)
 
 ## Desktop Application Evidence
 

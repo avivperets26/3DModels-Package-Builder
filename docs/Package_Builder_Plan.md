@@ -879,6 +879,13 @@ is deliberately honest: later product, audit, queue, report, and settings workfl
 as clearly labelled previews until their owning tasks implement them. It is the first checkpoint the
 user can run and inspect visually; it does not yet import, render, build, or publish a model package.
 
+PB-0301 begins the tool-discovery milestone with a renderer-independent Domain model. It represents
+.NET, Blender, Unity, and Unreal versions using their vendor grammars and semantic numeric ordering,
+derives stable or preview channels, and distinguishes contained from external installations. An
+external detection may be reported, but only an installation beneath the configured project
+`tools` root may be selected. Discovery, executable verification, download catalogs, version
+approval, persistence, and UI remain assigned to their later planned tasks.
+
 The supported development workflow uses the repository-local .NET SDK through PowerShell and `dotnet` commands in Visual Studio Code. Paid Visual Studio is optional and no required task may depend on its IDE, designer, test runner, or build system. Every required technology must have a no-cost local path; optional remote hosting and CI cannot be necessary for local builds.
 
 The user-approved public GitHub repository is [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder). The original planned repository name is `package-builder`; its difference from the actual repository name remains unresolved until the user makes a separate decision. Code namespaces begin with `PackageBuilder`; marketplace-specific modules use names such as `PackageBuilder.Marketplaces.Fab`.

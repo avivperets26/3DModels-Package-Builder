@@ -2,7 +2,7 @@
 
 **Task:** PB-1301 — Create WPF shell, dependency injection, and navigation  
 **Branch:** `feat/PB-1301-wpf-shell`  
-**Lifecycle:** 🟡 **PROCESS**  
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-08-04
 
 ## Scope and rollover
@@ -15,8 +15,13 @@ Log. Final task commit `9b377e4ce7ad9fc750b2b3ff8a6115a5fc5f3fe2` merged through
 completed successfully for that merge. The user explicitly confirmed publication and green required
 `main` CI on 2026-08-04. No exception was used.
 
-PB-1301 remains `[ ]` / 🟡 **PROCESS** until its user-controlled commit, merge, successful required
-`main` CI, explicit completion confirmation, and next-task rollover are complete.
+PB-1301 is `[x]` / 🟢 **DONE**, absent from Active Work, and recorded exactly once in the Completion
+Log. Final task commit `fd92b87ba2be1ad2f8aabc9792e429aab9074c6f` merged through
+[pull request #43](https://github.com/avivperets26/3DModels-Package-Builder/pull/43) as
+`c7a61f338cb908c4d574ce895bb040b7d6f49c14`. Required
+[main workflow run 30919099522](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30919099522)
+completed successfully for that exact merge commit. The user manually accepted the visual shell and
+explicitly confirmed publication and green required `main` CI on 2026-08-04. No exception was used.
 
 ## Implemented boundary
 
@@ -96,6 +101,6 @@ checkpoint, but it intentionally does not yet accept a model or render a 3D prev
 
 ## Remaining gates
 
-All local implementation and validation gates are complete. PB-1301 still requires user-controlled
-staging and commit, task-branch publication, merge into `main`, successful required `main` CI,
-explicit user confirmation, and rollover synchronization at the start of PB-1302.
+All local, publication, visual-acceptance, required `main` CI, confirmation, and rollover gates are
+complete. PB-0301 now owns the next active implementation boundary; PB-1302 remains dependency-blocked
+until PB-0302 through PB-0304 are complete.
