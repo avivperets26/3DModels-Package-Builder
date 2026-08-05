@@ -126,6 +126,15 @@ armatures, skinned meshes, and actions. Separate `.gltf` dependency graphs remai
 bounded contained-reference preflight is explicitly planned; PB-0404 never follows unvalidated
 external buffer or image references.
 
+PB-0405 adds deterministic direct-data geometry inspection after either supported import path.
+It reports every object's name, Blender type, decomposed world transform, and each mesh's vertex,
+polygon, loop-triangle, UV, face-corner normal, tangent, material-slot, world-bound, dimension, and
+16/32-bit index requirements. Scene totals and world bounds are deterministic. The inspector does
+not depend on UI state, does not modify the source, releases calculated tangent data promptly, and
+maps unreadable, inconsistent, duplicate, missing, or non-finite Blender data to stable sanitized
+blocking findings. Evaluated modifiers and detailed texture, rig, animation, normalization, export,
+and reimport behavior remain later Blender tasks.
+
 ### 3.3 Unity Worker
 
 A Unity Editor assembly is executed either from its Editor window or with `-batchmode -executeMethod`. It:

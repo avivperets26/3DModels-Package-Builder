@@ -4,11 +4,22 @@
 
 - Task: PB-0404 — Implement GLB/glTF import adapter
 - Branch: `feat/PB-0404-blender-glb-import`
-- Lifecycle: 🟡 **PROCESS**
+- Lifecycle: 🟢 **DONE**
 - Date: 2026-08-05
 
-PB-0404 is implemented and locally validated. It remains active until the user-controlled
-commit, push, merge, required `main` CI, explicit confirmation, and next-task rollover gates pass.
+PB-0404 is implemented, locally validated, published, and synchronized as complete during the
+approved PB-0405 rollover.
+
+## Final Publication Evidence
+
+- Final task commit: `851812e2a80c2a17197767f000800a87430e975b`.
+- Branch: `feat/PB-0404-blender-glb-import`.
+- Pull request: [#57](https://github.com/avivperets26/3DModels-Package-Builder/pull/57).
+- Merge commit: `e9231a22125108c5b8670a36ef7bb6d42a67b9a4`.
+- Required successful `main` CI:
+  [workflow run 31040818232](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31040818232).
+- Explicit user completion confirmation: 2026-08-05.
+- Exception used: none.
 
 ## Implemented Boundary
 
@@ -87,8 +98,9 @@ Every finding is a blocking error from `blender-glb-importer` with sanitized act
 - Separate `.gltf` source graphs are not accepted by this single-file GLB boundary. Supporting them
   safely requires bounded JSON parsing and complete canonical dependency-reference validation.
 
-## Remaining Gates
+## Completion
 
-User-controlled commit and push, merge into and push of `main`, successful required `main` CI,
-explicit user completion confirmation, and PB-0405 rollover remain.
-PB-0404 stays `[ ]` / 🟡 **PROCESS** and absent from the Completion Log. No exception is used.
+No PB-0404 acceptance or publication gate remains. PB-0404 is `[x]` / 🟢 **DONE**, absent from
+Active Work, and recorded exactly once in the Completion Log. The disclosed real-Blender and
+Python branch-coverage evidence limits remain; completion does not convert them into unsupported
+claims.
