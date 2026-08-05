@@ -31,6 +31,9 @@
     <EmbeddedResource Include="..\..\schemas\worker-result.schema.json"
                       Link="Schemas\worker-result.schema.json"
                       LogicalName="PackageBuilder.Contracts.Schemas.worker-result.schema.json" />
+    <EmbeddedResource Include="..\..\schemas\build-lock.schema.json"
+                      Link="Schemas\build-lock.schema.json"
+                      LogicalName="PackageBuilder.Contracts.Schemas.build-lock.schema.json" />
   </ItemGroup>
 
 </Project>

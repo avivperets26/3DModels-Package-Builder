@@ -1368,17 +1368,30 @@ Every release contains a build lock record:
 
 ```json
 {
+  "schemaVersion": 1,
+  "jobId": "Job-0308",
   "packageBuilderVersion": "1.0.0",
   "dotnetSdk": "10.0.302",
   "blender": "5.0.0",
   "unity": "6000.3.10f1",
-  "unreal": "5.8.x",
-  "marketplaceAdapter": "fab@2026-07-22",
-  "manifestSchema": 1
+  "unreal": "5.8.0",
+  "manifestSchemaVersion": 1,
+  "workers": [
+    { "id": "blender-worker", "version": "1.0.0" }
+  ],
+  "marketplaceProfiles": [
+    { "marketplace": "fab", "profile": "default", "version": "2026-07-22" }
+  ]
 }
 ```
 
-The values above illustrate the structure and are not permanent defaults.
+PB-0308 defines this as strict JSON Schema Draft 2020-12 contract version 1. Generation accepts
+only one stable Approved Latest or Last Known Good version for each engine, requires exact stable
+.NET SDK and Package Builder versions, and records non-empty worker and marketplace-profile
+version sets. Collections serialize in ordinal identity order, unknown or duplicate JSON
+properties fail closed, and the canonical UTF-8 JSON receives a lowercase SHA-256 digest. This
+record is a reproducibility snapshot; it does not install tools, approve versions, or fetch
+marketplace rules. The values above illustrate the structure and are not permanent defaults.
 
 ### 14.6 Multi-Version Compatibility
 

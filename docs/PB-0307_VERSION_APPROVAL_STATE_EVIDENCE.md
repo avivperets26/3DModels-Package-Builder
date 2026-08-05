@@ -2,7 +2,7 @@
 
 **Task:** PB-0307 — Implement candidate approval and compatibility-state persistence
 **Branch:** `feat/PB-0307-version-approval-state`
-**Lifecycle:** 🟡 **PROCESS**
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-08-05
 
 ## Scope
@@ -85,14 +85,15 @@ compatibility state only and does not accept terms or determine operator eligibi
 Not applicable. PB-0307 changes Domain, Contracts, Infrastructure, SQLite migration, and automated
 tests only; it does not modify WPF. The PB-1301 shell remains the current visual checkpoint.
 
-## Remaining Gates
+## Final Publication Evidence
 
-- Resolve or explicitly disposition the invalid coverage-instrumentation evidence before claiming
-  the detailed coverage gate.
-- User stages and commits PB-0307 on `feat/PB-0307-version-approval-state`.
-- User pushes the task branch and merges it into `main` through an optional PR or approved direct
-  merge.
-- Required `main` CI succeeds for the merge commit.
-- User explicitly confirms completion.
-- PB-0307 remains `[ ]` / 🟡 **PROCESS** and absent from the Completion Log until the PB-0308
-  rollover records those gates.
+- Final task commit: `44a7e24a90613c541df55555d4a9dd5a648ad7a0`.
+- Pull request: [#50](https://github.com/avivperets26/3DModels-Package-Builder/pull/50).
+- Merge commit on `main`: `9c570b7f0de2d049fd1910cce1f63b61d9562ae0`.
+- Required successful `main` CI: [run 31006588872](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31006588872).
+- User confirmation: 2026-08-05.
+- No CI, completion, quality, or workflow exception was used. The invalid local coverage report
+  remains disclosed and no coverage percentage is claimed.
+
+PB-0307 is synchronized `[x]` / 🟢 **DONE**, is absent from Active Work, and appears exactly once
+in the Completion Log during the PB-0308 rollover.
