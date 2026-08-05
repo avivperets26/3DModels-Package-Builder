@@ -158,7 +158,24 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0304 | 🟡 **PROCESS** | `feat/PB-0304-unreal-locator` | Infrastructure Engineering for local work; user for Git gates | 2026-08-05 | PB-0303 completion is synchronized. Offline configured/source/contained/launcher/registry/standard-path discovery, strict bounded launcher and `Build.version` parsing, external informational-only detections, reparse safeguards, and typed contracts are implemented. Focused tests are 46/46 with 100% line and branch coverage for every new executable production class; Infrastructure tests are 594/594; all 1,941 tests and all 9 Core CI stages pass; Debug and Release builds have zero warnings/errors; repository baseline is 29/29. | User-controlled commit and branch push, merge and `main` push, successful required `main` CI, explicit confirmation, and next-task rollover remain. |
+| PB-0305 | 🟡 **PROCESS** | `feat/PB-0305-release-catalogs` | Infrastructure Engineering for local work; user for Git gates | 2026-08-05 | PB-0304 completion is synchronized. Typed official catalogs, explicit-consent bounded refresh, contained atomic raw/cache persistence, four vendor adapters, and last-known-cache fallback are implemented and locally validated; final Core CI passed all 9 stages with 1,975 tests. | User-controlled commit, push, merge, required `main` CI, and confirmation gates remain. Coverage collection produced an invalid empty report, and an unrelated PB-0208 timeout test was observed to be intermittent before the final green run; both are disclosed in the task evidence. |
+
+### PB-0304 Completion Evidence
+
+Detailed implementation, validation, and final publication evidence are recorded in
+`docs/PB-0304_UNREAL_INSTALLATION_DISCOVERY_EVIDENCE.md`.
+
+- Final task commit `e3c62ddf283951e4290746d7577fd542ed2757e0` was pushed on
+  `feat/PB-0304-unreal-locator`.
+- The task was merged through [pull request #47](https://github.com/avivperets26/3DModels-Package-Builder/pull/47)
+  into `main` as `dabbbe74211eaf4ce45ee296712a8d90cae7bda6`.
+- Required [main workflow run 30995589319](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30995589319)
+  completed successfully for that exact merge commit.
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-05.
+- No CI, completion, quality, or workflow exception was used.
+- This PB-0305 rollover marks PB-0304 `[x]` / 🟢 **DONE**, removes it from Active Work, and adds
+  exactly one chronological Completion Log row.
 
 ### PB-0303 Completion Evidence
 
@@ -707,6 +724,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0301 | `feat/PB-0301-tool-version-models` | `99c312147175021c7114a0f71f55170e9d085081` | [#44](https://github.com/avivperets26/3DModels-Package-Builder/pull/44) | 2026-08-04 | Merged into `main` as `7380f747b77cd47dcf2335dc1d65f3103588b3f2`; required [main workflow run 30930450125](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30930450125) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-04. |
 | PB-0302 | `feat/PB-0302-blender-locator` | `35858af4635e8eb1be7d173714870b5c7af8a18e` | [#45](https://github.com/avivperets26/3DModels-Package-Builder/pull/45) | 2026-08-04 | Merged into `main` as `7cdd964a582decf77eae093cb41e5f958d8387c0`; required [main workflow run 30941209801](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30941209801) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-04. |
 | PB-0303 | `feat/PB-0303-unity-locator` | `46601f9091ce943bf2d867124040a2286f643358` | [#46](https://github.com/avivperets26/3DModels-Package-Builder/pull/46) | 2026-08-05 | Merged into `main` as `994350e0818f1ebc91dcf07fdf06142f1ffcefce`; required [main workflow run 30948096221](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30948096221) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. |
+| PB-0304 | `feat/PB-0304-unreal-locator` | `e3c62ddf283951e4290746d7577fd542ed2757e0` | [#47](https://github.com/avivperets26/3DModels-Package-Builder/pull/47) | 2026-08-05 | Merged into `main` as `dabbbe74211eaf4ce45ee296712a8d90cae7bda6`; required [main workflow run 30995589319](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30995589319) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. |
 
 ## 5. Milestones
 
@@ -1004,12 +1022,12 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0301
   - Done when: Unity editors and required modules installed beneath the project tool root are discovered from contained Hub/configured paths and verified; external detections are informational and cannot be selected.
 
-- [ ] **PB-0304 — Implement Unreal/Epic installation discovery** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0304 — Implement Unreal/Epic installation discovery** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0304-unreal-locator`
   - Depends on: PB-0301
   - Done when: launcher manifests, configured paths, and source builds identify verified Unreal installations beneath the project tool root; registry/standard-path detections outside it are informational and cannot be selected.
 
-- [ ] **PB-0305 — Implement official release-catalog providers** — **P0**
+- [ ] **PB-0305 — Implement official release-catalog providers** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0305-release-catalogs`
   - Depends on: PB-0301, PB-0212
   - Done when: provider abstractions store release metadata beneath repository-local downloads/cache roots and return cached current stable/LTS/preview metadata with source and refresh timestamps; network failure uses last known metadata.

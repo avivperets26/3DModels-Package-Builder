@@ -1,8 +1,8 @@
 # PB-0304 Unreal Installation Discovery Evidence
 
-**Task:** PB-0304 — Implement Unreal/Epic installation discovery  
-**Branch:** `feat/PB-0304-unreal-locator`  
-**Lifecycle:** 🟡 **PROCESS**  
+**Task:** PB-0304 — Implement Unreal/Epic installation discovery
+**Branch:** `feat/PB-0304-unreal-locator`
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-08-05
 
 ## Scope
@@ -110,9 +110,15 @@ exception or waived gate.
 Not applicable. PB-0304 changes Contracts and Infrastructure only and does not modify WPF. The
 PB-1301 shell remains the current visual checkpoint.
 
-## Remaining Gates
+## Final Publication Evidence
 
-PB-0304 remains `[ ]` / 🟡 **PROCESS** and absent from the Completion Log. All local implementation
-and validation gates pass. User-controlled commit and branch push, merge into and push of `main`,
-successful required `main` CI, explicit user completion confirmation, and next-task rollover remain.
-No exception is used.
+- Final task commit `e3c62ddf283951e4290746d7577fd542ed2757e0` was pushed on
+  `feat/PB-0304-unreal-locator`.
+- The task was merged through [pull request #47](https://github.com/avivperets26/3DModels-Package-Builder/pull/47)
+  into `main` as `dabbbe74211eaf4ce45ee296712a8d90cae7bda6`.
+- Required [main workflow run 30995589319](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30995589319)
+  completed successfully for that exact merge commit.
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-05.
+- No CI, completion, quality, or workflow exception was used.
+- PB-0304 is recorded exactly once in the Completion Log during the PB-0305 rollover.
