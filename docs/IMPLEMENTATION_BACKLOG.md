@@ -158,7 +158,25 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0305 | 🟡 **PROCESS** | `feat/PB-0305-release-catalogs` | Infrastructure Engineering for local work; user for Git gates | 2026-08-05 | PB-0304 completion is synchronized. Typed official catalogs, explicit-consent bounded refresh, contained atomic raw/cache persistence, four vendor adapters, and last-known-cache fallback are implemented and locally validated; final Core CI passed all 9 stages with 1,975 tests. | User-controlled commit, push, merge, required `main` CI, and confirmation gates remain. Coverage collection produced an invalid empty report, and an unrelated PB-0208 timeout test was observed to be intermittent before the final green run; both are disclosed in the task evidence. |
+| PB-0306 | 🟡 **PROCESS** | `feat/PB-0306-version-selection-policy` | Application Engineering for local work; user for Git gates | 2026-08-05 | PB-0305 completion is synchronized. Side-effect-free Latest Approved Stable selection, preview exclusion, marketplace range/LTS constraints, required-module filtering, typed failures, and Last Known Good fallback are implemented and locally validated; final Core CI passed all 9 stages with 1,989 tests. | User-controlled commit, push, merge, required `main` CI, and confirmation gates remain. Coverage collection produced an invalid empty report, so no percentage is claimed. |
+
+### PB-0305 Completion Evidence
+
+Detailed implementation, validation, and final publication evidence are recorded in
+`docs/PB-0305_OFFICIAL_RELEASE_CATALOG_EVIDENCE.md`.
+
+- Final task commit `7501c72bc48d2fb83b8bd0f46c7f727fdd9ce2f1` was pushed on
+  `feat/PB-0305-release-catalogs`.
+- The task was merged through [pull request #48](https://github.com/avivperets26/3DModels-Package-Builder/pull/48)
+  into `main` as `fdab06a3fc0a8f34c1c1a37b64279d2f2dfd71e6`.
+- Required [main workflow run 31000055400](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31000055400)
+  completed successfully for that exact merge commit.
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-05.
+- No CI, completion, quality, or workflow exception was used. The disclosed invalid local
+  coverage report remains an evidence gap and no coverage percentage is claimed.
+- This PB-0306 rollover marks PB-0305 `[x]` / 🟢 **DONE**, removes it from Active Work, and adds
+  exactly one chronological Completion Log row.
 
 ### PB-0304 Completion Evidence
 
@@ -725,6 +743,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0302 | `feat/PB-0302-blender-locator` | `35858af4635e8eb1be7d173714870b5c7af8a18e` | [#45](https://github.com/avivperets26/3DModels-Package-Builder/pull/45) | 2026-08-04 | Merged into `main` as `7cdd964a582decf77eae093cb41e5f958d8387c0`; required [main workflow run 30941209801](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30941209801) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-04. |
 | PB-0303 | `feat/PB-0303-unity-locator` | `46601f9091ce943bf2d867124040a2286f643358` | [#46](https://github.com/avivperets26/3DModels-Package-Builder/pull/46) | 2026-08-05 | Merged into `main` as `994350e0818f1ebc91dcf07fdf06142f1ffcefce`; required [main workflow run 30948096221](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30948096221) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. |
 | PB-0304 | `feat/PB-0304-unreal-locator` | `e3c62ddf283951e4290746d7577fd542ed2757e0` | [#47](https://github.com/avivperets26/3DModels-Package-Builder/pull/47) | 2026-08-05 | Merged into `main` as `dabbbe74211eaf4ce45ee296712a8d90cae7bda6`; required [main workflow run 30995589319](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30995589319) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. |
+| PB-0305 | `feat/PB-0305-release-catalogs` | `7501c72bc48d2fb83b8bd0f46c7f727fdd9ce2f1` | [#48](https://github.com/avivperets26/3DModels-Package-Builder/pull/48) | 2026-08-05 | Merged into `main` as `fdab06a3fc0a8f34c1c1a37b64279d2f2dfd71e6`; required [main workflow run 31000055400](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31000055400) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. The invalid local coverage report remains disclosed and no percentage is claimed. |
 
 ## 5. Milestones
 
@@ -1027,12 +1046,12 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0301
   - Done when: launcher manifests, configured paths, and source builds identify verified Unreal installations beneath the project tool root; registry/standard-path detections outside it are informational and cannot be selected.
 
-- [ ] **PB-0305 — Implement official release-catalog providers** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0305 — Implement official release-catalog providers** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0305-release-catalogs`
   - Depends on: PB-0301, PB-0212
   - Done when: provider abstractions store release metadata beneath repository-local downloads/cache roots and return cached current stable/LTS/preview metadata with source and refresh timestamps; network failure uses last known metadata.
 
-- [ ] **PB-0306 — Implement Latest Approved Stable selection policy** — **P0**
+- [ ] **PB-0306 — Implement Latest Approved Stable selection policy** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0306-version-selection-policy`
   - Depends on: PB-0303 through PB-0305
   - Done when: preview versions are excluded by default, marketplace constraints apply, and unit tests cover newest-approved and Last Known Good fallback.

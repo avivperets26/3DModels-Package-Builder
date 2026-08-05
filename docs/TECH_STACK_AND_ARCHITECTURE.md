@@ -1189,6 +1189,18 @@ verification-failed, or invalid-version-output status; and a `ToolInstallation` 
 contained candidate. External detections therefore have no installation value and cannot be
 selected.
 
+PB-0306 implements `LatestApprovedStableSelectionPolicy` as a side-effect-free Application policy.
+Its request combines one PB-0305 official catalog, caller-supplied PB-0307-compatible approval
+state, installed-module evidence, and an optional marketplace-owned inclusive version/LTS
+constraint. Catalog previews are never eligible for the production default, even if incorrectly
+marked approved. The policy selects the numerically newest stable `ApprovedLatest` release that
+satisfies required modules and marketplace bounds, then the newest eligible `LastKnownGood` only
+when no approved-latest release qualifies. Candidate, rejected, discovered, and merely installed
+versions cannot be selected. Invalid tool/range/module/duplicate approval input and an empty
+eligible set return typed sanitized failures; the policy performs no discovery, persistence,
+networking, installation, licence acceptance, or marketplace-profile fetching. PB-0307 remains
+the owner of persisted lifecycle transitions and compatibility-suite evidence.
+
 Portable discovery is an offline deterministic breadth-first scan rooted only at
 `tools\blender`. It sorts entries ordinally, accepts only `blender.exe`, skips reparse-point files
 and directories, and is bounded to depth 4, 1,024 scanned directories, and 256 unique executable
