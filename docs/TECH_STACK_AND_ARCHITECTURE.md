@@ -1175,6 +1175,24 @@ second direct-data reset so partial imported state is not reused. Deterministic 
 verify the boundary; execution against a contained approved Blender remains required before real
 engine integration is claimed.
 
+PB-0404 introduces `package_builder_blender.glb_import` for canonical single-file GLB sources. The
+adapter rejects empty, linked, noncanonical, outside-root, and separate `.gltf` inputs before scene
+or operator side effects. Separate glTF files can reference external buffers and images, so they
+remain unsupported until a bounded parser validates their complete dependency graph beneath the
+job input root.
+
+After PB-0402 reset, the adapter captures retained direct-data identities and invokes Blender
+5.0's `bpy.ops.import_scene.gltf` with explicit reproducible options: images packed, source normals
+preserved, vertex and material-slot merging disabled, Blender round-trip bone placement with
+original-bind-pose guessing, helper bone shapes disabled, unused materials/images retained,
+standard physical lighting, no WebP preference, no UI selection, no scene collection wrapper, and
+no imported scene extras/custom properties. The immutable report counts only newly created objects,
+meshes, materials, images, packed images, armatures, skinned meshes, and actions. Expected source,
+setting, reset, operator, empty-result, unreadable-result, and cleanup failures return stable
+PB-0109-compatible findings without raw exception text or physical paths. Plain-Python doubles
+cover the acceptance boundary; real contained Blender execution remains required before real GLB
+parsing is claimed.
+
 ## 13. Process Execution Rules
 
 - Use `ProcessStartInfo.ArgumentList`; never construct an unescaped command string.

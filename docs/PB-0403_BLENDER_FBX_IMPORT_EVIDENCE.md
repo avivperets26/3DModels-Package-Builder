@@ -4,11 +4,21 @@
 
 - Task: PB-0403 — Implement FBX import adapter
 - Branch: `feat/PB-0403-blender-fbx-import`
-- Lifecycle: 🟡 **PROCESS**
+- Lifecycle: 🟢 **DONE**
 - Date: 2026-08-05
 
-PB-0403 is implemented and locally validated. It remains active until the user-controlled
-commit, push, merge, required `main` CI, explicit confirmation, and next-task rollover gates pass.
+PB-0403 is implemented, locally validated, published, and confirmed complete. PB-0404 synchronized
+its lifecycle under the permanent one-merge rollover workflow.
+
+## Final Publication Evidence
+
+- Task commit: `b262b3b99bebddc1a8e0410b96dde0ee095bcff2`.
+- Pull request: [#56](https://github.com/avivperets26/3DModels-Package-Builder/pull/56).
+- Merge commit: `2235ee5f0849fda54763e8ec421afd66a3f8e305`.
+- Required successful `main` workflow:
+  [31033724099](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31033724099).
+- User completion confirmation: 2026-08-05.
+- Exception used: none.
 
 ## Implemented Boundary
 
@@ -80,8 +90,7 @@ guidance.
   substitute for the later contained-engine fixture suite.
 - Python branch coverage is not currently measured, so no branch-coverage claim is made.
 
-## Remaining Gates
+## Completion
 
-User-controlled commit and push, merge into and push of `main`, successful required `main` CI,
-explicit user completion confirmation, and PB-0404 rollover remain.
-PB-0403 stays `[ ]` / 🟡 **PROCESS** and absent from the Completion Log. No exception is used.
+PB-0403 is `[x]` / 🟢 **DONE**, absent from Active Work, and recorded exactly once in the Completion
+Log. Its disclosed evidence limits remain accurate and no unsupported real-Blender claim is made.
