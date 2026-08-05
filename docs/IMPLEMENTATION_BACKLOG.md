@@ -6,7 +6,7 @@
 **GitHub visibility:** Public, approved by the user on 2026-07-22
 **Runtime data:** `C:\Dev\PackageBuilder\runtime-data`
 **Planned default branch:** `main`
-**Last reviewed:** 2026-07-25
+**Last reviewed:** 2026-08-05
 
 ## 1. Purpose
 
@@ -158,7 +158,47 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0405 | 🟡 **PROCESS** | `feat/PB-0405-geometry-inspection` | Blender Worker Engineering for local work; user for Git gates | 2026-08-05 | PB-0404 completion is synchronized. Deterministic direct-data object, transform, topology, bounds, UV, normal, tangent, material-slot, and index-format inspection is implemented with sanitized findings and focused tests. | Final local validation, user-controlled commit/push/merge, required `main` CI, explicit confirmation, and next-task rollover remain. Actual contained Blender integration is unavailable and is not claimed. |
+| PB-0406 | 🟡 **PROCESS** | `feat/PB-0406-texture-inspection` | Blender Worker Engineering for local work; user for Git gates | 2026-08-05 | Read-only image, packed/external source, format, colour-space, shader-connection, and conservative probable-role inspection is implemented and locally validated on the approved combined publication branch. | Shared user-controlled commit/push/merge, required `main` CI, explicit confirmation, and PB-0409 rollover remain. Actual contained Blender integration is unavailable and is not claimed. |
+| PB-0407 | 🟡 **PROCESS** | `feat/PB-0407-rig-inspection` | Blender Worker Engineering for local work; user for Git gates | 2026-08-05 | Read-only armature hierarchy, roots, bones, deform flags, skinned meshes, rest/parent-inverse data, vertex groups, missing groups, and unweighted-vertex inspection is implemented and locally validated on `feat/PB-0406-texture-inspection` under the approved exception. | Shared user-controlled commit/push/merge, required `main` CI, explicit confirmation, and PB-0409 rollover remain. Actual contained Blender integration is unavailable and is not claimed. |
+| PB-0408 | 🟡 **PROCESS** | `feat/PB-0408-animation-inspection` | Blender Worker Engineering for local work; user for Git gates | 2026-08-05 | Read-only Blender 5 layered and legacy Action inspection reports clips, ranges, FPS, channel provenance, motion, and conservative loop likelihood and is locally validated on `feat/PB-0406-texture-inspection` under the approved exception. | Shared user-controlled commit/push/merge, required `main` CI, explicit confirmation, and PB-0409 rollover remain. Actual contained Blender integration is unavailable and is not claimed. |
+
+### PB-0406/PB-0407/PB-0408 Combined Publication Exception
+
+- **Approved:** 2026-08-05, explicitly by the user.
+- **Publication branch:** `feat/PB-0406-texture-inspection`.
+- **Exact scope:** PB-0406 texture inspection, PB-0407 rig/weight inspection, and PB-0408
+  animation inspection only, plus PB-0405 rollover and documentation genuinely affected by those
+  three implementations.
+- **Reason:** the user requested one review, commit, push, merge, and required `main` CI cycle for
+  these tightly related, sequential read-only Blender inspection capabilities.
+- **Independence retained:** each task keeps its canonical branch identifier, acceptance mapping,
+  implementation boundary, focused tests, evidence document, lifecycle state, and eventual
+  Completion Log row. The shared publication branch does not merge their task identities.
+- **Completion:** all three stay `[ ]` / 🟡 **PROCESS** until the combined change is committed,
+  pushed, merged into and pushed on `main`, required `main` CI succeeds, and the user explicitly
+  confirms completion. Their three DONE markers and Completion Log rows will be synchronized
+  together at the start of PB-0409.
+- **No precedent:** this one-time exception does not weaken the one-task-per-branch or one-merge
+  rollover rules for PB-0409 or any other task. A future combined cycle requires separate explicit
+  user approval and documentation.
+
+### PB-0405 Completion Evidence
+
+Detailed implementation, validation, and final publication evidence are recorded in
+`docs/PB-0405_GEOMETRY_TRANSFORM_INSPECTION_EVIDENCE.md`.
+
+- Final task commit `015c3d66fa4b375a4e2ce1f18e934d8a630aa089` was pushed on
+  `feat/PB-0405-geometry-inspection`.
+- The task was merged through [pull request #58](https://github.com/avivperets26/3DModels-Package-Builder/pull/58)
+  into `main` as `d8b79749071c763df4191e6b902e319c3b2abafd`.
+- Required [main workflow run 31044736892](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31044736892)
+  completed successfully for that exact merge commit.
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-05.
+- No CI, completion, quality, or workflow exception was used. Python branch coverage and actual
+  contained Blender integration remain disclosed evidence gaps; no unsupported claim is made.
+- This combined PB-0406/PB-0407/PB-0408 branch rollover marks PB-0405 `[x]` / 🟢 **DONE**,
+  removes it from Active Work, and adds exactly one chronological Completion Log row.
 
 ### PB-0404 Completion Evidence
 
@@ -915,6 +955,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0402 | `feat/PB-0402-blender-scene-utils` | `71a200e53b842dafaf92a6764cf559391ec8a7ee` | [#55](https://github.com/avivperets26/3DModels-Package-Builder/pull/55) | 2026-08-05 | Merged into `main` as `abc8f267f7830e2a9be6ded93d6f8f2f66dfe8f5`; required [main workflow run 31029159996](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31029159996) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. Python branch coverage and actual contained Blender integration remain disclosed evidence gaps; no unsupported claim is made. |
 | PB-0403 | `feat/PB-0403-blender-fbx-import` | `b262b3b99bebddc1a8e0410b96dde0ee095bcff2` | [#56](https://github.com/avivperets26/3DModels-Package-Builder/pull/56) | 2026-08-05 | Merged into `main` as `2235ee5f0849fda54763e8ec421afd66a3f8e305`; required [main workflow run 31033724099](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31033724099) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. Python branch coverage and actual contained Blender integration remain disclosed evidence gaps; no unsupported claim is made. |
 | PB-0404 | `feat/PB-0404-blender-glb-import` | `851812e2a80c2a17197767f000800a87430e975b` | [#57](https://github.com/avivperets26/3DModels-Package-Builder/pull/57) | 2026-08-05 | Merged into `main` as `e9231a22125108c5b8670a36ef7bb6d42a67b9a4`; required [main workflow run 31040818232](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31040818232) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. Python branch coverage and actual contained Blender integration remain disclosed evidence gaps; no unsupported claim is made. |
+| PB-0405 | `feat/PB-0405-geometry-inspection` | `015c3d66fa4b375a4e2ce1f18e934d8a630aa089` | [#58](https://github.com/avivperets26/3DModels-Package-Builder/pull/58) | 2026-08-05 | Merged into `main` as `d8b79749071c763df4191e6b902e319c3b2abafd`; required [main workflow run 31044736892](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31044736892) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. Python branch coverage and actual contained Blender integration remain disclosed evidence gaps; no unsupported claim is made. |
 
 ## 5. Milestones
 
@@ -1276,22 +1317,22 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0402
   - Done when: materials, embedded images, skins, and animations import from GLB fixtures.
 
-- [ ] **PB-0405 — Implement geometry and transform inspection** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0405 — Implement geometry and transform inspection** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0405-geometry-inspection`
   - Depends on: PB-0403, PB-0404
   - Done when: objects, meshes, vertices, triangles, dimensions, bounds, transforms, UVs, normals, tangents, material slots, and index requirements are reported.
 
-- [ ] **PB-0406 — Implement texture extraction and role inspection** — **P0**
+- [ ] **PB-0406 — Implement texture extraction and role inspection** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0406-texture-inspection`
   - Depends on: PB-0403, PB-0404
   - Done when: packed/external images, size, format, colour space, material connection, and probable roles are reported without modifying sources.
 
-- [ ] **PB-0407 — Implement armature, skin, and weight inspection** — **P0**
+- [ ] **PB-0407 — Implement armature, skin, and weight inspection** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0407-rig-inspection`
   - Depends on: PB-0405
   - Done when: skeletons, hierarchy, roots, bones, deform flags, skinned meshes, bind data, missing groups, and unweighted vertices are reported.
 
-- [ ] **PB-0408 — Implement action and animation inspection** — **P0**
+- [ ] **PB-0408 — Implement action and animation inspection** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0408-animation-inspection`
   - Depends on: PB-0407
   - Done when: actions, clips, frame ranges, FPS, channels, motion presence, and likely loop behavior metadata are reported.

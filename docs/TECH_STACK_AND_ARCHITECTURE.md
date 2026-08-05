@@ -6,7 +6,7 @@
 **GitHub repository:** [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder)
 **GitHub visibility:** Public, approved by the user on 2026-07-22
 **Runtime data:** `C:\Dev\PackageBuilder\runtime-data`
-**Last reviewed:** 2026-07-25
+**Last reviewed:** 2026-08-05
 
 ## 1. Purpose
 
@@ -1202,8 +1202,33 @@ are freed after inspection. Reports are immutable and sorted by ordinal object n
 control-character identities and incomplete, inconsistent, or non-finite Blender data fail closed
 through stable PB-0109-compatible findings without leaking exception text or paths. Selection,
 active object, editor context, dependency-graph evaluation, and source mutation are excluded.
-PB-0406 through PB-0417 retain texture connectivity, rig/animation analysis, normalization,
-export, and clean-reimport ownership.
+PB-0406 introduces `package_builder_blender.texture_inspection` as a direct-data image and shader
+graph reporting boundary. It records packed/external/generated source kind, safe filename,
+dimensions, format, exact colour-space name, conservative sRGB/linear classification, packed byte
+count, and active node-material connectivity. Bounded graph traversal infers a probable canonical
+texture role from unique shader evidence first and filename/node hints second; conflicting or
+missing evidence remains `ambiguous` or `unknown`. It never saves, packs, unpacks, extracts,
+rewrites, or relinks an image.
+
+PB-0407 introduces `package_builder_blender.rig_inspection`. It copies armature hierarchy, root,
+bone, deform, rest-matrix, Armature-modifier, vertex-group, raw weight, missing-group, unmatched-
+group, unweighted-vertex, and maximum-influence facts. The mesh object matrix is explicitly
+reported as `parent_inverse_matrix`; bone-local rest matrices provide bind/rest context, avoiding
+an unsupported claim that the object matrix is a universal inverse bind matrix. It does not pose,
+evaluate, repair, normalize, or edit a rig.
+
+PB-0408 introduces `package_builder_blender.animation_inspection`. It supports Blender 5 layered
+Actions through layers, strips, channelbags, and slots while retaining a legacy F-curve path. Each
+channel preserves slot/layer/strip provenance. Reports include frame ranges, scene FPS adjusted by
+`fps_base`, duration, keyframe and sampled-point counts, motion and transform-motion presence, and
+conservative loop likelihood with explicit evidence. Inspection never evaluates playback or
+changes Actions, modifiers, extrapolation, or cyclic settings.
+
+The three boundaries share one user-approved publication branch,
+`feat/PB-0406-texture-inspection`, solely for the PB-0406/PB-0407/PB-0408 cycle. Their modules,
+acceptance mappings, focused tests, evidence, lifecycle, and eventual Completion Log rows remain
+independent. This Git workflow exception creates no architectural coupling and no precedent.
+PB-0409 through PB-0417 retain case inference, normalization, export, and clean-reimport ownership.
 
 ## 13. Process Execution Rules
 
