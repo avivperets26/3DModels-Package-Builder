@@ -1263,6 +1263,35 @@ The layout follows Epic's [engine directory documentation](https://dev.epicgames
 installed/source builds follow the documented [installed-build layout](https://dev.epicgames.com/documentation/en-us/unreal-engine/create-an-installed-build-of-unreal-engine),
 and version fields follow [`FBuildVersion`](https://dev.epicgames.com/documentation/unreal-engine/API/Runtime/Core/FBuildVersion).
 
+PB-0305 implements `IOfficialReleaseCatalogProvider` through the Contracts/Infrastructure split.
+The request names one supported tool plus canonical project, `downloads`, and
+`runtime-data\cache` roots. Network access is denied by default: a cache-only request never calls
+the transport, and a refresh requires the caller to set `AllowNetworkRefresh`. The bounded HTTP
+transport uses response-header streaming, a 4 MiB response limit, cancellation, HTTPS-only
+sources, and same-authority redirect enforcement. It does not send credentials or telemetry.
+
+The provider reads the official [.NET release index](https://builds.dotnet.microsoft.com/dotnet/release-metadata/releases-index.json),
+[Unity Release API](https://services.docs.unity.com/release/v1/),
+[Blender release index](https://www.blender.org/download/releases/), and
+[Unreal What's New index](https://dev.epicgames.com/documentation/unreal-engine/whats-new?lang=en-US).
+JSON feeds reject malformed structure, duplicate properties, invalid vendor versions, and more
+than 512 normalized releases. The bounded Blender and Unreal HTML adapters extract only explicit
+official release labels; two-part engine release families normalize to a canonical `.0` patch.
+Markup or feed changes fail closed and preserve a previously valid cache rather than inventing
+metadata. Release catalogs contain source and UTC refresh timestamps, canonical PB-0301 versions,
+stable/preview channels derived from those versions, and standard/LTS support classification when
+the official source publishes it.
+
+Successful refreshes atomically replace raw metadata beneath
+`downloads\release-catalogs\<tool>` and a schema-versioned normalized cache beneath
+`runtime-data\cache\release-catalogs\v1`. Operations are serialized per cache file. Cache reads
+validate schema version, tool/source identity, duplicate versions, UTC timestamps, and every
+canonical version; corrupt or incompatible caches fail closed. A transport, response, parsing, or
+write failure returns the last valid cache with `LastKnownCache` provenance and a sanitized failure
+code. Cancellation remains cancellation and does not silently become a fallback. PB-0305 does not
+download or install a tool, verify installer signatures, accept vendor terms, select a default
+version, schedule refreshes, or add UI; those remain later PB tasks.
+
 ### 14.2 Version Lifecycle
 
 ```mermaid
