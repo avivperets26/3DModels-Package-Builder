@@ -936,6 +936,15 @@ detections remain informational and their engine files are not opened. Discovery
 Unreal Editor or the Epic Games Launcher, downloads or installs an engine, accepts terms, contacts a
 network, selects or persists an installation, or adds UI.
 
+PB-0309 composes PB-0305 catalog snapshots with the verified contained installations to report
+whether Blender, Unity, and Unreal are up to date, missing, or have a newer stable candidate.
+Checks are cache-only unless the user explicitly requests a network refresh. Installation guidance
+opens only an official vendor HTTPS page after separate confirmation and supplies the intended
+contained `tools\<engine>\<version>` destination. Package Builder never downloads an engine, runs
+the vendor installer or launcher, accepts licence terms, chooses a subscription or modules, assumes
+a paid tier, or determines the user's Unity or Unreal eligibility, seat, or royalty obligations.
+The user completes the vendor flow and the corresponding locator must verify the result before use.
+
 The supported development workflow uses the repository-local .NET SDK through PowerShell and `dotnet` commands in Visual Studio Code. Paid Visual Studio is optional and no required task may depend on its IDE, designer, test runner, or build system. Every required technology must have a no-cost local path; optional remote hosting and CI cannot be necessary for local builds.
 
 The user-approved public GitHub repository is [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder). The original planned repository name is `package-builder`; its difference from the actual repository name remains unresolved until the user makes a separate decision. Code namespaces begin with `PackageBuilder`; marketplace-specific modules use names such as `PackageBuilder.Marketplaces.Fab`.

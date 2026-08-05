@@ -158,7 +158,25 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0308 | 🟡 **PROCESS** | `feat/PB-0308-build-lock` | Application and Contracts Engineering for local work; user for Git gates | 2026-08-05 | PB-0307 completion is synchronized. Exact build-lock schema, deterministic generator, SHA-256 evidence, documentation, and acceptance tests are implemented and locally validated; final Core CI passed all 9 stages with 2,029/2,029 tests. | User-controlled commit, push, merge, required successful `main` CI, and explicit completion confirmation remain. |
+| PB-0309 | 🟡 **PROCESS** | `feat/PB-0309-engine-update-guidance` | Application, Contracts, and Infrastructure Engineering for local work; user for Git gates | 2026-08-05 | PB-0308 completion is synchronized. Cache-first update checks, stable candidate reporting, contained installation guidance, allowlisted external navigation, licensing disclosures, and focused tests are implemented; final Core CI passed all 9 stages with 2,048/2,048 tests. | User-controlled commit, push, merge, required successful `main` CI, and explicit completion confirmation remain. |
+
+### PB-0308 Completion Evidence
+
+Detailed implementation, validation, and final publication evidence are recorded in
+`docs/PB-0308_BUILD_LOCK_EVIDENCE.md`.
+
+- Final task commit `466b913175af2902e8c20a32f1980418ecaf1bff` was pushed on
+  `feat/PB-0308-build-lock`.
+- The task was merged through [pull request #51](https://github.com/avivperets26/3DModels-Package-Builder/pull/51)
+  into `main` as `1454a5cbab08089042b7b2cd059b16a9a57a02d0`.
+- Required [main workflow run 31013208586](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31013208586)
+  completed successfully for that exact merge commit.
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-05.
+- No CI, completion, quality, or workflow exception was used. The disclosed invalid local
+  coverage reports remain an evidence gap and no coverage percentage is claimed.
+- This PB-0309 rollover marks PB-0308 `[x]` / 🟢 **DONE**, removes it from Active Work, and adds
+  exactly one chronological Completion Log row.
 
 ### PB-0307 Completion Evidence
 
@@ -782,6 +800,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0305 | `feat/PB-0305-release-catalogs` | `7501c72bc48d2fb83b8bd0f46c7f727fdd9ce2f1` | [#48](https://github.com/avivperets26/3DModels-Package-Builder/pull/48) | 2026-08-05 | Merged into `main` as `fdab06a3fc0a8f34c1c1a37b64279d2f2dfd71e6`; required [main workflow run 31000055400](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31000055400) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. The invalid local coverage report remains disclosed and no percentage is claimed. |
 | PB-0306 | `feat/PB-0306-version-selection-policy` | `3be024ba043efcf05d1e7aa3d222aec4b61b217e` | [#49](https://github.com/avivperets26/3DModels-Package-Builder/pull/49) | 2026-08-05 | Merged into `main` as `47702b3f6ffdaae240511a3d66e366df45177150`; required [main workflow run 31002397748](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31002397748) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. The invalid local coverage report remains disclosed and no percentage is claimed. |
 | PB-0307 | `feat/PB-0307-version-approval-state` | `44a7e24a90613c541df55555d4a9dd5a648ad7a0` | [#50](https://github.com/avivperets26/3DModels-Package-Builder/pull/50) | 2026-08-05 | Merged into `main` as `9c570b7f0de2d049fd1910cce1f63b61d9562ae0`; required [main workflow run 31006588872](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31006588872) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. The invalid local coverage report remains disclosed and no percentage is claimed. |
+| PB-0308 | `feat/PB-0308-build-lock` | `466b913175af2902e8c20a32f1980418ecaf1bff` | [#51](https://github.com/avivperets26/3DModels-Package-Builder/pull/51) | 2026-08-05 | Merged into `main` as `1454a5cbab08089042b7b2cd059b16a9a57a02d0`; required [main workflow run 31013208586](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31013208586) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. The invalid local coverage reports remain disclosed and no percentage is claimed. |
 
 ## 5. Milestones
 
@@ -1099,12 +1118,12 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0211, PB-0306
   - Done when: Discovered, Installed, Candidate, Approved Latest, Rejected, and Last Known Good transitions are persisted with test results.
 
-- [ ] **PB-0308 — Implement exact build lock generation** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0308 — Implement exact build lock generation** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0308-build-lock`
   - Depends on: PB-0306, PB-0307
   - Done when: every job records Package Builder, SDK, Blender, Unity, Unreal, schema, worker, and marketplace-profile versions.
 
-- [ ] **PB-0309 — Implement engine update checks and installation guidance** — **P1**
+- [ ] **PB-0309 — Implement engine update checks and installation guidance** — **P1** — 🟡 **PROCESS**
   - Branch: `feat/PB-0309-engine-update-guidance`
   - Depends on: PB-0305, PB-0307
   - Done when: users can check for updates, see missing candidates, and launch documented contained install flows without silent downloads, EULA acceptance, paid-tier assumptions, or destinations outside the project root.

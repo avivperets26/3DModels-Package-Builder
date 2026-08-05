@@ -1,8 +1,8 @@
 # PB-0308 Exact Build Lock Evidence
 
-**Task:** PB-0308 — Implement exact build lock generation  
-**Branch:** `feat/PB-0308-build-lock`  
-**Lifecycle:** 🟡 **PROCESS**  
+**Task:** PB-0308 — Implement exact build lock generation
+**Branch:** `feat/PB-0308-build-lock`
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-08-05
 
 ## Scope
@@ -54,7 +54,15 @@ those same 641 Infrastructure tests had passed. Both failing tests passed immedi
 and the subsequent complete final Core CI run passed all 641 Infrastructure tests. No production
 or test change was made in response.
 
-## Remaining Gates
+## Final Publication Evidence
 
-- User stages, commits, pushes, and merges the task branch.
-- Required `main` CI succeeds and the user explicitly confirms completion.
+- Final task commit: `466b913175af2902e8c20a32f1980418ecaf1bff`.
+- Pull request: [#51](https://github.com/avivperets26/3DModels-Package-Builder/pull/51).
+- Merge commit on `main`: `1454a5cbab08089042b7b2cd059b16a9a57a02d0`.
+- Required successful `main` CI: [run 31013208586](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31013208586).
+- User confirmation: 2026-08-05.
+- No CI, completion, quality, or workflow exception was used. The invalid local coverage reports
+  remain disclosed and no coverage percentage is claimed.
+
+PB-0308 is synchronized `[x]` / 🟢 **DONE**, is absent from Active Work, and appears exactly once
+in the Completion Log during the PB-0309 rollover.

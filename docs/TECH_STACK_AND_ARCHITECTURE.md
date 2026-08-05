@@ -1347,6 +1347,22 @@ stateDiagram-v2
 - Never auto-install large engines or accept licence terms without user confirmation.
 - Allow a manual "Check for engine updates" command.
 
+PB-0309 implements the application boundary as cache-only by default. A caller must explicitly set
+the user-initiated network-refresh flag before the existing PB-0305 provider may contact official
+vendor sources. Results are reported independently for Blender, Unity, and Unreal as up to date,
+missing installation, newer stable candidate, or catalog unavailable; preview releases are never
+offered by this workflow. A failed refresh may retain the provider's validated last-known cache and
+its failure code remains visible.
+
+Installation guidance is a non-installing launch plan. It records an official HTTPS installation
+guide and licence page, the exact stable version, and the intended
+`tools/<engine>/<version>` destination beneath the project root. Opening that guide is a separate
+external-navigation action requiring explicit user confirmation. Package Builder does not download
+an engine, run a vendor installer or launcher, accept an EULA, select a plan, determine licence or
+seat eligibility, assume a paid tier, or use an installation outside the configured `tools` root.
+After the user completes the vendor-controlled flow, the existing contained locator must verify the
+installation before it is selectable.
+
 ### 14.4 Compatibility Promotion
 
 Before a candidate becomes the default, Package Builder runs:
