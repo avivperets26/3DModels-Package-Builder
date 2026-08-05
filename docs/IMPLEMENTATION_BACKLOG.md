@@ -158,7 +158,25 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0402 | 🟡 **PROCESS** | `feat/PB-0402-blender-scene-utils` | Blender Worker Engineering for local work; user for Git gates | 2026-08-05 | PB-0401 completion is synchronized. Direct-data scene reset and retryable temporary-data disposal are implemented and locally validated: 17 focused tests and all 9 Core CI stages pass. | User-controlled commit, push, merge, required `main` CI, and explicit confirmation remain. Actual contained Blender integration is unavailable and is not claimed. |
+| PB-0403 | 🟡 **PROCESS** | `feat/PB-0403-blender-fbx-import` | Blender Worker Engineering for local work; user for Git gates | 2026-08-05 | PB-0402 completion is synchronized. The contained-source FBX adapter, explicit Blender operator settings, deterministic report, partial-import cleanup, and stable sanitized findings are implemented. Focused Blender tests pass 28/28; all 2,067 .NET tests, the 29-check repository baseline, and all nine Core CI stages pass. | User-controlled commit, push, merge, required `main` CI, explicit confirmation, and next-task rollover remain. Actual contained Blender integration is unavailable and is not claimed. |
+
+### PB-0402 Completion Evidence
+
+Detailed implementation, validation, and final publication evidence are recorded in
+`docs/PB-0402_BLENDER_SCENE_UTILITIES_EVIDENCE.md`.
+
+- Final task commit `71a200e53b842dafaf92a6764cf559391ec8a7ee` was pushed on
+  `feat/PB-0402-blender-scene-utils`.
+- The task was merged through [pull request #55](https://github.com/avivperets26/3DModels-Package-Builder/pull/55)
+  into `main` as `abc8f267f7830e2a9be6ded93d6f8f2f66dfe8f5`.
+- Required [main workflow run 31029159996](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31029159996)
+  completed successfully for that exact merge commit.
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-05.
+- No CI, completion, quality, or workflow exception was used. Python branch coverage and actual
+  contained Blender integration remain disclosed evidence gaps; no unsupported claim is made.
+- This PB-0403 rollover marks PB-0402 `[x]` / 🟢 **DONE**, removes it from Active Work, and adds
+  exactly one chronological Completion Log row.
 
 ### PB-0401 Completion Evidence
 
@@ -858,6 +876,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0309 | `feat/PB-0309-engine-update-guidance` | `0ee44cabbdfcc80e09ec2bed4a90f22f151281e1` | [#52](https://github.com/avivperets26/3DModels-Package-Builder/pull/52) | 2026-08-05 | Merged into `main` as `86ae7d895ba438768b8893c7f488b2d6ae17c134`; required [main workflow run 31016436547](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31016436547) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. The invalid local coverage reports remain disclosed and no percentage is claimed. |
 | PB-0310 | `test/PB-0310-candidate-promotion-suite` | `539e1434a104a907eb427dc74484440f45512437` | [#53](https://github.com/avivperets26/3DModels-Package-Builder/pull/53) | 2026-08-05 | Merged into `main` as `b24f5d11b290e85d2b8a91a0e0d6ca3f0e506c0c`; required [main workflow run 31019836442](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31019836442) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. The invalid local coverage report remains disclosed and no percentage is claimed. |
 | PB-0401 | `feat/PB-0401-blender-worker-shell` | `0251fb96f551f651a4c65c1220beeca3c727f061` | [#54](https://github.com/avivperets26/3DModels-Package-Builder/pull/54) | 2026-08-05 | Merged into `main` as `b8568c5ab0c2252e01aeee13dfe6e9f678fc145e`; required [main workflow run 31024666006](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31024666006) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. Python branch coverage and actual contained Blender integration remain disclosed evidence gaps; no unsupported claim is made. |
+| PB-0402 | `feat/PB-0402-blender-scene-utils` | `71a200e53b842dafaf92a6764cf559391ec8a7ee` | [#55](https://github.com/avivperets26/3DModels-Package-Builder/pull/55) | 2026-08-05 | Merged into `main` as `abc8f267f7830e2a9be6ded93d6f8f2f66dfe8f5`; required [main workflow run 31029159996](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31029159996) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. Python branch coverage and actual contained Blender integration remain disclosed evidence gaps; no unsupported claim is made. |
 
 ## 5. Milestones
 
@@ -1203,13 +1222,13 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0112, PB-0207, PB-0302
   - Done when: Blender receives a request file, emits JSON Lines progress, writes a result, and returns documented exit codes.
 
-- [ ] **PB-0402 — Implement Blender scene reset and context-safe utilities** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0402 — Implement Blender scene reset and context-safe utilities** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0402-blender-scene-utils`
   - Depends on: PB-0401
   - Done when: worker operations do not depend on UI selection/mode and cleanly dispose temporary data.
   - Evidence: `docs/PB-0402_BLENDER_SCENE_UTILITIES_EVIDENCE.md`
 
-- [ ] **PB-0403 — Implement FBX import adapter** — **P0**
+- [ ] **PB-0403 — Implement FBX import adapter** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0403-blender-fbx-import`
   - Depends on: PB-0402
   - Done when: static and skinned FBX fixtures import with axis/unit settings recorded and errors mapped to stable findings.
