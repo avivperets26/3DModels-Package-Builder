@@ -2,7 +2,7 @@
 
 **Task:** PB-0305 — Implement official release-catalog providers
 **Branch:** `feat/PB-0305-release-catalogs`
-**Lifecycle:** 🟡 **PROCESS**
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-08-05
 
 ## Scope
@@ -124,16 +124,16 @@ disclosed for a separately scoped follow-up rather than being hidden or repaired
 Not applicable. PB-0305 changes Contracts and Infrastructure only and does not modify WPF. The
 PB-1301 shell remains the current visual checkpoint.
 
-## Remaining Gates
+## Final Publication Evidence
 
-- User stages and commits PB-0305 on `feat/PB-0305-release-catalogs`.
-- User pushes the task branch and merges it into `main` through an optional PR or approved direct
-  merge.
-- Required `main` CI succeeds for the merge commit.
-- User explicitly confirms completion.
-- Resolve or explicitly disposition the invalid coverage-instrumentation evidence before claiming
-  the detailed coverage gate for PB-0305.
-- Track the unrelated PB-0208 timeout-classification flake in a separately scoped task if it
-  reproduces in required branch or `main` CI.
-- PB-0305 remains `[ ]` / 🟡 **PROCESS** and absent from the Completion Log until the PB-0306
-  rollover records those gates.
+- Final task commit: `7501c72bc48d2fb83b8bd0f46c7f727fdd9ce2f1`.
+- Pull request: [#48](https://github.com/avivperets26/3DModels-Package-Builder/pull/48).
+- Merge commit on `main`: `fdab06a3fc0a8f34c1c1a37b64279d2f2dfd71e6`.
+- Required successful `main` CI: [run 31000055400](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31000055400).
+- User confirmation: 2026-08-05.
+- No CI, completion, quality, or workflow exception was used. The invalid local coverage report
+  remains disclosed and no coverage percentage is claimed. The unrelated PB-0208 timeout
+  classification remains separately scoped if it reproduces.
+
+PB-0305 is synchronized `[x]` / 🟢 **DONE**, is absent from Active Work, and appears exactly once
+in the Completion Log during the PB-0306 rollover.
