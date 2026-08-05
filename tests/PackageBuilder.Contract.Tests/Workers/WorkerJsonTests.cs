@@ -18,6 +18,8 @@ public sealed class WorkerJsonTests
             "progress-indeterminate.json",
             "finding-event.json",
             "metric-event.json",
+            "blender-probe-start.json",
+            "blender-probe-complete.json",
         ];
 
     public static TheoryData<string> ResultFixtures =>
@@ -25,6 +27,7 @@ public sealed class WorkerJsonTests
             "result-success.json",
             "result-failure.json",
             "result-cancelled.json",
+            "blender-probe-result.json",
         ];
 
     [Fact]
@@ -82,6 +85,40 @@ public sealed class WorkerJsonTests
         Assert.Equal(golden, SerializeRequest(parsed.Value));
         Assert.Equal(golden, SerializeRequest(parsed.Value));
         Assert.True(WorkerRequestJson.ValidateJsonAgainstSchema(golden).IsValid);
+    }
+
+    [Fact]
+    [Trait("Task", "PB-0401")]
+    public void BlenderProbeRequestGoldenRoundTripsThroughSharedProtocol()
+    {
+        string golden = ReadValid("blender-probe-request.json");
+        WorkerJsonDeserializationResult<WorkerRequest> parsed = WorkerRequestJson.Deserialize(golden);
+
+        Assert.True(parsed.IsSuccessful, parsed.Details);
+        Assert.Equal("Job-Blender-01", parsed.Value!.JobId.Value);
+        Assert.Equal("probe-blender-worker", parsed.Value.Operation);
+        Assert.Equal("portable", parsed.Value.Target!.CanonicalIdentifier);
+        Assert.Equal(golden, SerializeRequest(parsed.Value));
+    }
+
+    [Fact]
+    [Trait("Task", "PB-0401")]
+    public void BlenderWorkerGoldensUseSharedProgressAndResultContracts()
+    {
+        foreach (string fixture in new[] { "blender-probe-start.json", "blender-probe-complete.json" })
+        {
+            string golden = ReadValid(fixture);
+            WorkerJsonDeserializationResult<WorkerProgressEvent> parsed =
+                WorkerProgressEventJson.Deserialize(golden);
+            Assert.True(parsed.IsSuccessful, parsed.Details);
+            Assert.Equal(golden, SerializeEvent(parsed.Value!));
+        }
+
+        string resultGolden = ReadValid("blender-probe-result.json");
+        WorkerJsonDeserializationResult<WorkerResult> result =
+            WorkerResultJson.Deserialize(resultGolden);
+        Assert.True(result.IsSuccessful, result.Details);
+        Assert.Equal(resultGolden, SerializeResult(result.Value!));
     }
 
     [Fact]

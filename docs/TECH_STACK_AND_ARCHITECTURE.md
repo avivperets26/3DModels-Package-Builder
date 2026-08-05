@@ -1132,6 +1132,24 @@ cancelled results cannot claim promoted output; cancellation state does not repr
 `CancellationToken` or process signal. Unknown protocol versions fail clearly rather than being
 interpreted loosely.
 
+PB-0401 implements the Blender side of this boundary as the standard-library-only
+`workers/blender/package_builder_blender` Python package plus a Blender `--python` bootstrap. The
+request file must be an absolute regular non-link file no larger than 1 MiB. Its parent is the job
+workspace; strict protocol logical references resolve beneath that workspace after link-aware path
+resolution. Duplicate/unknown properties, malformed UTF-8/JSON, excess depth, unsupported protocol
+versions, invalid identities, traversal, absolute references, backslashes, and linked escapes fail
+before output paths are used.
+
+The PB-0401 `probe-blender-worker` operation emits deterministic start/complete progress records,
+checks the hosted `bpy.app.version` against an explicitly requested engine version, and writes a
+compact result through flush, file sync, and same-directory atomic replacement. Unsupported
+asset-processing operations emit a blocking structured finding and failure result instead of
+pretending implementation exists. Standard output is protocol JSON Lines only; standard error is
+limited to stable sanitized codes. Exit codes are `0` success, `2` invalid invocation, `3` invalid
+request, `4` unsupported operation, `5` execution/runtime mismatch, and `6` result-write failure.
+PB-0401 does not reset or inspect scenes, import models, normalize assets, export files, calculate
+hashes, or promote output; those remain PB-0402 and later tasks.
+
 ## 13. Process Execution Rules
 
 - Use `ProcessStartInfo.ArgumentList`; never construct an unescaped command string.
