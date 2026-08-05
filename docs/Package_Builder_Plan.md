@@ -114,8 +114,8 @@ with explicit manual axes, global scale, normals, colour, animation, armature, p
 and transform choices. The adapter records the source filename, exact axis/scale settings, and
 object/mesh/armature counts. Invalid sources, invalid settings, Blender exceptions, cancelled or
 empty imports, unreadable results, and failed partial cleanup become stable sanitized findings.
-Detailed geometry, material, texture, rig, weight, and animation inspection remains PB-0405 through
-PB-0408.
+Detailed geometry, material, texture, rig, weight, and animation inspection is owned by PB-0405
+through PB-0408.
 
 PB-0404 adds the bounded single-file GLB import adapter through Blender 5.0's official
 `import_scene.gltf` operator. It accepts one canonical non-link `.glb` source beneath the job input
@@ -134,6 +134,19 @@ not depend on UI state, does not modify the source, releases calculated tangent 
 maps unreadable, inconsistent, duplicate, missing, or non-finite Blender data to stable sanitized
 blocking findings. Evaluated modifiers and detailed texture, rig, animation, normalization, export,
 and reimport behavior remain later Blender tasks.
+
+PB-0406 through PB-0408 add the remaining read-only source-inspection boundaries. PB-0406 reports
+packed/external/generated images, dimensions, formats, colour spaces, material-node connectivity,
+and conservative probable roles without extracting or relinking files. PB-0407 reports armature
+hierarchies, roots, bones, deform flags, rest matrices, skinned meshes, parent-inverse context,
+missing/unmatched groups, and unweighted vertices. PB-0408 reports Blender 5 layered and legacy
+Actions, clip ranges, FPS, slot/layer/strip channel provenance, motion, and conservative loop
+likelihood. These tasks never repair, normalize, pose, play, or modify the source scene.
+
+The user approved one combined publication cycle for PB-0406, PB-0407, and PB-0408 on
+`feat/PB-0406-texture-inspection` on 2026-08-05. This changes only their Git publication topology;
+each task retains separate requirements, evidence, validation, lifecycle, and completion records,
+and the exception creates no precedent.
 
 ### 3.3 Unity Worker
 

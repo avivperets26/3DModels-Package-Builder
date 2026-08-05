@@ -1,6 +1,6 @@
 # Package Builder Documentation
 
-This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. Repository, core domain/contracts, contained infrastructure, tool-version management through PB-0310, the first WPF shell, and Blender worker work through PB-0404 are complete. PB-0405 geometry and transform inspection is active. Separate glTF dependency graphs, texture/rig/animation inspection, normalization/export, packaging workflows, and the remaining desktop screens are not claimed as implemented.
+This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. Repository, core domain/contracts, contained infrastructure, tool-version management through PB-0310, the first WPF shell, and Blender worker work through PB-0405 are complete. PB-0406 texture, PB-0407 rig/weight, and PB-0408 animation inspection are active in one explicitly approved publication cycle. Separate glTF dependency graphs, normalization/export, packaging workflows, and the remaining desktop screens are not claimed as implemented.
 
 ## Primary Documentation
 
@@ -90,6 +90,9 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 - [PB-0403 Blender FBX import adapter evidence](PB-0403_BLENDER_FBX_IMPORT_EVIDENCE.md)
 - [PB-0404 Blender GLB import adapter evidence](PB-0404_BLENDER_GLB_IMPORT_EVIDENCE.md)
 - [PB-0405 geometry and transform inspection evidence](PB-0405_GEOMETRY_TRANSFORM_INSPECTION_EVIDENCE.md)
+- [PB-0406 texture extraction and role inspection evidence](PB-0406_TEXTURE_ROLE_INSPECTION_EVIDENCE.md)
+- [PB-0407 armature, skin, and weight inspection evidence](PB-0407_RIG_WEIGHT_INSPECTION_EVIDENCE.md)
+- [PB-0408 action and animation inspection evidence](PB-0408_ANIMATION_INSPECTION_EVIDENCE.md)
 
 ## Dependency and Licence Records
 

@@ -4,11 +4,15 @@
 
 - Task: PB-0405 — Implement geometry and transform inspection
 - Branch: `feat/PB-0405-geometry-inspection`
-- Lifecycle: 🟡 **PROCESS**
+- Lifecycle: 🟢 **DONE**
 - Date: 2026-08-05
 
-PB-0405 is implemented and under local validation. It remains active until the user-controlled
-commit, push, merge, required `main` CI, explicit confirmation, and next-task rollover gates pass.
+PB-0405 is complete. Final task commit `015c3d66fa4b375a4e2ce1f18e934d8a630aa089`
+merged through [pull request #58](https://github.com/avivperets26/3DModels-Package-Builder/pull/58)
+as `d8b79749071c763df4191e6b902e319c3b2abafd`. Required
+[main workflow run 31044736892](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31044736892)
+succeeded for that exact merge, and the user explicitly confirmed completion on 2026-08-05. No
+exception was used.
 
 ## Implemented Boundary
 
@@ -96,8 +100,8 @@ corrective guidance.
   reimport remain owned by PB-0406 through PB-0417.
 - This task has no WPF or rendered visual change, so manual visual testing is not applicable yet.
 
-## Remaining Gates
+## Completion
 
-Final local validation, user-controlled staging/commit/push/merge, successful required `main` CI,
-explicit user completion confirmation, and PB-0406 rollover remain. PB-0405 stays `[ ]` /
-🟡 **PROCESS** and absent from the Completion Log. No exception is used.
+PB-0405 is `[x]` / 🟢 **DONE**, absent from Active Work, and recorded exactly once in the
+Completion Log during the combined PB-0406/PB-0407/PB-0408 rollover. Its disclosed evidence limits
+remain accurate and are not waived by completion.

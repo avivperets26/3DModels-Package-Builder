@@ -4,8 +4,9 @@ This directory contains the protocol shell loaded by the selected contained Blen
 PB-0401 implements request validation, JSON Lines progress, atomic result output, and stable exit
 codes. PB-0402 adds direct-data scene reset and temporary data-block ownership utilities. PB-0403
 and PB-0404 add bounded FBX and single-file GLB import adapters. PB-0405 adds deterministic
-geometry and transform inspection. Texture, rig, animation, normalization, export, and reimport
-remain assigned to later tasks.
+geometry and transform inspection. PB-0406 through PB-0408 add read-only texture/material,
+armature/weight, and Action/animation inspection. Normalization, export, and reimport remain
+assigned to later tasks.
 
 ## Context-safe scene utilities
 
@@ -41,6 +42,26 @@ world-space bounds/dimensions, UV layers, corner normals, calculated tangents, m
 aggregate counts, and required 16/32-bit indices. Calculated tangents are freed after inspection.
 Malformed, duplicate, missing, inconsistent, or non-finite data produces a stable sanitized
 blocking finding rather than a raw Blender exception.
+
+## Texture, rig, and animation inspection
+
+`package_builder_blender.texture_inspection.inspect_textures(...)` reports immutable image
+dimensions, formats, colour spaces, packed/external source facts, safe filenames, active material
+connections, and conservative probable roles. It does not save, pack, unpack, extract, relink, or
+otherwise modify an image.
+
+`package_builder_blender.rig_inspection.inspect_rigs(...)` reports immutable armature hierarchy,
+roots, bone rest data, deform flags, skinned meshes, vertex groups, missing and unmatched groups,
+unweighted vertices, influence totals, and mesh parent-inverse context. It reads raw imported data
+without posing, evaluating, or repairing a rig.
+
+`package_builder_blender.animation_inspection.inspect_animations(...)` supports Blender 5 layered
+Actions and legacy F-curves. It reports clip ranges, FPS, slot/layer/strip channel provenance,
+keyframes/samples, motion, transform motion, and conservative loop-likelihood evidence without
+evaluating playback or modifying animation data.
+
+All three inspectors return stable sanitized blocking findings for expected invalid Blender data.
+Their deterministic plain-Python tests do not claim actual `bpy` or contained-engine execution.
 
 ## Invocation
 
