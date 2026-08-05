@@ -2,7 +2,7 @@
 
 **Task:** PB-0310 — Implement candidate compatibility-suite runner
 **Branch:** `test/PB-0310-candidate-promotion-suite`
-**Lifecycle:** 🟡 **PROCESS**
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-08-05
 
 ## Scope
@@ -68,7 +68,15 @@ runner with deterministic injected executors and the real SQLite approval bounda
 claim that unavailable engine fixture builds have run. PB-1608 and PB-1609 remain responsible for
 the contained engine matrix and reviewed candidate-promotion CI workflow.
 
-## Remaining Gates
+## Final Publication Evidence
 
-- User stages, commits, pushes, and merges the task branch.
-- Required `main` CI succeeds and the user explicitly confirms completion.
+- Final task commit: `539e1434a104a907eb427dc74484440f45512437`.
+- Pull request: [#53](https://github.com/avivperets26/3DModels-Package-Builder/pull/53).
+- Merge commit on `main`: `b24f5d11b290e85d2b8a91a0e0d6ca3f0e506c0c`.
+- Required successful `main` CI: [workflow run 31019836442](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31019836442), completed successfully for that exact merge commit.
+- User confirmation: explicit push, merge, green required `main` CI, and completion confirmation on 2026-08-05.
+- Exceptions: none. The local coverage-instrumentation gap remains disclosed and no coverage percentage is claimed.
+
+PB-0310 is logically complete and its `[x]` / 🟢 **DONE** status, Active Work removal, and single
+Completion Log row are synchronized at the beginning of PB-0401 under the permanent one-merge
+rollover workflow.

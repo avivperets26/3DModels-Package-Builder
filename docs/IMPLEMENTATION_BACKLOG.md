@@ -158,7 +158,25 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0310 | 🟡 **PROCESS** | `test/PB-0310-candidate-promotion-suite` | Application and Infrastructure Engineering for local work; user for Git gates | 2026-08-05 | PB-0309 completion is synchronized. The configured eight-category runner, deterministic evidence digest, optimistic promotion/rejection decision, safe cancellation/error behavior, and SQLite fallback regression are implemented; final Core CI passed all 9 stages with 2,062/2,062 tests. | User-controlled commit, push, merge, required successful `main` CI, and explicit completion confirmation remain. Real engine fixture execution additionally depends on the applicable E16 and engine-CI tasks. |
+| PB-0401 | 🟡 **PROCESS** | `feat/PB-0401-blender-worker-shell` | Blender Worker and Contract Engineering for local work; user for Git gates | 2026-08-05 | PB-0310 completion is synchronized. The versioned Python worker shell, Blender bootstrap, strict request/containment validation, JSON Lines progress, atomic results, runtime-version boundary, documented exit codes, shared goldens, and focused tests are implemented; final Core CI passed all 9 stages with 2,067/2,067 .NET tests, plus 10/10 Python worker tests. | User-controlled commit, push, merge, required successful `main` CI, and explicit completion confirmation remain. Actual contained Blender integration is deferred to the applicable engine-integration tasks and is not claimed. |
+
+### PB-0310 Completion Evidence
+
+Detailed implementation, validation, and final publication evidence are recorded in
+`docs/PB-0310_CANDIDATE_COMPATIBILITY_SUITE_EVIDENCE.md`.
+
+- Final task commit `539e1434a104a907eb427dc74484440f45512437` was pushed on
+  `test/PB-0310-candidate-promotion-suite`.
+- The task was merged through [pull request #53](https://github.com/avivperets26/3DModels-Package-Builder/pull/53)
+  into `main` as `b24f5d11b290e85d2b8a91a0e0d6ca3f0e506c0c`.
+- Required [main workflow run 31019836442](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31019836442)
+  completed successfully for that exact merge commit.
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-05.
+- No CI, completion, quality, or workflow exception was used. The disclosed invalid local
+  coverage report remains an evidence gap and no coverage percentage is claimed.
+- This PB-0401 rollover marks PB-0310 `[x]` / 🟢 **DONE**, removes it from Active Work, and adds
+  exactly one chronological Completion Log row.
 
 ### PB-0309 Completion Evidence
 
@@ -820,6 +838,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0307 | `feat/PB-0307-version-approval-state` | `44a7e24a90613c541df55555d4a9dd5a648ad7a0` | [#50](https://github.com/avivperets26/3DModels-Package-Builder/pull/50) | 2026-08-05 | Merged into `main` as `9c570b7f0de2d049fd1910cce1f63b61d9562ae0`; required [main workflow run 31006588872](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31006588872) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. The invalid local coverage report remains disclosed and no percentage is claimed. |
 | PB-0308 | `feat/PB-0308-build-lock` | `466b913175af2902e8c20a32f1980418ecaf1bff` | [#51](https://github.com/avivperets26/3DModels-Package-Builder/pull/51) | 2026-08-05 | Merged into `main` as `1454a5cbab08089042b7b2cd059b16a9a57a02d0`; required [main workflow run 31013208586](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31013208586) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. The invalid local coverage reports remain disclosed and no percentage is claimed. |
 | PB-0309 | `feat/PB-0309-engine-update-guidance` | `0ee44cabbdfcc80e09ec2bed4a90f22f151281e1` | [#52](https://github.com/avivperets26/3DModels-Package-Builder/pull/52) | 2026-08-05 | Merged into `main` as `86ae7d895ba438768b8893c7f488b2d6ae17c134`; required [main workflow run 31016436547](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31016436547) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. The invalid local coverage reports remain disclosed and no percentage is claimed. |
+| PB-0310 | `test/PB-0310-candidate-promotion-suite` | `539e1434a104a907eb427dc74484440f45512437` | [#53](https://github.com/avivperets26/3DModels-Package-Builder/pull/53) | 2026-08-05 | Merged into `main` as `b24f5d11b290e85d2b8a91a0e0d6ca3f0e506c0c`; required [main workflow run 31019836442](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31019836442) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. The invalid local coverage report remains disclosed and no percentage is claimed. |
 
 ## 5. Milestones
 
@@ -1147,7 +1166,7 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0305, PB-0307
   - Done when: users can check for updates, see missing candidates, and launch documented contained install flows without silent downloads, EULA acceptance, paid-tier assumptions, or destinations outside the project root.
 
-- [ ] **PB-0310 — Implement candidate compatibility-suite runner** — **P1** — 🟡 **PROCESS**
+- [x] **PB-0310 — Implement candidate compatibility-suite runner** — **P1** — 🟢 **DONE**
   - Branch: `test/PB-0310-candidate-promotion-suite`
   - Depends on: PB-0213, PB-0307; complete fixture execution additionally depends on the applicable E16 fixture tasks
   - Done when: a candidate runs configured fixture builds, records results, promotes only on pass, and falls back safely on failure.
@@ -1160,7 +1179,7 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** A robust Blender worker turns heterogeneous FBX/GLB input into normalized, measured, reimport-verified interchange assets.
 
-- [ ] **PB-0401 — Create Blender worker package and entrypoint** — **P0**
+- [ ] **PB-0401 — Create Blender worker package and entrypoint** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0401-blender-worker-shell`
   - Depends on: PB-0112, PB-0207, PB-0302
   - Done when: Blender receives a request file, emits JSON Lines progress, writes a result, and returns documented exit codes.

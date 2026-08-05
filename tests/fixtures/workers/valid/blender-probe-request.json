@@ -1,0 +1,1 @@
+{"protocolVersion":1,"jobId":"Job-Blender-01","operation":"probe-blender-worker","productManifestReference":"request/product.json","inputDirectoryReference":"normalized","outputDirectoryReference":"results","resultFileReference":"results/blender-probe-result.json","engineVersion":"5.0.0","target":"portable"}

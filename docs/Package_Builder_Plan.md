@@ -91,6 +91,15 @@ A versioned Blender Python module performs source normalization:
 - Produces normalized FBX and GLB files.
 - Generates technical metadata: dimensions, triangle count, material count, skeleton count, bone count, and animation table.
 
+PB-0401 establishes the worker package and process entrypoint without implementing those scene
+operations. The selected contained Blender executable loads `workers/blender/entrypoint.py`, the
+worker consumes one bounded protocol-v1 request file, emits compact JSON Lines on standard output,
+and atomically writes the shared protocol-v1 result. Its `probe-blender-worker` operation verifies
+the shell and exact runtime version; all asset-processing operations fail as unsupported until
+their owning PB-0402+ tasks implement them. Stable exit codes distinguish invocation, request,
+operation, execution, and result-write failures, while standard error contains only sanitized
+diagnostic codes.
+
 ### 3.3 Unity Worker
 
 A Unity Editor assembly is executed either from its Editor window or with `-batchmode -executeMethod`. It:
