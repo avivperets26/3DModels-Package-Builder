@@ -1159,6 +1159,22 @@ cleanup. Neither utility receives `bpy.context` or `bpy.ops`, so UI selection, a
 editor-area, and interaction-mode state cannot influence cleanup. Blender integration execution
 remains required before these boundaries can be promoted beyond deterministic plain-Python tests.
 
+PB-0403 introduces `package_builder_blender.fbx_import`. The adapter accepts only a canonical,
+non-link, non-empty `.fbx` regular file beneath the canonical job input root. It resets through the
+PB-0402 direct-data boundary, then calls `bpy.ops.import_scene.fbx` with the source path and every
+relevant choice explicitly supplied: manual forward/up axes, finite `0.001` through `1000` global
+scale, no experimental baked-space transform, custom normals and sRGB vertex colours, animation,
+pre/post rotation, retained leaf bones, no forced bone connection or automatic reorientation, no
+subdivision import, no recursive image search, and no untrusted custom properties.
+
+The successful immutable report retains only the source filename, exact axis/scale settings, and
+object/mesh/armature counts; detailed asset inspection belongs to PB-0405 through PB-0408. Expected
+source, setting, operator, result, and cleanup failures return stable PB-0109-compatible findings
+without exception text or physical paths. Operator exceptions and non-FINISHED results trigger a
+second direct-data reset so partial imported state is not reused. Deterministic plain-Python doubles
+verify the boundary; execution against a contained approved Blender remains required before real
+engine integration is claimed.
+
 ## 13. Process Execution Rules
 
 - Use `ProcessStartInfo.ArgumentList`; never construct an unescaped command string.

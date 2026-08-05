@@ -1,6 +1,6 @@
 # Package Builder Documentation
 
-This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. Repository, core domain/contracts, contained infrastructure through the persisted orchestrator, the first WPF shell, PB-0301 tool-version/installation modeling, and PB-0302 contained Blender discovery are complete. PB-0303 contained Unity Editor and required-module discovery is active. Unreal discovery, model import, engine workers, packaging workflows, and the remaining desktop screens are not claimed as implemented.
+This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. Repository, core domain/contracts, contained infrastructure, tool-version management through PB-0310, the first WPF shell, and the Blender worker shell/scene utilities are complete. PB-0403 FBX import adaptation is active. GLB import, detailed asset inspection/normalization/export, packaging workflows, and the remaining desktop screens are not claimed as implemented.
 
 ## Primary Documentation
 
@@ -82,6 +82,12 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 ## Desktop Application Evidence
 
 - [PB-1301 WPF shell, composition, navigation, and visual evidence](PB-1301_WPF_SHELL_EVIDENCE.md)
+
+## Blender Worker Evidence
+
+- [PB-0401 Blender worker shell evidence](PB-0401_BLENDER_WORKER_SHELL_EVIDENCE.md)
+- [PB-0402 Blender scene utilities evidence](PB-0402_BLENDER_SCENE_UTILITIES_EVIDENCE.md)
+- [PB-0403 Blender FBX import adapter evidence](PB-0403_BLENDER_FBX_IMPORT_EVIDENCE.md)
 
 ## Dependency and Licence Records
 

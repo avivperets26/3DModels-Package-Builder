@@ -108,6 +108,15 @@ The utilities never consult selection, active object, editor area, or interactio
 Blender references must not be accessed afterward. Import and asset-specific processing remain
 owned by PB-0403 and later tasks.
 
+PB-0403 adds the bounded FBX import adapter. It accepts one canonical non-link `.fbx` source beneath
+the job input root, resets the scene, and invokes Blender's official `import_scene.fbx` operator
+with explicit manual axes, global scale, normals, colour, animation, armature, property, image-search,
+and transform choices. The adapter records the source filename, exact axis/scale settings, and
+object/mesh/armature counts. Invalid sources, invalid settings, Blender exceptions, cancelled or
+empty imports, unreadable results, and failed partial cleanup become stable sanitized findings.
+Detailed geometry, material, texture, rig, weight, and animation inspection remains PB-0405 through
+PB-0408.
+
 ### 3.3 Unity Worker
 
 A Unity Editor assembly is executed either from its Editor window or with `-batchmode -executeMethod`. It:
