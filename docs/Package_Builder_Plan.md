@@ -919,6 +919,23 @@ Blender discovery. Only canonical PB-0301 Unity version output creates an unsele
 `ToolInstallation`. The locator performs no download, installation, licence acceptance, Hub
 execution, registry lookup, network request, selection, persistence, or UI work.
 
+PB-0304 adds offline Unreal Engine discovery through explicit configured roots, explicitly supplied
+source-build roots, contained cached Epic launcher manifests, caller-supplied registry and standard-
+path detections, and the conventional contained `tools\unreal` root. Discovery is deterministic and
+bounded to 32 unique launcher manifests, 1 MiB per manifest, 512 launcher entries, 256 direct
+contained directories, and 256 unique installation candidates. Launcher JSON rejects excessive
+depth, duplicate properties, malformed Unreal entries, traversal/noncanonical locations, external
+manifest files, and reparse boundaries. Non-Unreal launcher entries are ignored.
+
+Only a candidate strictly beneath the approved tools root is inspected as selectable. It must have
+the documented Unreal engine layout, `Engine\Binaries\Win64\UnrealEditor-Cmd.exe`, and canonical
+`Engine\Build\Build.version` metadata containing nonnegative major, minor, and patch numbers. The
+metadata becomes the PB-0301 Unreal version, and every root, directory, executable, and metadata
+path is checked for reparse boundaries. External configured, registry, standard-path, and launcher
+detections remain informational and their engine files are not opened. Discovery never launches
+Unreal Editor or the Epic Games Launcher, downloads or installs an engine, accepts terms, contacts a
+network, selects or persists an installation, or adds UI.
+
 The supported development workflow uses the repository-local .NET SDK through PowerShell and `dotnet` commands in Visual Studio Code. Paid Visual Studio is optional and no required task may depend on its IDE, designer, test runner, or build system. Every required technology must have a no-cost local path; optional remote hosting and CI cannot be necessary for local builds.
 
 The user-approved public GitHub repository is [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder). The original planned repository name is `package-builder`; its difference from the actual repository name remains unresolved until the user makes a separate decision. Code namespaces begin with `PackageBuilder`; marketplace-specific modules use names such as `PackageBuilder.Marketplaces.Fab`.

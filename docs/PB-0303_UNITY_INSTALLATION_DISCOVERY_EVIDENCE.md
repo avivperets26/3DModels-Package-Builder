@@ -2,7 +2,7 @@
 
 **Task:** PB-0303 — Implement Unity Hub editor discovery
 **Branch:** `feat/PB-0303-unity-locator`
-**Lifecycle:** 🟡 **PROCESS**
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-08-04
 
 ## Scope
@@ -116,9 +116,15 @@ Core CI script then passed without an exception or waived gate.
 Not applicable. PB-0303 changes Contracts and Infrastructure only and does not modify WPF. The
 PB-1301 shell remains the current visual checkpoint.
 
-## Remaining Gates
+## Final Publication Evidence
 
-PB-0303 remains `[ ]` / 🟡 **PROCESS** and absent from the Completion Log. All local implementation
-and validation gates pass. User-controlled commit and branch push, merge into and push of `main`,
-successful required `main` CI, explicit user completion confirmation, and next-task rollover
-remain. No exception is used.
+- Final task commit `46601f9091ce943bf2d867124040a2286f643358` was pushed on
+  `feat/PB-0303-unity-locator`.
+- The task was merged through [pull request #46](https://github.com/avivperets26/3DModels-Package-Builder/pull/46)
+  into `main` as `994350e0818f1ebc91dcf07fdf06142f1ffcefce`.
+- Required [main workflow run 30948096221](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30948096221)
+  completed successfully for that exact merge commit.
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-05.
+- No CI, completion, quality, or workflow exception was used.
+- PB-0303 is recorded exactly once in the Completion Log during the PB-0304 rollover.

@@ -1235,6 +1235,34 @@ version grammar. PB-0303 does not execute Unity Hub, parse external Hub state, d
 an editor/module, accept a Unity licence, inspect the registry, contact a network, select or
 persist an installation, or implement UI.
 
+PB-0304 implements `IUnrealInstallationLocator` through the same Contracts/Infrastructure split,
+without adding a process-runner dependency. Its request carries canonical project/tools roots,
+explicit configured installation roots, contained cached Epic launcher-manifest paths, explicit
+source-build roots, and caller-supplied registry and standard-path detections. The conventional
+contained location is `tools\unreal`; it may itself be an engine root or contain direct versioned
+engine roots. Sources combine when multiple inputs identify the same canonical root.
+
+Discovery is offline and bounded to 32 unique launcher manifests, 1,048,576 bytes per manifest,
+512 total launcher entries, 256 direct contained directories, 256 unique candidates, 65,536 bytes
+of build-version metadata, and JSON depth 16. Launcher manifests must be project-contained regular
+files without reparse boundaries. Duplicate JSON properties, malformed `InstallationList` values,
+invalid Unreal `InstallLocation` values, and oversized inputs fail closed; entries whose `AppName`
+or `ArtifactId` does not use the `UE_` prefix are ignored. Registry and standard-path enumeration
+remain outside this filesystem locator and enter through typed request collections, which keeps
+platform state reads independently adaptable and deterministic to test.
+
+A selectable candidate must be a strict descendant of the approved tools root and contain the
+official engine directory structure plus `Engine\Binaries\Win64\UnrealEditor-Cmd.exe` and
+`Engine\Build\Build.version`. The latter is parsed as bounded strict JSON using Epic's documented
+`FBuildVersion` major, minor, and patch fields; those fields create the canonical PB-0301 Unreal
+version. Root, editor, and version-metadata paths cannot cross a reparse boundary. External roots
+are reported as informational without opening engine files or constructing a `ToolInstallation`.
+PB-0304 does not launch the editor or Epic Games Launcher, download/install an engine, accept a
+licence, contact a network, select/persist an installation, or implement release selection/UI.
+The layout follows Epic's [engine directory documentation](https://dev.epicgames.com/documentation/unreal-engine/unreal-engine-directory-structure),
+installed/source builds follow the documented [installed-build layout](https://dev.epicgames.com/documentation/en-us/unreal-engine/create-an-installed-build-of-unreal-engine),
+and version fields follow [`FBuildVersion`](https://dev.epicgames.com/documentation/unreal-engine/API/Runtime/Core/FBuildVersion).
+
 ### 14.2 Version Lifecycle
 
 ```mermaid
