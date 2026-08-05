@@ -20,8 +20,8 @@ public sealed class SqliteDatabaseMigratorTests
         Assert.Equal(0, result.PreviousVersion);
         Assert.Equal(SqliteSchema.CurrentVersion, result.CurrentVersion);
         Assert.Null(result.BackupReference);
-        Assert.Equal(1, workspace.UserVersion());
-        Assert.Equal(SqliteSchema.VersionOneTables.Order(), workspace.Tables().Order());
+        Assert.Equal(SqliteSchema.CurrentVersion, workspace.UserVersion());
+        Assert.Equal(SqliteSchema.CurrentTables.Order(), workspace.Tables().Order());
     }
 
     [Fact]
@@ -45,6 +45,45 @@ public sealed class SqliteDatabaseMigratorTests
         using SqliteCommand command = backup.CreateCommand();
         command.CommandText = "SELECT Value FROM LegacySentinel;";
         Assert.Equal("preserved", command.ExecuteScalar());
+    }
+
+    [Fact]
+    public void VersionOneDatabaseUpgradesWithApprovalHistoryTablesAndBackup()
+    {
+        using SqliteMigrationTestWorkspace workspace = new();
+        Assert.True(Migrate(workspace).IsSuccess);
+        DowngradeToVersionOne(workspace);
+        workspace.Execute("""
+            INSERT INTO EngineVersions
+                (EngineVersionId, EngineKind, Version, Status, LastValidatedAtUtc)
+            VALUES ('unity-6000.3.2f1', 'unity', '6000.3.2f1', 'discovered',
+                    '2026-08-05T12:00:00.0000000+00:00');
+            """);
+
+        SqliteMigrationResult result = Migrate(workspace);
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal(SqliteMigrationOutcome.Upgraded, result.Outcome);
+        Assert.Equal(1, result.PreviousVersion);
+        Assert.Equal(2, result.CurrentVersion);
+        Assert.Equal(SqliteSchema.CurrentTables.Order(), workspace.Tables().Order());
+        Assert.NotNull(result.BackupReference);
+        string backupPath = Path.Combine(
+            workspace.Root,
+            result.BackupReference!.Replace('/', Path.DirectorySeparatorChar));
+        Assert.Equal(1, workspace.UserVersion(backupPath));
+        Assert.Equal(SqliteSchema.VersionOneTables.Order(), workspace.Tables(backupPath).Order());
+
+        using SqliteConnection connection = workspace.Open();
+        using SqliteCommand command = connection.CreateCommand();
+        command.CommandText = "SELECT Status, Revision FROM EngineVersions WHERE EngineVersionId = 'unity-6000.3.2f1';";
+        using SqliteDataReader reader = command.ExecuteReader();
+        Assert.True(reader.Read());
+        Assert.Equal("discovered", reader.GetString(0));
+        Assert.Equal(0L, reader.GetInt64(1));
+        reader.Close();
+        command.CommandText = "SELECT ToStatus FROM EngineVersionTransitions WHERE EngineVersionId = 'unity-6000.3.2f1';";
+        Assert.Equal("discovered", command.ExecuteScalar());
     }
 
     [Fact]
@@ -74,7 +113,7 @@ public sealed class SqliteDatabaseMigratorTests
 
         Assert.True(result.IsSuccess);
         Assert.Equal(SqliteMigrationOutcome.Current, result.Outcome);
-        Assert.Equal(1, result.PreviousVersion);
+        Assert.Equal(SqliteSchema.CurrentVersion, result.PreviousVersion);
         Assert.Empty(Directory.GetFiles(workspace.BackupDirectory));
     }
 
@@ -82,13 +121,13 @@ public sealed class SqliteDatabaseMigratorTests
     public void NewerDatabaseIsRejectedWithoutModificationOrBackup()
     {
         using SqliteMigrationTestWorkspace workspace = new();
-        workspace.Execute("PRAGMA user_version = 2; CREATE TABLE FutureData (Value TEXT NOT NULL);");
+        workspace.Execute("PRAGMA user_version = 3; CREATE TABLE FutureData (Value TEXT NOT NULL);");
 
         SqliteMigrationResult result = Migrate(workspace);
 
         Assert.False(result.IsSuccess);
         Assert.Equal("SQLITE_VERSION_NEWER", result.Error!.Code);
-        Assert.Equal(2, workspace.UserVersion());
+        Assert.Equal(3, workspace.UserVersion());
         Assert.Equal(["FutureData"], workspace.Tables());
         Assert.Empty(Directory.GetFiles(workspace.BackupDirectory));
     }
@@ -97,13 +136,13 @@ public sealed class SqliteDatabaseMigratorTests
     public void CurrentVersionWithIncompleteTableInventoryFailsClosed()
     {
         using SqliteMigrationTestWorkspace workspace = new();
-        workspace.Execute("PRAGMA user_version = 1; CREATE TABLE Products (ProductId TEXT PRIMARY KEY);");
+        workspace.Execute("PRAGMA user_version = 2; CREATE TABLE Products (ProductId TEXT PRIMARY KEY);");
 
         SqliteMigrationResult result = Migrate(workspace);
 
         Assert.False(result.IsSuccess);
         Assert.Equal("SQLITE_SCHEMA_INVALID", result.Error!.Code);
-        Assert.Equal(1, workspace.UserVersion());
+        Assert.Equal(2, workspace.UserVersion());
         Assert.Equal(["Products"], workspace.Tables());
         Assert.Empty(Directory.GetFiles(workspace.BackupDirectory));
     }
@@ -131,7 +170,7 @@ public sealed class SqliteDatabaseMigratorTests
         using SqliteCommand command = connection.CreateCommand();
         command.CommandText = "SELECT COUNT(*) FROM sqlite_schema WHERE type = 'index' AND name LIKE 'IX_%';";
 
-        Assert.Equal(8L, command.ExecuteScalar());
+        Assert.Equal(10L, command.ExecuteScalar());
     }
 
     [Fact]
@@ -266,7 +305,7 @@ public sealed class SqliteDatabaseMigratorTests
     {
         using SqliteMigrationTestWorkspace workspace = new();
         workspace.Execute("CREATE TABLE LegacySentinel (Value TEXT NOT NULL);");
-        string occupied = Path.Combine(workspace.BackupDirectory, "packagebuilder.pre-v0-to-v1.001.db.bak");
+        string occupied = Path.Combine(workspace.BackupDirectory, "packagebuilder.pre-v0-to-v2.001.db.bak");
         File.WriteAllText(occupied, "existing evidence");
 
         SqliteMigrationResult result = Migrate(workspace);
@@ -284,7 +323,7 @@ public sealed class SqliteDatabaseMigratorTests
         for (int sequence = 1; sequence <= 10; sequence++)
         {
             File.WriteAllText(
-                Path.Combine(workspace.BackupDirectory, $"packagebuilder.pre-v0-to-v1.{sequence:D3}.db.bak"),
+                Path.Combine(workspace.BackupDirectory, $"packagebuilder.pre-v0-to-v2.{sequence:D3}.db.bak"),
                 "occupied");
         }
 
@@ -349,6 +388,27 @@ public sealed class SqliteDatabaseMigratorTests
             workspace.DatabasePath,
             workspace.BackupDirectory,
             TestContext.Current.CancellationToken);
+
+    private static void DowngradeToVersionOne(SqliteMigrationTestWorkspace workspace) =>
+        workspace.Execute("""
+            DROP TABLE EngineVersionTransitions;
+            DROP TABLE EngineVersionModules;
+            DROP INDEX UX_EngineVersions_ApprovedLatest;
+            DROP INDEX IX_EngineVersions_ToolInstallationId;
+            ALTER TABLE EngineVersions RENAME TO EngineVersionsV2;
+            CREATE TABLE EngineVersions (
+                EngineVersionId TEXT PRIMARY KEY NOT NULL,
+                EngineKind TEXT NOT NULL CHECK (EngineKind IN ('blender','unity','unreal')),
+                Version TEXT NOT NULL,
+                Status TEXT NOT NULL,
+                ToolInstallationId TEXT REFERENCES ToolInstallations(ToolInstallationId) ON DELETE SET NULL,
+                LastValidatedAtUtc TEXT,
+                UNIQUE (EngineKind, Version)
+            ) STRICT;
+            DROP TABLE EngineVersionsV2;
+            CREATE INDEX IX_EngineVersions_ToolInstallationId ON EngineVersions(ToolInstallationId);
+            PRAGMA user_version = 1;
+            """);
 
     private static SqliteConnection Open(string path)
     {

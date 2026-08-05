@@ -509,11 +509,11 @@ public sealed class SqliteBuildMetadataRepository :
     {
         using SqliteCommand command = connection.CreateCommand();
         List<string> parameterNames = [];
-        for (int index = 0; index < SqliteSchema.VersionOneTables.Count; index++)
+        for (int index = 0; index < SqliteSchema.CurrentTables.Count; index++)
         {
             string parameterName = $"$table{index}";
             parameterNames.Add(parameterName);
-            Add(command, parameterName, SqliteSchema.VersionOneTables[index]);
+            Add(command, parameterName, SqliteSchema.CurrentTables[index]);
         }
 
         command.CommandText = $"""
@@ -521,7 +521,7 @@ public sealed class SqliteBuildMetadataRepository :
             WHERE type = 'table' AND name IN ({string.Join(',', parameterNames)});
             """;
         long count = Convert.ToInt64(command.ExecuteScalar(), CultureInfo.InvariantCulture);
-        return count == SqliteSchema.VersionOneTables.Count;
+        return count == SqliteSchema.CurrentTables.Count;
     }
 
     private static string ConnectionString(string databasePath) =>

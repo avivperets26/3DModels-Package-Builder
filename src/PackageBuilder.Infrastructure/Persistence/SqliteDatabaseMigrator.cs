@@ -39,7 +39,7 @@ public sealed class SqliteDatabaseMigrator : ISqliteDatabaseMigrator
             EnsureIntegrity(connection);
             if (previousVersion == SqliteSchema.CurrentVersion)
             {
-                return !HasCompleteVersionOneSchema(connection)
+                return !HasCompleteCurrentSchema(connection)
                     ? SqliteMigrationResult.Failure(
                         "SQLITE_SCHEMA_INVALID",
                         "The database schema version does not match its required table inventory.")
@@ -63,10 +63,13 @@ public sealed class SqliteDatabaseMigrator : ISqliteDatabaseMigrator
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            ApplyVersionOne(connection, cancellationToken);
+            ApplyMigrations(connection, previousVersion, cancellationToken);
             EnsureIntegrity(connection);
-
-            return SqliteMigrationResult.Success(
+            return !HasCompleteCurrentSchema(connection)
+                ? SqliteMigrationResult.Failure(
+                    "SQLITE_SCHEMA_INVALID",
+                    "The migrated database schema is incomplete or invalid.")
+                : SqliteMigrationResult.Success(
                 databaseExisted ? SqliteMigrationOutcome.Upgraded : SqliteMigrationOutcome.Created,
                 previousVersion,
                 SqliteSchema.CurrentVersion,
@@ -128,15 +131,15 @@ public sealed class SqliteDatabaseMigrator : ISqliteDatabaseMigrator
         }
     }
 
-    private static bool HasCompleteVersionOneSchema(SqliteConnection connection)
+    private static bool HasCompleteCurrentSchema(SqliteConnection connection)
     {
         using SqliteCommand command = connection.CreateCommand();
         List<string> parameterNames = [];
-        for (int index = 0; index < SqliteSchema.VersionOneTables.Count; index++)
+        for (int index = 0; index < SqliteSchema.CurrentTables.Count; index++)
         {
             string parameterName = $"$table{index}";
             parameterNames.Add(parameterName);
-            _ = command.Parameters.AddWithValue(parameterName, SqliteSchema.VersionOneTables[index]);
+            _ = command.Parameters.AddWithValue(parameterName, SqliteSchema.CurrentTables[index]);
         }
 
         command.CommandText = $"""
@@ -145,10 +148,13 @@ public sealed class SqliteDatabaseMigrator : ISqliteDatabaseMigrator
             WHERE type = 'table' AND name IN ({string.Join(',', parameterNames)});
             """;
         long count = Convert.ToInt64(command.ExecuteScalar(), System.Globalization.CultureInfo.InvariantCulture);
-        return count == SqliteSchema.VersionOneTables.Count;
+        return count == SqliteSchema.CurrentTables.Count;
     }
 
-    private static void ApplyVersionOne(SqliteConnection connection, CancellationToken cancellationToken)
+    private static void ApplyMigrations(
+        SqliteConnection connection,
+        int previousVersion,
+        CancellationToken cancellationToken)
     {
         using SqliteTransaction transaction = connection.BeginTransaction();
         try
@@ -156,8 +162,18 @@ public sealed class SqliteDatabaseMigrator : ISqliteDatabaseMigrator
             cancellationToken.ThrowIfCancellationRequested();
             using SqliteCommand command = connection.CreateCommand();
             command.Transaction = transaction;
-            command.CommandText = SqliteSchema.CreateVersionOne;
-            _ = command.ExecuteNonQuery();
+            if (previousVersion == 0)
+            {
+                command.CommandText = SqliteSchema.CreateVersionOne;
+                _ = command.ExecuteNonQuery();
+            }
+
+            if (previousVersion <= 1)
+            {
+                command.CommandText = SqliteSchema.CreateVersionTwo;
+                _ = command.ExecuteNonQuery();
+            }
+
             cancellationToken.ThrowIfCancellationRequested();
             transaction.Commit();
         }

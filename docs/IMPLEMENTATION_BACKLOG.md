@@ -158,7 +158,25 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0306 | 🟡 **PROCESS** | `feat/PB-0306-version-selection-policy` | Application Engineering for local work; user for Git gates | 2026-08-05 | PB-0305 completion is synchronized. Side-effect-free Latest Approved Stable selection, preview exclusion, marketplace range/LTS constraints, required-module filtering, typed failures, and Last Known Good fallback are implemented and locally validated; final Core CI passed all 9 stages with 1,989 tests. | User-controlled commit, push, merge, required `main` CI, and confirmation gates remain. Coverage collection produced an invalid empty report, so no percentage is claimed. |
+| PB-0307 | 🟡 **PROCESS** | `feat/PB-0307-version-approval-state` | Infrastructure Engineering for local work; user for Git gates | 2026-08-05 | PB-0306 completion is synchronized. The six-state lifecycle policy, schema-v2 migration, optimistic SQLite repository, installed-module snapshots, append-only compatibility results, restart recovery, and atomic Approved Latest rollover are implemented and locally validated; final Core CI passed all 9 stages with 2,013 tests. | User-controlled commit, push, merge, required `main` CI, and confirmation gates remain. Coverage collection produced an invalid empty report, so no percentage is claimed. |
+
+### PB-0306 Completion Evidence
+
+Detailed implementation, validation, and final publication evidence are recorded in
+`docs/PB-0306_LATEST_APPROVED_STABLE_EVIDENCE.md`.
+
+- Final task commit `3be024ba043efcf05d1e7aa3d222aec4b61b217e` was pushed on
+  `feat/PB-0306-version-selection-policy`.
+- The task was merged through [pull request #49](https://github.com/avivperets26/3DModels-Package-Builder/pull/49)
+  into `main` as `47702b3f6ffdaae240511a3d66e366df45177150`.
+- Required [main workflow run 31002397748](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31002397748)
+  completed successfully for that exact merge commit.
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-05.
+- No CI, completion, quality, or workflow exception was used. The disclosed invalid local
+  coverage report remains an evidence gap and no coverage percentage is claimed.
+- This PB-0307 rollover marks PB-0306 `[x]` / 🟢 **DONE**, removes it from Active Work, and adds
+  exactly one chronological Completion Log row.
 
 ### PB-0305 Completion Evidence
 
@@ -744,6 +762,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0303 | `feat/PB-0303-unity-locator` | `46601f9091ce943bf2d867124040a2286f643358` | [#46](https://github.com/avivperets26/3DModels-Package-Builder/pull/46) | 2026-08-05 | Merged into `main` as `994350e0818f1ebc91dcf07fdf06142f1ffcefce`; required [main workflow run 30948096221](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30948096221) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. |
 | PB-0304 | `feat/PB-0304-unreal-locator` | `e3c62ddf283951e4290746d7577fd542ed2757e0` | [#47](https://github.com/avivperets26/3DModels-Package-Builder/pull/47) | 2026-08-05 | Merged into `main` as `dabbbe74211eaf4ce45ee296712a8d90cae7bda6`; required [main workflow run 30995589319](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30995589319) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. |
 | PB-0305 | `feat/PB-0305-release-catalogs` | `7501c72bc48d2fb83b8bd0f46c7f727fdd9ce2f1` | [#48](https://github.com/avivperets26/3DModels-Package-Builder/pull/48) | 2026-08-05 | Merged into `main` as `fdab06a3fc0a8f34c1c1a37b64279d2f2dfd71e6`; required [main workflow run 31000055400](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31000055400) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. The invalid local coverage report remains disclosed and no percentage is claimed. |
+| PB-0306 | `feat/PB-0306-version-selection-policy` | `3be024ba043efcf05d1e7aa3d222aec4b61b217e` | [#49](https://github.com/avivperets26/3DModels-Package-Builder/pull/49) | 2026-08-05 | Merged into `main` as `47702b3f6ffdaae240511a3d66e366df45177150`; required [main workflow run 31002397748](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31002397748) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. The invalid local coverage report remains disclosed and no percentage is claimed. |
 
 ## 5. Milestones
 
@@ -1051,12 +1070,12 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0301, PB-0212
   - Done when: provider abstractions store release metadata beneath repository-local downloads/cache roots and return cached current stable/LTS/preview metadata with source and refresh timestamps; network failure uses last known metadata.
 
-- [ ] **PB-0306 — Implement Latest Approved Stable selection policy** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0306 — Implement Latest Approved Stable selection policy** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0306-version-selection-policy`
   - Depends on: PB-0303 through PB-0305
   - Done when: preview versions are excluded by default, marketplace constraints apply, and unit tests cover newest-approved and Last Known Good fallback.
 
-- [ ] **PB-0307 — Implement candidate approval and compatibility-state persistence** — **P0**
+- [ ] **PB-0307 — Implement candidate approval and compatibility-state persistence** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0307-version-approval-state`
   - Depends on: PB-0211, PB-0306
   - Done when: Discovered, Installed, Candidate, Approved Latest, Rejected, and Last Known Good transitions are persisted with test results.
