@@ -3,17 +3,6 @@ using PackageBuilder.Domain.Tools;
 
 namespace PackageBuilder.Application.Tools;
 
-/// <summary>Compatibility lifecycle state supplied to the side-effect-free version selector.</summary>
-public enum ToolVersionApprovalState
-{
-    Discovered = 0,
-    Installed = 1,
-    Candidate = 2,
-    ApprovedLatest = 3,
-    Rejected = 4,
-    LastKnownGood = 5,
-}
-
 /// <summary>Approval evidence and installed modules for one canonical tool version.</summary>
 public sealed record ToolVersionApproval(
     ToolVersion Version,

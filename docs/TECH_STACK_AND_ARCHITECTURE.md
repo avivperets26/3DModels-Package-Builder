@@ -1201,6 +1201,27 @@ eligible set return typed sanitized failures; the policy performs no discovery, 
 networking, installation, licence acceptance, or marketplace-profile fetching. PB-0307 remains
 the owner of persisted lifecycle transitions and compatibility-suite evidence.
 
+PB-0307 moves the six lifecycle states and their legal edge policy into Domain, adds typed
+approval, transition, and compatibility-result persistence contracts, and advances the contained
+SQLite metadata schema from version 1 to version 2. Version 2 rebuilds `EngineVersions` with
+canonical state checks, UTC discovery/update metadata, and a non-negative optimistic revision;
+adds immutable per-version module snapshots; and adds append-only transition history with strict
+passed/failed result counts, logical evidence references, lowercase SHA-256 identity, and UTC
+completion time. Migration from version 1 is transactional, creates a consistent pre-upgrade
+backup, preserves valid engine rows, rejects invalid legacy states, and remains idempotent at the
+current version.
+
+`SqliteToolVersionApprovalRepository` creates only Discovered revision-zero records and permits
+only Discovered → Installed → Candidate, Candidate → Approved Latest or Rejected, Rejected →
+Candidate, and Approved Latest → Last Known Good. Candidate approval requires complete passing
+compatibility evidence; rejection requires a failing result; other edges reject attached suite
+evidence. Expected state plus revision protects concurrent writers. Promoting a candidate and
+demoting the previous Approved Latest for the same engine to Last Known Good occur in one
+transaction, with both transitions retained. Reads validate canonical versions, state, modules,
+timestamps, results, and hashes and return sanitized typed failures for corrupt data. PB-0307 does
+not run compatibility fixtures (PB-0310), choose a version (PB-0306), generate build locks
+(PB-0308), discover/download/install engines, or accept vendor terms.
+
 Portable discovery is an offline deterministic breadth-first scan rooted only at
 `tools\blender`. It sorts entries ordinally, accepts only `blender.exe`, skips reparse-point files
 and directories, and is bounded to depth 4, 1,024 scanned directories, and 256 unique executable
@@ -1416,7 +1437,7 @@ Initial tables:
 
 Large files remain in the artifact store and are addressed by path plus SHA-256. Database migrations are versioned and backed up before upgrade.
 
-PB-0210 implements schema version 1 in `PackageBuilder.Infrastructure.Persistence` with SQLite
+PB-0210 introduced schema version 1 in `PackageBuilder.Infrastructure.Persistence` with SQLite
 `PRAGMA user_version` as the single migration-version source. Database and backup locations must
 be absolute, exist beneath the approved project root, and cross no existing reparse point. The
 runtime database remains `runtime-data/packagebuilder.db`; callers explicitly supply a contained

@@ -2,7 +2,7 @@
 
 **Task:** PB-0306 — Implement Latest Approved Stable selection policy
 **Branch:** `feat/PB-0306-version-selection-policy`
-**Lifecycle:** 🟡 **PROCESS**
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-08-05
 
 ## Scope
@@ -82,14 +82,15 @@ these conditions outside its version precedence logic.
 Not applicable. PB-0306 changes Application policy and unit tests only and does not modify WPF.
 The PB-1301 shell remains the current visual checkpoint.
 
-## Remaining Gates
+## Final Publication Evidence
 
-- Resolve or explicitly disposition the invalid coverage-instrumentation evidence before claiming
-  the detailed coverage gate.
-- User stages and commits PB-0306 on `feat/PB-0306-version-selection-policy`.
-- User pushes the task branch and merges it into `main` through an optional PR or approved direct
-  merge.
-- Required `main` CI succeeds for the merge commit.
-- User explicitly confirms completion.
-- PB-0306 remains `[ ]` / 🟡 **PROCESS** and absent from the Completion Log until the PB-0307
-  rollover records those gates.
+- Final task commit: `3be024ba043efcf05d1e7aa3d222aec4b61b217e`.
+- Pull request: [#49](https://github.com/avivperets26/3DModels-Package-Builder/pull/49).
+- Merge commit on `main`: `47702b3f6ffdaae240511a3d66e366df45177150`.
+- Required successful `main` CI: [run 31002397748](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31002397748).
+- User confirmation: 2026-08-05.
+- No CI, completion, quality, or workflow exception was used. The invalid local coverage report
+  remains disclosed and no coverage percentage is claimed.
+
+PB-0306 is synchronized `[x]` / 🟢 **DONE**, is absent from Active Work, and appears exactly once
+in the Completion Log during the PB-0307 rollover.

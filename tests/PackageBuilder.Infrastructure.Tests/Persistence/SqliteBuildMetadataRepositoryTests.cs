@@ -568,10 +568,10 @@ public sealed class SqliteBuildMetadataRepositoryTests
             workspace.DatabasePath,
             workspace.BackupDirectory,
             TestContext.Current.CancellationToken).IsSuccess);
-        workspace.Execute("PRAGMA user_version = 2;");
+        workspace.Execute("PRAGMA user_version = 3;");
         RepositoryOperationResult<SqliteBuildMetadataRepository> unsupported =
             SqliteBuildMetadataRepository.Create(workspace.Root, workspace.DatabasePath);
-        workspace.Execute("PRAGMA user_version = 1; DROP TABLE Settings;");
+        workspace.Execute("PRAGMA user_version = 2; DROP TABLE Settings;");
         RepositoryOperationResult<SqliteBuildMetadataRepository> incomplete =
             SqliteBuildMetadataRepository.Create(workspace.Root, workspace.DatabasePath);
         File.Delete(outside);
