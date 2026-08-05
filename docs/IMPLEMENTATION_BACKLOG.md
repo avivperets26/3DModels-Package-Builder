@@ -158,7 +158,24 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0303 | 🟡 **PROCESS** | `feat/PB-0303-unity-locator` | Infrastructure Engineering for local work; user for Git gates | 2026-08-04 | PB-0302 completion is synchronized. Contained configured/Hub Unity discovery, typed required-module markers, bounded enumeration, external informational-only detections, reparse safeguards, and shell-free `-version` verification are implemented. Focused tests are 54/54 with 100% line and branch coverage for every new executable production class; Infrastructure tests are 548/548; all 1,895 tests and all 9 Core CI stages pass; Debug and Release builds have zero warnings/errors; repository baseline is 29/29. | User-controlled commit and branch push, merge and `main` push, successful required `main` CI, explicit confirmation, and next-task rollover remain. |
+| PB-0304 | 🟡 **PROCESS** | `feat/PB-0304-unreal-locator` | Infrastructure Engineering for local work; user for Git gates | 2026-08-05 | PB-0303 completion is synchronized. Offline configured/source/contained/launcher/registry/standard-path discovery, strict bounded launcher and `Build.version` parsing, external informational-only detections, reparse safeguards, and typed contracts are implemented. Focused tests are 46/46 with 100% line and branch coverage for every new executable production class; Infrastructure tests are 594/594; all 1,941 tests and all 9 Core CI stages pass; Debug and Release builds have zero warnings/errors; repository baseline is 29/29. | User-controlled commit and branch push, merge and `main` push, successful required `main` CI, explicit confirmation, and next-task rollover remain. |
+
+### PB-0303 Completion Evidence
+
+Detailed implementation, validation, and final publication evidence are recorded in
+`docs/PB-0303_UNITY_INSTALLATION_DISCOVERY_EVIDENCE.md`.
+
+- Final task commit `46601f9091ce943bf2d867124040a2286f643358` was pushed on
+  `feat/PB-0303-unity-locator`.
+- The task was merged through [pull request #46](https://github.com/avivperets26/3DModels-Package-Builder/pull/46)
+  into `main` as `994350e0818f1ebc91dcf07fdf06142f1ffcefce`.
+- Required [main workflow run 30948096221](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30948096221)
+  completed successfully for that exact merge commit.
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-05.
+- No CI, completion, quality, or workflow exception was used.
+- This PB-0304 rollover marks PB-0303 `[x]` / 🟢 **DONE**, removes it from Active Work, and adds
+  exactly one chronological Completion Log row.
 
 ### PB-0302 Completion Evidence
 
@@ -689,6 +706,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-1301 | `feat/PB-1301-wpf-shell` | `fd92b87ba2be1ad2f8aabc9792e429aab9074c6f` | [#43](https://github.com/avivperets26/3DModels-Package-Builder/pull/43) | 2026-08-04 | Merged into `main` as `c7a61f338cb908c4d574ce895bb040b7d6f49c14`; required [main workflow run 30919099522](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30919099522) succeeded for that exact merge commit. No exception was used; the user manually accepted the visual shell and explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-04. |
 | PB-0301 | `feat/PB-0301-tool-version-models` | `99c312147175021c7114a0f71f55170e9d085081` | [#44](https://github.com/avivperets26/3DModels-Package-Builder/pull/44) | 2026-08-04 | Merged into `main` as `7380f747b77cd47dcf2335dc1d65f3103588b3f2`; required [main workflow run 30930450125](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30930450125) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-04. |
 | PB-0302 | `feat/PB-0302-blender-locator` | `35858af4635e8eb1be7d173714870b5c7af8a18e` | [#45](https://github.com/avivperets26/3DModels-Package-Builder/pull/45) | 2026-08-04 | Merged into `main` as `7cdd964a582decf77eae093cb41e5f958d8387c0`; required [main workflow run 30941209801](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30941209801) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-04. |
+| PB-0303 | `feat/PB-0303-unity-locator` | `46601f9091ce943bf2d867124040a2286f643358` | [#46](https://github.com/avivperets26/3DModels-Package-Builder/pull/46) | 2026-08-05 | Merged into `main` as `994350e0818f1ebc91dcf07fdf06142f1ffcefce`; required [main workflow run 30948096221](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/30948096221) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. |
 
 ## 5. Milestones
 
@@ -981,12 +999,12 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0301, PB-0207
   - Done when: contained configured and portable Blender installations are found beneath the project tool root and verified by executable version output; external detections are informational and cannot be selected.
 
-- [ ] **PB-0303 — Implement Unity Hub editor discovery** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0303 — Implement Unity Hub editor discovery** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0303-unity-locator`
   - Depends on: PB-0301
   - Done when: Unity editors and required modules installed beneath the project tool root are discovered from contained Hub/configured paths and verified; external detections are informational and cannot be selected.
 
-- [ ] **PB-0304 — Implement Unreal/Epic installation discovery** — **P0**
+- [ ] **PB-0304 — Implement Unreal/Epic installation discovery** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0304-unreal-locator`
   - Depends on: PB-0301
   - Done when: launcher manifests, configured paths, and source builds identify verified Unreal installations beneath the project tool root; registry/standard-path detections outside it are informational and cannot be selected.
