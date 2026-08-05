@@ -117,6 +117,15 @@ empty imports, unreadable results, and failed partial cleanup become stable sani
 Detailed geometry, material, texture, rig, weight, and animation inspection remains PB-0405 through
 PB-0408.
 
+PB-0404 adds the bounded single-file GLB import adapter through Blender 5.0's official
+`import_scene.gltf` operator. It accepts one canonical non-link `.glb` source beneath the job input
+root, resets the scene, packs imported images, preserves normals/material slots/skins/animations,
+and disables UI selection, helper bone shapes, scene collection wrapping, and untrusted scene
+extras. Its report counts only newly created objects, meshes, materials, images, packed images,
+armatures, skinned meshes, and actions. Separate `.gltf` dependency graphs remain rejected until a
+bounded contained-reference preflight is explicitly planned; PB-0404 never follows unvalidated
+external buffer or image references.
+
 ### 3.3 Unity Worker
 
 A Unity Editor assembly is executed either from its Editor window or with `-batchmode -executeMethod`. It:

@@ -1,6 +1,6 @@
 # Package Builder Documentation
 
-This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. Repository, core domain/contracts, contained infrastructure, tool-version management through PB-0310, the first WPF shell, and the Blender worker shell/scene utilities are complete. PB-0403 FBX import adaptation is active. GLB import, detailed asset inspection/normalization/export, packaging workflows, and the remaining desktop screens are not claimed as implemented.
+This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. Repository, core domain/contracts, contained infrastructure, tool-version management through PB-0310, the first WPF shell, and Blender worker work through PB-0403 are complete. PB-0404 single-file GLB import adaptation is active. Separate glTF dependency graphs, detailed asset inspection/normalization/export, packaging workflows, and the remaining desktop screens are not claimed as implemented.
 
 ## Primary Documentation
 
@@ -88,6 +88,7 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 - [PB-0401 Blender worker shell evidence](PB-0401_BLENDER_WORKER_SHELL_EVIDENCE.md)
 - [PB-0402 Blender scene utilities evidence](PB-0402_BLENDER_SCENE_UTILITIES_EVIDENCE.md)
 - [PB-0403 Blender FBX import adapter evidence](PB-0403_BLENDER_FBX_IMPORT_EVIDENCE.md)
+- [PB-0404 Blender GLB import adapter evidence](PB-0404_BLENDER_GLB_IMPORT_EVIDENCE.md)
 
 ## Dependency and Licence Records
 

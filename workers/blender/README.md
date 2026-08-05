@@ -2,8 +2,9 @@
 
 This directory contains the protocol shell loaded by the selected contained Blender executable.
 PB-0401 implements request validation, JSON Lines progress, atomic result output, and stable exit
-codes. PB-0402 adds direct-data scene reset and temporary data-block ownership utilities. Import,
-inspection, normalization, export, and reimport remain assigned to later tasks.
+codes. PB-0402 adds direct-data scene reset and temporary data-block ownership utilities. PB-0403
+and PB-0404 add bounded FBX and single-file GLB import adapters. Detailed inspection,
+normalization, export, and reimport remain assigned to later tasks.
 
 ## Context-safe scene utilities
 
@@ -16,6 +17,20 @@ result. Linked orphaned data is retained.
 blocks as one reverse-registration-order batch on explicit `close()` or context-manager exit,
 including when processing raises. Cleanup failures remain retryable and are never reported as
 success. Callers must not retain or access Blender references after these utilities remove them.
+
+## Import adapters
+
+`package_builder_blender.fbx_import.import_fbx(...)` accepts one canonical contained `.fbx` and
+records explicit axis/scale options plus object, mesh, and armature counts.
+
+`package_builder_blender.glb_import.import_glb(...)` accepts one canonical contained `.glb`, packs
+images, preserves material/skin/animation data, disables UI and untrusted-extra behavior, and
+reports only resources created by the import. Separate `.gltf` files are rejected because their
+external resource graph requires a future contained-reference preflight.
+
+Both boundaries reset direct Blender data before import, clean partial state after expected
+failure, and return stable sanitized findings. They have deterministic plain-Python tests, but real
+binary parsing is not claimed until an approved contained Blender executable runs the fixture suite.
 
 ## Invocation
 
