@@ -945,6 +945,15 @@ the vendor installer or launcher, accepts licence terms, chooses a subscription 
 a paid tier, or determines the user's Unity or Unreal eligibility, seat, or royalty obligations.
 The user completes the vendor flow and the corresponding locator must verify the result before use.
 
+PB-0310 adds the candidate compatibility-suite gate. A configured run must cover all five product
+fixtures plus material/preview comparison, clean export/reimport, and marketplace-structure
+validation. It records ordered outcomes and a deterministic SHA-256 evidence digest through the
+persisted approval transition, promotes only when every check passes, and rejects safely on any
+failure without changing the existing approved fallback. Cancellation and stale candidate
+revisions produce no partial decision. The runner accepts injected check executors; actual
+Blender/Unity/Unreal execution over the complete fixture portfolio remains owned by the applicable
+E16 fixture and engine-CI tasks.
+
 The supported development workflow uses the repository-local .NET SDK through PowerShell and `dotnet` commands in Visual Studio Code. Paid Visual Studio is optional and no required task may depend on its IDE, designer, test runner, or build system. Every required technology must have a no-cost local path; optional remote hosting and CI cannot be necessary for local builds.
 
 The user-approved public GitHub repository is [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder). The original planned repository name is `package-builder`; its difference from the actual repository name remains unresolved until the user makes a separate decision. Code namespaces begin with `PackageBuilder`; marketplace-specific modules use names such as `PackageBuilder.Marketplaces.Fab`.

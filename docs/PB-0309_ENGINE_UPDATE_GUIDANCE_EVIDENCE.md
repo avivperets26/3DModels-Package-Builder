@@ -2,7 +2,7 @@
 
 **Task:** PB-0309 — Implement engine update checks and installation guidance
 **Branch:** `feat/PB-0309-engine-update-guidance`
-**Lifecycle:** 🟡 **PROCESS**
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-08-05
 
 ## Scope
@@ -64,7 +64,15 @@ Official references:
 | Formatting and prohibited-content checks | Pass; strict information-level .NET formatting, Ruff lint/formatting, `git diff --check`, and repository public-content checks succeeded. |
 | Coverage instrumentation | Unresolved evidence gap; Coverlet 10.0.1 passed both focused suites but emitted reports with zero instrumented points, so no coverage percentage is claimed. |
 
-## Remaining Gates
+## Final Publication Evidence
 
-- User stages, commits, pushes, and merges the task branch.
-- Required `main` CI succeeds and the user explicitly confirms completion.
+- Final task commit: `0ee44cabbdfcc80e09ec2bed4a90f22f151281e1`.
+- Pull request: [#52](https://github.com/avivperets26/3DModels-Package-Builder/pull/52).
+- Merge commit on `main`: `86ae7d895ba438768b8893c7f488b2d6ae17c134`.
+- Required successful `main` CI: [workflow run 31016436547](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31016436547), completed successfully for that exact merge commit.
+- User confirmation: explicit push, merge, green required `main` CI, and completion confirmation on 2026-08-05.
+- Exceptions: none. The local coverage-instrumentation gap remains disclosed and no coverage percentage is claimed.
+
+PB-0309 is logically complete and its `[x]` / 🟢 **DONE** status, Active Work removal, and single
+Completion Log row are synchronized at the beginning of PB-0310 under the permanent one-merge
+rollover workflow.

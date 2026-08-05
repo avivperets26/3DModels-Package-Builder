@@ -1378,6 +1378,24 @@ Before a candidate becomes the default, Package Builder runs:
 
 If any required test fails, builds continue with the Last Known Good version and the UI explains why the newer version is not yet approved.
 
+PB-0310 implements this gate as an Application-owned runner over the PB-0307 approval repository.
+A configuration must contain at least one check for every category above, check IDs must be unique,
+and fixture/evidence references must be contained logical references. Checks run in configured order
+through an injected executor so later engine workers and the E16 fixtures can supply real builds
+without gaining approval-state authority. Cancellation records no partial promotion decision;
+unexpected or contradictory executor results fail closed as sanitized check failures while the
+remaining configured checks still run.
+
+After all checks finish, the runner produces deterministic lowercase SHA-256 evidence over the
+candidate, run, UTC completion time, ordered configuration, and individual outcomes. It persists
+the complete counts, outcome, logical evidence reference, and digest in the candidate transition.
+Only an all-pass suite requests `Candidate -> ApprovedLatest`; any failure requests
+`Candidate -> Rejected`. The existing SQLite transaction demotes a previous Approved Latest to
+Last Known Good only during a successful promotion, so rejection leaves the working version
+unchanged. Optimistic candidate revision checks prevent a stale concurrent run from deciding state.
+PB-0310 supplies deterministic fake-executor and SQLite boundary evidence; execution against the
+real five product fixtures remains dependent on the applicable E16 tasks and PB-1608/PB-1609 CI.
+
 ### 14.5 Reproducibility
 
 Every release contains a build lock record:

@@ -146,6 +146,52 @@ public sealed class SqliteToolVersionApprovalRepositoryTests
         Assert.Null(olderHistory[^1].CompatibilityResult);
     }
 
+    [Fact]
+    public async Task RejectingNewerCandidatePreservesExistingApprovedLatest()
+    {
+        using SqliteMigrationTestWorkspace workspace = new();
+        SqliteToolVersionApprovalRepository repository = CreateRepository(workspace);
+        PersistedToolVersionApproval existing = await CreateCandidate(
+            repository,
+            "unity-existing",
+            ToolKind.Unity,
+            "6000.3.1f1");
+        existing = await Transition(
+            repository,
+            existing.Id,
+            existing.Revision,
+            ToolVersionApprovalState.Candidate,
+            ToolVersionApprovalState.ApprovedLatest,
+            "approve-existing",
+            3,
+            PassingEvidence("suite-existing", 3));
+        PersistedToolVersionApproval newer = await CreateCandidate(
+            repository,
+            "unity-failing",
+            ToolKind.Unity,
+            "6000.3.2f1",
+            minuteOffset: 4);
+
+        PersistedToolVersionApproval rejected = await Transition(
+            repository,
+            newer.Id,
+            newer.Revision,
+            ToolVersionApprovalState.Candidate,
+            ToolVersionApprovalState.Rejected,
+            "reject-newer",
+            7,
+            FailingEvidence("suite-failing", 7));
+
+        PersistedToolVersionApproval persistedExisting =
+            (await repository.GetAsync(existing.Id, TestContext.Current.CancellationToken)).Value!;
+        Assert.Equal(ToolVersionApprovalState.ApprovedLatest, persistedExisting.State);
+        Assert.Equal(existing.Revision, persistedExisting.Revision);
+        Assert.Equal(ToolVersionApprovalState.Rejected, rejected.State);
+        IReadOnlyList<PersistedToolVersionApprovalTransition> existingHistory =
+            (await repository.GetHistoryAsync(existing.Id, TestContext.Current.CancellationToken)).Value!;
+        Assert.Equal(ToolVersionApprovalState.ApprovedLatest, existingHistory[^1].ToState);
+    }
+
     [Theory]
     [InlineData("missing-pass")]
     [InlineData("failed-for-approval")]
