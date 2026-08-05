@@ -158,7 +158,25 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0404 | 🟡 **PROCESS** | `feat/PB-0404-blender-glb-import` | Blender Worker Engineering for local work; user for Git gates | 2026-08-05 | PB-0403 completion is synchronized. The single-file GLB adapter, explicit Blender 5.0 glTF settings, created-resource report, partial-import cleanup, and stable sanitized findings are implemented. Focused Blender tests pass 40/40; all 2,067 .NET tests, the 29-check repository baseline, and all nine Core CI stages pass. | User-controlled commit, push, merge, required `main` CI, explicit confirmation, and next-task rollover remain. Actual contained Blender integration is unavailable and is not claimed. |
+| PB-0405 | 🟡 **PROCESS** | `feat/PB-0405-geometry-inspection` | Blender Worker Engineering for local work; user for Git gates | 2026-08-05 | PB-0404 completion is synchronized. Deterministic direct-data object, transform, topology, bounds, UV, normal, tangent, material-slot, and index-format inspection is implemented with sanitized findings and focused tests. | Final local validation, user-controlled commit/push/merge, required `main` CI, explicit confirmation, and next-task rollover remain. Actual contained Blender integration is unavailable and is not claimed. |
+
+### PB-0404 Completion Evidence
+
+Detailed implementation, validation, and final publication evidence are recorded in
+`docs/PB-0404_BLENDER_GLB_IMPORT_EVIDENCE.md`.
+
+- Final task commit `851812e2a80c2a17197767f000800a87430e975b` was pushed on
+  `feat/PB-0404-blender-glb-import`.
+- The task was merged through [pull request #57](https://github.com/avivperets26/3DModels-Package-Builder/pull/57)
+  into `main` as `e9231a22125108c5b8670a36ef7bb6d42a67b9a4`.
+- Required [main workflow run 31040818232](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31040818232)
+  completed successfully for that exact merge commit.
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-05.
+- No CI, completion, quality, or workflow exception was used. Python branch coverage and actual
+  contained Blender integration remain disclosed evidence gaps; no unsupported claim is made.
+- This PB-0405 rollover marks PB-0404 `[x]` / 🟢 **DONE**, removes it from Active Work, and adds
+  exactly one chronological Completion Log row.
 
 ### PB-0403 Completion Evidence
 
@@ -896,6 +914,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0401 | `feat/PB-0401-blender-worker-shell` | `0251fb96f551f651a4c65c1220beeca3c727f061` | [#54](https://github.com/avivperets26/3DModels-Package-Builder/pull/54) | 2026-08-05 | Merged into `main` as `b8568c5ab0c2252e01aeee13dfe6e9f678fc145e`; required [main workflow run 31024666006](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31024666006) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. Python branch coverage and actual contained Blender integration remain disclosed evidence gaps; no unsupported claim is made. |
 | PB-0402 | `feat/PB-0402-blender-scene-utils` | `71a200e53b842dafaf92a6764cf559391ec8a7ee` | [#55](https://github.com/avivperets26/3DModels-Package-Builder/pull/55) | 2026-08-05 | Merged into `main` as `abc8f267f7830e2a9be6ded93d6f8f2f66dfe8f5`; required [main workflow run 31029159996](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31029159996) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. Python branch coverage and actual contained Blender integration remain disclosed evidence gaps; no unsupported claim is made. |
 | PB-0403 | `feat/PB-0403-blender-fbx-import` | `b262b3b99bebddc1a8e0410b96dde0ee095bcff2` | [#56](https://github.com/avivperets26/3DModels-Package-Builder/pull/56) | 2026-08-05 | Merged into `main` as `2235ee5f0849fda54763e8ec421afd66a3f8e305`; required [main workflow run 31033724099](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31033724099) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. Python branch coverage and actual contained Blender integration remain disclosed evidence gaps; no unsupported claim is made. |
+| PB-0404 | `feat/PB-0404-blender-glb-import` | `851812e2a80c2a17197767f000800a87430e975b` | [#57](https://github.com/avivperets26/3DModels-Package-Builder/pull/57) | 2026-08-05 | Merged into `main` as `e9231a22125108c5b8670a36ef7bb6d42a67b9a4`; required [main workflow run 31040818232](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31040818232) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. Python branch coverage and actual contained Blender integration remain disclosed evidence gaps; no unsupported claim is made. |
 
 ## 5. Milestones
 
@@ -1252,12 +1271,12 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0402
   - Done when: static and skinned FBX fixtures import with axis/unit settings recorded and errors mapped to stable findings.
 
-- [ ] **PB-0404 — Implement GLB/glTF import adapter** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0404 — Implement GLB/glTF import adapter** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0404-blender-glb-import`
   - Depends on: PB-0402
   - Done when: materials, embedded images, skins, and animations import from GLB fixtures.
 
-- [ ] **PB-0405 — Implement geometry and transform inspection** — **P0**
+- [ ] **PB-0405 — Implement geometry and transform inspection** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0405-geometry-inspection`
   - Depends on: PB-0403, PB-0404
   - Done when: objects, meshes, vertices, triangles, dimensions, bounds, transforms, UVs, normals, tangents, material slots, and index requirements are reported.

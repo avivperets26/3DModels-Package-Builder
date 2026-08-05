@@ -1193,6 +1193,18 @@ PB-0109-compatible findings without raw exception text or physical paths. Plain-
 cover the acceptance boundary; real contained Blender execution remains required before real GLB
 parsing is claimed.
 
+PB-0405 introduces `package_builder_blender.geometry_inspection` as a renderer-independent,
+direct-data reporting boundary. It copies object identities/types and decomposed `matrix_world`
+values, derives world bounds from all eight transformed `bound_box` corners, triangulates mesh
+polygons through `calc_loop_triangles`, and reports UV layers, corner normals, calculated loop
+tangents, material slots, aggregate counts, and required unsigned 16/32-bit index width. Tangents
+are freed after inspection. Reports are immutable and sorted by ordinal object name; duplicate or
+control-character identities and incomplete, inconsistent, or non-finite Blender data fail closed
+through stable PB-0109-compatible findings without leaking exception text or paths. Selection,
+active object, editor context, dependency-graph evaluation, and source mutation are excluded.
+PB-0406 through PB-0417 retain texture connectivity, rig/animation analysis, normalization,
+export, and clean-reimport ownership.
+
 ## 13. Process Execution Rules
 
 - Use `ProcessStartInfo.ArgumentList`; never construct an unescaped command string.
