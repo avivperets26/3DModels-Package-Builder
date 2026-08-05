@@ -2,7 +2,7 @@
 
 **Task:** PB-0401 — Create Blender worker package and entrypoint
 **Branch:** `feat/PB-0401-blender-worker-shell`
-**Lifecycle:** 🟡 **PROCESS**
+**Lifecycle:** 🟢 **DONE**
 **Evidence date:** 2026-08-05
 
 ## Scope
@@ -81,7 +81,15 @@ its licence, or determines eligibility. The user selects a contained Blender ins
 by PB-0302. The official terms are available on the
 [Blender licence page](https://www.blender.org/about/license/).
 
-## Remaining Gates
+## Final Publication Evidence
 
-- User stages, commits, pushes, and merges the task branch.
-- Required `main` CI succeeds and the user explicitly confirms completion.
+- Final task commit: `0251fb96f551f651a4c65c1220beeca3c727f061`.
+- Pull request: [#54](https://github.com/avivperets26/3DModels-Package-Builder/pull/54).
+- Merge commit on `main`: `b8568c5ab0c2252e01aeee13dfe6e9f678fc145e`.
+- Required successful `main` CI: [workflow run 31024666006](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31024666006), completed successfully for that exact merge commit.
+- User confirmation: explicit push, merge, green required `main` CI, and completion confirmation on 2026-08-05.
+- Exceptions: none. Python branch coverage and actual contained Blender integration remain disclosed evidence gaps; no unsupported claim is made.
+
+PB-0401 is logically complete and its `[x]` / 🟢 **DONE** status, Active Work removal, and single
+Completion Log row are synchronized at the beginning of PB-0402 under the permanent one-merge
+rollover workflow.

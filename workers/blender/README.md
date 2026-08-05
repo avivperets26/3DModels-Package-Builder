@@ -2,8 +2,20 @@
 
 This directory contains the protocol shell loaded by the selected contained Blender executable.
 PB-0401 implements request validation, JSON Lines progress, atomic result output, and stable exit
-codes only. Scene reset, import, inspection, normalization, export, and reimport belong to PB-0402
-and later tasks.
+codes. PB-0402 adds direct-data scene reset and temporary data-block ownership utilities. Import,
+inspection, normalization, export, and reimport remain assigned to later tasks.
+
+## Context-safe scene utilities
+
+`package_builder_blender.scene_utils.reset_scene(bpy.data)` removes all scene objects with
+`BlendData.batch_remove` and recursively purges local orphaned data. It deliberately receives only
+`bpy.data`: selection, active object, editor area, and current interaction mode cannot influence the
+result. Linked orphaned data is retained.
+
+`TemporaryDataBlocks(bpy.data)` owns operation-scoped data-blocks. It removes unique registered
+blocks as one reverse-registration-order batch on explicit `close()` or context-manager exit,
+including when processing raises. Cleanup failures remain retryable and are never reported as
+success. Callers must not retain or access Blender references after these utilities remove them.
 
 ## Invocation
 

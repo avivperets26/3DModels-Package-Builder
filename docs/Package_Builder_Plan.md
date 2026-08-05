@@ -100,6 +100,14 @@ their owning PB-0402+ tasks implement them. Stable exit codes distinguish invoca
 operation, execution, and result-write failures, while standard error contains only sanitized
 diagnostic codes.
 
+PB-0402 adds context-independent scene reset and operation-scoped temporary data ownership. The
+worker passes only `bpy.data` into these utilities: it removes object data-blocks with
+`BlendData.batch_remove`, purges local orphans recursively while retaining linked orphaned data,
+and disposes unique temporary data-blocks in a deterministic batch even when processing fails.
+The utilities never consult selection, active object, editor area, or interaction mode. Removed
+Blender references must not be accessed afterward. Import and asset-specific processing remain
+owned by PB-0403 and later tasks.
+
 ### 3.3 Unity Worker
 
 A Unity Editor assembly is executed either from its Editor window or with `-batchmode -executeMethod`. It:

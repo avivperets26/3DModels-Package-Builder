@@ -158,7 +158,25 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0401 | 🟡 **PROCESS** | `feat/PB-0401-blender-worker-shell` | Blender Worker and Contract Engineering for local work; user for Git gates | 2026-08-05 | PB-0310 completion is synchronized. The versioned Python worker shell, Blender bootstrap, strict request/containment validation, JSON Lines progress, atomic results, runtime-version boundary, documented exit codes, shared goldens, and focused tests are implemented; final Core CI passed all 9 stages with 2,067/2,067 .NET tests, plus 10/10 Python worker tests. | User-controlled commit, push, merge, required successful `main` CI, and explicit completion confirmation remain. Actual contained Blender integration is deferred to the applicable engine-integration tasks and is not claimed. |
+| PB-0402 | 🟡 **PROCESS** | `feat/PB-0402-blender-scene-utils` | Blender Worker Engineering for local work; user for Git gates | 2026-08-05 | PB-0401 completion is synchronized. Direct-data scene reset and retryable temporary-data disposal are implemented and locally validated: 17 focused tests and all 9 Core CI stages pass. | User-controlled commit, push, merge, required `main` CI, and explicit confirmation remain. Actual contained Blender integration is unavailable and is not claimed. |
+
+### PB-0401 Completion Evidence
+
+Detailed implementation, validation, and final publication evidence are recorded in
+`docs/PB-0401_BLENDER_WORKER_SHELL_EVIDENCE.md`.
+
+- Final task commit `0251fb96f551f651a4c65c1220beeca3c727f061` was pushed on
+  `feat/PB-0401-blender-worker-shell`.
+- The task was merged through [pull request #54](https://github.com/avivperets26/3DModels-Package-Builder/pull/54)
+  into `main` as `b8568c5ab0c2252e01aeee13dfe6e9f678fc145e`.
+- Required [main workflow run 31024666006](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31024666006)
+  completed successfully for that exact merge commit.
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-05.
+- No CI, completion, quality, or workflow exception was used. Python branch coverage and actual
+  contained Blender integration remain disclosed evidence gaps; no unsupported claim is made.
+- This PB-0402 rollover marks PB-0401 `[x]` / 🟢 **DONE**, removes it from Active Work, and adds
+  exactly one chronological Completion Log row.
 
 ### PB-0310 Completion Evidence
 
@@ -839,6 +857,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0308 | `feat/PB-0308-build-lock` | `466b913175af2902e8c20a32f1980418ecaf1bff` | [#51](https://github.com/avivperets26/3DModels-Package-Builder/pull/51) | 2026-08-05 | Merged into `main` as `1454a5cbab08089042b7b2cd059b16a9a57a02d0`; required [main workflow run 31013208586](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31013208586) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. The invalid local coverage reports remain disclosed and no percentage is claimed. |
 | PB-0309 | `feat/PB-0309-engine-update-guidance` | `0ee44cabbdfcc80e09ec2bed4a90f22f151281e1` | [#52](https://github.com/avivperets26/3DModels-Package-Builder/pull/52) | 2026-08-05 | Merged into `main` as `86ae7d895ba438768b8893c7f488b2d6ae17c134`; required [main workflow run 31016436547](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31016436547) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. The invalid local coverage reports remain disclosed and no percentage is claimed. |
 | PB-0310 | `test/PB-0310-candidate-promotion-suite` | `539e1434a104a907eb427dc74484440f45512437` | [#53](https://github.com/avivperets26/3DModels-Package-Builder/pull/53) | 2026-08-05 | Merged into `main` as `b24f5d11b290e85d2b8a91a0e0d6ca3f0e506c0c`; required [main workflow run 31019836442](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31019836442) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. The invalid local coverage report remains disclosed and no percentage is claimed. |
+| PB-0401 | `feat/PB-0401-blender-worker-shell` | `0251fb96f551f651a4c65c1220beeca3c727f061` | [#54](https://github.com/avivperets26/3DModels-Package-Builder/pull/54) | 2026-08-05 | Merged into `main` as `b8568c5ab0c2252e01aeee13dfe6e9f678fc145e`; required [main workflow run 31024666006](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31024666006) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. Python branch coverage and actual contained Blender integration remain disclosed evidence gaps; no unsupported claim is made. |
 
 ## 5. Milestones
 
@@ -1179,15 +1198,16 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** A robust Blender worker turns heterogeneous FBX/GLB input into normalized, measured, reimport-verified interchange assets.
 
-- [ ] **PB-0401 — Create Blender worker package and entrypoint** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0401 — Create Blender worker package and entrypoint** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0401-blender-worker-shell`
   - Depends on: PB-0112, PB-0207, PB-0302
   - Done when: Blender receives a request file, emits JSON Lines progress, writes a result, and returns documented exit codes.
 
-- [ ] **PB-0402 — Implement Blender scene reset and context-safe utilities** — **P0**
+- [ ] **PB-0402 — Implement Blender scene reset and context-safe utilities** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0402-blender-scene-utils`
   - Depends on: PB-0401
   - Done when: worker operations do not depend on UI selection/mode and cleanly dispose temporary data.
+  - Evidence: `docs/PB-0402_BLENDER_SCENE_UTILITIES_EVIDENCE.md`
 
 - [ ] **PB-0403 — Implement FBX import adapter** — **P0**
   - Branch: `feat/PB-0403-blender-fbx-import`

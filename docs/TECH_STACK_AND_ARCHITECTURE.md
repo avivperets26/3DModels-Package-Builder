@@ -1150,6 +1150,15 @@ request, `4` unsupported operation, `5` execution/runtime mismatch, and `6` resu
 PB-0401 does not reset or inspect scenes, import models, normalize assets, export files, calculate
 hashes, or promote output; those remain PB-0402 and later tasks.
 
+PB-0402 introduces `package_builder_blender.scene_utils` as a direct-data boundary. `reset_scene`
+accepts `bpy.data`, snapshots and batch-removes all object identities, then recursively purges only
+local orphaned data. `TemporaryDataBlocks` owns exact operation-created data-block identities,
+deduplicates them by identity, removes them in reverse registration order on normal or exceptional
+exit, is idempotent after success, and retains ownership for an explicit retry if Blender rejects
+cleanup. Neither utility receives `bpy.context` or `bpy.ops`, so UI selection, active-object,
+editor-area, and interaction-mode state cannot influence cleanup. Blender integration execution
+remains required before these boundaries can be promoted beyond deterministic plain-Python tests.
+
 ## 13. Process Execution Rules
 
 - Use `ProcessStartInfo.ArgumentList`; never construct an unescaped command string.
