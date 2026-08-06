@@ -581,7 +581,7 @@ Invoke-Check 'SDK selection, containment, telemetry opt-out, and reusable test s
         '\[string\]\$ResultSetName',
         '\[string\]\$DotnetExecutable',
         '\[switch\]\$GitHubActions',
-        'Passed\s+-lt\s+4',
+        'Passed\s+-lt\s+6',
         '''--no-build'''
     )
 }

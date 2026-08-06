@@ -104,6 +104,11 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 - [PB-0417 Blender clean-reimport validation evidence](PB-0417_CLEAN_REIMPORT_EVIDENCE.md)
 - [PB-0418 Blender failure and regression fixture evidence](PB-0418_BLENDER_REGRESSION_FIXTURES_EVIDENCE.md)
 
+## Portable Target Evidence
+
+- [PB-0501 portable naming evidence](PB-0501_PORTABLE_NAMING_EVIDENCE.md)
+- [PB-0502 portable folder composer evidence](PB-0502_PORTABLE_FOLDER_COMPOSER_EVIDENCE.md)
+
 ## Dependency and Licence Records
 
 - [Third-party dependency notices](THIRD_PARTY_NOTICES.md)

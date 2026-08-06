@@ -158,9 +158,26 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0416 | 🟡 **PROCESS** | `feat/PB-0416-normalized-glb-export` | Blender Worker Engineering for local work; user for Git gates | 2026-08-06 | Production policy plus contained Blender 5.0.0 exported 3/3 static, rigged, and animated GLBs with exact selected nodes, material, embedded image/texture, skin, and Action inventories. | Published locally with PB-0417/PB-0418 under the approved combined exception; user-controlled commit/push/merge, required `main` CI, confirmation, and rollover remain. |
-| PB-0417 | 🟡 **PROCESS** | `test/PB-0417-blender-reimport-validation` | Blender Worker Engineering for local work; user for Git gates | 2026-08-06 | Three distinct factory-empty Blender 5.0.0 processes reimported the static, rigged, and animated GLBs; exact counts, bounds, and representative deformation passed the production comparison 3/3. | Published locally on `feat/PB-0416-normalized-glb-export` under the approved combined exception; shared Git/CI/confirmation/rollover gates remain. |
-| PB-0418 | 🟡 **PROCESS** | `test/PB-0418-blender-regression-fixtures` | Blender Worker Engineering for local work; user for Git gates | 2026-08-06 | Real Blender importer/data-block execution returned the seven exact stable corrupt/missing-image/multi-rig/no-UV/unsupported-data/invalid-animation finding sets, 7/7, without a process crash. | Published locally on `feat/PB-0416-normalized-glb-export` under the approved combined exception; shared Git/CI/confirmation/rollover gates remain. |
+| PB-0501 | 🟡 **PROCESS** | `feat/PB-0501-portable-naming` | Portable Target Engineering for local work; user for Git gates | 2026-08-06 | Exact FBX, standard/rigged GLB, six canonical separate-texture, README, archive, and media naming is implemented; 47 focused tests, 100% new-code line/branch coverage, 2,114 complete tests, and full local Core CI pass. | User-controlled commit/push/merge, required `main` CI, explicit confirmation, and next-task rollover remain. |
+| PB-0502 | 🟡 **PROCESS** | `feat/PB-0502-portable-folder-composer` | Portable Target Engineering for local work; user for Git gates | 2026-08-06 | A deterministic read-only composer maps validated PB-0205 records into exact flat-FBX and top-level product/media plans; combined focused, coverage, baseline, and full Core CI validation pass. | Publish on `feat/PB-0501-portable-naming` under the approved combined exception, then obtain required `main` CI, explicit confirmation, and next-task rollover. |
+
+### PB-0501/PB-0502 Combined Publication Exception
+
+- **Approved:** 2026-08-06, explicitly by the user.
+- **Publication branch:** `feat/PB-0501-portable-naming`.
+- **Exact scope:** PB-0501 portable naming, PB-0502 portable folder composition, PB-0416 through
+  PB-0418 rollover, the direct portable-target test-project boundary required to test both tasks,
+  and documentation genuinely affected by this implementation.
+- **Reason:** the user requested one branch and one publication cycle for these directly dependent
+  naming and layout boundaries.
+- **Independence retained:** each task keeps its canonical branch identifier, acceptance mapping,
+  production boundary, focused tests, evidence document, lifecycle state, and eventual Completion
+  Log row. The shared branch does not merge their task identities.
+- **Completion:** PB-0501 and PB-0502 remain `[ ]` / 🟡 **PROCESS** until the combined change is
+  committed, pushed, merged into and pushed on `main`, required `main` CI succeeds, the user
+  explicitly confirms completion, and their state is synchronized during the next-task rollover.
+- **No precedent:** this exception applies only to this exact two-task cycle and does not weaken
+  the normal one-task-per-branch or one-merge rollover rules for later work.
 
 ### PB-0416/PB-0417/PB-0418 Combined Publication Exception
 
@@ -174,9 +191,11 @@ feat/PB-0607-unity-urp-material-compiler
 - **Independence retained:** every task keeps its canonical branch identifier, acceptance boundary,
   production module, focused tests, evidence document, lifecycle state, and eventual Completion Log
   row. The shared branch does not merge their task identities.
-- **Completion:** PB-0416 through PB-0418 stay `[ ]` / 🟡 **PROCESS** until the combined change is
-  committed, pushed, merged into and pushed on `main`, required `main` CI succeeds, the user
-  explicitly confirms completion, and their state is synchronized during the next-task rollover.
+- **Completion:** PB-0416 through PB-0418 were committed as
+  `e43ded6d7a36764df42cca89f0380a4d40aeb251`, merged through pull request #62 as
+  `45a6af25813c2494771ca6237f2be7d1eb83695d`, passed required `main` workflow run 31104970924,
+  and were explicitly confirmed complete by the user on 2026-08-06. Their DONE markers and
+  Completion Log rows are synchronized in this PB-0501/PB-0502 rollover.
 - **Evidence boundary:** strict Blender-compatible doubles validate policy and failure behavior;
   user-authorized contained Blender 5.0.0 execution now proves 3/3 real exports, 3/3 distinct empty-
   process reimports, and 7/7 real regression cases. Broader engine-version and licensed golden-
@@ -1028,6 +1047,9 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0413 | `feat/PB-0413-material-normalization` | `ba9e617b76b076e58aaa4e2279432b784ec373d7` | [#61](https://github.com/avivperets26/3DModels-Package-Builder/pull/61) | 2026-08-06 | Published on `feat/PB-0412-scene-cleanup` with PB-0412/PB-0414/PB-0415 under the approved combined exception and merged as `e75f9d41f6091d47b915e1da3be3564f2895839c`; required [main workflow run 31095384477](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31095384477) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. Real Blender image integration and Python branch coverage remain disclosed gaps. |
 | PB-0414 | `feat/PB-0414-rig-animation-normalization` | `ba9e617b76b076e58aaa4e2279432b784ec373d7` | [#61](https://github.com/avivperets26/3DModels-Package-Builder/pull/61) | 2026-08-06 | Published on `feat/PB-0412-scene-cleanup` with PB-0412/PB-0413/PB-0415 under the approved combined exception and merged as `e75f9d41f6091d47b915e1da3be3564f2895839c`; required [main workflow run 31095384477](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31095384477) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. Actual contained Blender baking and Python branch coverage remain disclosed gaps. |
 | PB-0415 | `feat/PB-0415-normalized-fbx-export` | `ba9e617b76b076e58aaa4e2279432b784ec373d7` | [#61](https://github.com/avivperets26/3DModels-Package-Builder/pull/61) | 2026-08-06 | Published on `feat/PB-0412-scene-cleanup` with PB-0412 through PB-0414 under the approved combined exception and merged as `e75f9d41f6091d47b915e1da3be3564f2895839c`; required [main workflow run 31095384477](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31095384477) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. Real FBX output and Python branch coverage remain disclosed gaps. |
+| PB-0416 | `feat/PB-0416-normalized-glb-export` | `e43ded6d7a36764df42cca89f0380a4d40aeb251` | [#62](https://github.com/avivperets26/3DModels-Package-Builder/pull/62) | 2026-08-06 | Published with PB-0417 and PB-0418 under the approved combined exception and merged as `45a6af25813c2494771ca6237f2be7d1eb83695d`; required [main workflow run 31104970924](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31104970924) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. Contained Blender 5.0.0 proved 3/3 GLB exports; broader version/fixture matrices remain later work. |
+| PB-0417 | `test/PB-0417-blender-reimport-validation` | `e43ded6d7a36764df42cca89f0380a4d40aeb251` | [#62](https://github.com/avivperets26/3DModels-Package-Builder/pull/62) | 2026-08-06 | Published on `feat/PB-0416-normalized-glb-export` with PB-0416/PB-0418 under the approved combined exception and merged as `45a6af25813c2494771ca6237f2be7d1eb83695d`; required [main workflow run 31104970924](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31104970924) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. Three distinct factory-empty Blender processes passed exact reimport comparisons. |
+| PB-0418 | `test/PB-0418-blender-regression-fixtures` | `e43ded6d7a36764df42cca89f0380a4d40aeb251` | [#62](https://github.com/avivperets26/3DModels-Package-Builder/pull/62) | 2026-08-06 | Published on `feat/PB-0416-normalized-glb-export` with PB-0416/PB-0417 under the approved combined exception and merged as `45a6af25813c2494771ca6237f2be7d1eb83695d`; required [main workflow run 31104970924](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31104970924) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. All seven real Blender regression observations produced stable findings without a worker crash. |
 
 ## 5. Milestones
 
@@ -1444,17 +1466,17 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0410 through PB-0414
   - Done when: static, rigged, and animated FBX fixtures export with selected assets, materials, rigs, and animations.
 
-- [ ] **PB-0416 — Implement normalized GLB export** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0416 — Implement normalized GLB export** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0416-normalized-glb-export`
   - Depends on: PB-0410 through PB-0414
   - Done when: static, rigged, and animated GLB fixtures export with intended textures and animation.
 
-- [ ] **PB-0417 — Implement Blender clean-reimport validator** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0417 — Implement Blender clean-reimport validator** — **P0** — 🟢 **DONE**
   - Branch: `test/PB-0417-blender-reimport-validation`
   - Depends on: PB-0415, PB-0416
   - Done when: fresh Blender processes compare object/mesh/material/rig/animation counts, bounds, and representative deformations against expected results.
 
-- [ ] **PB-0418 — Add Blender failure and regression fixtures** — **P1** — 🟡 **PROCESS**
+- [x] **PB-0418 — Add Blender failure and regression fixtures** — **P1** — 🟢 **DONE**
   - Branch: `test/PB-0418-blender-regression-fixtures`
   - Depends on: PB-0417
   - Done when: corrupt files, missing images, multiple rigs, no UVs, unsupported data, and invalid animations return stable findings without worker crashes.
@@ -1467,12 +1489,12 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** Normalized assets become clean, renamed, documented portable deliverables.
 
-- [ ] **PB-0501 — Implement portable naming profile** — **P0**
+- [ ] **PB-0501 — Implement portable naming profile** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0501-portable-naming`
   - Depends on: PB-0101, PB-0410
   - Done when: FBX, GLB, Albedo, Normal, Metallic, Roughness, Emission, AO, and README names match examples and collision rules.
 
-- [ ] **PB-0502 — Implement portable folder composer** — **P0**
+- [ ] **PB-0502 — Implement portable folder composer** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0502-portable-folder-composer`
   - Depends on: PB-0501, PB-0205
   - Done when: flat FBX folder and top-level product/media layout are produced without duplicates or unrelated files.

@@ -66,6 +66,10 @@ $script:ProjectSpecifications = @(
     [pscustomobject]@{
         Name = 'PackageBuilder.App.Wpf.Tests'
         Path = 'tests/PackageBuilder.App.Wpf.Tests/PackageBuilder.App.Wpf.Tests.csproj'
+    },
+    [pscustomobject]@{
+        Name = 'PackageBuilder.Targets.Portable.Tests'
+        Path = 'tests/PackageBuilder.Targets.Portable.Tests/PackageBuilder.Targets.Portable.Tests.csproj'
     }
 )
 
@@ -448,9 +452,9 @@ try {
             "[TOTAL] discovered=$($totals.Discovered), passed=$($totals.Passed), " +
             "failed=$($totals.Failed), skipped=$($totals.Skipped)"
         )
-        if ($totals.Passed -lt 4) {
+        if ($totals.Passed -lt 6) {
             $validationFailures.Add(
-                "The complete baseline suite must report at least 4 passing tests; found $($totals.Passed)."
+                "The complete suite must report at least 6 passing tests; found $($totals.Passed)."
             )
         }
 
