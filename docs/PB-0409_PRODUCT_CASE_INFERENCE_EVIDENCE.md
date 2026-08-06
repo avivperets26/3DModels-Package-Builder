@@ -4,12 +4,16 @@
 
 - Canonical branch: `feat/PB-0409-case-inference`
 - Publication branch: `feat/PB-0409-case-inference`
-- Lifecycle: 🟡 **PROCESS**
+- Lifecycle: 🟢 **DONE**
 - Date: 2026-08-05
 
-PB-0409 shares one explicitly approved publication cycle with PB-0410 and PB-0411. Its API,
-acceptance mapping, tests, evidence, canonical branch identity, and eventual Completion Log row
-remain independent.
+PB-0409 shared one explicitly approved publication cycle with PB-0410 and PB-0411. Its API,
+acceptance mapping, tests, evidence, canonical branch identity, and Completion Log row remain
+independent. Commit `773f776ad3ad9c62d33ecf075715232b2fbaf000` was merged through
+[pull request #60](https://github.com/avivperets26/3DModels-Package-Builder/pull/60) as
+`8b19fdca393e803ca476669945d5761f7d424cd4`; required
+[main workflow run 31086450759](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31086450759)
+succeeded, and the user explicitly confirmed completion on 2026-08-06.
 
 ## Implemented Boundary
 
@@ -53,9 +57,9 @@ from mesh or file counts; either result requires the matching explicit manifest 
 - Ruff lint/formatting, locked restore, .NET formatting, PowerShell parsing, documentation/task graph,
   secret/prohibited-content, vulnerability, and `git diff --check` checks passed.
 
-## Evidence Limits and Remaining Gates
+## Evidence Limits and Publication
 
 The inference boundary is renderer-independent plain Python. No approved contained Blender runtime
 is present, so real Blender integration is not claimed. No UI or rendered output changed; manual
-visual testing is not applicable. Commit, branch push, merge into and push of `main`, required
-`main` CI, explicit user confirmation, and next-task rollover remain.
+visual testing is not applicable. All publication, required `main` CI, explicit confirmation, and
+rollover gates passed as recorded above.

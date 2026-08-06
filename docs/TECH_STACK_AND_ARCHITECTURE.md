@@ -1254,8 +1254,42 @@ matrices and scene units are restored if application or verification fails.
 PB-0409, PB-0410, and PB-0411 share `feat/PB-0409-case-inference` solely under their separately
 approved publication exception. Their canonical task identities, modules, tests, evidence, and
 eventual Completion Log rows remain independent; the exception creates no architectural coupling
-or precedent. PB-0412 through PB-0417 retain cleanup, material normalization, baking, export, and
-clean-reimport ownership.
+or precedent.
+
+PB-0412 introduces `package_builder_blender.export_sets`. A complete manifest set owns intended
+mesh/armature objects and any explicitly retained helpers. Every other camera, light, hidden backup,
+helper, or non-intended object is classified and batch-removed from the disposable workspace before
+only local orphaned data is recursively purged. `SelectionSafeExport` snapshots all selection,
+hidden, and active-object state; selects exactly the requested objects with a deterministic active
+armature preference; and restores the snapshot on success or failure.
+
+PB-0413 introduces `package_builder_blender.material_normalization`. It consumes the PB-0406 image
+and connection report plus a complete manifest image plan. Canonical maps remain separate, paths
+become Blender-relative `//Textures` references, and Albedo/Emission use sRGB while data maps use
+Non-Color. Unknown, ambiguous, or contradictory roles block unless the manifest records an explicit
+reviewed override. Unsafe, missing, colliding, noncanonical, ORM, and metallic-roughness outputs fail
+before mutation; rejected Blender setters trigger complete reference/color-space rollback.
+
+PB-0414 introduces `package_builder_blender.rig_animation_normalization`. It validates exact Action
+ownership, canonical skeleton/clip names, deform bones, source motion, inclusive clip bounds, and
+sample steps. The Blender 5 NLA bake policy selects deform pose bones, uses visual keying/current
+Action/POSE channels, and never clears parents, constraints, or curves. Post-bake inspection requires
+exact boundary keys, step-conforming samples, and retained motion. Scene range, active Action, and
+pose selection restore unconditionally; a failed destructive bake invalidates the disposable copy.
+
+PB-0415 introduces `package_builder_blender.fbx_export`. It accepts only a new canonical direct-child
+FBX output path and exact static, rigged, or animated object/material/Action inventory. PB-0412's
+selection guard surrounds the Blender 5 exporter. Export uses selected meshes/armatures, unit/axis
+space metadata, modifiers, tangents, face smoothing, deform bones, no leaf bones, relative external
+textures, explicit animation boundaries, and zero curve simplification. Experimental baked-space
+transform, NLA strips, custom properties, metadata, embedding, and overwrite are disabled. Rejected,
+exceptional, linked, missing, or empty output is quarantined through exact partial-file cleanup.
+
+PB-0412 through PB-0415 share `feat/PB-0412-scene-cleanup` solely under their explicitly approved
+publication exception. Canonical task identifiers, module boundaries, focused tests, evidence,
+lifecycle state, and eventual Completion Log rows remain independent; the exception creates no
+architectural coupling or precedent. PB-0416 and PB-0417 retain GLB export and real clean-reimport
+validation ownership.
 
 ## 13. Process Execution Rules
 

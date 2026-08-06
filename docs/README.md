@@ -96,6 +96,10 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 - [PB-0409 automatic product-case inference evidence](PB-0409_PRODUCT_CASE_INFERENCE_EVIDENCE.md)
 - [PB-0410 Blender naming normalization evidence](PB-0410_NAMING_NORMALIZATION_EVIDENCE.md)
 - [PB-0411 unit, axis, pivot, and transform normalization evidence](PB-0411_TRANSFORM_NORMALIZATION_EVIDENCE.md)
+- [PB-0412 helper cleanup and selection-safe export-set evidence](PB-0412_SCENE_CLEANUP_EVIDENCE.md)
+- [PB-0413 material and image normalization evidence](PB-0413_MATERIAL_IMAGE_NORMALIZATION_EVIDENCE.md)
+- [PB-0414 rig, Action, and baking normalization evidence](PB-0414_RIG_ANIMATION_NORMALIZATION_EVIDENCE.md)
+- [PB-0415 normalized FBX export evidence](PB-0415_NORMALIZED_FBX_EXPORT_EVIDENCE.md)
 
 ## Dependency and Licence Records
 
