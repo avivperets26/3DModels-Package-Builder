@@ -1372,6 +1372,20 @@ publication exception. Their canonical task identities, acceptance boundaries, A
 evidence, lifecycle state, and eventual Completion Log rows remain independent; no architectural
 coupling or workflow precedent is created.
 
+PB-0505 adds the deterministic in-process ZIP boundary using only `System.IO.Compression`. It
+consumes the PB-0502 flat layout and caller-owned streams, orders entries ordinally from the plan,
+uses a fixed ZIP-compatible UTC timestamp and metadata, verifies every PB-0205 content identity
+while streaming through a bounded buffer, and returns exact plus logical archive identities.
+Expected failure clears the caller-owned destination and never disposes source streams.
+
+PB-0506 adds a read-only fail-closed portable release validator. The validator compares actual ZIP
+bytes and metadata with the PB-0505 receipt and folder manifest, then checks canonical FBX/optional
+GLB delivery, PB-0503 textures, PB-0504 README bytes, external references, and PB-0417 clean-
+reimport decisions. It emits immutable PB-0109 findings and passes only with no blocking result.
+PB-0505 and PB-0506 share `feat/PB-0505-deterministic-fbx-zip` only under their explicit combined
+publication exception; PB-0507 remains responsible for physical orchestration and the first
+user-runnable portable vertical slice.
+
 ## 13. Process Execution Rules
 
 - Use `ProcessStartInfo.ArgumentList`; never construct an unescaped command string.

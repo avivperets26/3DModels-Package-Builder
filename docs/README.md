@@ -110,6 +110,8 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 - [PB-0502 portable folder composer evidence](PB-0502_PORTABLE_FOLDER_COMPOSER_EVIDENCE.md)
 - [PB-0503 portable texture copy and conversion evidence](PB-0503_PORTABLE_TEXTURES_EVIDENCE.md)
 - [PB-0504 portable README generator evidence](PB-0504_PORTABLE_README_EVIDENCE.md)
+- [PB-0505 deterministic FBX ZIP evidence](PB-0505_DETERMINISTIC_FBX_ZIP_EVIDENCE.md)
+- [PB-0506 portable target validator evidence](PB-0506_PORTABLE_TARGET_VALIDATOR_EVIDENCE.md)
 
 ## Dependency and Licence Records
 

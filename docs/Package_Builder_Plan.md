@@ -504,6 +504,12 @@ GLB, and texture-receipt data. Its deterministic LF UTF-8 output covers the prod
 formats, texture metadata, dimensions, materials, rig, animations, item inventory, usage, AI
 disclosure, support, and copyright without guessing absent data.
 
+PB-0505 materializes the exact flat-FBX plan into a deterministic ZIP. Entry order, names,
+timestamps, attributes, byte lengths, and SHA-256 values are controlled, and the receipt exposes
+both exact archive identity and a compression-independent logical identity. PB-0506 then validates
+the actual archive plus FBX, intended GLB, textures, README, naming, references, and PB-0417
+clean-reimport results. Every invalid category produces a blocking PB-0109 finding.
+
 ### 8.2 Unity Package Root
 
 ```text
