@@ -5,8 +5,10 @@ PB-0401 implements request validation, JSON Lines progress, atomic result output
 codes. PB-0402 adds direct-data scene reset and temporary data-block ownership utilities. PB-0403
 and PB-0404 add bounded FBX and single-file GLB import adapters. PB-0405 adds deterministic
 geometry and transform inspection. PB-0406 through PB-0408 add read-only texture/material,
-armature/weight, and Action/animation inspection. Normalization, export, and reimport remain
-assigned to later tasks.
+armature/weight, and Action/animation inspection. PB-0409 through PB-0416 add inference,
+normalization, cleanup, and FBX/GLB export boundaries; PB-0417/PB-0418 add clean-reimport
+comparison and stable regression findings. Full job-operation orchestration and contained Blender
+execution remain later integration work.
 
 ## Context-safe scene utilities
 
@@ -63,6 +65,24 @@ evaluating playback or modifying animation data.
 All three inspectors return stable sanitized blocking findings for expected invalid Blender data.
 Their deterministic plain-Python tests do not claim actual `bpy` or contained-engine execution.
 
+## Normalization, Export, and Reimport Validation
+
+`case_inference`, `naming_normalization`, `transform_normalization`, `export_sets`,
+`material_normalization`, and `rig_animation_normalization` implement manifest-owned normalization
+without silently guessing product grouping or ambiguous texture roles. `fbx_export` and
+`glb_export` validate exact static, rigged, or animated inventories, use selection-safe reviewed
+Blender 5 operator policies, and remove incomplete output. GLB export additionally requires every
+declared image to be inspected and connected and verifies the glTF 2.0 binary container header.
+
+`clean_reimport` requires one independently empty-process observation per contained FBX/GLB and
+compares exact object/mesh/material/skeleton/animation counts, bounds, and representative evaluated
+deformation samples. `regression_validation` maps the versioned corrupt, missing-image,
+multiple-rig, no-UV, unsupported-data, and invalid-animation portfolio to stable sanitized findings.
+Strict doubles prove deterministic success, failure, and tolerance boundaries. The opt-in
+contained-engine harness additionally exercises
+static/rigged/animated GLB export, three distinct empty-process reimports, and all seven regression
+cases against the approved Blender 5.0.0 runtime.
+
 ## Invocation
 
 The .NET safe-process boundary supplies absolute contained paths through separate arguments:
@@ -101,11 +121,23 @@ python -m unittest discover -s tests/blender -p "test_*.py" -v
 ```
 
 The shared .NET contract suite validates the same request, progress, and result golden files. Real
-Blender scene behavior and contained engine integration remain later tasks.
+Blender scene behavior for PB-0416 through PB-0418 can be rerun without using the caller's current
+directory:
+
+```powershell
+powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass `
+  -File scripts\Test-BlenderPb0416ToPb0418.ps1 `
+  -RepositoryRoot C:\Dev\PackageBuilder `
+  -BlenderExecutable C:\Dev\PackageBuilder\tools\blender\5.0.0\blender.exe
+```
+
+The script retains `.blend`, `.glb`, observations, reports, and logs beneath ignored `artifacts` for
+machine verification and supplementary manual visual inspection.
 
 ## Licensing Boundary
 
 Blender is external software distributed under the GNU GPL. Package Builder does not redistribute
-Blender here, install it, accept its licence, or determine eligibility. The user selects a
-contained installation that the existing PB-0302 locator verifies. See the official
+Blender in Git, accept its licence on the user's behalf, or determine eligibility. The current
+ignored portable copy was downloaded only after explicit user authorization and remains beneath the
+project root. The existing PB-0302 locator verifies the selected contained installation. See the official
 [Blender licence page](https://www.blender.org/about/license/).

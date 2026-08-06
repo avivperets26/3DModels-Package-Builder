@@ -54,7 +54,7 @@ This is an environment snapshot, not a permanent architecture constraint.
 | Windows | Primary supported host | No action |
 | Git | `2.43.0.windows.1` installed | Update through normal maintenance policy |
 | .NET | SDK `10.0.302` installed at `tools\dotnet\10.0.302` and verified against Microsoft SHA-512 metadata | Enter the repository environment before using `dotnet` |
-| Blender | Blender 5.0 executable detected | Use as initial normalization worker; track latest stable |
+| Blender | Official portable Blender `5.0.0` verified at `tools\blender\5.0.0` by vendor SHA-256, valid Blender Foundation Authenticode signature, and runtime probe | Use as the approved initial normalization worker; track later stable candidates separately |
 | Unity | `6000.2.9f1` and `6000.3.10f1` installed | Use newest approved stable version by policy |
 | Unreal Engine | No `UE_*` installation detected in the standard Epic Games directory | Install the current production release before Unreal integration tests |
 | Editor | Visual Studio Code is the supported baseline | Use CLI builds/tests; do not require paid Visual Studio features |
@@ -1288,8 +1288,43 @@ exceptional, linked, missing, or empty output is quarantined through exact parti
 PB-0412 through PB-0415 share `feat/PB-0412-scene-cleanup` solely under their explicitly approved
 publication exception. Canonical task identifiers, module boundaries, focused tests, evidence,
 lifecycle state, and eventual Completion Log rows remain independent; the exception creates no
-architectural coupling or precedent. PB-0416 and PB-0417 retain GLB export and real clean-reimport
-validation ownership.
+architectural coupling or precedent.
+
+PB-0416 introduces `package_builder_blender.glb_export`. It accepts only a new canonical
+direct-child GLB path and exact static, rigged, or animated object/material/image/Action inventory.
+Every image must match the PB-0406 inspection set and have at least one material connection.
+PB-0412's guard surrounds Blender 5 glTF Binary export. The reviewed policy embeds images; exports
+selected meshes/armatures, materials, UVs, normals, tangents, skins, morphs, deform bones, and
+sampled Actions; and excludes cameras, lights, extras, unused images, external collections,
+gltfpack, Draco, WebP variants, leaf bones, NLA strips, export-side bake/optimization, overwrite,
+and settings persistence. Output must have a consistent glTF 2.0 binary header and JSON chunk;
+failed or incomplete output is removed exactly. The official `export_action_filter` default remains
+false by intentional omission because assigning the false value explicitly invokes a Blender 5.0.0
+UI-only callback in background mode; the omission is regression-tested.
+
+PB-0417 introduces `package_builder_blender.clean_reimport`. Expectations and observations carry
+the source identity, product case, exact object/mesh/material/skeleton/animation counts, finite
+bounds, and representative evaluated vertex positions identified by object, clip, frame, and vertex.
+The comparison boundary requires one unique independently empty Blender process observation per
+contained non-link FBX/GLB. Counts compare exactly and bounds/deformation compare with explicit
+tolerances. Unsafe input, invalid process provenance, comparison mismatch, and runner failure map to
+stable sanitized findings. The contained Blender 5.0.0 harness supplies three distinct empty-process
+GLB observations and retains its reports beneath ignored artifacts; strict doubles retain the
+deterministic negative and tolerance matrix.
+
+PB-0418 introduces `package_builder_blender.regression_validation` and a versioned tracked fixture
+portfolio. Bounded facts for corrupt sources, missing image references, multiple skeletons, absent
+UVs on intended textured meshes, unsupported data, invalid animation, and missing mesh content map
+to stable ordered blocking findings. Malformed observations fail closed. Retained corrupt FBX/GLB
+payloads also exercise existing import adapters with parser failures to prove cleanup and diagnostic
+sanitization. The contained Blender 5.0.0 harness materializes those payloads only beneath ignored
+artifacts and derives all other case facts from actual Blender data blocks, proving exact stable
+findings without a process crash.
+
+PB-0416 through PB-0418 share `feat/PB-0416-normalized-glb-export` solely under their explicitly
+approved publication exception. Canonical task identifiers, acceptance boundaries, modules,
+focused tests, evidence, lifecycle state, and eventual Completion Log rows remain independent; the
+exception creates no architectural coupling or precedent.
 
 ## 13. Process Execution Rules
 

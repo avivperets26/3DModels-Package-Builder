@@ -4,7 +4,7 @@
 
 - Canonical branch: `feat/PB-0413-material-normalization`
 - Publication branch: `feat/PB-0412-scene-cleanup`
-- Lifecycle: 🟡 **PROCESS**
+- Lifecycle: 🟢 **DONE**
 - Date: 2026-08-06
 
 The shared publication branch is the exact user-approved PB-0412/PB-0413/PB-0414/PB-0415
@@ -51,3 +51,12 @@ Focused PB-0413 tests: 5 passed, 0 failed.
 
 Tests use direct image doubles; real Blender image loading/saving is intentionally outside this
 evidence and no visual result is claimed.
+
+## Publication Evidence
+
+- Shared task commit: `ba9e617b76b076e58aaa4e2279432b784ec373d7`.
+- Pull request: [#61](https://github.com/avivperets26/3DModels-Package-Builder/pull/61).
+- Merge commit: `e75f9d41f6091d47b915e1da3be3564f2895839c`.
+- Required [main workflow run 31095384477](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31095384477) succeeded.
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-06. No CI or quality exception was used.

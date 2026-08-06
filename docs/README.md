@@ -100,6 +100,9 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 - [PB-0413 material and image normalization evidence](PB-0413_MATERIAL_IMAGE_NORMALIZATION_EVIDENCE.md)
 - [PB-0414 rig, Action, and baking normalization evidence](PB-0414_RIG_ANIMATION_NORMALIZATION_EVIDENCE.md)
 - [PB-0415 normalized FBX export evidence](PB-0415_NORMALIZED_FBX_EXPORT_EVIDENCE.md)
+- [PB-0416 normalized GLB export evidence](PB-0416_NORMALIZED_GLB_EXPORT_EVIDENCE.md)
+- [PB-0417 Blender clean-reimport validation evidence](PB-0417_CLEAN_REIMPORT_EVIDENCE.md)
+- [PB-0418 Blender failure and regression fixture evidence](PB-0418_BLENDER_REGRESSION_FIXTURES_EVIDENCE.md)
 
 ## Dependency and Licence Records
 

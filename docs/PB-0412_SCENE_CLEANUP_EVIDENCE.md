@@ -4,7 +4,7 @@
 
 - Canonical branch: `feat/PB-0412-scene-cleanup`
 - Publication branch: `feat/PB-0412-scene-cleanup`
-- Lifecycle: 🟡 **PROCESS**
+- Lifecycle: 🟢 **DONE**
 - Date: 2026-08-06
 
 PB-0412 shares one explicitly user-approved publication cycle with PB-0413 through PB-0415. Each
@@ -52,3 +52,12 @@ The [Blender 5 Object API](https://docs.blender.org/api/5.0/bpy.types.Object.htm
 selection, hidden-state, and visibility interfaces used by this boundary. Tests use strict
 plain-Python Blender doubles because no approved contained Blender runtime currently exists under
 the project root. Real Blender integration and visual output are not claimed.
+
+## Publication Evidence
+
+- Shared task commit: `ba9e617b76b076e58aaa4e2279432b784ec373d7`.
+- Pull request: [#61](https://github.com/avivperets26/3DModels-Package-Builder/pull/61).
+- Merge commit: `e75f9d41f6091d47b915e1da3be3564f2895839c`.
+- Required [main workflow run 31095384477](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31095384477) succeeded.
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-06. No CI or quality exception was used.
