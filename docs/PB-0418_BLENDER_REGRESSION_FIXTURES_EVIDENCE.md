@@ -4,7 +4,7 @@
 
 - Canonical branch: `test/PB-0418-blender-regression-fixtures`
 - Publication branch: `feat/PB-0416-normalized-glb-export`
-- Lifecycle: 🟡 **PROCESS**
+- Lifecycle: 🟢 **DONE**
 - Date: 2026-08-06
 
 The shared publication branch is the exact user-approved PB-0416/PB-0417/PB-0418 exception. The
@@ -69,10 +69,14 @@ The passing report and sanitized Blender log are retained beneath
 
 The tracked corrupt payloads and strict parser doubles retain stable worker-boundary failure
 coverage. The contained Blender run now proves real importer rejection and derives the remaining
-bounded facts from actual Blender data blocks. PB-0418 remains PROCESS only because publication
-gates are outstanding; visual review is not an acceptance mechanism for corrupt-source findings.
+bounded facts from actual Blender data blocks. Visual review is not an acceptance mechanism for
+corrupt-source findings.
 
-## Remaining Gates
+## Publication Evidence
 
-- User-controlled commit, push, merge, required `main` CI, and explicit completion confirmation.
-- Next-task rollover synchronization after all completion gates pass.
+- Task commit: `e43ded6d7a36764df42cca89f0380a4d40aeb251`.
+- Pull request: [#62](https://github.com/avivperets26/3DModels-Package-Builder/pull/62).
+- Merge commit: `45a6af25813c2494771ca6237f2be7d1eb83695d`.
+- Required successful [main workflow run 31104970924](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31104970924).
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-06. No CI or quality exception was used.

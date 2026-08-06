@@ -3,7 +3,7 @@
 ## Status
 
 - Canonical and publication branch: `feat/PB-0416-normalized-glb-export`
-- Lifecycle: 🟡 **PROCESS**
+- Lifecycle: 🟢 **DONE**
 - Date: 2026-08-06
 
 PB-0416 shares one explicitly user-approved publication cycle with PB-0417 and PB-0418. Each task
@@ -91,10 +91,13 @@ and [glTF 2.0 export manual](https://docs.blender.org/manual/en/5.0/addons/impor
 Strict exporter doubles retain deterministic failure coverage, while the contained Blender run now
 proves real geometry, embedded image, material, skin, Action, and evaluated-motion round trips.
 Visual review is available from the retained `.blend` and `.glb` files but remains supplementary to
-the automated evidence. PB-0416 remains PROCESS only because publication gates are outstanding.
+the automated evidence.
 
-## Remaining Gates
+## Publication Evidence
 
-- User-controlled commit, push, merge into and push of `main`.
-- Successful required `main` CI and explicit user confirmation.
-- Next-task rollover synchronization after all completion gates pass.
+- Task commit: `e43ded6d7a36764df42cca89f0380a4d40aeb251`.
+- Pull request: [#62](https://github.com/avivperets26/3DModels-Package-Builder/pull/62).
+- Merge commit: `45a6af25813c2494771ca6237f2be7d1eb83695d`.
+- Required successful [main workflow run 31104970924](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31104970924).
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-06. No CI or quality exception was used.

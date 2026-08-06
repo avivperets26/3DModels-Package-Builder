@@ -56,6 +56,12 @@ $script:ProjectSpecifications = @(
         Path = 'tests/PackageBuilder.App.Wpf.Tests/PackageBuilder.App.Wpf.Tests.csproj'
         ProductionProject = 'src/PackageBuilder.App.Wpf/PackageBuilder.App.Wpf.csproj'
         ProductionAssembly = 'PackageBuilder.App.Wpf'
+    },
+    [pscustomobject]@{
+        Name = 'PackageBuilder.Targets.Portable.Tests'
+        Path = 'tests/PackageBuilder.Targets.Portable.Tests/PackageBuilder.Targets.Portable.Tests.csproj'
+        ProductionProject = 'src/PackageBuilder.Targets.Portable/PackageBuilder.Targets.Portable.csproj'
+        ProductionAssembly = 'PackageBuilder.Targets.Portable'
     }
 )
 
@@ -141,7 +147,7 @@ if (-not [System.StringComparer]::OrdinalIgnoreCase.Equals($gitRoot, $script:Rep
     throw "RepositoryRoot must be the Git top level. Git reports: $gitRoot"
 }
 
-Invoke-Check 'Exactly the five approved test projects exist' {
+Invoke-Check 'Exactly the six approved test projects exist' {
     $expected = @($script:ProjectSpecifications | ForEach-Object { $_.Path } | Sort-Object)
     $actual = @(
         Get-ChildItem -LiteralPath (Join-Path $script:RepositoryRoot 'tests') -Recurse -File -Filter '*.csproj' |

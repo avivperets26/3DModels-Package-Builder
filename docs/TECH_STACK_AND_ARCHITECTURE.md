@@ -123,7 +123,7 @@ The root `.gitattributes` rule `* text=auto eol=lf` makes text-file checkout lin
 
 The PB-0008 test baseline keeps the four existing xUnit v3 projects on the centrally pinned VSTest-compatible package set. Each project has a deterministic offline `Category=Smoke` test that loads its directly referenced production assembly and verifies the expected assembly identity. `scripts/Test-TestProjects.ps1` validates the exact project inventory, production references, package configuration, and discoverable smoke-test source without external dependencies. `scripts/Test-BaselineUnitTests.ps1` defaults to repository-local SDK `10.0.302`, a locked restore, Debug configuration, and PB-0008 result paths. It also supports the PB-0009 controlled Release pipeline with no repeated restore or build, while preserving zero-discovery, failure, skip, stale/missing-result, unclassified-outcome, source-nonmutation, and minimum-total protections.
 
-The PB-0009 core pipeline is exposed through `scripts/Invoke-CoreCi.ps1` for Visual Studio Code, Windows PowerShell 5.1, and GitHub Actions `pwsh`. It performs repository-baseline validation, exact SDK verification, one locked restore, a warning-free Release build, non-mutating .NET formatting, checksum-verified Ruff `0.15.22` installation, Ruff lint/format checks, and all five Release test projects in a fixed fail-closed order. Local execution accepts only `tools/dotnet/10.0.302`; explicit GitHub Actions mode accepts the `actions/setup-dotnet` managed runner SDK only after the GitHub workspace and exact SDK version are verified. All Package Builder CLI state, NuGet/Ruff caches, temporary files, logs, and results remain beneath the selected repository workspace.
+The PB-0009 core pipeline is exposed through `scripts/Invoke-CoreCi.ps1` for Visual Studio Code, Windows PowerShell 5.1, and GitHub Actions `pwsh`. It performs repository-baseline validation, exact SDK verification, one locked restore, a warning-free Release build, non-mutating .NET formatting, checksum-verified Ruff `0.15.22` installation, Ruff lint/format checks, and all six Release test projects in a fixed fail-closed order. Local execution accepts only `tools/dotnet/10.0.302`; explicit GitHub Actions mode accepts the `actions/setup-dotnet` managed runner SDK only after the GitHub workspace and exact SDK version are verified. All Package Builder CLI state, NuGet/Ruff caches, temporary files, logs, and results remain beneath the selected repository workspace.
 
 PB-0010 establishes `README.md` and `CONTRIBUTING.md` as the contributor entry points without presenting planned product functionality as available. `scripts/Test-ContributionDocumentation.ps1` is a dependency-free PowerShell validator for required sections, real command/file references, local Markdown links, branch types, lifecycle markers, optional pull requests, direct merges, the permanent one-merge rollover, version boundaries, no-cost tooling, and public-repository safeguards. `scripts/Test-RepositoryBaseline.ps1` runs it in-process and through standalone Windows PowerShell 5.1 before the core pipeline proceeds.
 
@@ -675,6 +675,8 @@ C:\Dev\PackageBuilder\
 │   ├── PackageBuilder.Application.Tests/
 │   ├── PackageBuilder.Infrastructure.Tests/
 │   ├── PackageBuilder.Contract.Tests/
+│   ├── PackageBuilder.App.Wpf.Tests/
+│   ├── PackageBuilder.Targets.Portable.Tests/
 │   └── fixtures/
 ├── scripts/
 │   ├── Test-ArchitectureDecisionRecords.ps1
@@ -1325,6 +1327,30 @@ PB-0416 through PB-0418 share `feat/PB-0416-normalized-glb-export` solely under 
 approved publication exception. Canonical task identifiers, acceptance boundaries, modules,
 focused tests, evidence, lifecycle state, and eventual Completion Log rows remain independent; the
 exception creates no architectural coupling or precedent.
+
+PB-0501 introduces the first implementation in `PackageBuilder.Targets.Portable`. Its immutable
+`PortableNamingProfile` consumes only PB-0101's typed `InternalAssetId` and `ProductFolderName`.
+It composes the approved flat-FBX folder, FBX, archive, standard/rigged GLB, flat/product README,
+six canonical separate texture, and five media names. Texture byte-format extensions remain
+explicit lowercase values for PB-0503; ambient occlusion uses the exact portable token `AO`.
+All comparisons used for portable filesystem collision checks are ordinal-ignore-case, while the
+typed source identities remain ordinal and case-sensitive.
+
+PB-0502 introduces `PortableFolderComposer`, a side-effect-free policy over validated PB-0205
+`ArtifactStoreRecord` values. Every source must be in `validated` state, target `portable`, and use
+the exact role for its qualified layout purpose. The composer requires one FBX, FBX archive, flat
+README, and product README; accepts at most one GLB and at most one artifact per texture role/media
+view; rejects null, duplicate, case-insensitive identity-colliding, unvalidated, other-target, and
+role-mismatched inputs; and returns immutable deterministic root-relative entries for the flat-FBX
+and top-level product/media roots. It never opens, copies, renames, or modifies source bytes.
+PB-0503 through PB-0505 remain responsible for texture materialization, README content, and ZIP
+creation respectively.
+
+PB-0501 and PB-0502 share `feat/PB-0501-portable-naming` solely under their explicitly approved
+publication exception. Their canonical identifiers, acceptance boundaries, tests, evidence,
+lifecycle state, and eventual Completion Log rows remain independent. The direct
+`PackageBuilder.Targets.Portable.Tests` project keeps target-policy tests out of Domain, Contracts,
+Infrastructure, and WPF layers; the exception creates no architectural coupling or precedent.
 
 ## 13. Process Execution Rules
 
@@ -1987,7 +2013,7 @@ The reviewed action pins are:
 - `actions/checkout` `v7.0.1` at immutable commit `3d3c42e5aac5ba805825da76410c181273ba90b1`.
 - `actions/setup-dotnet` `v6.0.0` at immutable commit `a98b56852c35b8e3190ac28c8c2271da59106c68`.
 
-The core entry point runs repository validation, exact SDK verification, one locked restore, the complete Release build, `dotnet format --verify-no-changes`, checksum-verified Ruff `0.15.22` installation, Ruff lint and format verification, then all five baseline test projects with no repeated restore/build. Each project must discover and pass at least one test; the aggregate must contain at least five passes and no failed, skipped, missing, stale, or unclassified result.
+The core entry point runs repository validation, exact SDK verification, one locked restore, the complete Release build, `dotnet format --verify-no-changes`, checksum-verified Ruff `0.15.22` installation, Ruff lint and format verification, then all six test projects with no repeated restore/build. Each project must discover and pass at least one test; the aggregate must contain at least six passes and no failed, skipped, missing, stale, or unclassified result.
 
 The action-managed SDK path is runner infrastructure and is not described as repository-contained. Explicit GitHub Actions mode verifies `GITHUB_ACTIONS`, exact `GITHUB_WORKSPACE`, and SDK `10.0.302`; every project-owned CLI home, NuGet package/cache, Ruff cache, scratch, temporary, log, and result path remains below `GITHUB_WORKSPACE`. Local execution continues to require `tools/dotnet/10.0.302`.
 

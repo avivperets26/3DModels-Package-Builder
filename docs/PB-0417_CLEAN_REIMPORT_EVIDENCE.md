@@ -4,7 +4,7 @@
 
 - Canonical branch: `test/PB-0417-blender-reimport-validation`
 - Publication branch: `feat/PB-0416-normalized-glb-export`
-- Lifecycle: 🟡 **PROCESS**
+- Lifecycle: 🟢 **DONE**
 - Date: 2026-08-06
 
 The publication topology is the exact user-approved PB-0416/PB-0417/PB-0418 exception. Task
@@ -66,11 +66,14 @@ Machine-readable observations and the passing comparison report are retained ben
 
 Tests use a strict fresh-process runner boundary and prove that independent observations are
 required and compared correctly. The contained run additionally proves real GLB reimports in
-separate empty Blender processes. PB-0417 remains PROCESS only because publication gates are
-outstanding. This task validated the GLB artifacts produced by PB-0416; PB-0415 retains its own FBX
+separate empty Blender processes. This task validated the GLB artifacts produced by PB-0416; PB-0415 retains its own FBX
 export evidence and future matrix tasks own broader cross-version fixture execution.
 
-## Remaining Gates
+## Publication Evidence
 
-- User-controlled commit, push, merge, required `main` CI, and explicit completion confirmation.
-- Next-task rollover synchronization after all completion gates pass.
+- Task commit: `e43ded6d7a36764df42cca89f0380a4d40aeb251`.
+- Pull request: [#62](https://github.com/avivperets26/3DModels-Package-Builder/pull/62).
+- Merge commit: `45a6af25813c2494771ca6237f2be7d1eb83695d`.
+- Required successful [main workflow run 31104970924](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31104970924).
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-06. No CI or quality exception was used.

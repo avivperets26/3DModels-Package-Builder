@@ -27,6 +27,7 @@ $script:ExpectedProjects = @(
     'tests/PackageBuilder.Contract.Tests/PackageBuilder.Contract.Tests.csproj',
     'tests/PackageBuilder.Domain.Tests/PackageBuilder.Domain.Tests.csproj',
     'tests/PackageBuilder.Infrastructure.Tests/PackageBuilder.Infrastructure.Tests.csproj'
+    'tests/PackageBuilder.Targets.Portable.Tests/PackageBuilder.Targets.Portable.Tests.csproj'
 )
 
 $script:ExpectedPackageVersions = @{
@@ -75,6 +76,7 @@ $script:ExpectedTestProjects = @(
     'tests/PackageBuilder.Contract.Tests/PackageBuilder.Contract.Tests.csproj',
     'tests/PackageBuilder.Domain.Tests/PackageBuilder.Domain.Tests.csproj',
     'tests/PackageBuilder.Infrastructure.Tests/PackageBuilder.Infrastructure.Tests.csproj'
+    'tests/PackageBuilder.Targets.Portable.Tests/PackageBuilder.Targets.Portable.Tests.csproj'
 )
 
 function Invoke-Check {
@@ -171,7 +173,7 @@ if (-not (Test-Path -LiteralPath $script:RepositoryRoot -PathType Container)) {
     throw "Repository root does not exist: $script:RepositoryRoot"
 }
 
-Invoke-Check 'Required central configuration and exact 16-project inventory exist' {
+Invoke-Check 'Required central configuration and exact 17-project inventory exist' {
     $requiredFiles = @(
         'global.json',
         'Directory.Build.props',
@@ -197,7 +199,7 @@ Invoke-Check 'Required central configuration and exact 16-project inventory exis
     $differences = @(Compare-Object -ReferenceObject ($script:ExpectedProjects | Sort-Object) -DifferenceObject $actualProjects)
     if ($differences.Count -gt 0) {
         $details = @($differences | ForEach-Object { "$($_.SideIndicator) $($_.InputObject)" })
-        throw "Project inventory differs from the approved 16 projects: $($details -join '; ')"
+        throw "Project inventory differs from the approved 17 projects: $($details -join '; ')"
     }
 }
 

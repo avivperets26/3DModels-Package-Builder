@@ -225,6 +225,13 @@ $projectSpecifications = @(
         Framework = 'net10.0-windows'
         Kind = 'Test'
         References = @('PackageBuilder.App.Wpf')
+    },
+    [pscustomobject]@{
+        Name = 'PackageBuilder.Targets.Portable.Tests'
+        Path = 'tests/PackageBuilder.Targets.Portable.Tests/PackageBuilder.Targets.Portable.Tests.csproj'
+        Framework = 'net10.0'
+        Kind = 'Test'
+        References = @('PackageBuilder.Targets.Portable')
     }
 )
 

@@ -384,12 +384,19 @@ Names are generated from three distinct values:
 Silverwing_Talonbow_fbx/
 ├── SilverwingTalonbow.fbx
 ├── T_SilverwingTalonbow_Albedo.png
+├── T_SilverwingTalonbow_AO.png
 ├── T_SilverwingTalonbow_Emission.png
 ├── T_SilverwingTalonbow_Metallic.png
 ├── T_SilverwingTalonbow_Normal.png
 ├── T_SilverwingTalonbow_Roughness.png
 └── README_SilverwingTalonbow.txt
 ```
+
+PB-0501 composes these names from the typed `assetId` and `folderName`; it never derives them from
+source filenames. The six portable separate-map tokens are exactly `Albedo`, `Normal`, `Metallic`,
+`Roughness`, `Emission`, and `AO`. A standard static GLB is `<FolderName>.glb`; a rigged or animated
+GLB is `<FolderName>_rigged.glb`. Output extensions are explicit lowercase format identities so
+PB-0503 can preserve or intentionally convert bytes without silently changing a suffix.
 
 ### Unity Profile
 
@@ -479,6 +486,13 @@ Silverwing_Talonbow/
     ├── Silverwing_Talonbow_Left.jpg
     └── Silverwing_Talonbow_Right.jpg
 ```
+
+PB-0502 produces this structure as a deterministic logical plan from explicitly qualified,
+validated PB-0205 artifact records. It does not copy bytes: PB-0503 supplies canonical texture
+artifacts, PB-0504 supplies README artifacts, and PB-0505 creates the FBX archive. Required FBX,
+archive, and both README slots must appear once; GLB, textures, and media are optional, but any
+present artifact must have the exact portable target/role and a unique case-insensitive identity.
+No unqualified or unrelated artifact can enter the plan.
 
 ### 8.2 Unity Package Root
 
