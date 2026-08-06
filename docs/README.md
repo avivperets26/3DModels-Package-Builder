@@ -93,6 +93,9 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 - [PB-0406 texture extraction and role inspection evidence](PB-0406_TEXTURE_ROLE_INSPECTION_EVIDENCE.md)
 - [PB-0407 armature, skin, and weight inspection evidence](PB-0407_RIG_WEIGHT_INSPECTION_EVIDENCE.md)
 - [PB-0408 action and animation inspection evidence](PB-0408_ANIMATION_INSPECTION_EVIDENCE.md)
+- [PB-0409 automatic product-case inference evidence](PB-0409_PRODUCT_CASE_INFERENCE_EVIDENCE.md)
+- [PB-0410 Blender naming normalization evidence](PB-0410_NAMING_NORMALIZATION_EVIDENCE.md)
+- [PB-0411 unit, axis, pivot, and transform normalization evidence](PB-0411_TRANSFORM_NORMALIZATION_EVIDENCE.md)
 
 ## Dependency and Licence Records
 

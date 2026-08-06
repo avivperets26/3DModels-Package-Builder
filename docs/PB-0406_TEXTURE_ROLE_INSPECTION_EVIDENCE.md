@@ -5,7 +5,7 @@
 - Task: PB-0406 — Implement texture extraction and role inspection
 - Canonical branch: `feat/PB-0406-texture-inspection`
 - Publication branch: `feat/PB-0406-texture-inspection`
-- Lifecycle: 🟡 **PROCESS**
+- Lifecycle: 🟢 **DONE**
 - Date: 2026-08-05
 
 PB-0406 shares one explicitly approved publication cycle with PB-0407 and PB-0408. The exception
@@ -80,7 +80,10 @@ never contain Blender exception text, source contents, or physical paths.
   guessed.
 - This task changes no WPF view or rendered output, so manual visual testing is not applicable.
 
-## Remaining Gates
+## Publication Evidence
 
-User-controlled commit/push/merge, successful required `main` CI, explicit user confirmation, and
-PB-0409 rollover remain. PB-0406 stays `[ ]` / 🟡 **PROCESS** and absent from the Completion Log.
+Task commit `28bfe9393b4a8c0d6a12775046390435ca785faa` was merged through pull request #59 as
+`67668d24c3a5ea418affc01bde7267580ac9fb22`. Required `main` workflow run 31047283980 succeeded
+for that exact merge, and the user explicitly confirmed completion on 2026-08-05. The approved
+shared-branch exception affected Git topology only; no CI or quality exception was used. PB-0406
+is `[x]` / 🟢 **DONE** and appears exactly once in the Completion Log.
