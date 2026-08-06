@@ -158,10 +158,31 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0412 | 🟡 **PROCESS** | `feat/PB-0412-scene-cleanup` | Blender Worker Engineering for local work; user for Git gates | 2026-08-06 | Manifest-owned meshes/rigs and explicit helpers are retained; cameras, lights, hidden backups, helpers, non-intended objects, and local orphans are excluded; exact export selection restores UI state. | Shared user-controlled commit/push/merge, required `main` CI, explicit confirmation, and next-task rollover remain. Actual contained Blender integration is unavailable and is not claimed. |
-| PB-0413 | 🟡 **PROCESS** | `feat/PB-0413-material-normalization` | Blender Worker Engineering for local work; user for Git gates | 2026-08-06 | Complete separate-map plans normalize Blender-relative texture references and role-appropriate color spaces; unknown, ambiguous, contradictory, unsafe, combined, and colliding mappings block. | Published locally on `feat/PB-0412-scene-cleanup` under the approved combined exception; the shared Git and CI gates remain. |
-| PB-0414 | 🟡 **PROCESS** | `feat/PB-0414-rig-animation-normalization` | Blender Worker Engineering for local work; user for Git gates | 2026-08-06 | Skeleton/Action names, deform-bone selection, reviewed Blender 5 NLA baking, sampling, exact inclusive clip boundaries, motion preservation, and state restoration are implemented. | Published locally on `feat/PB-0412-scene-cleanup` under the approved combined exception; the shared Git and CI gates remain. Actual contained Blender integration is unavailable and is not claimed. |
-| PB-0415 | 🟡 **PROCESS** | `feat/PB-0415-normalized-fbx-export` | Blender Worker Engineering for local work; user for Git gates | 2026-08-06 | Static, rigged, and animated fixture exports validate exact objects/materials/actions, safe output paths, reviewed Blender 5 FBX options, partial cleanup, and selection restoration. | Published locally on `feat/PB-0412-scene-cleanup` under the approved combined exception; the shared Git and CI gates remain. Real FBX output awaits contained Blender integration and is not claimed. |
+| PB-0416 | 🟡 **PROCESS** | `feat/PB-0416-normalized-glb-export` | Blender Worker Engineering for local work; user for Git gates | 2026-08-06 | Production policy plus contained Blender 5.0.0 exported 3/3 static, rigged, and animated GLBs with exact selected nodes, material, embedded image/texture, skin, and Action inventories. | Published locally with PB-0417/PB-0418 under the approved combined exception; user-controlled commit/push/merge, required `main` CI, confirmation, and rollover remain. |
+| PB-0417 | 🟡 **PROCESS** | `test/PB-0417-blender-reimport-validation` | Blender Worker Engineering for local work; user for Git gates | 2026-08-06 | Three distinct factory-empty Blender 5.0.0 processes reimported the static, rigged, and animated GLBs; exact counts, bounds, and representative deformation passed the production comparison 3/3. | Published locally on `feat/PB-0416-normalized-glb-export` under the approved combined exception; shared Git/CI/confirmation/rollover gates remain. |
+| PB-0418 | 🟡 **PROCESS** | `test/PB-0418-blender-regression-fixtures` | Blender Worker Engineering for local work; user for Git gates | 2026-08-06 | Real Blender importer/data-block execution returned the seven exact stable corrupt/missing-image/multi-rig/no-UV/unsupported-data/invalid-animation finding sets, 7/7, without a process crash. | Published locally on `feat/PB-0416-normalized-glb-export` under the approved combined exception; shared Git/CI/confirmation/rollover gates remain. |
+
+### PB-0416/PB-0417/PB-0418 Combined Publication Exception
+
+- **Approved:** 2026-08-06, explicitly by the user.
+- **Publication branch:** `feat/PB-0416-normalized-glb-export`.
+- **Exact scope:** PB-0416 normalized GLB export, PB-0417 clean-reimport comparison, PB-0418
+  stable Blender regression fixtures/findings, PB-0412 through PB-0415 rollover, and documentation
+  genuinely affected by these three implementations.
+- **Reason:** the user requested one branch and one publication cycle for these dependent Blender
+  export, reimport, and regression boundaries.
+- **Independence retained:** every task keeps its canonical branch identifier, acceptance boundary,
+  production module, focused tests, evidence document, lifecycle state, and eventual Completion Log
+  row. The shared branch does not merge their task identities.
+- **Completion:** PB-0416 through PB-0418 stay `[ ]` / 🟡 **PROCESS** until the combined change is
+  committed, pushed, merged into and pushed on `main`, required `main` CI succeeds, the user
+  explicitly confirms completion, and their state is synchronized during the next-task rollover.
+- **Evidence boundary:** strict Blender-compatible doubles validate policy and failure behavior;
+  user-authorized contained Blender 5.0.0 execution now proves 3/3 real exports, 3/3 distinct empty-
+  process reimports, and 7/7 real regression cases. Broader engine-version and licensed golden-
+  fixture matrices remain owned by PB-1601 through PB-1609.
+- **No precedent:** this exception applies only to this exact three-task cycle and does not weaken
+  the normal one-task-per-branch or one-merge rollover rules for later work.
 
 ### PB-0412/PB-0413/PB-0414/PB-0415 Combined Publication Exception
 
@@ -176,10 +197,11 @@ feat/PB-0607-unity-urp-material-compiler
 - **Independence retained:** every task keeps its canonical branch identifier, acceptance boundary,
   production module, focused tests, evidence document, lifecycle state, and eventual Completion Log
   row. The shared branch does not merge their task identities.
-- **Completion:** PB-0412 through PB-0415 stay `[ ]` / 🟡 **PROCESS** until the combined change is
-  committed, pushed, merged into and pushed on `main`, required `main` CI succeeds, and the user
-  explicitly confirms completion. Their DONE markers and Completion Log rows will be synchronized
-  together at the start of the next task branch.
+- **Completion:** PB-0412 through PB-0415 were committed as
+  `ba9e617b76b076e58aaa4e2279432b784ec373d7`, merged through pull request #61 as
+  `e75f9d41f6091d47b915e1da3be3564f2895839c`, passed required `main` workflow run 31095384477,
+  and were explicitly confirmed complete by the user on 2026-08-06. Their DONE markers and
+  Completion Log rows are synchronized in this PB-0416 rollover.
 - **No precedent:** this exception applies only to this exact four-task cycle and does not weaken
   the normal one-task-per-branch or one-merge rollover rules for later work.
 
@@ -1002,6 +1024,10 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0409 | `feat/PB-0409-case-inference` | `773f776ad3ad9c62d33ecf075715232b2fbaf000` | [#60](https://github.com/avivperets26/3DModels-Package-Builder/pull/60) | 2026-08-06 | Published with PB-0410 and PB-0411 on the PB-0409 branch under the approved one-time exception and merged as `8b19fdca393e803ca476669945d5761f7d424cd4`; required [main workflow run 31086450759](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31086450759) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. Actual contained Blender integration and Python branch coverage remain disclosed gaps. |
 | PB-0410 | `feat/PB-0410-blender-naming-normalization` | `773f776ad3ad9c62d33ecf075715232b2fbaf000` | [#60](https://github.com/avivperets26/3DModels-Package-Builder/pull/60) | 2026-08-06 | Published on `feat/PB-0409-case-inference` with PB-0409 and PB-0411 under the approved one-time exception and merged as `8b19fdca393e803ca476669945d5761f7d424cd4`; required [main workflow run 31086450759](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31086450759) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. Actual contained Blender integration and Python branch coverage remain disclosed gaps. |
 | PB-0411 | `feat/PB-0411-transform-normalization` | `773f776ad3ad9c62d33ecf075715232b2fbaf000` | [#60](https://github.com/avivperets26/3DModels-Package-Builder/pull/60) | 2026-08-06 | Published on `feat/PB-0409-case-inference` with PB-0409 and PB-0410 under the approved one-time exception and merged as `8b19fdca393e803ca476669945d5761f7d424cd4`; required [main workflow run 31086450759](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31086450759) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. Actual contained Blender integration and Python branch coverage remain disclosed gaps. |
+| PB-0412 | `feat/PB-0412-scene-cleanup` | `ba9e617b76b076e58aaa4e2279432b784ec373d7` | [#61](https://github.com/avivperets26/3DModels-Package-Builder/pull/61) | 2026-08-06 | Published with PB-0413 through PB-0415 under the approved combined exception and merged as `e75f9d41f6091d47b915e1da3be3564f2895839c`; required [main workflow run 31095384477](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31095384477) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. Actual contained Blender integration and Python branch coverage remain disclosed gaps. |
+| PB-0413 | `feat/PB-0413-material-normalization` | `ba9e617b76b076e58aaa4e2279432b784ec373d7` | [#61](https://github.com/avivperets26/3DModels-Package-Builder/pull/61) | 2026-08-06 | Published on `feat/PB-0412-scene-cleanup` with PB-0412/PB-0414/PB-0415 under the approved combined exception and merged as `e75f9d41f6091d47b915e1da3be3564f2895839c`; required [main workflow run 31095384477](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31095384477) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. Real Blender image integration and Python branch coverage remain disclosed gaps. |
+| PB-0414 | `feat/PB-0414-rig-animation-normalization` | `ba9e617b76b076e58aaa4e2279432b784ec373d7` | [#61](https://github.com/avivperets26/3DModels-Package-Builder/pull/61) | 2026-08-06 | Published on `feat/PB-0412-scene-cleanup` with PB-0412/PB-0413/PB-0415 under the approved combined exception and merged as `e75f9d41f6091d47b915e1da3be3564f2895839c`; required [main workflow run 31095384477](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31095384477) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. Actual contained Blender baking and Python branch coverage remain disclosed gaps. |
+| PB-0415 | `feat/PB-0415-normalized-fbx-export` | `ba9e617b76b076e58aaa4e2279432b784ec373d7` | [#61](https://github.com/avivperets26/3DModels-Package-Builder/pull/61) | 2026-08-06 | Published on `feat/PB-0412-scene-cleanup` with PB-0412 through PB-0414 under the approved combined exception and merged as `e75f9d41f6091d47b915e1da3be3564f2895839c`; required [main workflow run 31095384477](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31095384477) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. Real FBX output and Python branch coverage remain disclosed gaps. |
 
 ## 5. Milestones
 
@@ -1398,37 +1424,37 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0405
   - Done when: configured units/axes/pivot are applied without changing deformation and before/after metrics are reported.
 
-- [ ] **PB-0412 — Implement helper cleanup and selection-safe export sets** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0412 — Implement helper cleanup and selection-safe export sets** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0412-scene-cleanup`
   - Depends on: PB-0405
   - Done when: cameras, lights, hidden backups, helpers, and orphaned data are excluded unless explicitly retained, while intended meshes/rigs remain.
 
-- [ ] **PB-0413 — Implement material/image normalization** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0413 — Implement material/image normalization** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0413-material-normalization`
   - Depends on: PB-0406, PB-0410
   - Done when: texture references are normalized, separate canonical maps are retained, and ambiguous roles block instead of silently misassigning.
 
-- [ ] **PB-0414 — Implement rig/action normalization and baking policy** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0414 — Implement rig/action normalization and baking policy** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0414-rig-animation-normalization`
   - Depends on: PB-0407, PB-0408, PB-0410, PB-0411
   - Done when: requested skeleton/action naming, baking, sampling, deform-bone export, and clip boundaries preserve motion in tests.
 
-- [ ] **PB-0415 — Implement normalized FBX export** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0415 — Implement normalized FBX export** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0415-normalized-fbx-export`
   - Depends on: PB-0410 through PB-0414
   - Done when: static, rigged, and animated FBX fixtures export with selected assets, materials, rigs, and animations.
 
-- [ ] **PB-0416 — Implement normalized GLB export** — **P0**
+- [ ] **PB-0416 — Implement normalized GLB export** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0416-normalized-glb-export`
   - Depends on: PB-0410 through PB-0414
   - Done when: static, rigged, and animated GLB fixtures export with intended textures and animation.
 
-- [ ] **PB-0417 — Implement Blender clean-reimport validator** — **P0**
+- [ ] **PB-0417 — Implement Blender clean-reimport validator** — **P0** — 🟡 **PROCESS**
   - Branch: `test/PB-0417-blender-reimport-validation`
   - Depends on: PB-0415, PB-0416
   - Done when: fresh Blender processes compare object/mesh/material/rig/animation counts, bounds, and representative deformations against expected results.
 
-- [ ] **PB-0418 — Add Blender failure and regression fixtures** — **P1**
+- [ ] **PB-0418 — Add Blender failure and regression fixtures** — **P1** — 🟡 **PROCESS**
   - Branch: `test/PB-0418-blender-regression-fixtures`
   - Depends on: PB-0417
   - Done when: corrupt files, missing images, multiple rigs, no UVs, unsupported data, and invalid animations return stable findings without worker crashes.

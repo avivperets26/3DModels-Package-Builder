@@ -165,6 +165,19 @@ only selected meshes/armatures with reviewed non-experimental FBX settings and p
 cleanup. The user explicitly approved one publication cycle for these four independent tasks on
 `feat/PB-0412-scene-cleanup` on 2026-08-06; it creates no precedent.
 
+PB-0416 through PB-0418 form the GLB and clean-reimport validation boundary. PB-0416 applies exact
+manifest-owned object, material, connected-image, rig, and Action inventory to Blender 5 glTF
+Binary export, verifies the GLB container, and removes partial output. PB-0417 compares exact counts,
+bounds, and representative deformation from one independently empty-process observation per FBX or
+GLB. PB-0418 maps the approved corrupt, missing-image, multiple-rig, no-UV, unsupported-data, and
+invalid-animation fixture facts to stable sanitized findings. The user approved one publication
+cycle for these three independent tasks on `feat/PB-0416-normalized-glb-export` on 2026-08-06; it
+creates no precedent. Strict doubles prove policy and failure boundaries. A user-authorized,
+checksum- and signature-verified contained Blender 5.0.0 run additionally exported static, rigged,
+and animated GLBs 3/3, clean-reimported them in three distinct empty processes 3/3, and executed the
+seven regression cases 7/7. The retained `.blend` and `.glb` files now support supplementary visual
+review; later fixture/version-matrix tasks still own broader engine acceptance.
+
 ### 3.3 Unity Worker
 
 A Unity Editor assembly is executed either from its Editor window or with `-batchmode -executeMethod`. It:

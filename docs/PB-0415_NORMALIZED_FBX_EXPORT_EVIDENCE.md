@@ -4,7 +4,7 @@
 
 - Canonical branch: `feat/PB-0415-normalized-fbx-export`
 - Publication branch: `feat/PB-0412-scene-cleanup`
-- Lifecycle: 🟡 **PROCESS**
+- Lifecycle: 🟢 **DONE**
 - Date: 2026-08-06
 
 The shared publication branch is the exact user-approved PB-0412/PB-0413/PB-0414/PB-0415
@@ -54,3 +54,12 @@ including its warning that baked space transform is experimental and known to be
 armatures/animations. Fixture tests use a strict exporter double that writes contained non-empty
 artifacts; no real FBX binary validity or visual reimport is claimed until an approved contained
 Blender runtime exists and PB-0417 performs clean reimport validation.
+
+## Publication Evidence
+
+- Shared task commit: `ba9e617b76b076e58aaa4e2279432b784ec373d7`.
+- Pull request: [#61](https://github.com/avivperets26/3DModels-Package-Builder/pull/61).
+- Merge commit: `e75f9d41f6091d47b915e1da3be3564f2895839c`.
+- Required [main workflow run 31095384477](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31095384477) succeeded.
+- The user explicitly confirmed the push, merge, green required `main` CI, and completion on
+  2026-08-06. No CI or quality exception was used.

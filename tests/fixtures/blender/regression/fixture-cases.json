@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "fixtures": [
+    {
+      "id": "corrupt-fbx",
+      "payloadFile": "corrupt-fbx.payload",
+      "sourceFormat": "fbx",
+      "parserSucceeded": false,
+      "meshCount": 0,
+      "expectedCodes": ["BLENDER_SOURCE_CORRUPT"]
+    },
+    {
+      "id": "corrupt-glb",
+      "payloadFile": "corrupt-glb.payload",
+      "sourceFormat": "glb",
+      "parserSucceeded": false,
+      "meshCount": 0,
+      "expectedCodes": ["BLENDER_SOURCE_CORRUPT"]
+    },
+    {
+      "id": "missing-images",
+      "sourceFormat": "fbx",
+      "parserSucceeded": true,
+      "meshCount": 1,
+      "missingImageCount": 2,
+      "expectedCodes": ["BLENDER_TEXTURE_REFERENCE_MISSING"]
+    },
+    {
+      "id": "multiple-rigs",
+      "sourceFormat": "glb",
+      "parserSucceeded": true,
+      "meshCount": 1,
+      "skeletonCount": 2,
+      "expectedCodes": ["BLENDER_MULTIPLE_RIGS_UNSUPPORTED"]
+    },
+    {
+      "id": "no-uvs",
+      "sourceFormat": "fbx",
+      "parserSucceeded": true,
+      "meshCount": 1,
+      "meshWithoutUvCount": 1,
+      "expectedCodes": ["BLENDER_UV_REQUIRED"]
+    },
+    {
+      "id": "unsupported-data",
+      "sourceFormat": "glb",
+      "parserSucceeded": true,
+      "meshCount": 1,
+      "unsupportedDataTypes": ["VOLUME"],
+      "expectedCodes": ["BLENDER_DATA_UNSUPPORTED"]
+    },
+    {
+      "id": "invalid-animation",
+      "sourceFormat": "fbx",
+      "parserSucceeded": true,
+      "meshCount": 1,
+      "skeletonCount": 1,
+      "invalidAnimationCount": 1,
+      "expectedCodes": ["BLENDER_ANIMATION_INVALID"]
+    }
+  ]
+}
