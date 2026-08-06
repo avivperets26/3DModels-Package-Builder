@@ -191,7 +191,7 @@ A Unity Editor assembly is executed either from its Editor window or with `-batc
 - Validates the package in the Editor.
 - Exports the exact intended paths as a `.unitypackage`.
 
-The initial target is the installed Unity `6000.3.10f1` project using URP `17.3.0`. Engine and pipeline versions remain configurable.
+The initial target is the installed Unity `6000.3.10f1` project using URP `17.3.0`. Engine and pipeline versions remain configurable. The tracked `engine-templates/unity/6000.3` foundation contains only required URP settings beneath `Assets`, the pinned package manifest beneath `Packages`, and versioned `ProjectSettings`; workers always clone it before Unity is allowed to create caches or generated state.
 
 ### 3.4 Unreal Worker
 

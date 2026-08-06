@@ -1717,6 +1717,13 @@ engine-templates/unreal/5.8/
 
 Templates are copied to staging and migrated there. The source template is updated only through a reviewed migration change.
 
+The initial tracked Unity compatibility family is `engine-templates/unity/6000.3`. It pins Editor
+`6000.3.10f1` revision `e35f0c77bd8e` and URP `17.3.0`. Its only top-level directories are
+`Assets`, `Packages`, and `ProjectSettings`; its asset content is limited to the required URP
+pipeline settings. Samples, tutorial code/media, product content, engine caches, and generated
+output are prohibited. A dependency-free repository validator checks the exact inventory, version
+pair, URP GUID graph, public safety, and text portability without launching Unity.
+
 ## 15. Marketplace Requirements Versioning
 
 Marketplace rules change independently of engine versions. Requirements profiles contain:
