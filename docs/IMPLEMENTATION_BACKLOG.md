@@ -158,9 +158,28 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0406 | 🟡 **PROCESS** | `feat/PB-0406-texture-inspection` | Blender Worker Engineering for local work; user for Git gates | 2026-08-05 | Read-only image, packed/external source, format, colour-space, shader-connection, and conservative probable-role inspection is implemented and locally validated on the approved combined publication branch. | Shared user-controlled commit/push/merge, required `main` CI, explicit confirmation, and PB-0409 rollover remain. Actual contained Blender integration is unavailable and is not claimed. |
-| PB-0407 | 🟡 **PROCESS** | `feat/PB-0407-rig-inspection` | Blender Worker Engineering for local work; user for Git gates | 2026-08-05 | Read-only armature hierarchy, roots, bones, deform flags, skinned meshes, rest/parent-inverse data, vertex groups, missing groups, and unweighted-vertex inspection is implemented and locally validated on `feat/PB-0406-texture-inspection` under the approved exception. | Shared user-controlled commit/push/merge, required `main` CI, explicit confirmation, and PB-0409 rollover remain. Actual contained Blender integration is unavailable and is not claimed. |
-| PB-0408 | 🟡 **PROCESS** | `feat/PB-0408-animation-inspection` | Blender Worker Engineering for local work; user for Git gates | 2026-08-05 | Read-only Blender 5 layered and legacy Action inspection reports clips, ranges, FPS, channel provenance, motion, and conservative loop likelihood and is locally validated on `feat/PB-0406-texture-inspection` under the approved exception. | Shared user-controlled commit/push/merge, required `main` CI, explicit confirmation, and PB-0409 rollover remain. Actual contained Blender integration is unavailable and is not claimed. |
+| PB-0409 | 🟡 **PROCESS** | `feat/PB-0409-case-inference` | Blender Worker Engineering for local work; user for Git gates | 2026-08-05 | Static, complete-rig, and motion-backed animated inference is implemented; item-set and item-collection resolution requires an explicit manifest case. | Shared user-controlled commit/push/merge, required `main` CI, explicit confirmation, and next-task rollover remain. Actual contained Blender integration is unavailable and is not claimed. |
+| PB-0410 | 🟡 **PROCESS** | `feat/PB-0410-blender-naming-normalization` | Blender Worker Engineering for local work; user for Git gates | 2026-08-05 | Complete manifest plans transactionally normalize object, mesh, armature, material, image, Action, and exported-asset names with collision rejection and rollback. | Published locally on `feat/PB-0409-case-inference` under the approved combined exception; the shared Git and CI gates remain. |
+| PB-0411 | 🟡 **PROCESS** | `feat/PB-0411-transform-normalization` | Blender Worker Engineering for local work; user for Git gates | 2026-08-05 | Unit scale, forward/up axes, keep/center/base pivot policies, world transforms, before/after metrics, and raw deformation-preservation checks are implemented transactionally. | Published locally on `feat/PB-0409-case-inference` under the approved combined exception; the shared Git and CI gates remain. Actual contained Blender integration is unavailable and is not claimed. |
+
+### PB-0409/PB-0410/PB-0411 Combined Publication Exception
+
+- **Approved:** 2026-08-05, explicitly by the user.
+- **Publication branch:** `feat/PB-0409-case-inference`.
+- **Exact scope:** PB-0409 product-case inference, PB-0410 naming normalization, PB-0411
+  unit/axis/pivot/transform normalization, PB-0406/PB-0407/PB-0408 rollover, and documentation
+  genuinely affected by those three implementations.
+- **Reason:** the user requested one branch and one review/commit/push/merge/required-`main`-CI
+  cycle for these sequential inference and normalization boundaries.
+- **Independence retained:** every task keeps its canonical branch identifier, acceptance boundary,
+  production module, focused tests, evidence document, lifecycle state, and eventual Completion Log
+  row. The shared branch does not merge their task identities.
+- **Completion:** PB-0409, PB-0410, and PB-0411 stay `[ ]` / 🟡 **PROCESS** until the combined
+  change is committed, pushed, merged into and pushed on `main`, required `main` CI succeeds, and
+  the user explicitly confirms completion. Their DONE markers and Completion Log rows will be
+  synchronized together at the start of the next task branch.
+- **No precedent:** this exception applies only to this exact three-task cycle. It does not weaken
+  the normal one-task-per-branch or one-merge rollover rules for later work.
 
 ### PB-0406/PB-0407/PB-0408 Combined Publication Exception
 
@@ -174,13 +193,12 @@ feat/PB-0607-unity-urp-material-compiler
 - **Independence retained:** each task keeps its canonical branch identifier, acceptance mapping,
   implementation boundary, focused tests, evidence document, lifecycle state, and eventual
   Completion Log row. The shared publication branch does not merge their task identities.
-- **Completion:** all three stay `[ ]` / 🟡 **PROCESS** until the combined change is committed,
-  pushed, merged into and pushed on `main`, required `main` CI succeeds, and the user explicitly
-  confirms completion. Their three DONE markers and Completion Log rows will be synchronized
-  together at the start of PB-0409.
-- **No precedent:** this one-time exception does not weaken the one-task-per-branch or one-merge
-  rollover rules for PB-0409 or any other task. A future combined cycle requires separate explicit
-  user approval and documentation.
+- **Completion:** all three were committed as `28bfe9393b4a8c0d6a12775046390435ca785faa`,
+  merged through pull request #59 as `67668d24c3a5ea418affc01bde7267580ac9fb22`, passed required
+  `main` workflow run 31047283980, and were explicitly confirmed complete by the user. Their DONE
+  markers and Completion Log rows are synchronized in this PB-0409 rollover.
+- **No precedent:** this completed exception created no automatic precedent. The separate
+  PB-0409/PB-0410/PB-0411 exception below required its own explicit user approval.
 
 ### PB-0405 Completion Evidence
 
@@ -956,6 +974,9 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0403 | `feat/PB-0403-blender-fbx-import` | `b262b3b99bebddc1a8e0410b96dde0ee095bcff2` | [#56](https://github.com/avivperets26/3DModels-Package-Builder/pull/56) | 2026-08-05 | Merged into `main` as `2235ee5f0849fda54763e8ec421afd66a3f8e305`; required [main workflow run 31033724099](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31033724099) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. Python branch coverage and actual contained Blender integration remain disclosed evidence gaps; no unsupported claim is made. |
 | PB-0404 | `feat/PB-0404-blender-glb-import` | `851812e2a80c2a17197767f000800a87430e975b` | [#57](https://github.com/avivperets26/3DModels-Package-Builder/pull/57) | 2026-08-05 | Merged into `main` as `e9231a22125108c5b8670a36ef7bb6d42a67b9a4`; required [main workflow run 31040818232](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31040818232) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. Python branch coverage and actual contained Blender integration remain disclosed evidence gaps; no unsupported claim is made. |
 | PB-0405 | `feat/PB-0405-geometry-inspection` | `015c3d66fa4b375a4e2ce1f18e934d8a630aa089` | [#58](https://github.com/avivperets26/3DModels-Package-Builder/pull/58) | 2026-08-05 | Merged into `main` as `d8b79749071c763df4191e6b902e319c3b2abafd`; required [main workflow run 31044736892](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31044736892) succeeded for that exact merge commit. No exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and completion on 2026-08-05. Python branch coverage and actual contained Blender integration remain disclosed evidence gaps; no unsupported claim is made. |
+| PB-0406 | `feat/PB-0406-texture-inspection` | `28bfe9393b4a8c0d6a12775046390435ca785faa` | [#59](https://github.com/avivperets26/3DModels-Package-Builder/pull/59) | 2026-08-05 | Published with PB-0407 and PB-0408 on the PB-0406 branch under the approved one-time exception and merged as `67668d24c3a5ea418affc01bde7267580ac9fb22`; required [main workflow run 31047283980](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31047283980) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. Actual contained Blender integration and Python branch coverage remain disclosed gaps. |
+| PB-0407 | `feat/PB-0407-rig-inspection` | `28bfe9393b4a8c0d6a12775046390435ca785faa` | [#59](https://github.com/avivperets26/3DModels-Package-Builder/pull/59) | 2026-08-05 | Published on `feat/PB-0406-texture-inspection` with PB-0406 and PB-0408 under the approved one-time exception and merged as `67668d24c3a5ea418affc01bde7267580ac9fb22`; required [main workflow run 31047283980](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31047283980) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. Actual contained Blender integration and Python branch coverage remain disclosed gaps. |
+| PB-0408 | `feat/PB-0408-animation-inspection` | `28bfe9393b4a8c0d6a12775046390435ca785faa` | [#59](https://github.com/avivperets26/3DModels-Package-Builder/pull/59) | 2026-08-05 | Published on `feat/PB-0406-texture-inspection` with PB-0406 and PB-0407 under the approved one-time exception and merged as `67668d24c3a5ea418affc01bde7267580ac9fb22`; required [main workflow run 31047283980](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31047283980) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. Actual contained Blender integration and Python branch coverage remain disclosed gaps. |
 
 ## 5. Milestones
 
@@ -1322,32 +1343,32 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0403, PB-0404
   - Done when: objects, meshes, vertices, triangles, dimensions, bounds, transforms, UVs, normals, tangents, material slots, and index requirements are reported.
 
-- [ ] **PB-0406 — Implement texture extraction and role inspection** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0406 — Implement texture extraction and role inspection** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0406-texture-inspection`
   - Depends on: PB-0403, PB-0404
   - Done when: packed/external images, size, format, colour space, material connection, and probable roles are reported without modifying sources.
 
-- [ ] **PB-0407 — Implement armature, skin, and weight inspection** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0407 — Implement armature, skin, and weight inspection** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0407-rig-inspection`
   - Depends on: PB-0405
   - Done when: skeletons, hierarchy, roots, bones, deform flags, skinned meshes, bind data, missing groups, and unweighted vertices are reported.
 
-- [ ] **PB-0408 — Implement action and animation inspection** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0408 — Implement action and animation inspection** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0408-animation-inspection`
   - Depends on: PB-0407
   - Done when: actions, clips, frame ranges, FPS, channels, motion presence, and likely loop behavior metadata are reported.
 
-- [ ] **PB-0409 — Implement automatic product-case inference** — **P0**
+- [ ] **PB-0409 — Implement automatic product-case inference** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0409-case-inference`
   - Depends on: PB-0405, PB-0407, PB-0408
   - Done when: static, rigged, and animated inference is tested and set/collection ambiguity requires manifest input.
 
-- [ ] **PB-0410 — Implement naming normalization** — **P0**
+- [ ] **PB-0410 — Implement naming normalization** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0410-blender-naming-normalization`
   - Depends on: PB-0101, PB-0409
   - Done when: objects, meshes, armatures, materials, images, actions, and exported assets follow the manifest naming plan without collisions.
 
-- [ ] **PB-0411 — Implement unit, axis, pivot, and transform normalization** — **P0**
+- [ ] **PB-0411 — Implement unit, axis, pivot, and transform normalization** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0411-transform-normalization`
   - Depends on: PB-0405
   - Done when: configured units/axes/pivot are applied without changing deformation and before/after metrics are reported.

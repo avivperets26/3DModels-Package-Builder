@@ -1228,7 +1228,34 @@ The three boundaries share one user-approved publication branch,
 `feat/PB-0406-texture-inspection`, solely for the PB-0406/PB-0407/PB-0408 cycle. Their modules,
 acceptance mappings, focused tests, evidence, lifecycle, and eventual Completion Log rows remain
 independent. This Git workflow exception creates no architectural coupling and no precedent.
-PB-0409 through PB-0417 retain case inference, normalization, export, and clean-reimport ownership.
+
+PB-0409 introduces `package_builder_blender.case_inference`. It consumes validated geometry, rig,
+and animation reports and deterministically distinguishes static, complete-rig, and motion-backed
+rigged-animated sources. Still Actions do not manufacture animation. Incomplete rigs, motion
+without a complete rig, malformed facts, and contradictory single-product manifest declarations
+fail closed. Item-set and item-collection are never inferred from counts; both require an explicit
+manifest case.
+
+PB-0410 introduces `package_builder_blender.naming_normalization`. A complete manifest plan owns
+every supplied object, mesh, armature, material, image, Action, and exported filename. Preflight
+validates canonical project prefixes, exact source ownership, safe names, and per-namespace/output
+collisions before mutation. A two-phase temporary rename prevents name swaps from triggering
+Blender suffixes, verifies every final name exactly, and rolls back the complete transaction on
+failure.
+
+PB-0411 introduces `package_builder_blender.transform_normalization`. It validates signed
+forward/up axis pairs, finite positive source/target unit scales, target display units, and keep,
+bounds-center, or bounds-base pivot policy. One global axis/unit/pivot conversion is applied to
+object world matrices; mesh data is not baked because PB-0414 retains that responsibility. The
+result reports world metrics before and after and fingerprints raw bone rest matrices, vertex
+weights, and legacy/layered Action curve points to prove deformation inputs did not change. Object
+matrices and scene units are restored if application or verification fails.
+
+PB-0409, PB-0410, and PB-0411 share `feat/PB-0409-case-inference` solely under their separately
+approved publication exception. Their canonical task identities, modules, tests, evidence, and
+eventual Completion Log rows remain independent; the exception creates no architectural coupling
+or precedent. PB-0412 through PB-0417 retain cleanup, material normalization, baking, export, and
+clean-reimport ownership.
 
 ## 13. Process Execution Rules
 

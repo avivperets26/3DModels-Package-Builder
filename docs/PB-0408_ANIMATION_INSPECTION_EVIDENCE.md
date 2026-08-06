@@ -5,7 +5,7 @@
 - Task: PB-0408 — Implement action and animation inspection
 - Canonical branch: `feat/PB-0408-animation-inspection`
 - Publication branch: `feat/PB-0406-texture-inspection`
-- Lifecycle: 🟡 **PROCESS**
+- Lifecycle: 🟢 **DONE**
 - Date: 2026-08-05
 
 PB-0408 shares the explicitly approved PB-0406/PB-0407/PB-0408 publication cycle. Its canonical
@@ -70,7 +70,10 @@ Expected failures are sanitized PB-0109-compatible blocking findings from
 - No approved contained Blender executable is present; real Blender 5 execution is not claimed.
 - This task changes no WPF view or rendered output, so manual visual testing is not applicable.
 
-## Remaining Gates
+## Publication Evidence
 
-User-controlled commit/push/merge, successful required `main` CI, explicit user confirmation, and
-PB-0409 rollover remain. PB-0408 stays `[ ]` / 🟡 **PROCESS** and absent from the Completion Log.
+Task commit `28bfe9393b4a8c0d6a12775046390435ca785faa` was published on the approved shared PB-0406 branch
+and merged through pull request #59 as `67668d24c3a5ea418affc01bde7267580ac9fb22`. Required `main`
+workflow run 31047283980 succeeded, and the user explicitly confirmed completion on 2026-08-05.
+No CI or quality exception was used. PB-0408 is `[x]` / 🟢 **DONE** and appears exactly once in the
+Completion Log under its canonical task identity.
