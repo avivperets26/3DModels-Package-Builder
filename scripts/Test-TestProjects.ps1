@@ -62,6 +62,11 @@ $script:ProjectSpecifications = @(
         Path = 'tests/PackageBuilder.Targets.Portable.Tests/PackageBuilder.Targets.Portable.Tests.csproj'
         ProductionProject = 'src/PackageBuilder.Targets.Portable/PackageBuilder.Targets.Portable.csproj'
         ProductionAssembly = 'PackageBuilder.Targets.Portable'
+        ApprovedProjectReferences = @(
+            'src/PackageBuilder.Application/PackageBuilder.Application.csproj',
+            'src/PackageBuilder.Infrastructure/PackageBuilder.Infrastructure.csproj',
+            'src/PackageBuilder.Targets.Portable/PackageBuilder.Targets.Portable.csproj'
+        )
     }
 )
 
@@ -196,7 +201,7 @@ Invoke-Check 'Central test package versions remain exactly pinned' {
     }
 }
 
-Invoke-Check 'Each test project uses xUnit v3 and references only its production assembly' {
+Invoke-Check 'Each test project uses xUnit v3 and references only its approved production assemblies' {
     foreach ($specification in $script:ProjectSpecifications) {
         $project = Get-XmlDocument $specification.Path
         $expectedFramework = if ($specification.Name -ceq 'PackageBuilder.App.Wpf.Tests') {
@@ -247,20 +252,32 @@ Invoke-Check 'Each test project uses xUnit v3 and references only its production
         }
 
         $projectReferences = @($project.SelectNodes('/Project/ItemGroup/ProjectReference'))
-        if ($projectReferences.Count -ne 1) {
-            throw "$($specification.Name) must have exactly one direct ProjectReference."
+        $expectedProjectReferences = if (
+            $specification.PSObject.Properties.Name -contains 'ApprovedProjectReferences') {
+            @($specification.ApprovedProjectReferences)
         }
+        else {
+            @($specification.ProductionProject)
+        }
+        $actualProjectReferences = @()
         $projectDirectory = Split-Path (Join-Path $script:RepositoryRoot $specification.Path) -Parent
-        $resolvedReference = [System.IO.Path]::GetFullPath(
-            (Join-Path $projectDirectory ([string]$projectReferences[0].Include))
-        )
-        if (-not (Test-ContainedPath $resolvedReference) -or
-            -not (Test-Path -LiteralPath $resolvedReference -PathType Leaf)) {
-            throw "$($specification.Name) has a missing or escaping production ProjectReference."
+        foreach ($projectReference in $projectReferences) {
+            $resolvedReference = [System.IO.Path]::GetFullPath(
+                (Join-Path $projectDirectory ([string]$projectReference.Include))
+            )
+            if (-not (Test-ContainedPath $resolvedReference) -or
+                -not (Test-Path -LiteralPath $resolvedReference -PathType Leaf)) {
+                throw "$($specification.Name) has a missing or escaping production ProjectReference."
+            }
+            $actualProjectReferences += Get-RepositoryRelativePath $resolvedReference
         }
-        $actualReference = Get-RepositoryRelativePath $resolvedReference
-        if ($actualReference -cne $specification.ProductionProject) {
-            throw "$($specification.Name) must reference $($specification.ProductionProject); found $actualReference."
+
+        $referenceDifferences = @(Compare-Object `
+            -ReferenceObject @($expectedProjectReferences | Sort-Object) `
+            -DifferenceObject @($actualProjectReferences | Sort-Object))
+        if ($referenceDifferences.Count -gt 0 -or
+            @($actualProjectReferences).Count -ne @($expectedProjectReferences).Count) {
+            throw "$($specification.Name) has an unexpected direct ProjectReference set."
         }
     }
 }

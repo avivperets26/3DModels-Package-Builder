@@ -403,6 +403,14 @@ JPEG structure and bounded dimensions, and streams the exact bytes to the canoni
 `.jpeg` may normalize to `.jpg` without changing bytes. A requested PNG/JPEG format change blocks
 until an approved encoder exists; changing only the suffix is never treated as conversion.
 
+PB-0507 supplies the first complete static portable vertical slice. A repository-authored FBX and
+typed manifest pass through persisted orchestration, artifact staging, README/layout composition,
+deterministic ZIP creation, fail-closed validation, correlated logging, and atomic promotion. The
+promoted ZIP plus JSON validation report and JSONL job log can be retained and inspected through a
+project-contained manual command. A blocking validation result writes failure evidence but never
+creates a release. This checkpoint proves the portable pipeline with a simple untextured cube; the
+WPF-driven arbitrary-model workflow and broader golden-fixture matrix remain later tasks.
+
 ### Unity Profile
 
 - `MS_` — standalone mesh asset where extracting one is safe and useful.

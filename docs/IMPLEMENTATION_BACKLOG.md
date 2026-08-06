@@ -158,8 +158,7 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0505 | 🟡 **PROCESS** | `feat/PB-0505-deterministic-fbx-zip` | Portable Target Engineering for local work; user for Git gates | 2026-08-06 | Deterministic ZIP creation controls entry order/timestamps/metadata, verifies exact manifest content identities, streams through a bounded buffer, clears partial output, and produces exact plus logical receipts. | User-controlled commit/push/merge, required `main` CI, explicit confirmation, and next-task rollover remain. |
-| PB-0506 | 🟡 **PROCESS** | `feat/PB-0506-portable-validator` | Portable Target Engineering for local work; user for Git gates | 2026-08-06 | A fail-closed validator covers archive, FBX, optional GLB, textures, README, naming, references, and clean-reimport evidence with blocking PB-0109 findings. | Publish on `feat/PB-0505-deterministic-fbx-zip` under the approved combined exception, then obtain required `main` CI, explicit confirmation, and next-task rollover. |
+| PB-0507 | 🟡 **PROCESS** | `test/PB-0507-portable-static-e2e` | Portable Target Engineering for local work; user for Git gates | 2026-08-06 | A self-authored static FBX now runs from its typed manifest through persisted orchestration, deterministic packaging, fail-closed validation, JSON/JSONL evidence, and atomic release promotion; a project-contained manual inspection command retains and extracts the release. | User-controlled commit/push/merge, required `main` CI, explicit confirmation, and next-task rollover remain. |
 
 ### PB-0505/PB-0506 Combined Publication Exception
 
@@ -175,6 +174,21 @@ feat/PB-0607-unity-urp-material-compiler
 - **Completion:** both remain `[ ]` / 🟡 **PROCESS** until the combined change is merged, required
   `main` CI succeeds, the user explicitly confirms completion, and rollover is synchronized.
 - **No precedent:** this exact exception does not weaken the normal one-task-per-branch rule.
+
+### PB-0505/PB-0506 Completion Evidence
+
+- Both tasks were committed as `38d82cc00572f506c3dc2cf67f996d64e50e64dd` on the approved
+  combined publication branch.
+- [Pull request #65](https://github.com/avivperets26/3DModels-Package-Builder/pull/65)
+  merged them into `main` as `725c5d21fa5d28342d62946b4ac93184a33656f9` on 2026-08-06.
+- Required [main workflow run 31123410839](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31123410839)
+  completed successfully for that exact merge commit.
+- The user confirmed the push and merge and reported the result as passing; the exact successful
+  workflow conclusion was independently reverified before this rollover.
+- No CI, quality, or completion exception was used. The combined publication exception governed
+  branch topology only and created no precedent.
+- This PB-0507 rollover marks PB-0505 and PB-0506 `[x]` / 🟢 **DONE**, removes both from
+  Active Work, and adds exactly one chronological Completion Log row for each.
 
 ### PB-0503/PB-0504 Completion Evidence
 
@@ -1110,6 +1124,8 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0502 | `feat/PB-0502-portable-folder-composer` | `b5f0f6aa527096e6337bb9efa856219231f49071` | [#63](https://github.com/avivperets26/3DModels-Package-Builder/pull/63) | 2026-08-06 | Published on the PB-0501 branch with PB-0501 under the approved combined exception and merged as `d9a7ab1c460f74fd11d7804e124ff788d84d7314`; required [main workflow run 31109207525](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31109207525) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. |
 | PB-0503 | `feat/PB-0503-portable-textures` | `4b482e97cb4fadf112ebb95ad972831b5f6141cd` | [#64](https://github.com/avivperets26/3DModels-Package-Builder/pull/64) | 2026-08-06 | Published with PB-0504 under the approved combined exception and merged as `33d077a5eb63a9398d720fb60b08bfd8871f7bc5`; required [main workflow run 31116763102](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31116763102) succeeded. Optional PR CI failed only during GitHub's action-download service outage; no CI or quality exception was used, and the user explicitly confirmed completion. |
 | PB-0504 | `feat/PB-0504-portable-readme` | `4b482e97cb4fadf112ebb95ad972831b5f6141cd` | [#64](https://github.com/avivperets26/3DModels-Package-Builder/pull/64) | 2026-08-06 | Published on the PB-0503 branch with PB-0503 under the approved combined exception and merged as `33d077a5eb63a9398d720fb60b08bfd8871f7bc5`; required [main workflow run 31116763102](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31116763102) succeeded. Optional PR CI failed only during GitHub's action-download service outage; no CI or quality exception was used, and the user explicitly confirmed completion. |
+| PB-0505 | `feat/PB-0505-deterministic-fbx-zip` | `38d82cc00572f506c3dc2cf67f996d64e50e64dd` | [#65](https://github.com/avivperets26/3DModels-Package-Builder/pull/65) | 2026-08-06 | Published with PB-0506 under the approved combined publication exception and merged as `725c5d21fa5d28342d62946b4ac93184a33656f9`; required [main workflow run 31123410839](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31123410839) succeeded for that exact merge. No CI or quality exception was used; the user confirmed the push and merge, and the successful conclusion was independently reverified. |
+| PB-0506 | `feat/PB-0506-portable-validator` | `38d82cc00572f506c3dc2cf67f996d64e50e64dd` | [#65](https://github.com/avivperets26/3DModels-Package-Builder/pull/65) | 2026-08-06 | Published on the PB-0505 branch with PB-0505 under the approved combined publication exception and merged as `725c5d21fa5d28342d62946b4ac93184a33656f9`; required [main workflow run 31123410839](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31123410839) succeeded for that exact merge. No CI or quality exception was used; the user confirmed the push and merge, and the successful conclusion was independently reverified. |
 
 ## 5. Milestones
 
@@ -1569,17 +1585,17 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0110, PB-0502
   - Done when: case-specific contents, formats, dimensions, material, rig, animation, usage, AI disclosure, support, and copyright render from typed data.
 
-- [ ] **PB-0505 — Implement deterministic FBX ZIP creation** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0505 — Implement deterministic FBX ZIP creation** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0505-deterministic-fbx-zip`
   - Depends on: PB-0202, PB-0502 through PB-0504
   - Done when: archive order/timestamps are controlled, contents match the manifest, and repeated builds are logically identical.
 
-- [ ] **PB-0506 — Implement portable target validator** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0506 — Implement portable target validator** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0506-portable-validator`
   - Depends on: PB-0417, PB-0505
   - Done when: archive, FBX, GLB, textures, README, naming, references, and reimport results produce a blocking pass/fail report.
 
-- [ ] **PB-0507 — Complete portable static vertical slice** — **P0**
+- [ ] **PB-0507 — Complete portable static vertical slice** — **P0** — 🟡 **PROCESS**
   - Branch: `test/PB-0507-portable-static-e2e`
   - Depends on: PB-0213, PB-0308, PB-0506
   - Done when: one static source builds from manifest to atomically promoted portable release with logs and JSON validation report.

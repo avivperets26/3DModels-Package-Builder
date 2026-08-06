@@ -4,7 +4,7 @@
 
 - Canonical branch: `feat/PB-0506-portable-validator`
 - Publication branch: `feat/PB-0505-deterministic-fbx-zip`
-- Lifecycle: 🟡 **PROCESS**
+- Lifecycle: 🟢 **DONE**
 - Date: 2026-08-06
 
 The shared branch is the exact user-approved PB-0505/PB-0506 publication exception. Task identity,
@@ -69,9 +69,12 @@ PB-0506 has no WPF or renderer surface. Its output can be inspected programmatic
 but the first user-runnable physical portable package and end-to-end validation report are owned by
 PB-0507. Visual model/texture inspection remains the Blender/engine preview responsibility.
 
-## Remaining Gates
+## Publication and Completion
 
-- User-controlled commit and push of the combined publication branch.
-- Merge into and push of `main`.
-- Successful required `main` CI and explicit user confirmation.
-- Next-task rollover synchronization.
+- Combined task commit: `38d82cc00572f506c3dc2cf67f996d64e50e64dd`.
+- Integration: [pull request #65](https://github.com/avivperets26/3DModels-Package-Builder/pull/65).
+- `main` merge: `725c5d21fa5d28342d62946b4ac93184a33656f9`.
+- Required [main workflow run 31123410839](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31123410839): successful for the exact merge.
+- User confirmation and rollover date: 2026-08-06.
+- Exception boundary: the approved combined publication branch affected topology only; no CI,
+  quality, or completion exception was used, and no precedent was created.

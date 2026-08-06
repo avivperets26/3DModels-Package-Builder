@@ -25,6 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\PackageBuilder.Application\PackageBuilder.Application.csproj" />
+    <ProjectReference Include="..\..\src\PackageBuilder.Infrastructure\PackageBuilder.Infrastructure.csproj" />
     <ProjectReference Include="..\..\src\PackageBuilder.Targets.Portable\PackageBuilder.Targets.Portable.csproj" />
   </ItemGroup>
 
