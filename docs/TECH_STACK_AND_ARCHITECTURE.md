@@ -1352,6 +1352,26 @@ lifecycle state, and eventual Completion Log rows remain independent. The direct
 `PackageBuilder.Targets.Portable.Tests` project keeps target-policy tests out of Domain, Contracts,
 Infrastructure, and WPF layers; the exception creates no architectural coupling or precedent.
 
+PB-0503 introduces the byte-integrity boundary for canonical portable textures. The processor
+accepts only validated portable `normalized-texture` artifact records, verifies source length and
+SHA-256, validates bounded PNG/JPEG structure and dimensions, streams exact bytes with a pooled
+buffer, re-hashes while copying, and returns a canonical PB-0501 filename/reference receipt. A
+`.jpeg` source can use canonical `.jpg` naming without changing bytes. Cross-format requests block
+because suffix-only conversion would misrepresent content and no approved encoder is introduced.
+Cancellation, changing sources, malformed images, and expected I/O failures fail closed with
+stable errors and partial-output cleanup.
+
+PB-0504 introduces deterministic marketplace-neutral README rendering from the PB-0110 manifest,
+PB-0107 publisher profile, PB-0501 names, measured dimensions, optional GLB variant, and PB-0503
+receipts. Cross-contract identities and exact texture coverage are validated before LF UTF-8 text
+is generated. All five product cases render only typed facts for formats, dimensions, materials,
+rig, animations, items, usage, AI disclosure, support, and copyright using invariant formatting.
+
+PB-0503 and PB-0504 share `feat/PB-0503-portable-textures` solely under their explicitly approved
+publication exception. Their canonical task identities, acceptance boundaries, APIs, tests,
+evidence, lifecycle state, and eventual Completion Log rows remain independent; no architectural
+coupling or workflow precedent is created.
+
 ## 13. Process Execution Rules
 
 - Use `ProcessStartInfo.ArgumentList`; never construct an unescaped command string.

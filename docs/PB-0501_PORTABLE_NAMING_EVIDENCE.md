@@ -3,7 +3,7 @@
 ## Status
 
 - Canonical and publication branch: `feat/PB-0501-portable-naming`
-- Lifecycle: 🟡 **PROCESS**
+- Lifecycle: 🟢 **DONE**
 - Date: 2026-08-06
 
 PB-0501 shares one explicitly user-approved publication cycle with PB-0502. Each task retains its
@@ -59,8 +59,12 @@ is not applicable.
 - Locked restore, .NET formatting, Ruff lint/formatting, task lifecycle, dependency graph, Markdown
   links, secret/prohibited-content checks, and `git diff --check`: passed.
 
-## Remaining Gates
+## Publication Evidence
 
-- User-controlled commit, push, merge into and push of `main`.
-- Successful required `main` CI and explicit user confirmation.
-- Next-task rollover synchronization after all completion gates pass.
+- Shared task commit: `b5f0f6aa527096e6337bb9efa856219231f49071`.
+- Pull request: [#63](https://github.com/avivperets26/3DModels-Package-Builder/pull/63).
+- Merge commit: `d9a7ab1c460f74fd11d7804e124ff788d84d7314`.
+- Required successful `main` workflow:
+  [31109207525](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31109207525).
+- The user explicitly confirmed the merge and green required CI on 2026-08-06. No CI or quality
+  exception was used; the shared publication exception creates no precedent.
