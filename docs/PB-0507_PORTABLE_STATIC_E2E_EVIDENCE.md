@@ -6,9 +6,19 @@
 - Lifecycle: 🟡 **PROCESS**
 - Date: 2026-08-06
 
-PB-0507 is implemented and locally runnable. It remains open until the user-controlled task commit,
-branch publication, merge into `main`, successful required `main` CI, explicit confirmation, and
-next-task rollover are complete.
+PB-0507 is implemented, locally runnable, and merged. It remains open until the required workflow
+for the exact `main` merge succeeds and the user explicitly confirms completion.
+
+## Publication and External-CI Checkpoint
+
+- Task commit: `03d18ae0a646b133ee55cbca808ed09c0fd8103f`.
+- Pull request: [#66](https://github.com/avivperets26/3DModels-Package-Builder/pull/66).
+- Merge commit: `c1a560c620ca8ad23b10becbd8f6c7860155107d` on 2026-08-06.
+- GitHub created no check or workflow run for that merge while its official status service reported
+  a major Actions outage.
+- No CI exception is approved. PB-0507 remains `[ ]` / 🟡 **PROCESS** and is absent from the
+  Completion Log.
+- Independent PB-0601 work may proceed because it does not depend on PB-0507.
 
 ## Delivered Vertical Slice
 
@@ -116,7 +126,5 @@ visual checkpoint; it is not yet the WPF-driven arbitrary-model workflow.
 
 ## Remaining Gates
 
-- User-controlled commit and branch push.
-- Merge into and push of `main`.
-- Successful required `main` CI.
+- Successful required CI for exact `main` merge `c1a560c620ca8ad23b10becbd8f6c7860155107d`.
 - Explicit user completion confirmation and next-task rollover synchronization.

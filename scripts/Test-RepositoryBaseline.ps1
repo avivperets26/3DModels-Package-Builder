@@ -795,6 +795,15 @@ Invoke-Check 'Tracked and candidate files contain no prohibited content' {
     }
 }
 
+Invoke-Check 'Versioned Unity project template is minimal and deterministic' {
+    $validatorPath = Join-Path $script:RepositoryRoot 'scripts\Test-UnityProjectTemplate.ps1'
+    if (-not (Test-Path -LiteralPath $validatorPath -PathType Leaf)) {
+        throw 'Missing scripts/Test-UnityProjectTemplate.ps1.'
+    }
+
+    & $validatorPath -RepositoryRoot $script:RepositoryRoot
+}
+
 Invoke-Check 'Core CI configuration preserves and extends the repository baseline' {
     $validatorPath = Join-Path $script:RepositoryRoot 'scripts\Test-CoreCiConfiguration.ps1'
     if (-not (Test-Path -LiteralPath $validatorPath -PathType Leaf)) {

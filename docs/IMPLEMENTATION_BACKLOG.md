@@ -158,7 +158,20 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0507 | 🟡 **PROCESS** | `test/PB-0507-portable-static-e2e` | Portable Target Engineering for local work; user for Git gates | 2026-08-06 | A self-authored static FBX now runs from its typed manifest through persisted orchestration, deterministic packaging, fail-closed validation, JSON/JSONL evidence, and atomic release promotion; a project-contained manual inspection command retains and extracts the release. | User-controlled commit/push/merge, required `main` CI, explicit confirmation, and next-task rollover remain. |
+| PB-0507 | 🟡 **PROCESS** | `test/PB-0507-portable-static-e2e` | Portable Target Engineering for local work; user for Git gates | 2026-08-06 | PR #66 merged task commit `03d18ae0a646b133ee55cbca808ed09c0fd8103f` into `main` as `c1a560c620ca8ad23b10becbd8f6c7860155107d`; local acceptance remains fully green. GitHub created no check suite for that merge while Actions reported a major outage. | A required successful workflow for exact merge `c1a560c…` and explicit completion confirmation remain. No CI exception is approved; PB-0601 proceeds independently. |
+| PB-0601 | 🟡 **PROCESS** | `feat/PB-0601-unity-template` | Unity Target Engineering for local work; user for Git gates | 2026-08-06 | The tracked Unity `6000.3` template is derived from the installed official `6000.3.10f1` URP template, pins URP `17.3.0`, contains only minimal project roots/settings, and has a dependency-free eight-check validator integrated into the repository baseline. | Local full validation, user-controlled commit/push/merge, successful required `main` CI, explicit confirmation, and next-task rollover remain. |
+
+### PB-0507 GitHub Actions Outage Checkpoint
+
+- [PR #66](https://github.com/avivperets26/3DModels-Package-Builder/pull/66) merged PB-0507 into
+  `main` as `c1a560c620ca8ad23b10becbd8f6c7860155107d` on 2026-08-06.
+- GitHub created no check run or workflow run for that exact merge while the official GitHub Status
+  service reported a major Actions outage.
+- The missing external run is not treated as a passing gate and no CI exception is approved.
+- PB-0507 remains `[ ]` / 🟡 **PROCESS**. Work may continue on PB-0601 because PB-0601 depends
+  only on completed PB-0303 and PB-0308.
+- When Actions recovers, a workflow for exact `main` state must succeed before PB-0507 can roll to
+  DONE. This checkpoint changes neither quality requirements nor dependency ordering.
 
 ### PB-0505/PB-0506 Combined Publication Exception
 
@@ -1608,7 +1621,7 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** A static normalized product becomes a correct URP package, prefab, overview scene, media output, and clean-reimported `.unitypackage`.
 
-- [ ] **PB-0601 — Create versioned Unity project template** — **P0**
+- [ ] **PB-0601 — Create versioned Unity project template** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0601-unity-template`
   - Depends on: PB-0303, PB-0308
   - Done when: a minimal current approved Unity/URP template contains only required `Assets`, `Packages`, and `ProjectSettings` content and no cache directories.

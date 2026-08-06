@@ -1,6 +1,6 @@
 # Package Builder Documentation
 
-This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. Repository, core domain/contracts, contained infrastructure, tool-version management through PB-0310, the first WPF shell, Blender normalization/export/reimport through PB-0418, and portable target capabilities through PB-0506 are complete. PB-0507 is the active first static portable vertical slice. Unity/Unreal targets, broader product cases, marketplace packaging, preview generation, and the remaining desktop screens are not claimed as implemented.
+This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. Repository, core domain/contracts, contained infrastructure, tool-version management through PB-0310, the first WPF shell, Blender normalization/export/reimport through PB-0418, and portable target capabilities through PB-0506 are complete. PB-0507 is merged but awaits its outage-delayed required CI gate, while PB-0601 is the active Unity template foundation. Later Unity/Unreal targets, broader product cases, marketplace packaging, preview generation, and the remaining desktop screens are not claimed as implemented.
 
 ## Primary Documentation
 
@@ -113,6 +113,10 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 - [PB-0505 deterministic FBX ZIP evidence](PB-0505_DETERMINISTIC_FBX_ZIP_EVIDENCE.md)
 - [PB-0506 portable target validator evidence](PB-0506_PORTABLE_TARGET_VALIDATOR_EVIDENCE.md)
 - [PB-0507 portable static vertical-slice evidence](PB-0507_PORTABLE_STATIC_E2E_EVIDENCE.md)
+
+## Unity Target Evidence
+
+- [PB-0601 versioned Unity project template evidence](PB-0601_UNITY_TEMPLATE_EVIDENCE.md)
 
 ## Dependency and Licence Records
 
