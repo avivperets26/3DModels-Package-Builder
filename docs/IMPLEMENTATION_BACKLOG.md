@@ -158,8 +158,35 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0501 | 🟡 **PROCESS** | `feat/PB-0501-portable-naming` | Portable Target Engineering for local work; user for Git gates | 2026-08-06 | Exact FBX, standard/rigged GLB, six canonical separate-texture, README, archive, and media naming is implemented; 47 focused tests, 100% new-code line/branch coverage, 2,114 complete tests, and full local Core CI pass. | User-controlled commit/push/merge, required `main` CI, explicit confirmation, and next-task rollover remain. |
-| PB-0502 | 🟡 **PROCESS** | `feat/PB-0502-portable-folder-composer` | Portable Target Engineering for local work; user for Git gates | 2026-08-06 | A deterministic read-only composer maps validated PB-0205 records into exact flat-FBX and top-level product/media plans; combined focused, coverage, baseline, and full Core CI validation pass. | Publish on `feat/PB-0501-portable-naming` under the approved combined exception, then obtain required `main` CI, explicit confirmation, and next-task rollover. |
+| PB-0503 | 🟡 **PROCESS** | `feat/PB-0503-portable-textures` | Portable Target Engineering for local work; user for Git gates | 2026-08-06 | Exact validated PNG/JPEG copies, canonical references, byte/hash verification, bounded streaming, structured failures, and hostile image/stream tests are implemented with 100% line/branch coverage for the texture-integrity boundary. | User-controlled commit/push/merge, required `main` CI, explicit confirmation, and next-task rollover remain. |
+| PB-0504 | 🟡 **PROCESS** | `feat/PB-0504-portable-readme` | Portable Target Engineering for local work; user for Git gates | 2026-08-06 | A deterministic typed README generator covers all five cases, delivered formats, dimensions, materials, rig, animations, item inventory, usage, AI disclosure, support, and copyright. | Publish on `feat/PB-0503-portable-textures` under the approved combined exception, then obtain required `main` CI, explicit confirmation, and next-task rollover. |
+
+### PB-0503/PB-0504 Combined Publication Exception
+
+- **Approved:** 2026-08-06, explicitly by the user.
+- **Publication branch:** `feat/PB-0503-portable-textures`.
+- **Exact scope:** PB-0503 portable texture copy/format validation, PB-0504 typed portable README
+  generation, PB-0501/PB-0502 rollover, focused tests, and documentation genuinely affected by
+  these two implementations.
+- **Reason:** the user requested that these directly dependent portable-target tasks be completed in
+  one branch and one publication cycle.
+- **Independence retained:** each task keeps its canonical branch, acceptance boundary, production
+  API, focused evidence, lifecycle state, and eventual Completion Log row.
+- **Completion:** both remain `[ ]` / 🟡 **PROCESS** until the combined change is merged, required
+  `main` CI succeeds, the user explicitly confirms completion, and rollover is synchronized.
+- **No precedent:** this exact exception does not weaken the normal one-task-per-branch rule.
+
+### PB-0501/PB-0502 Completion Evidence
+
+- Both tasks were published as `b5f0f6aa527096e6337bb9efa856219231f49071` on the approved
+  shared PB-0501 branch and merged through pull request #63 as
+  `d9a7ab1c460f74fd11d7804e124ff788d84d7314`.
+- Required `main` workflow run
+  [31109207525](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31109207525)
+  succeeded for that exact merge, and the user explicitly confirmed the merge and green CI on
+  2026-08-06.
+- No CI or quality exception was used. The combined publication exception changed only branch
+  topology and created no precedent.
 
 ### PB-0501/PB-0502 Combined Publication Exception
 
@@ -1051,6 +1078,9 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0417 | `test/PB-0417-blender-reimport-validation` | `e43ded6d7a36764df42cca89f0380a4d40aeb251` | [#62](https://github.com/avivperets26/3DModels-Package-Builder/pull/62) | 2026-08-06 | Published on `feat/PB-0416-normalized-glb-export` with PB-0416/PB-0418 under the approved combined exception and merged as `45a6af25813c2494771ca6237f2be7d1eb83695d`; required [main workflow run 31104970924](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31104970924) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. Three distinct factory-empty Blender processes passed exact reimport comparisons. |
 | PB-0418 | `test/PB-0418-blender-regression-fixtures` | `e43ded6d7a36764df42cca89f0380a4d40aeb251` | [#62](https://github.com/avivperets26/3DModels-Package-Builder/pull/62) | 2026-08-06 | Published on `feat/PB-0416-normalized-glb-export` with PB-0416/PB-0417 under the approved combined exception and merged as `45a6af25813c2494771ca6237f2be7d1eb83695d`; required [main workflow run 31104970924](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31104970924) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. All seven real Blender regression observations produced stable findings without a worker crash. |
 
+| PB-0501 | `feat/PB-0501-portable-naming` | `b5f0f6aa527096e6337bb9efa856219231f49071` | [#63](https://github.com/avivperets26/3DModels-Package-Builder/pull/63) | 2026-08-06 | Published with PB-0502 under the approved combined exception and merged as `d9a7ab1c460f74fd11d7804e124ff788d84d7314`; required [main workflow run 31109207525](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31109207525) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. |
+| PB-0502 | `feat/PB-0502-portable-folder-composer` | `b5f0f6aa527096e6337bb9efa856219231f49071` | [#63](https://github.com/avivperets26/3DModels-Package-Builder/pull/63) | 2026-08-06 | Published on the PB-0501 branch with PB-0501 under the approved combined exception and merged as `d9a7ab1c460f74fd11d7804e124ff788d84d7314`; required [main workflow run 31109207525](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31109207525) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. |
+
 ## 5. Milestones
 
 | Milestone | Outcome | Required epics |
@@ -1489,22 +1519,22 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** Normalized assets become clean, renamed, documented portable deliverables.
 
-- [ ] **PB-0501 — Implement portable naming profile** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0501 — Implement portable naming profile** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0501-portable-naming`
   - Depends on: PB-0101, PB-0410
   - Done when: FBX, GLB, Albedo, Normal, Metallic, Roughness, Emission, AO, and README names match examples and collision rules.
 
-- [ ] **PB-0502 — Implement portable folder composer** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0502 — Implement portable folder composer** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0502-portable-folder-composer`
   - Depends on: PB-0501, PB-0205
   - Done when: flat FBX folder and top-level product/media layout are produced without duplicates or unrelated files.
 
-- [ ] **PB-0503 — Implement portable texture copy and conversion rules** — **P0**
+- [ ] **PB-0503 — Implement portable texture copy and conversion rules** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0503-portable-textures`
   - Depends on: PB-0413, PB-0502
   - Done when: canonical separate textures are named, copied, format-validated, and referenced correctly.
 
-- [ ] **PB-0504 — Implement portable README generator** — **P0**
+- [ ] **PB-0504 — Implement portable README generator** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0504-portable-readme`
   - Depends on: PB-0110, PB-0502
   - Done when: case-specific contents, formats, dimensions, material, rig, animation, usage, AI disclosure, support, and copyright render from typed data.

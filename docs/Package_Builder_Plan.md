@@ -398,6 +398,11 @@ source filenames. The six portable separate-map tokens are exactly `Albedo`, `No
 GLB is `<FolderName>_rigged.glb`. Output extensions are explicit lowercase format identities so
 PB-0503 can preserve or intentionally convert bytes without silently changing a suffix.
 
+PB-0503 verifies the normalized texture artifact's declared length and SHA-256, validates PNG or
+JPEG structure and bounded dimensions, and streams the exact bytes to the canonical PB-0501 name.
+`.jpeg` may normalize to `.jpg` without changing bytes. A requested PNG/JPEG format change blocks
+until an approved encoder exists; changing only the suffix is never treated as conversion.
+
 ### Unity Profile
 
 - `MS_` — standalone mesh asset where extracting one is safe and useful.
@@ -493,6 +498,11 @@ artifacts, PB-0504 supplies README artifacts, and PB-0505 creates the FBX archiv
 archive, and both README slots must appear once; GLB, textures, and media are optional, but any
 present artifact must have the exact portable target/role and a unique case-insensitive identity.
 No unqualified or unrelated artifact can enter the plan.
+
+PB-0504 generates both portable README contents from typed manifest, publisher, naming, dimension,
+GLB, and texture-receipt data. Its deterministic LF UTF-8 output covers the product case, delivered
+formats, texture metadata, dimensions, materials, rig, animations, item inventory, usage, AI
+disclosure, support, and copyright without guessing absent data.
 
 ### 8.2 Unity Package Root
 
