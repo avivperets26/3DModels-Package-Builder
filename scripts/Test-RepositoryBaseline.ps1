@@ -722,8 +722,34 @@ Invoke-Check 'Tracked and candidate files contain no prohibited content' {
     $runtimePath = '^(tools|downloads|logs|runtime-data|artifacts)(/|$)'
     $generatedPath = '(^|/)(bin|obj|\.vs|Library|Temp|UserSettings|Intermediate|Saved|DerivedDataCache|__pycache__)(/|$)'
     $prohibitedExtension = '(?i)\.(exe|dll|pdb|msi|msix|appx|zip|7z|rar|nupkg|vsix|fbx|glb|gltf|blend|unitypackage|uasset|umap|pak|pfx|p12|key|dmp)$'
-    $badPaths = @($candidatePaths | Where-Object { $_ -match $runtimePath -or $_ -match $generatedPath -or $_ -match $prohibitedExtension })
+    $approvedBinaryFixtures = @(
+        'tests/fixtures/portable/static-vertical-slice/source/StoneArch.fbx'
+    )
+    $badPaths = @($candidatePaths | Where-Object {
+        ($_ -match $runtimePath -or $_ -match $generatedPath -or $_ -match $prohibitedExtension) -and
+        $_ -notin $approvedBinaryFixtures
+    })
     if ($badPaths.Count -gt 0) { throw "Prohibited repository paths: $($badPaths -join ', ')" }
+
+    foreach ($fixture in $approvedBinaryFixtures) {
+        if ($fixture -notin $candidatePaths) { continue }
+        $fixturePath = Join-Path $script:RepositoryRoot $fixture
+        $evidencePath = Join-Path (Split-Path $fixturePath -Parent) '..\clean-reimport-evidence.json'
+        $licensePath = Join-Path (Split-Path $fixturePath -Parent) '..\README.md'
+        if (-not (Test-Path -LiteralPath $fixturePath -PathType Leaf) -or
+            (Get-Item -LiteralPath $fixturePath).Length -gt 1048576 -or
+            -not (Test-Path -LiteralPath $evidencePath -PathType Leaf) -or
+            -not (Test-Path -LiteralPath $licensePath -PathType Leaf)) {
+            throw "Approved binary fixture is missing, oversized, or lacks evidence/licence metadata: $fixture"
+        }
+        $fixtureEvidence = Get-Content -LiteralPath $evidencePath -Raw -Encoding UTF8 | ConvertFrom-Json
+        $actualFixtureHash = (Get-FileHash -LiteralPath $fixturePath -Algorithm SHA256).Hash.ToLowerInvariant()
+        if ([string]$fixtureEvidence.sha256 -cne $actualFixtureHash -or
+            [string]$fixtureEvidence.fixture -cne 'source/StoneArch.fbx' -or
+            (Get-Content -LiteralPath $licensePath -Raw -Encoding UTF8) -notmatch 'CC0-1\.0') {
+            throw "Approved binary fixture identity or licence evidence is invalid: $fixture"
+        }
+    }
 
     foreach ($entry in Invoke-Git @('ls-files', '--stage')) {
         $match = [regex]::Match($entry, '^(?<mode>\d{6})\s+[0-9a-f]+\s+\d+\t(?<path>.+)$')
@@ -755,6 +781,8 @@ Invoke-Check 'Tracked and candidate files contain no prohibited content' {
         if (-not (Test-ContainedPath $fullPath)) { throw "Repository path escapes the root: $relativePath" }
         $item = Get-Item -LiteralPath $fullPath
         if ($item.Length -gt 1MB) { throw "Repository file exceeds the 1 MiB baseline limit: $relativePath" }
+        # Exact approved binaries were already size-, identity-, and licence-checked above.
+        if ($relativePath -in $approvedBinaryFixtures) { continue }
         $bytes = [System.IO.File]::ReadAllBytes($fullPath)
         if ($bytes -contains 0) { throw "Binary content is prohibited: $relativePath" }
         try { $text = $strictUtf8.GetString($bytes) } catch { throw "File is not valid UTF-8 text: $relativePath" }

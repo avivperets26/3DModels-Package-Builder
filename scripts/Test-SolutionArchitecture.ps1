@@ -231,7 +231,13 @@ $projectSpecifications = @(
         Path = 'tests/PackageBuilder.Targets.Portable.Tests/PackageBuilder.Targets.Portable.Tests.csproj'
         Framework = 'net10.0'
         Kind = 'Test'
-        References = @('PackageBuilder.Targets.Portable')
+        # PB-0507 is the target-level composition test boundary. Production adapters remain
+        # isolated; only this test assembly composes application, infrastructure, and portable.
+        References = @(
+            'PackageBuilder.Application',
+            'PackageBuilder.Infrastructure',
+            'PackageBuilder.Targets.Portable'
+        )
     }
 )
 

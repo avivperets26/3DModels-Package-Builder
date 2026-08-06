@@ -1386,6 +1386,21 @@ PB-0505 and PB-0506 share `feat/PB-0505-deterministic-fbx-zip` only under their 
 publication exception; PB-0507 remains responsible for physical orchestration and the first
 user-runnable portable vertical slice.
 
+PB-0507 composes PB-0213 persisted orchestration, PB-0205 artifact staging, PB-0308 build locking,
+PB-0502/PB-0504 layout and README generation, PB-0505 archive creation, PB-0506 validation,
+PB-0212 JSONL logging, SQLite job persistence, and PB-0206 atomic promotion in one target-level
+end-to-end fixture. The success path promotes exactly one validated static FBX ZIP; the blocking
+clean-reimport path writes a failed report and cannot invoke promotion. Its compact schema-version-1
+JSON receipt contains only logical identities/references, exact reproducibility inputs, artifact
+digests, and sorted PB-0109 findings. PB-0910 remains responsible for the complete cross-target
+validation-report schema.
+
+This cross-layer composition exists only in `PackageBuilder.Targets.Portable.Tests`, which may
+reference Application, Infrastructure, and the Portable adapter for end-to-end verification.
+Production adapter isolation remains unchanged. The project-contained manual script runs the same
+success test, retains and extracts its promoted output beneath `artifacts/PB-0507`, and never writes
+outside the configured project roots.
+
 ## 13. Process Execution Rules
 
 - Use `ProcessStartInfo.ArgumentList`; never construct an unescaped command string.

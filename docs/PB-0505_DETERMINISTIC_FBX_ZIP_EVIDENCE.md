@@ -3,7 +3,7 @@
 ## Status
 
 - Canonical and publication branch: `feat/PB-0505-deterministic-fbx-zip`
-- Lifecycle: 🟡 **PROCESS**
+- Lifecycle: 🟢 **DONE**
 - Date: 2026-08-06
 
 PB-0505 shares the explicitly user-approved publication cycle with PB-0506. Each task retains an
@@ -50,9 +50,12 @@ was introduced.
   secret/prohibited-content checks, history integrity, and `git diff --check`: passed.
 - NuGet audit: no vulnerable direct or transitive package reported across all 17 projects.
 
-## Remaining Gates
+## Publication and Completion
 
-- User-controlled commit and push of the combined branch.
-- Merge into and push of `main`.
-- Successful required `main` CI and explicit user confirmation.
-- Next-task rollover synchronization.
+- Combined task commit: `38d82cc00572f506c3dc2cf67f996d64e50e64dd`.
+- Integration: [pull request #65](https://github.com/avivperets26/3DModels-Package-Builder/pull/65).
+- `main` merge: `725c5d21fa5d28342d62946b4ac93184a33656f9`.
+- Required [main workflow run 31123410839](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31123410839): successful for the exact merge.
+- User confirmation and rollover date: 2026-08-06.
+- Exception boundary: the approved combined publication branch affected topology only; no CI,
+  quality, or completion exception was used, and no precedent was created.

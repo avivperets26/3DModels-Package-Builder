@@ -1,6 +1,6 @@
 # Package Builder Documentation
 
-This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. Repository, core domain/contracts, contained infrastructure, tool-version management through PB-0310, the first WPF shell, and Blender worker work through PB-0405 are complete. PB-0406 texture, PB-0407 rig/weight, and PB-0408 animation inspection are active in one explicitly approved publication cycle. Separate glTF dependency graphs, normalization/export, packaging workflows, and the remaining desktop screens are not claimed as implemented.
+This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. Repository, core domain/contracts, contained infrastructure, tool-version management through PB-0310, the first WPF shell, Blender normalization/export/reimport through PB-0418, and portable target capabilities through PB-0506 are complete. PB-0507 is the active first static portable vertical slice. Unity/Unreal targets, broader product cases, marketplace packaging, preview generation, and the remaining desktop screens are not claimed as implemented.
 
 ## Primary Documentation
 
@@ -112,6 +112,7 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 - [PB-0504 portable README generator evidence](PB-0504_PORTABLE_README_EVIDENCE.md)
 - [PB-0505 deterministic FBX ZIP evidence](PB-0505_DETERMINISTIC_FBX_ZIP_EVIDENCE.md)
 - [PB-0506 portable target validator evidence](PB-0506_PORTABLE_TARGET_VALIDATOR_EVIDENCE.md)
+- [PB-0507 portable static vertical-slice evidence](PB-0507_PORTABLE_STATIC_E2E_EVIDENCE.md)
 
 ## Dependency and Licence Records
 
