@@ -158,9 +158,30 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0409 | 🟡 **PROCESS** | `feat/PB-0409-case-inference` | Blender Worker Engineering for local work; user for Git gates | 2026-08-05 | Static, complete-rig, and motion-backed animated inference is implemented; item-set and item-collection resolution requires an explicit manifest case. | Shared user-controlled commit/push/merge, required `main` CI, explicit confirmation, and next-task rollover remain. Actual contained Blender integration is unavailable and is not claimed. |
-| PB-0410 | 🟡 **PROCESS** | `feat/PB-0410-blender-naming-normalization` | Blender Worker Engineering for local work; user for Git gates | 2026-08-05 | Complete manifest plans transactionally normalize object, mesh, armature, material, image, Action, and exported-asset names with collision rejection and rollback. | Published locally on `feat/PB-0409-case-inference` under the approved combined exception; the shared Git and CI gates remain. |
-| PB-0411 | 🟡 **PROCESS** | `feat/PB-0411-transform-normalization` | Blender Worker Engineering for local work; user for Git gates | 2026-08-05 | Unit scale, forward/up axes, keep/center/base pivot policies, world transforms, before/after metrics, and raw deformation-preservation checks are implemented transactionally. | Published locally on `feat/PB-0409-case-inference` under the approved combined exception; the shared Git and CI gates remain. Actual contained Blender integration is unavailable and is not claimed. |
+| PB-0412 | 🟡 **PROCESS** | `feat/PB-0412-scene-cleanup` | Blender Worker Engineering for local work; user for Git gates | 2026-08-06 | Manifest-owned meshes/rigs and explicit helpers are retained; cameras, lights, hidden backups, helpers, non-intended objects, and local orphans are excluded; exact export selection restores UI state. | Shared user-controlled commit/push/merge, required `main` CI, explicit confirmation, and next-task rollover remain. Actual contained Blender integration is unavailable and is not claimed. |
+| PB-0413 | 🟡 **PROCESS** | `feat/PB-0413-material-normalization` | Blender Worker Engineering for local work; user for Git gates | 2026-08-06 | Complete separate-map plans normalize Blender-relative texture references and role-appropriate color spaces; unknown, ambiguous, contradictory, unsafe, combined, and colliding mappings block. | Published locally on `feat/PB-0412-scene-cleanup` under the approved combined exception; the shared Git and CI gates remain. |
+| PB-0414 | 🟡 **PROCESS** | `feat/PB-0414-rig-animation-normalization` | Blender Worker Engineering for local work; user for Git gates | 2026-08-06 | Skeleton/Action names, deform-bone selection, reviewed Blender 5 NLA baking, sampling, exact inclusive clip boundaries, motion preservation, and state restoration are implemented. | Published locally on `feat/PB-0412-scene-cleanup` under the approved combined exception; the shared Git and CI gates remain. Actual contained Blender integration is unavailable and is not claimed. |
+| PB-0415 | 🟡 **PROCESS** | `feat/PB-0415-normalized-fbx-export` | Blender Worker Engineering for local work; user for Git gates | 2026-08-06 | Static, rigged, and animated fixture exports validate exact objects/materials/actions, safe output paths, reviewed Blender 5 FBX options, partial cleanup, and selection restoration. | Published locally on `feat/PB-0412-scene-cleanup` under the approved combined exception; the shared Git and CI gates remain. Real FBX output awaits contained Blender integration and is not claimed. |
+
+### PB-0412/PB-0413/PB-0414/PB-0415 Combined Publication Exception
+
+- **Approved:** 2026-08-06, explicitly by the user.
+- **Publication branch:** `feat/PB-0412-scene-cleanup`.
+- **Exact scope:** PB-0412 scene cleanup/export sets, PB-0413 material/image normalization,
+  PB-0414 rig/action normalization and baking policy, PB-0415 normalized FBX export,
+  PB-0409/PB-0410/PB-0411 rollover, and documentation genuinely affected by those four
+  implementations.
+- **Reason:** the user requested one branch and one review/commit/push/merge/required-`main`-CI
+  cycle for these sequential Blender normalization and FBX export boundaries.
+- **Independence retained:** every task keeps its canonical branch identifier, acceptance boundary,
+  production module, focused tests, evidence document, lifecycle state, and eventual Completion Log
+  row. The shared branch does not merge their task identities.
+- **Completion:** PB-0412 through PB-0415 stay `[ ]` / 🟡 **PROCESS** until the combined change is
+  committed, pushed, merged into and pushed on `main`, required `main` CI succeeds, and the user
+  explicitly confirms completion. Their DONE markers and Completion Log rows will be synchronized
+  together at the start of the next task branch.
+- **No precedent:** this exception applies only to this exact four-task cycle and does not weaken
+  the normal one-task-per-branch or one-merge rollover rules for later work.
 
 ### PB-0409/PB-0410/PB-0411 Combined Publication Exception
 
@@ -174,10 +195,11 @@ feat/PB-0607-unity-urp-material-compiler
 - **Independence retained:** every task keeps its canonical branch identifier, acceptance boundary,
   production module, focused tests, evidence document, lifecycle state, and eventual Completion Log
   row. The shared branch does not merge their task identities.
-- **Completion:** PB-0409, PB-0410, and PB-0411 stay `[ ]` / 🟡 **PROCESS** until the combined
-  change is committed, pushed, merged into and pushed on `main`, required `main` CI succeeds, and
-  the user explicitly confirms completion. Their DONE markers and Completion Log rows will be
-  synchronized together at the start of the next task branch.
+- **Completion:** PB-0409, PB-0410, and PB-0411 were committed as
+  `773f776ad3ad9c62d33ecf075715232b2fbaf000`, merged through pull request #60 as
+  `8b19fdca393e803ca476669945d5761f7d424cd4`, passed required `main` workflow run 31086450759,
+  and were explicitly confirmed complete by the user on 2026-08-06. Their DONE markers and
+  Completion Log rows are synchronized in this PB-0412 rollover.
 - **No precedent:** this exception applies only to this exact three-task cycle. It does not weaken
   the normal one-task-per-branch or one-merge rollover rules for later work.
 
@@ -977,6 +999,9 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0406 | `feat/PB-0406-texture-inspection` | `28bfe9393b4a8c0d6a12775046390435ca785faa` | [#59](https://github.com/avivperets26/3DModels-Package-Builder/pull/59) | 2026-08-05 | Published with PB-0407 and PB-0408 on the PB-0406 branch under the approved one-time exception and merged as `67668d24c3a5ea418affc01bde7267580ac9fb22`; required [main workflow run 31047283980](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31047283980) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. Actual contained Blender integration and Python branch coverage remain disclosed gaps. |
 | PB-0407 | `feat/PB-0407-rig-inspection` | `28bfe9393b4a8c0d6a12775046390435ca785faa` | [#59](https://github.com/avivperets26/3DModels-Package-Builder/pull/59) | 2026-08-05 | Published on `feat/PB-0406-texture-inspection` with PB-0406 and PB-0408 under the approved one-time exception and merged as `67668d24c3a5ea418affc01bde7267580ac9fb22`; required [main workflow run 31047283980](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31047283980) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. Actual contained Blender integration and Python branch coverage remain disclosed gaps. |
 | PB-0408 | `feat/PB-0408-animation-inspection` | `28bfe9393b4a8c0d6a12775046390435ca785faa` | [#59](https://github.com/avivperets26/3DModels-Package-Builder/pull/59) | 2026-08-05 | Published on `feat/PB-0406-texture-inspection` with PB-0406 and PB-0407 under the approved one-time exception and merged as `67668d24c3a5ea418affc01bde7267580ac9fb22`; required [main workflow run 31047283980](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31047283980) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. Actual contained Blender integration and Python branch coverage remain disclosed gaps. |
+| PB-0409 | `feat/PB-0409-case-inference` | `773f776ad3ad9c62d33ecf075715232b2fbaf000` | [#60](https://github.com/avivperets26/3DModels-Package-Builder/pull/60) | 2026-08-06 | Published with PB-0410 and PB-0411 on the PB-0409 branch under the approved one-time exception and merged as `8b19fdca393e803ca476669945d5761f7d424cd4`; required [main workflow run 31086450759](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31086450759) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. Actual contained Blender integration and Python branch coverage remain disclosed gaps. |
+| PB-0410 | `feat/PB-0410-blender-naming-normalization` | `773f776ad3ad9c62d33ecf075715232b2fbaf000` | [#60](https://github.com/avivperets26/3DModels-Package-Builder/pull/60) | 2026-08-06 | Published on `feat/PB-0409-case-inference` with PB-0409 and PB-0411 under the approved one-time exception and merged as `8b19fdca393e803ca476669945d5761f7d424cd4`; required [main workflow run 31086450759](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31086450759) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. Actual contained Blender integration and Python branch coverage remain disclosed gaps. |
+| PB-0411 | `feat/PB-0411-transform-normalization` | `773f776ad3ad9c62d33ecf075715232b2fbaf000` | [#60](https://github.com/avivperets26/3DModels-Package-Builder/pull/60) | 2026-08-06 | Published on `feat/PB-0409-case-inference` with PB-0409 and PB-0410 under the approved one-time exception and merged as `8b19fdca393e803ca476669945d5761f7d424cd4`; required [main workflow run 31086450759](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31086450759) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. Actual contained Blender integration and Python branch coverage remain disclosed gaps. |
 
 ## 5. Milestones
 
@@ -1358,37 +1383,37 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0407
   - Done when: actions, clips, frame ranges, FPS, channels, motion presence, and likely loop behavior metadata are reported.
 
-- [ ] **PB-0409 — Implement automatic product-case inference** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0409 — Implement automatic product-case inference** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0409-case-inference`
   - Depends on: PB-0405, PB-0407, PB-0408
   - Done when: static, rigged, and animated inference is tested and set/collection ambiguity requires manifest input.
 
-- [ ] **PB-0410 — Implement naming normalization** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0410 — Implement naming normalization** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0410-blender-naming-normalization`
   - Depends on: PB-0101, PB-0409
   - Done when: objects, meshes, armatures, materials, images, actions, and exported assets follow the manifest naming plan without collisions.
 
-- [ ] **PB-0411 — Implement unit, axis, pivot, and transform normalization** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0411 — Implement unit, axis, pivot, and transform normalization** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0411-transform-normalization`
   - Depends on: PB-0405
   - Done when: configured units/axes/pivot are applied without changing deformation and before/after metrics are reported.
 
-- [ ] **PB-0412 — Implement helper cleanup and selection-safe export sets** — **P0**
+- [ ] **PB-0412 — Implement helper cleanup and selection-safe export sets** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0412-scene-cleanup`
   - Depends on: PB-0405
   - Done when: cameras, lights, hidden backups, helpers, and orphaned data are excluded unless explicitly retained, while intended meshes/rigs remain.
 
-- [ ] **PB-0413 — Implement material/image normalization** — **P0**
+- [ ] **PB-0413 — Implement material/image normalization** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0413-material-normalization`
   - Depends on: PB-0406, PB-0410
   - Done when: texture references are normalized, separate canonical maps are retained, and ambiguous roles block instead of silently misassigning.
 
-- [ ] **PB-0414 — Implement rig/action normalization and baking policy** — **P0**
+- [ ] **PB-0414 — Implement rig/action normalization and baking policy** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0414-rig-animation-normalization`
   - Depends on: PB-0407, PB-0408, PB-0410, PB-0411
   - Done when: requested skeleton/action naming, baking, sampling, deform-bone export, and clip boundaries preserve motion in tests.
 
-- [ ] **PB-0415 — Implement normalized FBX export** — **P0**
+- [ ] **PB-0415 — Implement normalized FBX export** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0415-normalized-fbx-export`
   - Depends on: PB-0410 through PB-0414
   - Done when: static, rigged, and animated FBX fixtures export with selected assets, materials, rigs, and animations.

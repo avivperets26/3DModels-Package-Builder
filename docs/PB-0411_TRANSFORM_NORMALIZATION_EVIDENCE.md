@@ -4,11 +4,15 @@
 
 - Canonical branch: `feat/PB-0411-transform-normalization`
 - Publication branch: `feat/PB-0409-case-inference`
-- Lifecycle: 🟡 **PROCESS**
+- Lifecycle: 🟢 **DONE**
 - Date: 2026-08-05
 
-The shared publication branch is the exact user-approved PB-0409/PB-0410/PB-0411 exception and
-creates no precedent.
+The shared publication branch was the exact user-approved PB-0409/PB-0410/PB-0411 exception and
+created no precedent. Commit `773f776ad3ad9c62d33ecf075715232b2fbaf000` was merged through
+[pull request #60](https://github.com/avivperets26/3DModels-Package-Builder/pull/60) as
+`8b19fdca393e803ca476669945d5761f7d424cd4`; required
+[main workflow run 31086450759](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31086450759)
+succeeded, and the user explicitly confirmed completion on 2026-08-06.
 
 ## Implemented Boundary
 
@@ -52,11 +56,11 @@ workspace discard. Mesh data is not baked here because PB-0414 owns modifier and
 - Ruff lint/formatting, locked restore, .NET formatting, PowerShell parsing, documentation/task graph,
   secret/prohibited-content, vulnerability, and `git diff --check` checks passed.
 
-## Evidence Limits and Remaining Gates
+## Evidence Limits and Publication
 
 Blender's current API documents `UnitSettings.scale_length`, the six signed axis tokens accepted by
 `axis_conversion`, and unique ID data-block naming/collision behavior. Plain-Python doubles cover
 the transformation boundary, but no approved contained Blender runtime is present, so real engine
 integration is not claimed. No UI or rendered output changed; manual visual testing is not
-applicable. User-controlled Git publication, required `main` CI, explicit confirmation, and
-next-task rollover remain.
+applicable. All publication, required `main` CI, explicit confirmation, and rollover gates passed
+as recorded above.

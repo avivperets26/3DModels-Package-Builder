@@ -148,6 +148,23 @@ The user approved one combined publication cycle for PB-0406, PB-0407, and PB-04
 each task retains separate requirements, evidence, validation, lifecycle, and completion records,
 and the exception creates no precedent.
 
+PB-0409 through PB-0411 add deterministic case inference, collision-safe manifest naming, and
+transactional unit/axis/pivot normalization. Static, complete-rig, and motion-backed animated cases
+are inferred while set/collection grouping requires the manifest. Every Blender ID namespace and
+export filename is owned explicitly, and raw rig/weight/Action deformation inputs are fingerprinted
+across world-transform normalization. Their completed shared publication exception changed only Git
+topology and created no precedent.
+
+PB-0412 through PB-0415 form the normalized FBX boundary. PB-0412 removes non-manifest cameras,
+lights, hidden backups, helpers, and local orphans from the disposable copy while guarding/restoring
+exact Blender selection state. PB-0413 retains separate canonical texture maps, normalizes relative
+references and color spaces, and blocks ambiguous roles unless explicitly reviewed in the manifest.
+PB-0414 applies canonical skeleton/Action names and a deform-bone, visual-keyed, boundary-preserving
+Blender 5 bake policy. PB-0415 validates static, rigged, and animated content inventories and exports
+only selected meshes/armatures with reviewed non-experimental FBX settings and partial-output
+cleanup. The user explicitly approved one publication cycle for these four independent tasks on
+`feat/PB-0412-scene-cleanup` on 2026-08-06; it creates no precedent.
+
 ### 3.3 Unity Worker
 
 A Unity Editor assembly is executed either from its Editor window or with `-batchmode -executeMethod`. It:
