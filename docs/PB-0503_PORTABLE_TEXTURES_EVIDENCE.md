@@ -3,7 +3,7 @@
 ## Status
 
 - Canonical and publication branch: `feat/PB-0503-portable-textures`
-- Lifecycle: 🟡 **PROCESS**
+- Lifecycle: 🟢 **DONE**
 - Date: 2026-08-06
 
 PB-0503 shares the explicitly user-approved publication cycle with PB-0504. Each task retains an
@@ -57,8 +57,13 @@ output. No image pixels are transformed and no WPF surface is added.
 - Locked restore, info-level .NET formatting, Ruff lint/formatting, PowerShell parsing, task graph,
   Markdown links, secret/prohibited-content checks, and `git diff --check`: passed.
 
-## Remaining Gates
+## Publication Evidence
 
-- User-controlled commit, push, merge into and push of `main`.
-- Successful required `main` CI and explicit user confirmation.
-- Next-task rollover synchronization.
+- Combined task commit: `4b482e97cb4fadf112ebb95ad972831b5f6141cd`.
+- PR: [#64](https://github.com/avivperets26/3DModels-Package-Builder/pull/64).
+- Merge commit: `33d077a5eb63a9398d720fb60b08bfd8871f7bc5`.
+- Required [main workflow run 31116763102](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31116763102): succeeded.
+- Optional PR run `31116752821` failed while GitHub could not download the pinned action; the same
+  commit merged and the required `main` workflow passed. Pull-request CI is optional, so no CI or
+  quality exception was used.
+- User confirmation and completion date: 2026-08-06.
