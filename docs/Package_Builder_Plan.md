@@ -213,6 +213,17 @@ Retained clones use a short project-contained path compatible with Unity's legac
 APIs, and the populated clone is reopened in a second clean process before it is offered for manual
 inspection.
 
+The PB-0609 through PB-0611 static-asset boundary applies an explicit FBX `ModelImporter` policy,
+extracts only uniquely referenced meshes, and creates the first customer prefab. Static sources
+disable rig/animation, camera, light, visibility, and blend-shape import; normals, tangents, scale,
+hierarchy, material location, and the complete ordinal material-remap plan are verified after
+reimport. Standalone meshes are cloned transactionally into `Meshes` with stable `MS_` names and
+shared source meshes are deduplicated rather than copied repeatedly. `Source` retains no generated
+mesh assets. The resulting `P_<AssetId>.prefab` has one reset `<AssetId>` root and one reset direct
+`P_Model` child; every renderer uses an expected compiled material, every mesh reference resolves
+to the extracted plan, and post-save verification rejects missing scripts or references. Overview
+scene composition remains owned by PB-0612 through PB-0614.
+
 ### 3.4 Unreal Worker
 
 An Unreal Python/Editor Utility module runs inside a clean product project. It:

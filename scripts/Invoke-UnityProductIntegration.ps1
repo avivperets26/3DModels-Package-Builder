@@ -56,6 +56,19 @@ foreach ($rootName in @('Assets', 'Packages', 'ProjectSettings')) {
     Copy-Item -LiteralPath (Join-Path $templateRoot $rootName) -Destination $cloneRoot -Recurse
 }
 
+# Use the repository-authored normalized FBX rather than a mock ModelImporter input. Its camera,
+# light, two meshes, and embedded materials make the PB-0609 through PB-0611 checks observable.
+$modelTestRoot = Join-Path $cloneRoot 'Assets\PBModelTests'
+foreach ($folderName in @('Source', 'Meshes', 'Materials', 'Prefabs')) {
+    New-Item -ItemType Directory -Path (Join-Path $modelTestRoot $folderName) -Force | Out-Null
+}
+$staticFbxFixture = Join-Path $repositoryRootPath `
+    'tests\fixtures\portable\static-vertical-slice\source\StoneArch.fbx'
+if (-not (Test-Path -LiteralPath $staticFbxFixture -PathType Leaf)) {
+    throw "Static Unity FBX fixture is missing: $staticFbxFixture"
+}
+Copy-Item -LiteralPath $staticFbxFixture -Destination (Join-Path $modelTestRoot 'Source\StoneArch.fbx')
+
 $originalEnvironment = @{}
 $environment = [ordered]@{
     TEMP = $temporaryRoot
@@ -187,8 +200,11 @@ Write-Host 'Unity product folder Editor tests: passed'
 Write-Host 'Unity TextureImporter Editor tests: passed'
 Write-Host 'Unity metallic-smoothness exact pixel tests: passed'
 Write-Host 'Unity URP/Lit material compiler tests: passed'
+Write-Host 'Unity static ModelImporter Editor tests: passed'
+Write-Host 'Unity standalone mesh extraction Editor tests: passed'
+Write-Host 'Unity static prefab generation Editor tests: passed'
 Write-Host 'Unity URP material upgrader marker validation: passed'
 Write-Host 'Unity populated-project reopen validation: passed'
-Write-Host 'Generated folder, texture, and material test assets retained for manual Unity inspection.'
+Write-Host 'Generated folder, texture, material, model, mesh, and prefab assets retained for manual Unity inspection.'
 Write-Host "Manual Unity project: $cloneRoot"
 Write-Host "Retained integration evidence: $runRoot"

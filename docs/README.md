@@ -1,6 +1,6 @@
 # Package Builder Documentation
 
-This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. Repository, core domain/contracts, contained infrastructure, tool-version management through PB-0310, the first WPF shell, Blender normalization/export/reimport through PB-0418, portable target capabilities through PB-0506, and the Unity worker foundation through PB-0604 are complete. PB-0507 and PB-0601 are merged but still await exact required CI/completion evidence. PB-0605/PB-0606 now have locally validated product-folder and TextureImporter implementations and remain PROCESS until publication gates complete. Later Unity/Unreal target behavior, broader product cases, marketplace packaging, preview generation, and the remaining desktop screens are not claimed as implemented.
+This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. Repository, core domain/contracts, contained infrastructure, tool-version management through PB-0310, the first WPF shell, Blender normalization/export/reimport through PB-0418, the portable static vertical slice through PB-0507, and Unity product intake/material generation through PB-0608 are complete. PB-0609 through PB-0611 now have locally validated static importer, standalone mesh, and prefab implementations and remain PROCESS until publication gates complete. Unity overview scenes, package export/reimport, rigged and animated flows, Unreal targets, broader product cases, marketplace packaging, preview generation, and the remaining desktop screens are not claimed as implemented.
 
 ## Primary Documentation
 
@@ -124,6 +124,9 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 - [PB-0606 Unity TextureImporter evidence](PB-0606_UNITY_TEXTURE_IMPORTER_EVIDENCE.md)
 - [PB-0607 Unity metallic-smoothness packing evidence](PB-0607_UNITY_METALLIC_SMOOTHNESS_EVIDENCE.md)
 - [PB-0608 Unity URP/Lit material compiler evidence](PB-0608_UNITY_URP_MATERIAL_EVIDENCE.md)
+- [PB-0609 Unity static ModelImporter evidence](PB-0609_UNITY_STATIC_IMPORTER_EVIDENCE.md)
+- [PB-0610 Unity safe mesh extraction evidence](PB-0610_UNITY_MESH_EXTRACTION_EVIDENCE.md)
+- [PB-0611 Unity prefab generation evidence](PB-0611_UNITY_PREFAB_EVIDENCE.md)
 
 ## Dependency and Licence Records
 

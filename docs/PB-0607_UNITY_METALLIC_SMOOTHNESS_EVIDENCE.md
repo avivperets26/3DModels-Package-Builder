@@ -4,13 +4,14 @@
 
 - Task: PB-0607 — Implement Unity metallic-smoothness texture packing.
 - Canonical and publication branch: `feat/PB-0607-unity-metallic-smoothness`.
-- Status: `[ ]` / 🟡 **PROCESS**.
+- Status: `[x]` / 🟢 **DONE**.
 - Started: 2026-08-07.
 - Publication topology: combined with PB-0608 under the explicit user-approved exception recorded
   in `docs/IMPLEMENTATION_BACKLOG.md`.
 
-PB-0607 remains open until the user-controlled commit, push, merge, successful required `main` CI,
-explicit completion confirmation, and next-task rollover are complete.
+PB-0607 was published with PB-0608 under the approved combined exception, passed required `main`
+CI, and was explicitly confirmed complete. Its final lifecycle synchronization occurs on the
+PB-0609/PB-0610/PB-0611 successor branch.
 
 ## Implemented Policy
 
@@ -72,9 +73,14 @@ The user completed this checkpoint on 2026-08-07. Unity opened with no Console e
 was disabled, and no compression warning was present. The screenshot evidence agrees with the
 automated exact-channel assertions.
 
-## Remaining Gates
+## Publication Evidence
 
-- User-controlled commit and combined branch push.
-- Merge into and push of `main`.
-- Successful required `main` CI.
-- Explicit completion confirmation and next-task rollover synchronization.
+- Final task commit: `dda9130cc40b20b09f355c9ffe29db4e9e9df682`.
+- Pull request: [#70](https://github.com/avivperets26/3DModels-Package-Builder/pull/70).
+- Merge commit: `ea3ceedf108d9f2e867a4b00c1641a5925735cf8`.
+- Required exact-merge `main` CI:
+  [run 31196967286](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31196967286),
+  successful.
+- User confirmation and completion date: 2026-08-07.
+- Exception boundary: only the previously approved combined branch topology was used; no test,
+  engine, quality, CI, security, documentation, or completion gate was waived.

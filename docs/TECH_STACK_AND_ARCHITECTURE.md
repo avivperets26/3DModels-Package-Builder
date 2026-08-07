@@ -1443,6 +1443,28 @@ factors, depth writes, render tags, queues, double-sided GI, and emission state 
 Inspector does. Real Editor tests require a second canonicalization pass to leave all reviewed
 state unchanged, which is the automated no-Inspector-Fix invariant.
 
+PB-0609 applies the static FBX boundary through `UnityStaticModelImporterPolicy`. It accepts only a
+product `Source` FBX, a positive finite scale, an explicit preserve-hierarchy choice, and a complete
+ordinal source-material plan whose targets already exist beneath `Materials`. Rig/animation,
+cameras, lights, visibility, and blend shapes are disabled; normals are imported, Mikk tangents are
+calculated, and material assets remain external through verified `AssetImporter` remaps. A failed
+mutation attempts to restore the complete prior importer/remap snapshot and returns a stable
+diagnostic rather than silently retaining partial settings.
+
+PB-0610 extracts only meshes referenced by imported `MeshFilter` or `SkinnedMeshRenderer`
+components. Unity local file IDs deduplicate shared references and establish a stable name order.
+One unique mesh becomes `MS_<AssetId>.asset`; multiple unique meshes receive `_01`, `_02`, and so
+on. Every clone is checked for vertex/submesh parity and a failed transaction deletes all partial
+outputs. Generated mesh assets are accepted only beneath the product `Meshes` folder and never
+under `Source`.
+
+PB-0611 builds `P_<AssetId>.prefab` around one reset `<AssetId>` product root and one reset direct
+`P_Model` child. The generator instantiates the imported model, replaces every referenced mesh from
+the PB-0610 source-to-standalone plan, requires every renderer material to belong to the explicit
+compiled-material plan, saves the prefab, reloads it, and verifies hierarchy, transforms, exact
+mesh/material references, and absence of missing scripts. Output collisions and incomplete plans
+fail closed. Overview scenes and Play-mode composition remain PB-0612 through PB-0614 work.
+
 Unity integration evidence uses the short contained layout `artifacts/u/<id>/p`. Before launching
 Unity, the harness checks a reviewed worst-case pinned-package path against a 248-character legacy
 compatibility ceiling. After the Editor tests populate the project, a second clean Unity process

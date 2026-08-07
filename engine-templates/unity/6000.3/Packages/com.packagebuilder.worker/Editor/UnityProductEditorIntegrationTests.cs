@@ -13,6 +13,8 @@ namespace PackageBuilder.UnityWorker.Editor
         private const string FolderTestRoot = "Assets/PBFolderTests";
         private const string TextureTestRoot = "Assets/PBTextureTests";
         private const string MaterialTestRoot = "Assets/PBMaterialTests";
+        private const string ModelTestRoot = "Assets/PBModelTests";
+        private const string ModelSourceReference = "Assets/PBModelTests/Source/StoneArch.fbx";
 
         public static void Run()
         {
@@ -22,6 +24,7 @@ namespace PackageBuilder.UnityWorker.Editor
                 TestTextureImporterPolicies();
                 TestMetallicSmoothnessPacking();
                 TestUrpLitMaterialCompilation();
+                TestStaticModelImportMeshExtractionAndPrefab();
                 Debug.Log("PACKAGEBUILDER_UNITY_PRODUCT_TESTS_PASS");
                 EditorApplication.Exit(0);
             }
@@ -47,6 +50,7 @@ namespace PackageBuilder.UnityWorker.Editor
                     AssetDatabase.DeleteAsset(FolderTestRoot);
                     AssetDatabase.DeleteAsset(TextureTestRoot);
                     AssetDatabase.DeleteAsset(MaterialTestRoot);
+                    AssetDatabase.DeleteAsset(ModelTestRoot);
                     AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
                 }
             }
@@ -241,6 +245,172 @@ namespace PackageBuilder.UnityWorker.Editor
                 "Existing material outputs must fail closed.");
         }
 
+        private static void TestStaticModelImportMeshExtractionAndPrefab()
+        {
+            var originalModel = AssetDatabase.LoadAssetAtPath<GameObject>(ModelSourceReference);
+            Require(originalModel != null, "The real static FBX fixture was not imported.");
+            string[] sourceMaterialNames = AssetDatabase.LoadAllAssetsAtPath(ModelSourceReference)
+                .OfType<Material>()
+                .Select(material => material.name)
+                .Concat(originalModel.GetComponentsInChildren<Renderer>(true)
+                    .SelectMany(renderer => renderer.sharedMaterials)
+                    .Where(material => material != null)
+                    .Select(material => material.name))
+                .Distinct(StringComparer.Ordinal)
+                .OrderByDescending(name => name, StringComparer.Ordinal)
+                .ToArray();
+            Require(sourceMaterialNames.Length > 0, "The static FBX fixture has no source materials.");
+
+            string compiledMaterialReference = ModelTestRoot + "/Materials/M_StoneArch_URP.mat";
+            Require(AssetDatabase.CopyAsset(
+                MaterialTestRoot + "/Opaque.mat",
+                compiledMaterialReference), "The compiled fixture material could not be copied.");
+            AssetDatabase.ImportAsset(compiledMaterialReference, ImportAssetOptions.ForceSynchronousImport);
+
+            UnityMaterialRemap[] remaps = sourceMaterialNames
+                .Select(name => new UnityMaterialRemap(name, compiledMaterialReference))
+                .ToArray();
+            string requiredMaterialName = originalModel.GetComponentsInChildren<Renderer>(true)
+                .SelectMany(renderer => renderer.sharedMaterials)
+                .Where(material => material != null)
+                .Select(material => material.name)
+                .First();
+            string diagnostic;
+            Require(!UnityStaticModelImporterPolicy.TryApply(
+                ModelSourceReference, 1f, true,
+                remaps.Where(remap => remap.SourceMaterialName != requiredMaterialName),
+                out diagnostic) &&
+                diagnostic == "UNITY_STATIC_MODEL_MATERIAL_PLAN_INCOMPLETE",
+                "An incomplete static material remap plan must fail closed.");
+            Require(UnityStaticModelImporterPolicy.TryApply(
+                ModelSourceReference, 1f, true, remaps, out diagnostic), diagnostic);
+
+            var importer = AssetImporter.GetAtPath(ModelSourceReference) as ModelImporter;
+            Require(importer != null, "The static ModelImporter disappeared after reimport.");
+            Require(importer.animationType == ModelImporterAnimationType.None && !importer.importAnimation,
+                "Static rig and animation import must be disabled.");
+            Require(!importer.importCameras && !importer.importLights && !importer.importVisibility &&
+                !importer.importBlendShapes,
+                "Camera, light, visibility, and blend-shape import must be disabled.");
+            Require(importer.importNormals == ModelImporterNormals.Import &&
+                importer.importTangents == ModelImporterTangents.CalculateMikk,
+                "Static normal and tangent policy is incorrect.");
+            Require(Approximately(importer.globalScale, 1f) && importer.preserveHierarchy,
+                "Static scale or hierarchy policy is incorrect.");
+            Require(importer.materialLocation == ModelImporterMaterialLocation.InPrefab &&
+                importer.materialImportMode == ModelImporterMaterialImportMode.ImportViaMaterialDescription,
+                "Static material import policy is incorrect.");
+
+            var materialMap = importer.GetExternalObjectMap()
+                .Where(pair => pair.Key.type == typeof(Material))
+                .ToDictionary(pair => pair.Key.name, pair => AssetDatabase.GetAssetPath(pair.Value),
+                    StringComparer.Ordinal);
+            Require(materialMap.Count == sourceMaterialNames.Length &&
+                sourceMaterialNames.All(name => materialMap[name] == compiledMaterialReference),
+                "Material remapping is incomplete or nondeterministic.");
+            string firstRemapSignature = string.Join("|", materialMap.OrderBy(pair => pair.Key, StringComparer.Ordinal)
+                .Select(pair => pair.Key + "=" + pair.Value));
+            Require(UnityStaticModelImporterPolicy.TryApply(
+                ModelSourceReference, 1f, true, remaps.Reverse(), out diagnostic), diagnostic);
+            importer = AssetImporter.GetAtPath(ModelSourceReference) as ModelImporter;
+            string secondRemapSignature = string.Join("|", importer.GetExternalObjectMap()
+                .Where(pair => pair.Key.type == typeof(Material))
+                .OrderBy(pair => pair.Key.name, StringComparer.Ordinal)
+                .Select(pair => pair.Key.name + "=" + AssetDatabase.GetAssetPath(pair.Value)));
+            Require(firstRemapSignature == secondRemapSignature,
+                "Material remapping changed when request order changed.");
+
+            var modelAsset = AssetDatabase.LoadAssetAtPath<GameObject>(ModelSourceReference);
+            Require(modelAsset != null && modelAsset.GetComponentsInChildren<MeshFilter>(true).Length > 0,
+                "The static FBX contains no imported MeshFilter.");
+            Require(modelAsset.GetComponentsInChildren<Camera>(true).Length == 0 &&
+                modelAsset.GetComponentsInChildren<Light>(true).Length == 0 &&
+                modelAsset.GetComponentsInChildren<Animator>(true).Length == 0 &&
+                modelAsset.GetComponentsInChildren<Animation>(true).Length == 0,
+                "Static import retained a camera, light, or animation component.");
+            Require(modelAsset.GetComponentsInChildren<Renderer>(true)
+                .SelectMany(renderer => renderer.sharedMaterials)
+                .All(material => material != null &&
+                    AssetDatabase.GetAssetPath(material) == compiledMaterialReference),
+                "The imported static renderers do not use the deterministic compiled material.");
+
+            Mesh[] referencedMeshes = modelAsset.GetComponentsInChildren<MeshFilter>(true)
+                .Select(filter => filter.sharedMesh)
+                .Concat(modelAsset.GetComponentsInChildren<SkinnedMeshRenderer>(true)
+                    .Select(renderer => renderer.sharedMesh))
+                .Where(mesh => mesh != null)
+                .ToArray();
+            int uniqueReferencedMeshCount = referencedMeshes.Distinct().Count();
+            Require(uniqueReferencedMeshCount > 0,
+                "The real fixture contains no referenced meshes to extract.");
+
+            UnityExtractedMeshSet extractedMeshes;
+            Require(UnityMeshAssetExtractor.TryExtract(
+                ModelSourceReference,
+                ModelTestRoot + "/Meshes",
+                "StoneArch",
+                out extractedMeshes,
+                out diagnostic), diagnostic);
+            Require(extractedMeshes.Bindings.Count == uniqueReferencedMeshCount,
+                "Standalone mesh extraction did not preserve the unique referenced-mesh set.");
+            string[] extractedReferences = extractedMeshes.Bindings
+                .Select(binding => binding.OutputAssetReference)
+                .ToArray();
+            string[] expectedExtractedReferences = uniqueReferencedMeshCount == 1
+                ? new[] { ModelTestRoot + "/Meshes/MS_StoneArch.asset" }
+                : Enumerable.Range(1, uniqueReferencedMeshCount)
+                    .Select(index => ModelTestRoot + "/Meshes/MS_StoneArch_" +
+                        index.ToString("D2") + ".asset")
+                    .ToArray();
+            Require(extractedReferences.SequenceEqual(expectedExtractedReferences),
+                "Standalone mesh names are not stable.");
+            Require(extractedMeshes.Bindings.All(binding => binding.SourceMesh != binding.ExtractedMesh &&
+                binding.SourceMesh.vertexCount == binding.ExtractedMesh.vertexCount &&
+                AssetDatabase.GetAssetPath(binding.ExtractedMesh).StartsWith(
+                    ModelTestRoot + "/Meshes/MS_",
+                    StringComparison.Ordinal)), "A standalone mesh asset is missing or invalid.");
+            Require(Directory.GetFiles(ToPhysicalPath(ModelTestRoot + "/Source"), "*.asset").Length == 0,
+                "Standalone mesh assets must never be duplicated in Source.");
+            UnityExtractedMeshSet rejectedSet;
+            Require(!UnityMeshAssetExtractor.TryExtract(
+                ModelSourceReference,
+                ModelTestRoot + "/Meshes",
+                "StoneArch",
+                out rejectedSet,
+                out diagnostic) && diagnostic == "UNITY_MESH_EXTRACTION_OUTPUT_COLLISION",
+                "Existing standalone mesh outputs must fail closed.");
+
+            string prefabReference = ModelTestRoot + "/Prefabs/P_StoneArch.prefab";
+            var prefabRequest = new UnityPrefabRequest
+            {
+                AssetId = "StoneArch",
+                SourceModelReference = ModelSourceReference,
+                OutputAssetReference = prefabReference,
+                ExtractedMeshes = extractedMeshes,
+                ExpectedMaterialReferences = new[] { compiledMaterialReference },
+            };
+            GameObject prefab;
+            Require(UnityPrefabGenerator.TryCreate(prefabRequest, out prefab, out diagnostic), diagnostic);
+            Require(prefab != null && prefab.name == "P_StoneArch" && prefab.transform.childCount == 1,
+                "The saved product prefab hierarchy is incorrect.");
+            Transform modelChild = prefab.transform.GetChild(0);
+            Require(modelChild.name == "P_Model" && IsReset(prefab.transform) && IsReset(modelChild),
+                "The product root or P_Model transform is not reset.");
+            Require(modelChild.GetComponentsInChildren<MeshFilter>(true)
+                .All(filter => filter.sharedMesh != null && AssetDatabase.GetAssetPath(filter.sharedMesh)
+                    .StartsWith(ModelTestRoot + "/Meshes/MS_", StringComparison.Ordinal)),
+                "The prefab does not reference only standalone mesh assets.");
+            Require(modelChild.GetComponentsInChildren<Renderer>(true)
+                .SelectMany(renderer => renderer.sharedMaterials)
+                .All(material => material != null &&
+                    AssetDatabase.GetAssetPath(material) == compiledMaterialReference),
+                "The prefab material references are incorrect.");
+            GameObject rejectedPrefab;
+            Require(!UnityPrefabGenerator.TryCreate(
+                prefabRequest, out rejectedPrefab, out diagnostic) && diagnostic == "UNITY_PREFAB_INVALID",
+                "Existing prefab outputs must fail closed.");
+        }
+
         private static UnityUrpLitMaterialRequest MaterialRequest(
             string surfaceMode,
             string fileName,
@@ -411,6 +581,12 @@ namespace PackageBuilder.UnityWorker.Editor
         private static bool Approximately(float first, float second)
         {
             return Mathf.Abs(first - second) <= 0.0001f;
+        }
+
+        private static bool IsReset(Transform value)
+        {
+            return value.localPosition == Vector3.zero && value.localRotation == Quaternion.identity &&
+                value.localScale == Vector3.one;
         }
 
         private static void Require(bool condition, string message)

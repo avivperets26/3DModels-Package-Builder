@@ -26,6 +26,12 @@ $packingSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityMetallicS
     -Raw -Encoding UTF8
 $materialSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityUrpLitMaterialCompiler.cs') `
     -Raw -Encoding UTF8
+$modelImporterSource = Get-Content -LiteralPath (Join-Path $editorRoot `
+        'UnityStaticModelImporterPolicy.cs') -Raw -Encoding UTF8
+$meshExtractorSource = Get-Content -LiteralPath (Join-Path $editorRoot `
+        'UnityMeshAssetExtractor.cs') -Raw -Encoding UTF8
+$prefabSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityPrefabGenerator.cs') `
+    -Raw -Encoding UTF8
 $testSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityProductEditorIntegrationTests.cs') `
     -Raw -Encoding UTF8
 $integrationSource = Get-Content -LiteralPath (Join-Path $repositoryRootPath `
@@ -150,6 +156,48 @@ Invoke-Check 'Unity URP/Lit compiler delegates keyword and render-state canonica
     }
 }
 
+Invoke-Check 'Unity static ModelImporter policy is complete and material remaps are exact' {
+    foreach ($value in @('ModelImporterAnimationType.None', 'importAnimation = false',
+            'importCameras = false', 'importLights = false', 'importVisibility = false',
+            'importBlendShapes = false',
+            'ModelImporterNormals.Import', 'ModelImporterTangents.CalculateMikk', 'globalScale',
+            'preserveHierarchy', 'ModelImporterMaterialLocation.InPrefab',
+            'ModelImporterMaterialImportMode.ImportViaMaterialDescription', 'GetExternalObjectMap',
+            'RemoveRemap', 'AddRemap', 'StringComparer.Ordinal', 'SaveAndReimport',
+            'UNITY_STATIC_MODEL_MATERIAL_PLAN_INCOMPLETE', 'SourceAssetIdentifier',
+            'plannedNames.SetEquals(sourceNames)')) {
+        if (-not $modelImporterSource.Contains($value)) {
+            throw "Missing static ModelImporter behavior: $value"
+        }
+    }
+}
+
+Invoke-Check 'Unity standalone mesh extraction is transactional, stable, and deduplicated' {
+    foreach ($value in @('UNITY_MESH_EXTRACTION_OUTPUT_COLLISION', 'MS_', '.ToString("D2")',
+            'TryGetGUIDAndLocalFileIdentifier', 'Dictionary<long, SourceMesh>',
+            'vertexCount != source.vertexCount', 'subMeshCount != source.subMeshCount',
+            'AssetDatabase.DeleteAsset', 'finally', '/Meshes')) {
+        if (-not $meshExtractorSource.Contains($value)) {
+            throw "Missing safe mesh extraction behavior: $value"
+        }
+    }
+}
+
+Invoke-Check 'Unity prefab policy resets hierarchy and verifies mesh and material references' {
+    foreach ($value in @('P_Model', '/Prefabs/P_', 'PrefabUtility.InstantiatePrefab',
+            'PrefabUtility.SaveAsPrefabAsset', 'ResetTransform', 'Vector3.zero',
+            'Quaternion.identity', 'Vector3.one', 'ReplaceMeshes', 'HasCompleteMaterials',
+            'UNITY_PREFAB_REFERENCE_INVALID', 'UNITY_PREFAB_ROOT_NAME_VERIFY_FAILED',
+            'UNITY_PREFAB_ROOT_TRANSFORM_VERIFY_FAILED', 'UNITY_PREFAB_CHILD_COUNT_VERIFY_FAILED',
+            'UNITY_PREFAB_MODEL_NAME_VERIFY_FAILED', 'UNITY_PREFAB_MODEL_TRANSFORM_VERIFY_FAILED',
+            'UNITY_PREFAB_MATERIAL_VERIFY_FAILED', 'UNITY_PREFAB_MESH_VERIFY_FAILED',
+            'UNITY_PREFAB_MISSING_SCRIPT_VERIFY_FAILED')) {
+        if (-not $prefabSource.Contains($value)) {
+            throw "Missing prefab generation behavior: $value"
+        }
+    }
+}
+
 Invoke-Check 'Editor integration tests cover all cases, roles, collisions, and unsafe inputs' {
     foreach ($value in @('PACKAGEBUILDER_UNITY_PRODUCT_TESTS_PASS',
             'UNITY_PRODUCT_FOLDER_COLLISION', 'orm', '../outside.png',
@@ -157,7 +205,11 @@ Invoke-Check 'Editor integration tests cover all cases, roles, collisions, and u
             'Texture2D(4, 4', 'new Color[16]', 'TestMetallicSmoothnessPacking',
             'UNITY_METALLIC_SMOOTHNESS_DIMENSION_MISMATCH', 'Metallic red channel is incorrect',
             'Smoothness alpha must equal one minus roughness', 'TestUrpLitMaterialCompilation',
-            'VerifyUrpStateIsStable', '_METALLICSPECGLOSSMAP', '_SURFACE_TYPE_TRANSPARENT')) {
+            'VerifyUrpStateIsStable', '_METALLICSPECGLOSSMAP', '_SURFACE_TYPE_TRANSPARENT',
+            'TestStaticModelImportMeshExtractionAndPrefab', 'ModelImporterAnimationType.None',
+            'Material remapping changed when request order changed',
+            'UNITY_MESH_EXTRACTION_OUTPUT_COLLISION', 'P_StoneArch.prefab',
+            'The product root or P_Model transform is not reset')) {
         if (-not $testSource.Contains($value)) {
             throw "Missing Editor integration assertion: $value"
         }
@@ -169,6 +221,10 @@ Invoke-Check 'Unity integration uses a legacy-safe short clone and validates a c
             '$maximumLegacyCompatiblePathLength = 248', 'unity-product-reopen.log',
             'unity-product-reopen-retry.log', 'CurrentThread::IsMainThread()',
             '$knownNativeStartupRace', "'-quit'", 'DirectoryNotFoundException',
+            'tests\fixtures\portable\static-vertical-slice\source\StoneArch.fbx',
+            'Unity static ModelImporter Editor tests',
+            'Unity standalone mesh extraction Editor tests',
+            'Unity static prefab generation Editor tests',
             'Unity populated-project reopen validation')) {
         if (-not $integrationSource.Contains($value)) {
             throw "Missing Unity reopen/path safeguard: $value"
@@ -192,6 +248,9 @@ Invoke-Check 'Unity product policy sources are deterministic public-safe text' {
         (Join-Path $editorRoot 'UnityTextureImporterPolicy.cs'),
         (Join-Path $editorRoot 'UnityMetallicSmoothnessPacker.cs'),
         (Join-Path $editorRoot 'UnityUrpLitMaterialCompiler.cs'),
+        (Join-Path $editorRoot 'UnityStaticModelImporterPolicy.cs'),
+        (Join-Path $editorRoot 'UnityMeshAssetExtractor.cs'),
+        (Join-Path $editorRoot 'UnityPrefabGenerator.cs'),
         (Join-Path $editorRoot 'UnityProductEditorIntegrationTests.cs')
     )
     $utf8 = New-Object Text.UTF8Encoding($false, $true)
