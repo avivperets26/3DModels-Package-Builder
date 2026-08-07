@@ -202,6 +202,17 @@ choice. This foundation proves compilation and batch communication with a probe 
 folders, importers, materials, prefabs, scenes, `.unitypackage` export, and clean reimport remain
 owned by PB-0605 and later tasks.
 
+The PB-0605/PB-0606 product-intake boundary creates
+`Assets/<PublisherRoot>/<ProductFolder>` directly through Unity's AssetDatabase. Every case receives
+Source, Meshes, Materials, Textures, Prefabs, Documentation, Scenes, and Scripts; only the animated
+case adds Animations and Controllers. No `_Template` directory is copied to customer output.
+Texture import is explicit: Albedo and Emission are sRGB, data maps are linear, Normal uses Unity's
+Normal Map type, and alpha handling is role-specific. Real Editor integration tests verify the
+saved importer values in an isolated clone before later material and prefab work consumes them.
+Retained clones use a short project-contained path compatible with Unity's legacy package-assembly
+APIs, and the populated clone is reopened in a second clean process before it is offered for manual
+inspection.
+
 ### 3.4 Unreal Worker
 
 An Unreal Python/Editor Utility module runs inside a clean product project. It:

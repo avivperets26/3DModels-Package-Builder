@@ -1402,6 +1402,43 @@ Production adapter isolation remains unchanged. The project-contained manual scr
 success test, retains and extracts its promoted output beneath `artifacts/PB-0507`, and never writes
 outside the configured project roots.
 
+PB-0602 through PB-0604 establish the Unity worker foundation. The tracked Unity `6000.3` template
+contains one dependency-free Editor-only `com.packagebuilder.worker` package. Its bounded
+protocol-v1 batch entrypoint emits JSON Lines, writes atomic results, saves assets, and uses stable
+exit codes. Every execution occurs in a project-contained isolated clone with one exclusive writer
+lock and an explicit delete/retain policy; Unity never opens the tracked template directly.
+
+PB-0605 adds the manifest-driven product-folder boundary inside that Editor package. It mirrors the
+approved PB-0101 publisher/product segment grammars without introducing a Domain assembly into the
+Unity package, creates only beneath `Assets/<PublisherRoot>/<ProductFolder>`, and uses
+`AssetDatabase.CreateFolder` for Unity-owned metadata. All five cases receive Source, Meshes,
+Materials, Textures, Prefabs, Documentation, Scenes, and Scripts. Only `rigged-animated` receives
+Animations and Controllers. Existing product roots block, failed partial creation rolls back, and
+`_Template` is never emitted.
+
+PB-0606 adds the canonical separate-map `TextureImporter` policy. Albedo and Emission are sRGB;
+Normal, Metallic, Roughness, Ambient Occlusion, Opacity, and Height are linear. Normal is imported
+as a normal map. Albedo imports source alpha as transparency, Opacity imports source alpha as data,
+and every other role disables alpha import and transparency explicitly. Unsafe references,
+unknown roles, non-texture importers, and ambiguous packed roles fail closed. Real Editor tests
+create PNG inputs in an isolated clone, apply each policy, and read the resulting importer settings
+back from Unity. PB-0607 remains the only owner of metallic-smoothness packing.
+
+Unity integration evidence uses the short contained layout `artifacts/u/<id>/p`. Before launching
+Unity, the harness checks a reviewed worst-case pinned-package path against a 248-character legacy
+compatibility ceiling. After the Editor tests populate the project, a second clean Unity process
+reopens it and blocks on path, assembly-validation, or compilation failures. This prevents a clone
+that passes first import but cannot be reopened manually from being presented as valid evidence.
+The same integration run derives the pinned URP material-upgrader count from the installed package
+and requires `ProjectSettings/URPProjectSettings.asset` to record that exact value. A stale marker
+is release-blocking because it produces a modal material-upgrade prompt during interactive opening,
+even for a test clone with no project-owned material assets.
+
+PB-0605 and PB-0606 share `feat/PB-0605-unity-folder-generator` only under their explicit combined
+publication exception. Their task identities, acceptance boundaries, tests, evidence, lifecycle,
+and eventual Completion Log rows remain independent; the exception creates no architectural
+coupling or precedent.
+
 ## 13. Process Execution Rules
 
 - Use `ProcessStartInfo.ArgumentList`; never construct an unescaped command string.
