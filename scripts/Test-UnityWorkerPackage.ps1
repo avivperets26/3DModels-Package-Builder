@@ -62,6 +62,9 @@ $expectedFiles = @(
     'Editor/UnityTextureImporterPolicy.cs',
     'Editor/UnityMetallicSmoothnessPacker.cs',
     'Editor/UnityUrpLitMaterialCompiler.cs',
+    'Editor/UnityStaticModelImporterPolicy.cs',
+    'Editor/UnityMeshAssetExtractor.cs',
+    'Editor/UnityPrefabGenerator.cs',
     'Editor/UnityProductEditorIntegrationTests.cs'
 ) | Sort-Object
 

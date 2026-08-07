@@ -813,7 +813,7 @@ Invoke-Check 'Unity worker package is customer-runtime-free and Editor-only' {
     & $validatorPath -RepositoryRoot $script:RepositoryRoot
 }
 
-Invoke-Check 'Unity product, texture, packing, and URP material policies are deterministic' {
+Invoke-Check 'Unity static import, mesh, prefab, texture, and URP policies are deterministic' {
     $validatorPath = Join-Path $script:RepositoryRoot 'scripts\Test-UnityProductPolicies.ps1'
     if (-not (Test-Path -LiteralPath $validatorPath -PathType Leaf)) {
         throw 'Missing scripts/Test-UnityProductPolicies.ps1.'

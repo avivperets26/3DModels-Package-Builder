@@ -158,8 +158,56 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0607 | 🟡 **PROCESS** | `feat/PB-0607-unity-metallic-smoothness` | Unity Target Engineering for local work; user for Git gates | 2026-08-07 | Exact lossless packing, dimension/collision rejection, source-importer restoration, generated-map policy, real Unity pixel assertions, and the user-confirmed Inspector checkpoint pass. | User-controlled commit/push/merge, successful required `main` CI, explicit confirmation, and next-task rollover remain. |
-| PB-0608 | 🟡 **PROCESS** | `feat/PB-0608-unity-urp-material` | Unity Target Engineering for local work; user for Git gates | 2026-08-07 | Opaque, Cutout, and Transparent URP/Lit materials compile with canonical maps, factors, culling, keywords, GI flags, queues, idempotent Inspector state, and user-confirmed visual checks in real Unity. | The combined PB-0607 publication/CI/confirmation/rollover gates remain. |
+| PB-0609 | 🟡 **PROCESS** | `feat/PB-0609-unity-static-importer` | Unity Target Engineering for local work; user for Git gates | 2026-08-07 | Static FBX import disables rig/animation, cameras, lights, visibility, and blend shapes; applies explicit normal, tangent, scale, hierarchy, and material policies; and verifies deterministic complete remaps in real Unity. | User-controlled commit/push/merge, successful required `main` CI, explicit confirmation, and next-task rollover remain. |
+| PB-0610 | 🟡 **PROCESS** | `feat/PB-0610-unity-mesh-assets` | Unity Target Engineering for local work; user for Git gates | 2026-08-07 | Unique referenced meshes are extracted transactionally with stable `MS_` names, shared source meshes are deduplicated, and Source remains free of duplicate standalone assets. | The combined PB-0609/PB-0610/PB-0611 publication gates remain. |
+| PB-0611 | 🟡 **PROCESS** | `feat/PB-0611-unity-prefabs` | Unity Target Engineering for local work; user for Git gates | 2026-08-07 | Static prefabs use the exact `P_<AssetId>` filename, reset product root and `P_Model` child, standalone mesh references, compiled materials, and saved-reference verification. | The combined PB-0609/PB-0610/PB-0611 publication gates remain. |
+
+### PB-0609/PB-0610/PB-0611 Combined Publication Exception
+
+- **Approved:** 2026-08-07 by the user's explicit request to implement PB-0609, PB-0610, and
+  PB-0611 together.
+- **Publication branch:** `feat/PB-0609-unity-static-importer`.
+- **Exact scope:** static `ModelImporter` policy, safe standalone mesh extraction, static prefab
+  generation, PB-0607/PB-0608 rollover, focused dependency-free validation, real Unity Editor
+  integration, and documentation genuinely affected by these implementations.
+- **Reason:** PB-0610 directly depends on PB-0609 and PB-0611 directly depends on PB-0608 through
+  PB-0610; the user requested one implementation and publication cycle.
+- **Independence retained:** all three tasks keep their canonical IDs, branches, acceptance
+  boundaries, implementation types, evidence documents, lifecycle states, and eventual Completion
+  Log rows.
+- **Completion:** all three remain `[ ]` / 🟡 **PROCESS** until the combined change is committed,
+  pushed, merged into and pushed on `main`, required `main` CI succeeds, the user explicitly
+  confirms completion, and rollover is synchronized on the next task branch.
+- **No precedent:** this exact branch-topology exception waives no test, engine, quality, CI,
+  security, documentation, or completion gate and creates no automatic precedent.
+
+### PB-0609/PB-0610/PB-0611 Local Validation Checkpoint
+
+- Real Unity 6000.3.10f1 integration passed static FBX import, deterministic source-material
+  remapping, shared-mesh-safe extraction, prefab generation, output collisions, and populated
+  project clean reopen. Retained evidence is under ignored `artifacts/u/59282008`.
+- Unity product policy validation passed 17/17; worker package validation passed 9/9; project
+  template validation passed 8/8.
+- Repository baseline validation passed 32/32 across 764 tracked paths.
+- Final Core CI passed all nine stages: locked restore, 18-project Release build with zero
+  warnings/errors, .NET and Ruff formatting/linting, and 2,282/2,282 tests.
+- One earlier Core CI attempt observed a transient unrelated artifact-promotion collision test
+  failure. The unchanged test then passed alone, the complete Infrastructure suite passed 647/647,
+  and the final complete Core CI passed 2,282/2,282; no out-of-scope production or test change was
+  made.
+
+### PB-0607/PB-0608 Completion Evidence
+
+- Both tasks were committed as `dda9130cc40b20b09f355c9ffe29db4e9e9df682` on the approved
+  combined publication branch.
+- [Pull request #70](https://github.com/avivperets26/3DModels-Package-Builder/pull/70) merged them
+  into `main` as `ea3ceedf108d9f2e867a4b00c1641a5925735cf8`.
+- Required [main workflow run 31196967286](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31196967286)
+  completed successfully for that exact merge commit.
+- The user explicitly confirmed the push, merge, green required `main` CI, and successful manual
+  Inspector checkpoints on 2026-08-07.
+- No CI, quality, or completion exception was used. The combined publication exception governed
+  branch topology only and created no precedent.
 
 ### PB-0607/PB-0608 Combined Publication Exception
 
@@ -173,9 +221,10 @@ feat/PB-0607-unity-urp-material-compiler
   cycle.
 - **Independence retained:** both tasks keep their canonical IDs, branches, acceptance boundaries,
   evidence documents, lifecycle states, and eventual Completion Log rows.
-- **Completion:** both remain `[ ]` / 🟡 **PROCESS** until this combined change is committed,
-  pushed, merged into and pushed on `main`, required `main` CI succeeds, the user explicitly
-  confirms completion, and rollover is synchronized on the next task branch.
+- **Completion:** both were committed as `dda9130cc40b20b09f355c9ffe29db4e9e9df682`, merged
+  through PR #70 as `ea3ceedf108d9f2e867a4b00c1641a5925735cf8`, passed required `main`
+  workflow run 31196967286, and were explicitly confirmed complete by the user. Their DONE state
+  and Completion Log rows are synchronized in the PB-0609/PB-0610/PB-0611 branch.
 - **No precedent:** this branch-topology exception waives no test, engine, quality, CI, security,
   documentation, or completion gate.
 
@@ -1258,6 +1307,8 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0604 | `feat/PB-0604-unity-job-clone` | `07b05bf3e1110e7023eb781c2423049c93c66270` | [#68](https://github.com/avivperets26/3DModels-Package-Builder/pull/68) | 2026-08-07 | Published on the PB-0602 branch with PB-0602/PB-0603 under the approved combined exception and merged as `c8a63ce76b52cdb12734f6a7fe82ccc166acc081`; required [main workflow run 31162153720](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31162153720) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. |
 | PB-0605 | `feat/PB-0605-unity-folder-generator` | `f6c12c553229b245256b519f568de7fa0772c0ad` | [#69](https://github.com/avivperets26/3DModels-Package-Builder/pull/69) | 2026-08-07 | Published with PB-0606 under the approved combined exception and merged as `e575365df6ee9b93648e65bea02394596ace52e6`; required exact-merge [main workflow run 31180117662](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31180117662) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. |
 | PB-0606 | `feat/PB-0606-unity-texture-importers` | `f6c12c553229b245256b519f568de7fa0772c0ad` | [#69](https://github.com/avivperets26/3DModels-Package-Builder/pull/69) | 2026-08-07 | Published on the PB-0605 branch under the approved combined exception and merged as `e575365df6ee9b93648e65bea02394596ace52e6`; required exact-merge [main workflow run 31180117662](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31180117662) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. |
+| PB-0607 | `feat/PB-0607-unity-metallic-smoothness` | `dda9130cc40b20b09f355c9ffe29db4e9e9df682` | [#70](https://github.com/avivperets26/3DModels-Package-Builder/pull/70) | 2026-08-07 | Published with PB-0608 under the approved combined exception and merged as `ea3ceedf108d9f2e867a4b00c1641a5925735cf8`; required exact-merge [main workflow run 31196967286](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31196967286) succeeded. No CI or quality exception was used; the user explicitly confirmed completion and the real Unity Inspector checkpoint. |
+| PB-0608 | `feat/PB-0608-unity-urp-material` | `dda9130cc40b20b09f355c9ffe29db4e9e9df682` | [#70](https://github.com/avivperets26/3DModels-Package-Builder/pull/70) | 2026-08-07 | Published on the PB-0607 branch under the approved combined exception and merged as `ea3ceedf108d9f2e867a4b00c1641a5925735cf8`; required exact-merge [main workflow run 31196967286](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31196967286) succeeded. No CI or quality exception was used; the user explicitly confirmed completion and the real Unity material Inspector checkpoint. |
 
 ## 5. Milestones
 
@@ -1770,27 +1821,27 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0104, PB-0605
   - Done when: Albedo/Emission use sRGB, data maps use linear, Normal is typed correctly, alpha rules are explicit, and import settings have Editor tests.
 
-- [ ] **PB-0607 — Implement Unity metallic-smoothness texture packing** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0607 — Implement Unity metallic-smoothness texture packing** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0607-unity-metallic-smoothness`
   - Depends on: PB-0606
   - Done when: Metallic goes to red, `1 - Roughness` goes to alpha, dimensions are checked, and pixel tests verify output.
 
-- [ ] **PB-0608 — Implement Unity URP/Lit material compiler** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0608 — Implement Unity URP/Lit material compiler** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0608-unity-urp-material`
   - Depends on: PB-0606, PB-0607
   - Done when: Base, Normal, MetallicSmoothness, Emission, AO, surface/cutout, culling, keywords, and render queue are correct without Inspector Fix prompts.
 
-- [ ] **PB-0609 — Implement static ModelImporter policy** — **P0**
+- [ ] **PB-0609 — Implement static ModelImporter policy** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0609-unity-static-importer`
   - Depends on: PB-0603, PB-0605
   - Done when: animation/rig are disabled, cameras/lights/visibility rules apply, normals/tangents/scale/preserve-hierarchy are controlled, and material remapping is deterministic.
 
-- [ ] **PB-0610 — Implement safe mesh extraction policy** — **P0**
+- [ ] **PB-0610 — Implement safe mesh extraction policy** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0610-unity-mesh-assets`
   - Depends on: PB-0609
   - Done when: standalone `MS_` assets are generated only where references remain correct, have stable names, and are not duplicated in Source.
 
-- [ ] **PB-0611 — Implement Unity prefab generator** — **P0**
+- [ ] **PB-0611 — Implement Unity prefab generator** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0611-unity-prefabs`
   - Depends on: PB-0608 through PB-0610
   - Done when: `P_<AssetId>.prefab` has a reset product root, reset `P_Model` child, correct renderers/materials, and no missing references.
