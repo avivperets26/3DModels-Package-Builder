@@ -160,9 +160,48 @@ feat/PB-0607-unity-urp-material-compiler
 |---|---|---|---|---|---|---|
 | PB-0507 | 🟡 **PROCESS** | `test/PB-0507-portable-static-e2e` | Portable Target Engineering for local work; user for Git gates | 2026-08-06 | PR #66 merged task commit `03d18ae0a646b133ee55cbca808ed09c0fd8103f` into `main` as `c1a560c620ca8ad23b10becbd8f6c7860155107d`; local acceptance remains fully green. GitHub created no check suite for that merge while Actions reported a major outage. | A required successful workflow for exact merge `c1a560c…` and explicit completion confirmation remain. No CI exception is approved; PB-0601 proceeds independently. |
 | PB-0601 | 🟡 **PROCESS** | `feat/PB-0601-unity-template` | Unity Target Engineering for local work; user for Git gates | 2026-08-06 | Task commit `cce15e3b1cda012f15245c519aa354c1b85b85b8` was merged through PR #67 into `main` as `6915744820ae53fe9285b493c1d1ced3ede6e740`; the tracked Unity `6000.3` template and its eight-check validator remain locally valid. | A successful required `main` workflow for exact merge `6915744…`, explicit completion confirmation, and next-task rollover remain unverified. No CI exception is approved. |
-| PB-0602 | 🟡 **PROCESS** | `feat/PB-0602-unity-worker-package` | Unity Target Engineering for local work; user for Git gates | 2026-08-06 | The dependency-free `com.packagebuilder.worker` package is Editor-only; static validation passes 9/9 and Unity `6000.3.10f1` compiled the assembly successfully in an isolated template clone. | User-controlled commit/push/merge, successful required `main` CI, explicit confirmation, and next-task rollover remain. |
-| PB-0603 | 🟡 **PROCESS** | `feat/PB-0603-unity-entrypoint` | Unity Target Engineering for local work; user for Git gates | 2026-08-06 | The protocol-v1 batch entrypoint reads a bounded strict request, emits JSON Lines, saves a probe asset and atomic result, and returns documented stable exit codes; the real Unity batch probe passed. | Published with PB-0602 under the approved combined cycle; its Git/CI/confirmation/rollover gates remain. |
-| PB-0604 | 🟡 **PROCESS** | `feat/PB-0604-unity-job-clone` | Unity Target Engineering for local work; user for Git gates | 2026-08-06 | Project-contained cloning, exclusive job locking, staging promotion, cancellation, and explicit retain/delete policies are implemented; focused Release tests pass 14/14. | Published with PB-0602 under the approved combined cycle; its Git/CI/confirmation/rollover gates remain. |
+| PB-0605 | 🟡 **PROCESS** | `feat/PB-0605-unity-folder-generator` | Unity Target Engineering for local work; user for Git gates | 2026-08-07 | Configurable case-specific Unity product folders, legacy-safe retained paths, second-process reopen, and exact pinned-package URP marker validation pass. Manual Unity review confirmed all five layouts with no Console error, path exception, upgrade prompt, or `_Template`; final Core CI passed all nine stages. | User-controlled commit/push/merge, successful required `main` CI, explicit confirmation, and next-task rollover remain. |
+| PB-0606 | 🟡 **PROCESS** | `feat/PB-0606-unity-texture-importers` | Unity Target Engineering for local work; user for Git gates | 2026-08-07 | All eight canonical importer policies pass. Manual screenshots confirmed the settings; 4x4 fixtures removed the only Inspector compression notice, the warning-free follow-up passed, and final Core CI passed all nine stages. | The combined PB-0605 user-controlled publication/CI/confirmation/rollover gates remain. |
+
+### PB-0605/PB-0606 Combined Publication Exception
+
+- **Approved:** 2026-08-07, explicitly by the user.
+- **Publication branch:** `feat/PB-0605-unity-folder-generator`.
+- **Exact scope:** PB-0605 Unity product folder generation, PB-0606 TextureImporter policy,
+  PB-0602/PB-0603/PB-0604 rollover, focused static and real Editor tests, and documentation
+  genuinely affected by these two implementations.
+- **Reason:** the user requested these directly dependent Unity tasks as one implementation and
+  publication cycle.
+- **Independence retained:** PB-0605 and PB-0606 retain their canonical task IDs, branches,
+  acceptance boundaries, evidence documents, lifecycle states, and eventual Completion Log rows.
+- **Completion:** both remain `[ ]` / 🟡 **PROCESS** until the combined change is committed,
+  pushed, merged into and pushed on `main`, required `main` CI succeeds, the user explicitly
+  confirms completion, and rollover is synchronized on the next task branch.
+- **No precedent:** this branch-topology exception creates no architectural coupling and does not
+  waive a test, engine, quality, CI, security, documentation, or completion gate.
+
+### PB-0602/PB-0603/PB-0604 Completion Evidence
+
+- The three tasks were committed as `07b05bf3e1110e7023eb781c2423049c93c66270` on the approved
+  combined publication branch.
+- [Pull request #68](https://github.com/avivperets26/3DModels-Package-Builder/pull/68) merged them
+  into `main` as `c8a63ce76b52cdb12734f6a7fe82ccc166acc081` on 2026-08-07.
+- Required [main workflow run 31162153720](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31162153720)
+  completed successfully for that exact merge commit.
+- The user explicitly confirmed the push, merge, and green required `main` CI on 2026-08-07.
+- No CI or quality exception was used. The combined publication exception changed branch topology
+  only and created no precedent.
+
+### Deferred PB-0214/PB-0215 P1 Scheduling Checkpoint
+
+- PB-0214 deterministic caching and PB-0215 resource/concurrency guards remain approved **P1**
+  production-quality work; neither task was removed, replaced, or forgotten.
+- Their declared dependencies are complete, but neither task blocks the current P0 Unity static
+  critical path. PB-0604 already prevents concurrent writers to one Unity clone; PB-0215 owns the
+  later aggregate engine limits, disk-space, and quota policy.
+- Reassess and schedule both immediately after the Unity static vertical slice (PB-0618), before
+  production hardening, multi-engine concurrency, performance qualification, or public release.
+- This scheduling statement changes no acceptance condition, dependency edge, or release gate.
 
 ### PB-0602/PB-0603/PB-0604 Combined Publication Exception
 
@@ -1171,6 +1210,9 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0504 | `feat/PB-0504-portable-readme` | `4b482e97cb4fadf112ebb95ad972831b5f6141cd` | [#64](https://github.com/avivperets26/3DModels-Package-Builder/pull/64) | 2026-08-06 | Published on the PB-0503 branch with PB-0503 under the approved combined exception and merged as `33d077a5eb63a9398d720fb60b08bfd8871f7bc5`; required [main workflow run 31116763102](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31116763102) succeeded. Optional PR CI failed only during GitHub's action-download service outage; no CI or quality exception was used, and the user explicitly confirmed completion. |
 | PB-0505 | `feat/PB-0505-deterministic-fbx-zip` | `38d82cc00572f506c3dc2cf67f996d64e50e64dd` | [#65](https://github.com/avivperets26/3DModels-Package-Builder/pull/65) | 2026-08-06 | Published with PB-0506 under the approved combined publication exception and merged as `725c5d21fa5d28342d62946b4ac93184a33656f9`; required [main workflow run 31123410839](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31123410839) succeeded for that exact merge. No CI or quality exception was used; the user confirmed the push and merge, and the successful conclusion was independently reverified. |
 | PB-0506 | `feat/PB-0506-portable-validator` | `38d82cc00572f506c3dc2cf67f996d64e50e64dd` | [#65](https://github.com/avivperets26/3DModels-Package-Builder/pull/65) | 2026-08-06 | Published on the PB-0505 branch with PB-0505 under the approved combined publication exception and merged as `725c5d21fa5d28342d62946b4ac93184a33656f9`; required [main workflow run 31123410839](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31123410839) succeeded for that exact merge. No CI or quality exception was used; the user confirmed the push and merge, and the successful conclusion was independently reverified. |
+| PB-0602 | `feat/PB-0602-unity-worker-package` | `07b05bf3e1110e7023eb781c2423049c93c66270` | [#68](https://github.com/avivperets26/3DModels-Package-Builder/pull/68) | 2026-08-07 | Published with PB-0603 and PB-0604 under the approved combined exception and merged as `c8a63ce76b52cdb12734f6a7fe82ccc166acc081`; required [main workflow run 31162153720](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31162153720) succeeded for that exact merge. No CI or quality exception was used; the user explicitly confirmed completion. |
+| PB-0603 | `feat/PB-0603-unity-entrypoint` | `07b05bf3e1110e7023eb781c2423049c93c66270` | [#68](https://github.com/avivperets26/3DModels-Package-Builder/pull/68) | 2026-08-07 | Published on the PB-0602 branch with PB-0602/PB-0604 under the approved combined exception and merged as `c8a63ce76b52cdb12734f6a7fe82ccc166acc081`; required [main workflow run 31162153720](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31162153720) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. |
+| PB-0604 | `feat/PB-0604-unity-job-clone` | `07b05bf3e1110e7023eb781c2423049c93c66270` | [#68](https://github.com/avivperets26/3DModels-Package-Builder/pull/68) | 2026-08-07 | Published on the PB-0602 branch with PB-0602/PB-0603 under the approved combined exception and merged as `c8a63ce76b52cdb12734f6a7fe82ccc166acc081`; required [main workflow run 31162153720](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31162153720) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. |
 
 ## 5. Milestones
 
@@ -1658,27 +1700,27 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0303, PB-0308
   - Done when: a minimal current approved Unity/URP template contains only required `Assets`, `Packages`, and `ProjectSettings` content and no cache directories.
 
-- [ ] **PB-0602 — Create Unity worker package and Editor assembly** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0602 — Create Unity worker package and Editor assembly** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0602-unity-worker-package`
   - Depends on: PB-0112, PB-0601
   - Done when: `com.packagebuilder.worker` compiles in the template and contains no runtime dependency in exported customer content.
 
-- [ ] **PB-0603 — Implement Unity batch entrypoint and progress protocol** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0603 — Implement Unity batch entrypoint and progress protocol** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0603-unity-entrypoint`
   - Depends on: PB-0209, PB-0602
   - Done when: Unity reads requests, emits JSON Lines, writes results, saves assets, and exits with stable codes in batch mode.
 
-- [ ] **PB-0604 — Implement Unity template cloning and exclusive job execution** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0604 — Implement Unity template cloning and exclusive job execution** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0604-unity-job-clone`
   - Depends on: PB-0208, PB-0601, PB-0603
   - Done when: each job uses an isolated clone, project locks prevent concurrent writers, and failed clones are retained or cleaned by policy.
 
-- [ ] **PB-0605 — Implement Unity product folder generator** — **P0**
+- [ ] **PB-0605 — Implement Unity product folder generator** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0605-unity-folder-generator`
   - Depends on: PB-0101, PB-0603
   - Done when: configurable publisher root and case-specific Source, Meshes, Materials, Textures, Prefabs, Animations, Controllers, Documentation, Scenes, and Scripts folders are created without `_Template` output.
 
-- [ ] **PB-0606 — Implement Unity TextureImporter policies** — **P0**
+- [ ] **PB-0606 — Implement Unity TextureImporter policies** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0606-unity-texture-importers`
   - Depends on: PB-0104, PB-0605
   - Done when: Albedo/Emission use sRGB, data maps use linear, Normal is typed correctly, alpha rules are explicit, and import settings have Editor tests.

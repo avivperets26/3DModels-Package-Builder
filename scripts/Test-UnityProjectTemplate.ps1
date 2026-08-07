@@ -98,7 +98,10 @@ $expectedWorkerPackageFiles = @(
     'Packages/com.packagebuilder.worker/Editor/UnityWorkerExitCode.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityWorkerFileSystem.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityWorkerJson.cs',
-    'Packages/com.packagebuilder.worker/Editor/UnityWorkerRequest.cs'
+    'Packages/com.packagebuilder.worker/Editor/UnityWorkerRequest.cs',
+    'Packages/com.packagebuilder.worker/Editor/UnityProductFolderGenerator.cs',
+    'Packages/com.packagebuilder.worker/Editor/UnityTextureImporterPolicy.cs',
+    'Packages/com.packagebuilder.worker/Editor/UnityProductEditorIntegrationTests.cs'
 )
 $expectedFiles = @(
     $expectedAssetFiles +
@@ -144,6 +147,14 @@ Invoke-Check 'Unity Editor and URP versions are pinned to the approved pair' {
         $dependencies[0].Name -cne 'com.unity.render-pipelines.universal' -or
         [string]$dependencies[0].Value -cne '17.3.0') {
         throw 'Packages/manifest.json must pin only URP 17.3.0 as a direct dependency.'
+    }
+
+    $urpProjectSettings = Get-Content -LiteralPath (Join-Path $script:TemplateRoot `
+            'ProjectSettings\URPProjectSettings.asset') -Raw -Encoding UTF8
+    $materialVersionMatches = @([regex]::Matches($urpProjectSettings,
+            '(?m)^  m_LastMaterialVersion: 10$'))
+    if ($materialVersionMatches.Count -ne 1) {
+        throw 'URPProjectSettings.asset must record material upgrader version 10 for pinned URP 17.3.0.'
     }
 }
 

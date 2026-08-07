@@ -6,11 +6,19 @@
 - Canonical branch: `feat/PB-0602-unity-worker-package`.
 - Publication branch: `feat/PB-0602-unity-worker-package` under the approved combined
   PB-0602/PB-0603/PB-0604 cycle.
-- Status: `[ ]` / 🟡 **PROCESS**.
+- Status: `[x]` / 🟢 **DONE**.
 - Started: 2026-08-06.
 
-PB-0602 remains open until the user-controlled commit, push, merge, required `main` CI, explicit
-completion confirmation, and next-task rollover are complete.
+PB-0602 completed through the combined publication and PB-0605/PB-0606 rollover.
+
+## Publication Evidence
+
+- Final task commit: `07b05bf3e1110e7023eb781c2423049c93c66270`.
+- Integration: [PR #68](https://github.com/avivperets26/3DModels-Package-Builder/pull/68),
+  merged as `c8a63ce76b52cdb12734f6a7fe82ccc166acc081`.
+- Required `main` CI: [run 31162153720](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31162153720), successful.
+- User confirmation: 2026-08-07.
+- Exception: no CI or quality exception; the approved combined cycle affected branch topology only.
 
 ## Implemented Package Boundary
 
@@ -54,7 +62,4 @@ Unity caches and logs remain ignored and repository-contained.
 
 ## Remaining Gates
 
-- User-controlled commit and branch push.
-- Merge into and push of `main`.
-- Successful required `main` CI.
-- Explicit completion confirmation and next-task rollover synchronization.
+None for PB-0602.

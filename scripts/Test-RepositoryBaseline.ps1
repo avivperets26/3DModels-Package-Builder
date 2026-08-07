@@ -813,6 +813,15 @@ Invoke-Check 'Unity worker package is dependency-free and Editor-only' {
     & $validatorPath -RepositoryRoot $script:RepositoryRoot
 }
 
+Invoke-Check 'Unity product folders and TextureImporter policies are deterministic' {
+    $validatorPath = Join-Path $script:RepositoryRoot 'scripts\Test-UnityProductPolicies.ps1'
+    if (-not (Test-Path -LiteralPath $validatorPath -PathType Leaf)) {
+        throw 'Missing scripts/Test-UnityProductPolicies.ps1.'
+    }
+
+    & $validatorPath -RepositoryRoot $script:RepositoryRoot
+}
+
 Invoke-Check 'Core CI configuration preserves and extends the repository baseline' {
     $validatorPath = Join-Path $script:RepositoryRoot 'scripts\Test-CoreCiConfiguration.ps1'
     if (-not (Test-Path -LiteralPath $validatorPath -PathType Leaf)) {

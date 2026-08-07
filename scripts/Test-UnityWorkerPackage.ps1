@@ -57,7 +57,10 @@ $expectedFiles = @(
     'Editor/UnityWorkerExitCode.cs',
     'Editor/UnityWorkerFileSystem.cs',
     'Editor/UnityWorkerJson.cs',
-    'Editor/UnityWorkerRequest.cs'
+    'Editor/UnityWorkerRequest.cs',
+    'Editor/UnityProductFolderGenerator.cs',
+    'Editor/UnityTextureImporterPolicy.cs',
+    'Editor/UnityProductEditorIntegrationTests.cs'
 ) | Sort-Object
 
 Invoke-Check 'Embedded Unity worker package inventory is exact' {
