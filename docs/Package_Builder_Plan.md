@@ -191,7 +191,16 @@ A Unity Editor assembly is executed either from its Editor window or with `-batc
 - Validates the package in the Editor.
 - Exports the exact intended paths as a `.unitypackage`.
 
-The initial target is the installed Unity `6000.3.10f1` project using URP `17.3.0`. Engine and pipeline versions remain configurable. The tracked `engine-templates/unity/6000.3` foundation contains only required URP settings beneath `Assets`, the pinned package manifest beneath `Packages`, and versioned `ProjectSettings`; workers always clone it before Unity is allowed to create caches or generated state.
+The initial target is the installed Unity `6000.3.10f1` project using URP `17.3.0`. Engine and pipeline versions remain configurable. The tracked `engine-templates/unity/6000.3` foundation contains only required URP settings beneath `Assets`, the pinned package manifest and dependency-free Editor-only `com.packagebuilder.worker` beneath `Packages`, and versioned `ProjectSettings`; workers always clone it before Unity is allowed to create caches or generated state.
+
+The first worker foundation reads one bounded protocol-v1 request, emits JSON Lines progress and
+metrics, writes the final result atomically, saves generated assets, honors the project-contained
+cancellation-file signal, and uses stable process exit codes. Each execution holds an exclusive
+lock on a job-specific isolated clone. Clone completion explicitly selects delete-always,
+retain-on-failure, or retain-always behavior so diagnosis never depends on an implicit cleanup
+choice. This foundation proves compilation and batch communication with a probe asset; product
+folders, importers, materials, prefabs, scenes, `.unitypackage` export, and clean reimport remain
+owned by PB-0605 and later tasks.
 
 ### 3.4 Unreal Worker
 

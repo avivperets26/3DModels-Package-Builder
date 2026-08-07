@@ -677,6 +677,7 @@ C:\Dev\PackageBuilder\
 │   ├── PackageBuilder.Contract.Tests/
 │   ├── PackageBuilder.App.Wpf.Tests/
 │   ├── PackageBuilder.Targets.Portable.Tests/
+│   ├── PackageBuilder.Targets.Unity.Tests/
 │   └── fixtures/
 ├── scripts/
 │   ├── Test-ArchitectureDecisionRecords.ps1
@@ -1724,6 +1725,19 @@ pipeline settings. Samples, tutorial code/media, product content, engine caches,
 output are prohibited. A dependency-free repository validator checks the exact inventory, version
 pair, URP GUID graph, public safety, and text portability without launching Unity.
 
+The Unity compatibility template embeds `Packages/com.packagebuilder.worker` as a dependency-free
+Editor-only assembly. Its protocol-v1 batch entrypoint accepts one bounded strict request file,
+emits JSON Lines progress/metrics, saves assets and an atomic result, honors the shared
+project-contained cancellation-file signal, and exits with stable codes 0 and 2 through 7. The
+package contains no runtime assembly and is not part of exported customer content.
+
+The .NET Unity target creates jobs through `UnityProjectCloneService`. Template and job roots must
+be non-overlapping project-contained paths without reparse points. A job is copied in deterministic
+order through a unique staging directory, atomically promoted to `unity-project`, and protected for
+its full lifetime by an exclusive `FileShare.None` lock. Success, failure, and cancellation apply
+an explicit delete-always, retain-on-failure, or retain-always policy. Unity integration validation
+opens only ignored clones; the tracked template is never opened directly by the Editor.
+
 ## 15. Marketplace Requirements Versioning
 
 Marketplace rules change independently of engine versions. Requirements profiles contain:
@@ -2069,7 +2083,7 @@ The reviewed action pins are:
 - `actions/checkout` `v7.0.1` at immutable commit `3d3c42e5aac5ba805825da76410c181273ba90b1`.
 - `actions/setup-dotnet` `v6.0.0` at immutable commit `a98b56852c35b8e3190ac28c8c2271da59106c68`.
 
-The core entry point runs repository validation, exact SDK verification, one locked restore, the complete Release build, `dotnet format --verify-no-changes`, checksum-verified Ruff `0.15.22` installation, Ruff lint and format verification, then all six test projects with no repeated restore/build. Each project must discover and pass at least one test; the aggregate must contain at least six passes and no failed, skipped, missing, stale, or unclassified result.
+The core entry point runs repository validation, exact SDK verification, one locked restore, the complete Release build, `dotnet format --verify-no-changes`, checksum-verified Ruff `0.15.22` installation, Ruff lint and format verification, then all seven test projects with no repeated restore/build. Each project must discover and pass at least one test; the aggregate must contain at least seven passes and no failed, skipped, missing, stale, or unclassified result.
 
 The action-managed SDK path is runner infrastructure and is not described as repository-contained. Explicit GitHub Actions mode verifies `GITHUB_ACTIONS`, exact `GITHUB_WORKSPACE`, and SDK `10.0.302`; every project-owned CLI home, NuGet package/cache, Ruff cache, scratch, temporary, log, and result path remains below `GITHUB_WORKSPACE`. Local execution continues to require `tools/dotnet/10.0.302`.
 

@@ -239,6 +239,13 @@ $projectSpecifications = @(
             'PackageBuilder.Targets.Portable'
         )
     }
+    [pscustomobject]@{
+        Name = 'PackageBuilder.Targets.Unity.Tests'
+        Path = 'tests/PackageBuilder.Targets.Unity.Tests/PackageBuilder.Targets.Unity.Tests.csproj'
+        Framework = 'net10.0'
+        Kind = 'Test'
+        References = @('PackageBuilder.Targets.Unity')
+    }
 )
 
 $specificationByName = @{}

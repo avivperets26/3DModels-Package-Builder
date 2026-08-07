@@ -1,6 +1,6 @@
 # Package Builder Documentation
 
-This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. Repository, core domain/contracts, contained infrastructure, tool-version management through PB-0310, the first WPF shell, Blender normalization/export/reimport through PB-0418, and portable target capabilities through PB-0506 are complete. PB-0507 is merged but awaits its outage-delayed required CI gate, while PB-0601 is the active Unity template foundation. Later Unity/Unreal targets, broader product cases, marketplace packaging, preview generation, and the remaining desktop screens are not claimed as implemented.
+This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. Repository, core domain/contracts, contained infrastructure, tool-version management through PB-0310, the first WPF shell, Blender normalization/export/reimport through PB-0418, and portable target capabilities through PB-0506 are complete. PB-0507 and PB-0601 are merged but still await their exact required CI/completion evidence. PB-0602 through PB-0604 now have locally validated Unity worker, batch-protocol, and isolated-clone implementations and remain PROCESS until publication gates complete. Later Unity/Unreal target behavior, broader product cases, marketplace packaging, preview generation, and the remaining desktop screens are not claimed as implemented.
 
 ## Primary Documentation
 
@@ -117,6 +117,9 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 ## Unity Target Evidence
 
 - [PB-0601 versioned Unity project template evidence](PB-0601_UNITY_TEMPLATE_EVIDENCE.md)
+- [PB-0602 Unity worker package evidence](PB-0602_UNITY_WORKER_PACKAGE_EVIDENCE.md)
+- [PB-0603 Unity batch protocol evidence](PB-0603_UNITY_BATCH_PROTOCOL_EVIDENCE.md)
+- [PB-0604 Unity project clone evidence](PB-0604_UNITY_PROJECT_CLONE_EVIDENCE.md)
 
 ## Dependency and Licence Records
 

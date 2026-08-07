@@ -91,7 +91,21 @@ $expectedProjectSettings = @(
     'VFXManager.asset',
     'XRSettings.asset'
 ) | ForEach-Object { "ProjectSettings/$_" }
-$expectedFiles = @($expectedAssetFiles + 'Packages/manifest.json' + $expectedProjectSettings) | Sort-Object
+$expectedWorkerPackageFiles = @(
+    'Packages/com.packagebuilder.worker/package.json',
+    'Packages/com.packagebuilder.worker/Editor/PackageBuilder.UnityWorker.Editor.asmdef',
+    'Packages/com.packagebuilder.worker/Editor/UnityBatchEntrypoint.cs',
+    'Packages/com.packagebuilder.worker/Editor/UnityWorkerExitCode.cs',
+    'Packages/com.packagebuilder.worker/Editor/UnityWorkerFileSystem.cs',
+    'Packages/com.packagebuilder.worker/Editor/UnityWorkerJson.cs',
+    'Packages/com.packagebuilder.worker/Editor/UnityWorkerRequest.cs'
+)
+$expectedFiles = @(
+    $expectedAssetFiles +
+    'Packages/manifest.json' +
+    $expectedWorkerPackageFiles +
+    $expectedProjectSettings
+) | Sort-Object
 
 Invoke-Check 'Template has exactly the approved Unity project roots' {
     if (-not (Test-Path -LiteralPath $script:TemplateRoot -PathType Container)) {
@@ -174,7 +188,7 @@ Invoke-Check 'URP asset metadata matches every referenced project GUID' {
     }
 }
 
-Invoke-Check 'Template contains no sample product, scripts, scenes, or stale references' {
+Invoke-Check 'Template contains no sample product, runtime scripts, scenes, or stale references' {
     $buildSettings = Get-Content -LiteralPath (Join-Path $script:TemplateRoot 'ProjectSettings\EditorBuildSettings.asset') -Raw -Encoding UTF8
     $playerSettings = Get-Content -LiteralPath (Join-Path $script:TemplateRoot 'ProjectSettings\ProjectSettings.asset') -Raw -Encoding UTF8
     if ($buildSettings -notmatch '(?m)^  m_Scenes: \[\]$' -or $buildSettings -notmatch '(?m)^  m_configObjects: \{\}$') {
@@ -184,7 +198,7 @@ Invoke-Check 'Template contains no sample product, scripts, scenes, or stale ref
         throw 'Player settings retain prior template or publisher identity.'
     }
     $forbiddenExtensions = '(?i)\.(cs|dll|exe|unity|prefab|fbx|glb|gltf|blend|png|jpg|jpeg|tga|psd)$'
-    $forbiddenFiles = @(Get-ChildItem -LiteralPath $script:TemplateRoot -Recurse -File |
+    $forbiddenFiles = @(Get-ChildItem -LiteralPath (Join-Path $script:TemplateRoot 'Assets') -Recurse -File |
         Where-Object { $_.Name -match $forbiddenExtensions })
     if ($forbiddenFiles.Count -gt 0) {
         throw "Template contains product, executable, scene, script, or media files: $($forbiddenFiles.Name -join ', ')."

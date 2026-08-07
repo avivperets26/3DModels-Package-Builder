@@ -159,7 +159,39 @@ feat/PB-0607-unity-urp-material-compiler
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
 | PB-0507 | 🟡 **PROCESS** | `test/PB-0507-portable-static-e2e` | Portable Target Engineering for local work; user for Git gates | 2026-08-06 | PR #66 merged task commit `03d18ae0a646b133ee55cbca808ed09c0fd8103f` into `main` as `c1a560c620ca8ad23b10becbd8f6c7860155107d`; local acceptance remains fully green. GitHub created no check suite for that merge while Actions reported a major outage. | A required successful workflow for exact merge `c1a560c…` and explicit completion confirmation remain. No CI exception is approved; PB-0601 proceeds independently. |
-| PB-0601 | 🟡 **PROCESS** | `feat/PB-0601-unity-template` | Unity Target Engineering for local work; user for Git gates | 2026-08-06 | The tracked Unity `6000.3` template is derived from the installed official `6000.3.10f1` URP template, pins URP `17.3.0`, contains only minimal project roots/settings, and has a dependency-free eight-check validator integrated into the repository baseline. | Local full validation, user-controlled commit/push/merge, successful required `main` CI, explicit confirmation, and next-task rollover remain. |
+| PB-0601 | 🟡 **PROCESS** | `feat/PB-0601-unity-template` | Unity Target Engineering for local work; user for Git gates | 2026-08-06 | Task commit `cce15e3b1cda012f15245c519aa354c1b85b85b8` was merged through PR #67 into `main` as `6915744820ae53fe9285b493c1d1ced3ede6e740`; the tracked Unity `6000.3` template and its eight-check validator remain locally valid. | A successful required `main` workflow for exact merge `6915744…`, explicit completion confirmation, and next-task rollover remain unverified. No CI exception is approved. |
+| PB-0602 | 🟡 **PROCESS** | `feat/PB-0602-unity-worker-package` | Unity Target Engineering for local work; user for Git gates | 2026-08-06 | The dependency-free `com.packagebuilder.worker` package is Editor-only; static validation passes 9/9 and Unity `6000.3.10f1` compiled the assembly successfully in an isolated template clone. | User-controlled commit/push/merge, successful required `main` CI, explicit confirmation, and next-task rollover remain. |
+| PB-0603 | 🟡 **PROCESS** | `feat/PB-0603-unity-entrypoint` | Unity Target Engineering for local work; user for Git gates | 2026-08-06 | The protocol-v1 batch entrypoint reads a bounded strict request, emits JSON Lines, saves a probe asset and atomic result, and returns documented stable exit codes; the real Unity batch probe passed. | Published with PB-0602 under the approved combined cycle; its Git/CI/confirmation/rollover gates remain. |
+| PB-0604 | 🟡 **PROCESS** | `feat/PB-0604-unity-job-clone` | Unity Target Engineering for local work; user for Git gates | 2026-08-06 | Project-contained cloning, exclusive job locking, staging promotion, cancellation, and explicit retain/delete policies are implemented; focused Release tests pass 14/14. | Published with PB-0602 under the approved combined cycle; its Git/CI/confirmation/rollover gates remain. |
+
+### PB-0602/PB-0603/PB-0604 Combined Publication Exception
+
+- **Approved:** 2026-08-06, explicitly by the user.
+- **Publication branch:** `feat/PB-0602-unity-worker-package`.
+- **Exact scope:** the PB-0602 Editor-only Unity worker package, PB-0603 protocol-v1 batch
+  entrypoint/progress/result contract, PB-0604 isolated template cloning/exclusive locking and
+  retention policy, focused tests, validators, and documentation genuinely affected by those
+  three implementations.
+- **Reason:** the user requested the three directly dependent Unity foundation tasks as one work
+  and publication cycle.
+- **Independence retained:** PB-0602, PB-0603, and PB-0604 retain their canonical task IDs,
+  branches, acceptance boundaries, evidence documents, lifecycle states, and eventual Completion
+  Log rows.
+- **Completion:** all three remain `[ ]` / 🟡 **PROCESS** until the combined change is merged,
+  required `main` CI succeeds, the user explicitly confirms completion, and rollover is
+  synchronized on the next task branch.
+- **No precedent:** this exact branch-topology exception creates no precedent and does not waive a
+  test, quality, CI, security, documentation, or completion gate.
+
+### PB-0601 Publication Checkpoint
+
+- Task commit `cce15e3b1cda012f15245c519aa354c1b85b85b8` was merged through
+  [PR #67](https://github.com/avivperets26/3DModels-Package-Builder/pull/67) into `main` as
+  `6915744820ae53fe9285b493c1d1ced3ede6e740` on 2026-08-06.
+- The user confirmed the push and merge and asked work to continue without waiting for GitHub.
+- No successful required `main` workflow for that exact merge and no explicit completion
+  confirmation have been verified. PB-0601 therefore remains `[ ]` / 🟡 **PROCESS** and absent
+  from the Completion Log; no CI exception is inferred or approved.
 
 ### PB-0507 GitHub Actions Outage Checkpoint
 
@@ -1626,17 +1658,17 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0303, PB-0308
   - Done when: a minimal current approved Unity/URP template contains only required `Assets`, `Packages`, and `ProjectSettings` content and no cache directories.
 
-- [ ] **PB-0602 — Create Unity worker package and Editor assembly** — **P0**
+- [ ] **PB-0602 — Create Unity worker package and Editor assembly** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0602-unity-worker-package`
   - Depends on: PB-0112, PB-0601
   - Done when: `com.packagebuilder.worker` compiles in the template and contains no runtime dependency in exported customer content.
 
-- [ ] **PB-0603 — Implement Unity batch entrypoint and progress protocol** — **P0**
+- [ ] **PB-0603 — Implement Unity batch entrypoint and progress protocol** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0603-unity-entrypoint`
   - Depends on: PB-0209, PB-0602
   - Done when: Unity reads requests, emits JSON Lines, writes results, saves assets, and exits with stable codes in batch mode.
 
-- [ ] **PB-0604 — Implement Unity template cloning and exclusive job execution** — **P0**
+- [ ] **PB-0604 — Implement Unity template cloning and exclusive job execution** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0604-unity-job-clone`
   - Depends on: PB-0208, PB-0601, PB-0603
   - Done when: each job uses an isolated clone, project locks prevent concurrent writers, and failed clones are retained or cleaned by policy.

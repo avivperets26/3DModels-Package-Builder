@@ -28,6 +28,7 @@ $script:ExpectedProjects = @(
     'tests/PackageBuilder.Domain.Tests/PackageBuilder.Domain.Tests.csproj',
     'tests/PackageBuilder.Infrastructure.Tests/PackageBuilder.Infrastructure.Tests.csproj'
     'tests/PackageBuilder.Targets.Portable.Tests/PackageBuilder.Targets.Portable.Tests.csproj'
+    'tests/PackageBuilder.Targets.Unity.Tests/PackageBuilder.Targets.Unity.Tests.csproj'
 )
 
 $script:ExpectedPackageVersions = @{
@@ -77,6 +78,7 @@ $script:ExpectedTestProjects = @(
     'tests/PackageBuilder.Domain.Tests/PackageBuilder.Domain.Tests.csproj',
     'tests/PackageBuilder.Infrastructure.Tests/PackageBuilder.Infrastructure.Tests.csproj'
     'tests/PackageBuilder.Targets.Portable.Tests/PackageBuilder.Targets.Portable.Tests.csproj'
+    'tests/PackageBuilder.Targets.Unity.Tests/PackageBuilder.Targets.Unity.Tests.csproj'
 )
 
 function Invoke-Check {
@@ -173,7 +175,7 @@ if (-not (Test-Path -LiteralPath $script:RepositoryRoot -PathType Container)) {
     throw "Repository root does not exist: $script:RepositoryRoot"
 }
 
-Invoke-Check 'Required central configuration and exact 17-project inventory exist' {
+Invoke-Check 'Required central configuration and exact 18-project inventory exist' {
     $requiredFiles = @(
         'global.json',
         'Directory.Build.props',
