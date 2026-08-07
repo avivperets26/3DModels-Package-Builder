@@ -4,25 +4,25 @@
 
 - Task: PB-0601 — Create versioned Unity project template.
 - Branch: `feat/PB-0601-unity-template`.
-- Status: `[ ]` / 🟡 **PROCESS**.
+- Status: `[x]` / 🟢 **DONE**.
 - Started: 2026-08-06.
 - Dependencies: PB-0303 and PB-0308 are complete.
 
-PB-0601 remains open until its user-controlled publication, required `main` CI, explicit completion
-confirmation, and next-task rollover are complete.
+PB-0601 is published, validated by later inclusive required `main` CI, explicitly confirmed, and
+recorded complete during the PB-0607/PB-0608 rollover.
 
 ## Publication Checkpoint
 
 - Task commit: `cce15e3b1cda012f15245c519aa354c1b85b85b8`.
 - Integration: [PR #67](https://github.com/avivperets26/3DModels-Package-Builder/pull/67).
 - Merge commit: `6915744820ae53fe9285b493c1d1ced3ede6e740` on 2026-08-06.
-- User evidence: the user confirmed the push and merge and asked development to continue without
-  waiting for GitHub.
-- Remaining evidence: no successful required `main` workflow for the exact merge and no explicit
-  completion confirmation have been verified.
-
-PB-0601 therefore remains `[ ]` / 🟡 **PROCESS** and absent from the Completion Log. No CI or
-completion exception is inferred or approved.
+- GitHub created no workflow for the exact outage-time merge. Required later [main workflow run
+  31180117662](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31180117662)
+  succeeded for descendant `e575365df6ee9b93648e65bea02394596ace52e6`, whose history and
+  tree contain the unchanged PB-0601 template.
+- The user explicitly confirmed the green merged state and requested rollover on 2026-08-07.
+- No CI gate is waived; later inclusive post-merge CI supplies the missing outage-time execution
+  evidence.
 
 ## Approved Version Pair
 
@@ -108,6 +108,4 @@ contacting a registry, uploading artifacts, or writing outside the repository.
 
 ## Remaining Gates
 
-- Successful required `main` CI for exact merge
-  `6915744820ae53fe9285b493c1d1ced3ede6e740`.
-- Explicit user completion confirmation and next-task rollover synchronization.
+None for PB-0601.

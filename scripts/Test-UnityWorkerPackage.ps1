@@ -60,6 +60,8 @@ $expectedFiles = @(
     'Editor/UnityWorkerRequest.cs',
     'Editor/UnityProductFolderGenerator.cs',
     'Editor/UnityTextureImporterPolicy.cs',
+    'Editor/UnityMetallicSmoothnessPacker.cs',
+    'Editor/UnityUrpLitMaterialCompiler.cs',
     'Editor/UnityProductEditorIntegrationTests.cs'
 ) | Sort-Object
 
@@ -94,19 +96,20 @@ Invoke-Check 'Package metadata pins the approved Editor-only worker identity' {
     }
 }
 
-Invoke-Check 'Assembly definition compiles only inside the Unity Editor' {
+Invoke-Check 'Assembly definition compiles only inside the Unity Editor with the pinned URP Editor API' {
     $assembly = Get-Content -LiteralPath (
         Join-Path $script:PackageRoot 'Editor\PackageBuilder.UnityWorker.Editor.asmdef'
     ) -Raw -Encoding UTF8 | ConvertFrom-Json
     if ([string]$assembly.name -cne 'PackageBuilder.UnityWorker.Editor' -or
         @($assembly.includePlatforms).Count -ne 1 -or
         [string]$assembly.includePlatforms[0] -cne 'Editor' -or
-        @($assembly.references).Count -ne 0 -or
+        @($assembly.references).Count -ne 1 -or
+        [string]$assembly.references[0] -cne 'Unity.RenderPipelines.Universal.Editor' -or
         @($assembly.precompiledReferences).Count -ne 0 -or
         [bool]$assembly.allowUnsafeCode -or
         [bool]$assembly.overrideReferences -or
         -not [bool]$assembly.autoReferenced) {
-        throw 'Worker assembly must remain dependency-free, safe, and Editor-only.'
+        throw 'Worker assembly must remain safe, Editor-only, and limited to the pinned URP Editor API.'
     }
 }
 

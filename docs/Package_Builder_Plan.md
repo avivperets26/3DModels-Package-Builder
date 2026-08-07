@@ -491,7 +491,13 @@ T_<AssetId>_MetallicSmoothness.png
 - Red: metallic.
 - Alpha: smoothness, calculated as `1 - roughness`.
 
-The material is configured through code, including required shader keywords. Alpha clipping is enabled only when the product manifest declares a cutout material or a verified opacity mask exists.
+PB-0607 performs this packing from separate linear inputs, checks matching dimensions, restores
+source importer settings, and verifies exact output bytes. PB-0608 configures the material through
+code using the pinned URP/Lit Editor canonicalizers, including Base, Normal, MetallicSmoothness,
+Emission, AO, culling, surface mode, render queue, and required shader keywords. Alpha clipping is
+enabled only when the product manifest declares a cutout material or a verified opacity mask
+exists. Opaque, Cutout, and Transparent material states must already be Inspector-consistent after
+generation; an additional URP canonicalization pass must make no change.
 
 ### Unreal and GLB Packing
 

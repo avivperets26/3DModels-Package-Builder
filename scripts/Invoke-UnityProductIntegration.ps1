@@ -34,6 +34,7 @@ $runRoot = Join-Path $repositoryRootPath "artifacts\u\$runId"
 $cloneRoot = Join-Path $runRoot 'p'
 $logPath = Join-Path $runRoot 'unity-product-tests.log'
 $reopenLogPath = Join-Path $runRoot 'unity-product-reopen.log'
+$reopenRetryLogPath = Join-Path $runRoot 'unity-product-reopen-retry.log'
 $cacheRoot = Join-Path $repositoryRootPath 'runtime-data\unity\6000.3.10f1'
 $temporaryRoot = Join-Path $cacheRoot 'temp'
 $upmCacheRoot = Join-Path $cacheRoot 'upm-cache'
@@ -134,6 +135,33 @@ try {
     )
     $reopenProcess = Start-Process -FilePath $unityPath -ArgumentList $reopenArguments `
         -Wait -PassThru -NoNewWindow
+    if ($reopenProcess.ExitCode -ne 0) {
+        $firstReopenLog = if (Test-Path -LiteralPath $reopenLogPath) {
+            Get-Content -LiteralPath $reopenLogPath -Raw -Encoding UTF8
+        }
+        else {
+            ''
+        }
+        $knownNativeStartupRace = $firstReopenLog.Contains(
+            "Assertion failed on expression: 'CurrentThread::IsMainThread()'") -and
+            $firstReopenLog -notmatch '(?m)(DirectoryNotFoundException|Could not find a part of the path|error CS\d+)'
+        if ($knownNativeStartupRace) {
+            # Unity can tear down its licensing/windowing threads after the process exits. Retain
+            # the failed native log, allow that teardown to settle, and require one fresh process
+            # to prove the populated project itself reopens cleanly.
+            Start-Sleep -Seconds 2
+            $reopenLogPath = $reopenRetryLogPath
+            $reopenArguments = @(
+                '-batchmode',
+                '-nographics',
+                '-quit',
+                '-projectPath', $cloneRoot,
+                '-logFile', $reopenLogPath
+            )
+            $reopenProcess = Start-Process -FilePath $unityPath -ArgumentList $reopenArguments `
+                -Wait -PassThru -NoNewWindow
+        }
+    }
 }
 finally {
     foreach ($entry in $originalEnvironment.GetEnumerator()) {
@@ -157,8 +185,10 @@ if ($reopenLog -match '(?m)(DirectoryNotFoundException|Could not find a part of 
 
 Write-Host 'Unity product folder Editor tests: passed'
 Write-Host 'Unity TextureImporter Editor tests: passed'
+Write-Host 'Unity metallic-smoothness exact pixel tests: passed'
+Write-Host 'Unity URP/Lit material compiler tests: passed'
 Write-Host 'Unity URP material upgrader marker validation: passed'
 Write-Host 'Unity populated-project reopen validation: passed'
-Write-Host 'Generated folder and texture test assets retained for manual Unity inspection.'
+Write-Host 'Generated folder, texture, and material test assets retained for manual Unity inspection.'
 Write-Host "Manual Unity project: $cloneRoot"
 Write-Host "Retained integration evidence: $runRoot"

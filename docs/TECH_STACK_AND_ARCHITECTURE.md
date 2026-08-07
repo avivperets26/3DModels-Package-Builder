@@ -1403,10 +1403,13 @@ success test, retains and extracts its promoted output beneath `artifacts/PB-050
 outside the configured project roots.
 
 PB-0602 through PB-0604 establish the Unity worker foundation. The tracked Unity `6000.3` template
-contains one dependency-free Editor-only `com.packagebuilder.worker` package. Its bounded
+contains one Editor-only `com.packagebuilder.worker` package. Its bounded
 protocol-v1 batch entrypoint emits JSON Lines, writes atomic results, saves assets, and uses stable
 exit codes. Every execution occurs in a project-contained isolated clone with one exclusive writer
-lock and an explicit delete/retain policy; Unity never opens the tracked template directly.
+lock and an explicit delete/retain policy; Unity never opens the tracked template directly. The
+worker has no runtime/customer dependency. PB-0608 adds one compile-time Editor-only reference to
+the already pinned `Unity.RenderPipelines.Universal.Editor` assembly so material generation uses
+URP's own public state canonicalizers.
 
 PB-0605 adds the manifest-driven product-folder boundary inside that Editor package. It mirrors the
 approved PB-0101 publisher/product segment grammars without introducing a Domain assembly into the
@@ -1424,11 +1427,31 @@ unknown roles, non-texture importers, and ambiguous packed roles fail closed. Re
 create PNG inputs in an isolated clone, apply each policy, and read the resulting importer settings
 back from Unity. PB-0607 remains the only owner of metallic-smoothness packing.
 
+PB-0607 packs only canonical separate Metallic and Roughness inputs. Both inputs must be safe
+linear Default textures with identical dimensions. Unity temporarily reimports them readable and
+uncompressed, samples exact source pixels, writes metallic to red, deterministic zero to green and
+blue, and `255 - roughness` to alpha, then restores both source importers in `finally`. The output
+is a non-readable linear PNG with source alpha retained as data. Reference collisions, existing
+outputs, missing assets/folders, incorrect importer roles, and mismatched dimensions fail closed.
+
+PB-0608 compiles validated renderer-independent material intent into new URP/Lit assets. It maps
+Base, Normal, MetallicSmoothness, Emission, and Ambient Occlusion; converts roughness factor to
+smoothness; configures Opaque, Cutout, and Transparent behavior; applies double-sided culling;
+and records explicit emission GI intent. Before persistence it invokes the pinned URP Editor
+assembly's public `BaseShaderGUI` and `LitGUI` canonicalizers. These synchronize keywords, blend
+factors, depth writes, render tags, queues, double-sided GI, and emission state exactly as the Lit
+Inspector does. Real Editor tests require a second canonicalization pass to leave all reviewed
+state unchanged, which is the automated no-Inspector-Fix invariant.
+
 Unity integration evidence uses the short contained layout `artifacts/u/<id>/p`. Before launching
 Unity, the harness checks a reviewed worst-case pinned-package path against a 248-character legacy
 compatibility ceiling. After the Editor tests populate the project, a second clean Unity process
 reopens it and blocks on path, assembly-validation, or compilation failures. This prevents a clone
 that passes first import but cannot be reopened manually from being presented as valid evidence.
+One reviewed Unity native licensing/windowing teardown race may be retried once after two seconds
+only when the failed process contains the exact main-thread assertion and contains no path,
+assembly, or C# compilation diagnostic; both logs are retained. The retry itself must reopen the
+same populated clone successfully.
 The same integration run derives the pinned URP material-upgrader count from the installed package
 and requires `ProjectSettings/URPProjectSettings.asset` to record that exact value. A stale marker
 is release-blocking because it produces a modal material-upgrade prompt during interactive opening,
@@ -1762,11 +1785,13 @@ pipeline settings. Samples, tutorial code/media, product content, engine caches,
 output are prohibited. A dependency-free repository validator checks the exact inventory, version
 pair, URP GUID graph, public safety, and text portability without launching Unity.
 
-The Unity compatibility template embeds `Packages/com.packagebuilder.worker` as a dependency-free
-Editor-only assembly. Its protocol-v1 batch entrypoint accepts one bounded strict request file,
+The Unity compatibility template embeds `Packages/com.packagebuilder.worker` as an Editor-only
+assembly. Its protocol-v1 batch entrypoint accepts one bounded strict request file,
 emits JSON Lines progress/metrics, saves assets and an atomic result, honors the shared
 project-contained cancellation-file signal, and exits with stable codes 0 and 2 through 7. The
-package contains no runtime assembly and is not part of exported customer content.
+package contains no runtime assembly and is not part of exported customer content. Its only
+non-UnityEditor assembly reference is the pinned URP Editor API used by PB-0608 material
+canonicalization; this remains Editor-only and never enters customer exports.
 
 The .NET Unity target creates jobs through `UnityProjectCloneService`. Template and job roots must
 be non-overlapping project-contained paths without reparse points. A job is copied in deterministic

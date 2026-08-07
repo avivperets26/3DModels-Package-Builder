@@ -6,11 +6,19 @@
 - Canonical branch: `feat/PB-0606-unity-texture-importers`.
 - Publication branch: `feat/PB-0605-unity-folder-generator` under the explicit user-approved
   PB-0605/PB-0606 combined cycle.
-- Status: `[ ]` / 🟡 **PROCESS**.
+- Status: `[x]` / 🟢 **DONE**.
 - Started: 2026-08-07.
 
-PB-0606 remains open until the combined change is committed, pushed, merged, passes required
-`main` CI, receives explicit user confirmation, and rolls over on the next task branch.
+PB-0606 completed through the combined PB-0605/PB-0606 publication and PB-0607/PB-0608 rollover.
+
+## Publication Evidence
+
+- Final combined task commit: `f6c12c553229b245256b519f568de7fa0772c0ad`.
+- Integration: [PR #69](https://github.com/avivperets26/3DModels-Package-Builder/pull/69), merged
+  as `e575365df6ee9b93648e65bea02394596ace52e6`.
+- Required exact-merge `main` CI: [run 31180117662](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31180117662), successful.
+- User confirmation: 2026-08-07.
+- Exception: no CI or quality exception; the approved combined cycle affected branch topology only.
 
 ## Implemented Policy
 
@@ -78,7 +86,4 @@ compilation.
 
 ## Remaining Gates
 
-- User-controlled commit and combined branch push.
-- Merge into and push of `main`.
-- Successful required `main` CI.
-- Explicit completion confirmation and next-task rollover synchronization.
+None for PB-0606.

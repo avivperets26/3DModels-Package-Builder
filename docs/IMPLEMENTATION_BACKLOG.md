@@ -158,10 +158,46 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0507 | 🟡 **PROCESS** | `test/PB-0507-portable-static-e2e` | Portable Target Engineering for local work; user for Git gates | 2026-08-06 | PR #66 merged task commit `03d18ae0a646b133ee55cbca808ed09c0fd8103f` into `main` as `c1a560c620ca8ad23b10becbd8f6c7860155107d`; local acceptance remains fully green. GitHub created no check suite for that merge while Actions reported a major outage. | A required successful workflow for exact merge `c1a560c…` and explicit completion confirmation remain. No CI exception is approved; PB-0601 proceeds independently. |
-| PB-0601 | 🟡 **PROCESS** | `feat/PB-0601-unity-template` | Unity Target Engineering for local work; user for Git gates | 2026-08-06 | Task commit `cce15e3b1cda012f15245c519aa354c1b85b85b8` was merged through PR #67 into `main` as `6915744820ae53fe9285b493c1d1ced3ede6e740`; the tracked Unity `6000.3` template and its eight-check validator remain locally valid. | A successful required `main` workflow for exact merge `6915744…`, explicit completion confirmation, and next-task rollover remain unverified. No CI exception is approved. |
-| PB-0605 | 🟡 **PROCESS** | `feat/PB-0605-unity-folder-generator` | Unity Target Engineering for local work; user for Git gates | 2026-08-07 | Configurable case-specific Unity product folders, legacy-safe retained paths, second-process reopen, and exact pinned-package URP marker validation pass. Manual Unity review confirmed all five layouts with no Console error, path exception, upgrade prompt, or `_Template`; final Core CI passed all nine stages. | User-controlled commit/push/merge, successful required `main` CI, explicit confirmation, and next-task rollover remain. |
-| PB-0606 | 🟡 **PROCESS** | `feat/PB-0606-unity-texture-importers` | Unity Target Engineering for local work; user for Git gates | 2026-08-07 | All eight canonical importer policies pass. Manual screenshots confirmed the settings; 4x4 fixtures removed the only Inspector compression notice, the warning-free follow-up passed, and final Core CI passed all nine stages. | The combined PB-0605 user-controlled publication/CI/confirmation/rollover gates remain. |
+| PB-0607 | 🟡 **PROCESS** | `feat/PB-0607-unity-metallic-smoothness` | Unity Target Engineering for local work; user for Git gates | 2026-08-07 | Exact lossless packing, dimension/collision rejection, source-importer restoration, generated-map policy, real Unity pixel assertions, and the user-confirmed Inspector checkpoint pass. | User-controlled commit/push/merge, successful required `main` CI, explicit confirmation, and next-task rollover remain. |
+| PB-0608 | 🟡 **PROCESS** | `feat/PB-0608-unity-urp-material` | Unity Target Engineering for local work; user for Git gates | 2026-08-07 | Opaque, Cutout, and Transparent URP/Lit materials compile with canonical maps, factors, culling, keywords, GI flags, queues, idempotent Inspector state, and user-confirmed visual checks in real Unity. | The combined PB-0607 publication/CI/confirmation/rollover gates remain. |
+
+### PB-0607/PB-0608 Combined Publication Exception
+
+- **Approved:** 2026-08-07 by the user's request to handle PB-0607 and PB-0608 in the same work
+  continuation.
+- **Publication branch:** `feat/PB-0607-unity-metallic-smoothness`.
+- **Exact scope:** PB-0607 metallic-smoothness packing, PB-0608 URP/Lit material compilation,
+  PB-0507/PB-0601/PB-0605/PB-0606 rollover, focused static and real Unity Editor tests, and
+  documentation genuinely affected by these implementations.
+- **Reason:** PB-0608 directly depends on PB-0607, and the user requested both as the next work
+  cycle.
+- **Independence retained:** both tasks keep their canonical IDs, branches, acceptance boundaries,
+  evidence documents, lifecycle states, and eventual Completion Log rows.
+- **Completion:** both remain `[ ]` / 🟡 **PROCESS** until this combined change is committed,
+  pushed, merged into and pushed on `main`, required `main` CI succeeds, the user explicitly
+  confirms completion, and rollover is synchronized on the next task branch.
+- **No precedent:** this branch-topology exception waives no test, engine, quality, CI, security,
+  documentation, or completion gate.
+
+### PB-0507/PB-0601/PB-0605/PB-0606 Completion Evidence
+
+- PB-0507 task commit `03d18ae0a646b133ee55cbca808ed09c0fd8103f` merged through PR #66 as
+  `c1a560c620ca8ad23b10becbd8f6c7860155107d`; PB-0601 task commit
+  `cce15e3b1cda012f15245c519aa354c1b85b85b8` merged through PR #67 as
+  `6915744820ae53fe9285b493c1d1ced3ede6e740`.
+- The historical merge commits received no workflow runs during the recorded GitHub Actions
+  outage. Required [descendant main workflow run 31180117662](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31180117662)
+  succeeded for `e575365df6ee9b93648e65bea02394596ace52e6`, whose history and tree include both
+  unchanged implementations. This supplies inclusive post-merge CI evidence; no CI gate is waived.
+- PB-0605 and PB-0606 were committed together as
+  `f6c12c553229b245256b519f568de7fa0772c0ad` and merged through PR #69 as the same
+  `e575365df6ee9b93648e65bea02394596ace52e6`; run 31180117662 therefore validates their exact
+  merge state.
+- The user explicitly confirmed the pushes, merges, and green required `main` CI on 2026-08-07 and
+  asked that all four outstanding lifecycle records be handled before PB-0607/PB-0608.
+- No CI, quality, or completion exception is used. PB-0507 and PB-0601 use later inclusive
+  descendant-`main` evidence because GitHub never created their outage-time runs; PB-0605 and
+  PB-0606 use exact-merge evidence.
 
 ### PB-0605/PB-0606 Combined Publication Exception
 
@@ -174,9 +210,10 @@ feat/PB-0607-unity-urp-material-compiler
   publication cycle.
 - **Independence retained:** PB-0605 and PB-0606 retain their canonical task IDs, branches,
   acceptance boundaries, evidence documents, lifecycle states, and eventual Completion Log rows.
-- **Completion:** both remain `[ ]` / 🟡 **PROCESS** until the combined change is committed,
-  pushed, merged into and pushed on `main`, required `main` CI succeeds, the user explicitly
-  confirms completion, and rollover is synchronized on the next task branch.
+- **Completion:** both were committed as `f6c12c553229b245256b519f568de7fa0772c0ad`, merged
+  through PR #69 as `e575365df6ee9b93648e65bea02394596ace52e6`, passed required `main`
+  workflow run 31180117662, and were explicitly confirmed complete by the user. Their DONE state
+  and Completion Log rows are synchronized in the PB-0607/PB-0608 branch.
 - **No precedent:** this branch-topology exception creates no architectural coupling and does not
   waive a test, engine, quality, CI, security, documentation, or completion gate.
 
@@ -222,27 +259,31 @@ feat/PB-0607-unity-urp-material-compiler
 - **No precedent:** this exact branch-topology exception creates no precedent and does not waive a
   test, quality, CI, security, documentation, or completion gate.
 
-### PB-0601 Publication Checkpoint
+### PB-0601 Completion Checkpoint
 
 - Task commit `cce15e3b1cda012f15245c519aa354c1b85b85b8` was merged through
   [PR #67](https://github.com/avivperets26/3DModels-Package-Builder/pull/67) into `main` as
   `6915744820ae53fe9285b493c1d1ced3ede6e740` on 2026-08-06.
-- The user confirmed the push and merge and asked work to continue without waiting for GitHub.
-- No successful required `main` workflow for that exact merge and no explicit completion
-  confirmation have been verified. PB-0601 therefore remains `[ ]` / 🟡 **PROCESS** and absent
-  from the Completion Log; no CI exception is inferred or approved.
+- GitHub never created a workflow for the outage-time merge. Later required `main` workflow run
+  31180117662 succeeded for descendant commit `e575365df6ee9b93648e65bea02394596ace52e6`,
+  whose history and tree include the unchanged PB-0601 template.
+- The user explicitly confirmed the green merged state and requested PB-0601 rollover on
+  2026-08-07. No CI gate is waived; the later inclusive `main` run supplies the missing external
+  execution evidence.
 
-### PB-0507 GitHub Actions Outage Checkpoint
+### PB-0507 GitHub Actions Recovery Checkpoint
 
 - [PR #66](https://github.com/avivperets26/3DModels-Package-Builder/pull/66) merged PB-0507 into
   `main` as `c1a560c620ca8ad23b10becbd8f6c7860155107d` on 2026-08-06.
 - GitHub created no check run or workflow run for that exact merge while the official GitHub Status
   service reported a major Actions outage.
-- The missing external run is not treated as a passing gate and no CI exception is approved.
-- PB-0507 remains `[ ]` / 🟡 **PROCESS**. Work may continue on PB-0601 because PB-0601 depends
-  only on completed PB-0303 and PB-0308.
-- When Actions recovers, a workflow for exact `main` state must succeed before PB-0507 can roll to
-  DONE. This checkpoint changes neither quality requirements nor dependency ordering.
+- The missing outage-time run was never treated as a pass and no CI exception was approved.
+- After Actions recovered, required `main` workflow run 31180117662 succeeded for descendant
+  commit `e575365df6ee9b93648e65bea02394596ace52e6`, whose history and tree include the unchanged
+  PB-0507 vertical slice. The user explicitly confirmed the green merged state and requested the
+  outstanding rollover on 2026-08-07.
+- This later inclusive post-merge execution satisfies the required CI gate without inventing a
+  historical run or waiving CI. The outage record remains preserved.
 
 ### PB-0505/PB-0506 Combined Publication Exception
 
@@ -1210,9 +1251,13 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0504 | `feat/PB-0504-portable-readme` | `4b482e97cb4fadf112ebb95ad972831b5f6141cd` | [#64](https://github.com/avivperets26/3DModels-Package-Builder/pull/64) | 2026-08-06 | Published on the PB-0503 branch with PB-0503 under the approved combined exception and merged as `33d077a5eb63a9398d720fb60b08bfd8871f7bc5`; required [main workflow run 31116763102](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31116763102) succeeded. Optional PR CI failed only during GitHub's action-download service outage; no CI or quality exception was used, and the user explicitly confirmed completion. |
 | PB-0505 | `feat/PB-0505-deterministic-fbx-zip` | `38d82cc00572f506c3dc2cf67f996d64e50e64dd` | [#65](https://github.com/avivperets26/3DModels-Package-Builder/pull/65) | 2026-08-06 | Published with PB-0506 under the approved combined publication exception and merged as `725c5d21fa5d28342d62946b4ac93184a33656f9`; required [main workflow run 31123410839](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31123410839) succeeded for that exact merge. No CI or quality exception was used; the user confirmed the push and merge, and the successful conclusion was independently reverified. |
 | PB-0506 | `feat/PB-0506-portable-validator` | `38d82cc00572f506c3dc2cf67f996d64e50e64dd` | [#65](https://github.com/avivperets26/3DModels-Package-Builder/pull/65) | 2026-08-06 | Published on the PB-0505 branch with PB-0505 under the approved combined publication exception and merged as `725c5d21fa5d28342d62946b4ac93184a33656f9`; required [main workflow run 31123410839](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31123410839) succeeded for that exact merge. No CI or quality exception was used; the user confirmed the push and merge, and the successful conclusion was independently reverified. |
+| PB-0507 | `test/PB-0507-portable-static-e2e` | `03d18ae0a646b133ee55cbca808ed09c0fd8103f` | [#66](https://github.com/avivperets26/3DModels-Package-Builder/pull/66) | 2026-08-07 | Merged as `c1a560c620ca8ad23b10becbd8f6c7860155107d` during the recorded GitHub Actions outage, which created no workflow for that SHA. Required descendant `main` [workflow run 31180117662](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31180117662) later succeeded for `e575365df6ee9b93648e65bea02394596ace52e6`, whose history and tree include unchanged PB-0507. No CI gate was waived; the user explicitly confirmed the green merged state and rollover. |
+| PB-0601 | `feat/PB-0601-unity-template` | `cce15e3b1cda012f15245c519aa354c1b85b85b8` | [#67](https://github.com/avivperets26/3DModels-Package-Builder/pull/67) | 2026-08-07 | Merged as `6915744820ae53fe9285b493c1d1ced3ede6e740` during the same Actions outage. Required descendant `main` [workflow run 31180117662](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31180117662) later succeeded for `e575365df6ee9b93648e65bea02394596ace52e6`, including the unchanged template. No CI gate was waived; the user explicitly confirmed the green merged state and rollover. |
 | PB-0602 | `feat/PB-0602-unity-worker-package` | `07b05bf3e1110e7023eb781c2423049c93c66270` | [#68](https://github.com/avivperets26/3DModels-Package-Builder/pull/68) | 2026-08-07 | Published with PB-0603 and PB-0604 under the approved combined exception and merged as `c8a63ce76b52cdb12734f6a7fe82ccc166acc081`; required [main workflow run 31162153720](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31162153720) succeeded for that exact merge. No CI or quality exception was used; the user explicitly confirmed completion. |
 | PB-0603 | `feat/PB-0603-unity-entrypoint` | `07b05bf3e1110e7023eb781c2423049c93c66270` | [#68](https://github.com/avivperets26/3DModels-Package-Builder/pull/68) | 2026-08-07 | Published on the PB-0602 branch with PB-0602/PB-0604 under the approved combined exception and merged as `c8a63ce76b52cdb12734f6a7fe82ccc166acc081`; required [main workflow run 31162153720](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31162153720) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. |
 | PB-0604 | `feat/PB-0604-unity-job-clone` | `07b05bf3e1110e7023eb781c2423049c93c66270` | [#68](https://github.com/avivperets26/3DModels-Package-Builder/pull/68) | 2026-08-07 | Published on the PB-0602 branch with PB-0602/PB-0603 under the approved combined exception and merged as `c8a63ce76b52cdb12734f6a7fe82ccc166acc081`; required [main workflow run 31162153720](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31162153720) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. |
+| PB-0605 | `feat/PB-0605-unity-folder-generator` | `f6c12c553229b245256b519f568de7fa0772c0ad` | [#69](https://github.com/avivperets26/3DModels-Package-Builder/pull/69) | 2026-08-07 | Published with PB-0606 under the approved combined exception and merged as `e575365df6ee9b93648e65bea02394596ace52e6`; required exact-merge [main workflow run 31180117662](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31180117662) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. |
+| PB-0606 | `feat/PB-0606-unity-texture-importers` | `f6c12c553229b245256b519f568de7fa0772c0ad` | [#69](https://github.com/avivperets26/3DModels-Package-Builder/pull/69) | 2026-08-07 | Published on the PB-0605 branch under the approved combined exception and merged as `e575365df6ee9b93648e65bea02394596ace52e6`; required exact-merge [main workflow run 31180117662](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31180117662) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. |
 
 ## 5. Milestones
 
@@ -1682,7 +1727,7 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0417, PB-0505
   - Done when: archive, FBX, GLB, textures, README, naming, references, and reimport results produce a blocking pass/fail report.
 
-- [ ] **PB-0507 — Complete portable static vertical slice** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0507 — Complete portable static vertical slice** — **P0** — 🟢 **DONE**
   - Branch: `test/PB-0507-portable-static-e2e`
   - Depends on: PB-0213, PB-0308, PB-0506
   - Done when: one static source builds from manifest to atomically promoted portable release with logs and JSON validation report.
@@ -1695,7 +1740,7 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** A static normalized product becomes a correct URP package, prefab, overview scene, media output, and clean-reimported `.unitypackage`.
 
-- [ ] **PB-0601 — Create versioned Unity project template** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0601 — Create versioned Unity project template** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0601-unity-template`
   - Depends on: PB-0303, PB-0308
   - Done when: a minimal current approved Unity/URP template contains only required `Assets`, `Packages`, and `ProjectSettings` content and no cache directories.
@@ -1715,22 +1760,22 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0208, PB-0601, PB-0603
   - Done when: each job uses an isolated clone, project locks prevent concurrent writers, and failed clones are retained or cleaned by policy.
 
-- [ ] **PB-0605 — Implement Unity product folder generator** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0605 — Implement Unity product folder generator** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0605-unity-folder-generator`
   - Depends on: PB-0101, PB-0603
   - Done when: configurable publisher root and case-specific Source, Meshes, Materials, Textures, Prefabs, Animations, Controllers, Documentation, Scenes, and Scripts folders are created without `_Template` output.
 
-- [ ] **PB-0606 — Implement Unity TextureImporter policies** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0606 — Implement Unity TextureImporter policies** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0606-unity-texture-importers`
   - Depends on: PB-0104, PB-0605
   - Done when: Albedo/Emission use sRGB, data maps use linear, Normal is typed correctly, alpha rules are explicit, and import settings have Editor tests.
 
-- [ ] **PB-0607 — Implement Unity metallic-smoothness texture packing** — **P0**
+- [ ] **PB-0607 — Implement Unity metallic-smoothness texture packing** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0607-unity-metallic-smoothness`
   - Depends on: PB-0606
   - Done when: Metallic goes to red, `1 - Roughness` goes to alpha, dimensions are checked, and pixel tests verify output.
 
-- [ ] **PB-0608 — Implement Unity URP/Lit material compiler** — **P0**
+- [ ] **PB-0608 — Implement Unity URP/Lit material compiler** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0608-unity-urp-material`
   - Depends on: PB-0606, PB-0607
   - Done when: Base, Normal, MetallicSmoothness, Emission, AO, surface/cutout, culling, keywords, and render queue are correct without Inspector Fix prompts.

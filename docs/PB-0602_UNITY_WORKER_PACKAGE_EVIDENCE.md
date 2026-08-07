@@ -36,9 +36,12 @@ engine-templates/unity/6000.3/Packages/com.packagebuilder.worker/
     └── UnityWorkerRequest.cs
 ```
 
-The assembly definition includes only `Editor`, has no package, precompiled, native, unsafe, or
-runtime reference, and is not copied into customer content. Package metadata pins version `1.0.0`
-and Unity compatibility family `6000.3` without a dependency block.
+The assembly definition includes only `Editor`, has no precompiled, native, unsafe, or runtime
+reference, and is not copied into customer content. PB-0608 adds one Editor-only reference to the
+pinned `Unity.RenderPipelines.Universal.Editor` assembly so generated Lit materials use URP's own
+public keyword/render-state canonicalizers. Package metadata still pins version `1.0.0` and Unity
+compatibility family `6000.3` without a dependency block; customer exports receive no worker or
+URP Editor code.
 
 ## Validation
 
