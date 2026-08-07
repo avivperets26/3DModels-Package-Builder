@@ -11,6 +11,19 @@
 PB-0601 remains open until its user-controlled publication, required `main` CI, explicit completion
 confirmation, and next-task rollover are complete.
 
+## Publication Checkpoint
+
+- Task commit: `cce15e3b1cda012f15245c519aa354c1b85b85b8`.
+- Integration: [PR #67](https://github.com/avivperets26/3DModels-Package-Builder/pull/67).
+- Merge commit: `6915744820ae53fe9285b493c1d1ced3ede6e740` on 2026-08-06.
+- User evidence: the user confirmed the push and merge and asked development to continue without
+  waiting for GitHub.
+- Remaining evidence: no successful required `main` workflow for the exact merge and no explicit
+  completion confirmation have been verified.
+
+PB-0601 therefore remains `[ ]` / 🟡 **PROCESS** and absent from the Completion Log. No CI or
+completion exception is inferred or approved.
+
 ## Approved Version Pair
 
 The template is versioned at `engine-templates/unity/6000.3` and pins:
@@ -95,7 +108,6 @@ contacting a registry, uploading artifacts, or writing outside the repository.
 
 ## Remaining Gates
 
-- User-controlled task commit and branch push.
-- Merge into and push of `main`.
-- Successful required `main` CI.
+- Successful required `main` CI for exact merge
+  `6915744820ae53fe9285b493c1d1ced3ede6e740`.
 - Explicit user completion confirmation and next-task rollover synchronization.

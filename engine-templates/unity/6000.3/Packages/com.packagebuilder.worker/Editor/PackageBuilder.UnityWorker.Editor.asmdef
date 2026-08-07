@@ -1,0 +1,16 @@
+{
+  "name": "PackageBuilder.UnityWorker.Editor",
+  "rootNamespace": "PackageBuilder.UnityWorker.Editor",
+  "references": [],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

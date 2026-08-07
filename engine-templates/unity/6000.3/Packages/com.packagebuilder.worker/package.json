@@ -1,0 +1,10 @@
+{
+  "name": "com.packagebuilder.worker",
+  "version": "1.0.0",
+  "displayName": "Package Builder Unity Worker",
+  "description": "Editor-only offline worker used by Package Builder staging projects.",
+  "unity": "6000.3",
+  "author": {
+    "name": "Package Builder"
+  }
+}

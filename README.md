@@ -106,7 +106,7 @@ Formatting verification is non-mutating. Use `Test-Formatting.ps1 -Fix` only whe
 & .\scripts\Invoke-CoreCi.ps1
 ```
 
-The core entry point runs repository validation, exact SDK verification, locked restore, warning-free Release build, .NET formatting, pinned Ruff checks, and all six test projects in fail-closed order.
+The core entry point runs repository validation, exact SDK verification, locked restore, warning-free Release build, .NET formatting, pinned Ruff checks, and all seven test projects in fail-closed order.
 
 ## Repository Structure
 

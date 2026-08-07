@@ -68,6 +68,12 @@ $script:ProjectSpecifications = @(
             'src/PackageBuilder.Targets.Portable/PackageBuilder.Targets.Portable.csproj'
         )
     }
+    [pscustomobject]@{
+        Name = 'PackageBuilder.Targets.Unity.Tests'
+        Path = 'tests/PackageBuilder.Targets.Unity.Tests/PackageBuilder.Targets.Unity.Tests.csproj'
+        ProductionProject = 'src/PackageBuilder.Targets.Unity/PackageBuilder.Targets.Unity.csproj'
+        ProductionAssembly = 'PackageBuilder.Targets.Unity'
+    }
 )
 
 function Test-ContainedPath {
@@ -152,7 +158,7 @@ if (-not [System.StringComparer]::OrdinalIgnoreCase.Equals($gitRoot, $script:Rep
     throw "RepositoryRoot must be the Git top level. Git reports: $gitRoot"
 }
 
-Invoke-Check 'Exactly the six approved test projects exist' {
+Invoke-Check 'Exactly the seven approved test projects exist' {
     $expected = @($script:ProjectSpecifications | ForEach-Object { $_.Path } | Sort-Object)
     $actual = @(
         Get-ChildItem -LiteralPath (Join-Path $script:RepositoryRoot 'tests') -Recurse -File -Filter '*.csproj' |

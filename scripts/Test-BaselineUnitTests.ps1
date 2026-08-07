@@ -71,6 +71,10 @@ $script:ProjectSpecifications = @(
         Name = 'PackageBuilder.Targets.Portable.Tests'
         Path = 'tests/PackageBuilder.Targets.Portable.Tests/PackageBuilder.Targets.Portable.Tests.csproj'
     }
+    [pscustomobject]@{
+        Name = 'PackageBuilder.Targets.Unity.Tests'
+        Path = 'tests/PackageBuilder.Targets.Unity.Tests/PackageBuilder.Targets.Unity.Tests.csproj'
+    }
 )
 
 function Test-ContainedPath {
