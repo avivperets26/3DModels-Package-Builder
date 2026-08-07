@@ -101,6 +101,8 @@ $expectedWorkerPackageFiles = @(
     'Packages/com.packagebuilder.worker/Editor/UnityWorkerRequest.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityProductFolderGenerator.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityTextureImporterPolicy.cs',
+    'Packages/com.packagebuilder.worker/Editor/UnityMetallicSmoothnessPacker.cs',
+    'Packages/com.packagebuilder.worker/Editor/UnityUrpLitMaterialCompiler.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityProductEditorIntegrationTests.cs'
 )
 $expectedFiles = @(

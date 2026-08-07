@@ -3,11 +3,11 @@
 ## Status
 
 - Branch: `test/PB-0507-portable-static-e2e`
-- Lifecycle: 🟡 **PROCESS**
+- Lifecycle: 🟢 **DONE**
 - Date: 2026-08-06
 
-PB-0507 is implemented, locally runnable, and merged. It remains open until the required workflow
-for the exact `main` merge succeeds and the user explicitly confirms completion.
+PB-0507 is implemented, locally runnable, merged, validated by later inclusive required `main` CI,
+and confirmed complete by the user.
 
 ## Publication and External-CI Checkpoint
 
@@ -16,9 +16,12 @@ for the exact `main` merge succeeds and the user explicitly confirms completion.
 - Merge commit: `c1a560c620ca8ad23b10becbd8f6c7860155107d` on 2026-08-06.
 - GitHub created no check or workflow run for that merge while its official status service reported
   a major Actions outage.
-- No CI exception is approved. PB-0507 remains `[ ]` / 🟡 **PROCESS** and is absent from the
-  Completion Log.
-- Independent PB-0601 work may proceed because it does not depend on PB-0507.
+- After Actions recovered, required [main workflow run 31180117662](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31180117662)
+  succeeded for descendant commit `e575365df6ee9b93648e65bea02394596ace52e6`, whose history
+  and tree contain unchanged PB-0507.
+- The user explicitly confirmed the green merged state and requested rollover on 2026-08-07. No
+  CI exception is used: the later inclusive post-merge execution supplies the external CI evidence
+  that GitHub could not create during the outage.
 
 ## Delivered Vertical Slice
 
@@ -126,5 +129,4 @@ visual checkpoint; it is not yet the WPF-driven arbitrary-model workflow.
 
 ## Remaining Gates
 
-- Successful required CI for exact `main` merge `c1a560c620ca8ad23b10becbd8f6c7860155107d`.
-- Explicit user completion confirmation and next-task rollover synchronization.
+None for PB-0507.

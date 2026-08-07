@@ -1,7 +1,9 @@
 {
   "name": "PackageBuilder.UnityWorker.Editor",
   "rootNamespace": "PackageBuilder.UnityWorker.Editor",
-  "references": [],
+  "references": [
+    "Unity.RenderPipelines.Universal.Editor"
+  ],
   "includePlatforms": [
     "Editor"
   ],

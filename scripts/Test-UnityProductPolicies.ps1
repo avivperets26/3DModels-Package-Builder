@@ -22,6 +22,10 @@ $folderSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityProductFol
     -Raw -Encoding UTF8
 $textureSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityTextureImporterPolicy.cs') `
     -Raw -Encoding UTF8
+$packingSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityMetallicSmoothnessPacker.cs') `
+    -Raw -Encoding UTF8
+$materialSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityUrpLitMaterialCompiler.cs') `
+    -Raw -Encoding UTF8
 $testSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityProductEditorIntegrationTests.cs') `
     -Raw -Encoding UTF8
 $integrationSource = Get-Content -LiteralPath (Join-Path $repositoryRootPath `
@@ -103,11 +107,57 @@ Invoke-Check 'Unity texture alpha handling is explicit and reapplied synchronous
     }
 }
 
+Invoke-Check 'Unity metallic-smoothness packing is exact, dimension-safe, and source-restoring' {
+    foreach ($value in @('UNITY_METALLIC_SMOOTHNESS_DIMENSION_MISMATCH',
+            'metallicPixels[index].r', 'byte.MaxValue - roughnessPixels[index].r',
+            'TextureImporterCompression.Uncompressed', 'finally', 'Restore(metallicImporter)',
+            'Restore(roughnessImporter)', 'TextureImporterAlphaSource.FromInput')) {
+        if (-not $packingSource.Contains($value)) {
+            throw "Missing metallic-smoothness packing behavior: $value"
+        }
+    }
+}
+
+Invoke-Check 'Unity URP/Lit compiler maps canonical textures, factors, surfaces, and culling' {
+    foreach ($value in @('Universal Render Pipeline/Lit', '_BaseMap', '_BumpMap',
+            '_MetallicGlossMap', '_EmissionMap', '_OcclusionMap', '_AlphaClip', '_Cutoff',
+            '_Cull', '_Surface', '_Smoothness', '1f - request.RoughnessFactor')) {
+        if (-not $materialSource.Contains($value)) {
+            throw "Missing URP/Lit material mapping: $value"
+        }
+    }
+}
+
+Invoke-Check 'Unity URP/Lit emission intent is explicit before keyword canonicalization' {
+    foreach ($value in @('MaterialGlobalIlluminationFlags.BakedEmissive',
+            'MaterialGlobalIlluminationFlags.EmissiveIsBlack', 'maxColorComponent')) {
+        if (-not $materialSource.Contains($value)) {
+            throw "Missing emission/GI behavior: $value"
+        }
+    }
+}
+
+Invoke-Check 'Unity URP/Lit compiler delegates keyword and render-state canonicalization to URP' {
+    foreach ($value in @('BaseShaderGUI.SetMaterialKeywords(candidate, LitGUI.SetMaterialKeywords)',
+            'BaseShaderGUI.SetupMaterialBlendMode(candidate)', 'SynchronizeUrpState',
+            'Unity.RenderPipelines.Universal.Editor')) {
+        $found = $materialSource.Contains($value) -or
+            (Get-Content -LiteralPath (Join-Path $editorRoot `
+                    'PackageBuilder.UnityWorker.Editor.asmdef') -Raw -Encoding UTF8).Contains($value)
+        if (-not $found) {
+            throw "Missing URP canonicalization behavior: $value"
+        }
+    }
+}
+
 Invoke-Check 'Editor integration tests cover all cases, roles, collisions, and unsafe inputs' {
     foreach ($value in @('PACKAGEBUILDER_UNITY_PRODUCT_TESTS_PASS',
             'UNITY_PRODUCT_FOLDER_COLLISION', 'orm', '../outside.png',
             'TextureImporterType.NormalMap', 'AssetDatabase.IsValidFolder',
-            'Texture2D(4, 4', 'new Color[16]')) {
+            'Texture2D(4, 4', 'new Color[16]', 'TestMetallicSmoothnessPacking',
+            'UNITY_METALLIC_SMOOTHNESS_DIMENSION_MISMATCH', 'Metallic red channel is incorrect',
+            'Smoothness alpha must equal one minus roughness', 'TestUrpLitMaterialCompilation',
+            'VerifyUrpStateIsStable', '_METALLICSPECGLOSSMAP', '_SURFACE_TYPE_TRANSPARENT')) {
         if (-not $testSource.Contains($value)) {
             throw "Missing Editor integration assertion: $value"
         }
@@ -117,7 +167,9 @@ Invoke-Check 'Editor integration tests cover all cases, roles, collisions, and u
 Invoke-Check 'Unity integration uses a legacy-safe short clone and validates a clean reopen' {
     foreach ($value in @('artifacts\u', "Substring(0, 8)",
             '$maximumLegacyCompatiblePathLength = 248', 'unity-product-reopen.log',
-            "'-quit'", 'DirectoryNotFoundException', 'Unity populated-project reopen validation')) {
+            'unity-product-reopen-retry.log', 'CurrentThread::IsMainThread()',
+            '$knownNativeStartupRace', "'-quit'", 'DirectoryNotFoundException',
+            'Unity populated-project reopen validation')) {
         if (-not $integrationSource.Contains($value)) {
             throw "Missing Unity reopen/path safeguard: $value"
         }
@@ -138,6 +190,8 @@ Invoke-Check 'Unity product policy sources are deterministic public-safe text' {
     $files = @(
         (Join-Path $editorRoot 'UnityProductFolderGenerator.cs'),
         (Join-Path $editorRoot 'UnityTextureImporterPolicy.cs'),
+        (Join-Path $editorRoot 'UnityMetallicSmoothnessPacker.cs'),
+        (Join-Path $editorRoot 'UnityUrpLitMaterialCompiler.cs'),
         (Join-Path $editorRoot 'UnityProductEditorIntegrationTests.cs')
     )
     $utf8 = New-Object Text.UTF8Encoding($false, $true)

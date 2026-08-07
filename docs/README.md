@@ -122,6 +122,8 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 - [PB-0604 Unity project clone evidence](PB-0604_UNITY_PROJECT_CLONE_EVIDENCE.md)
 - [PB-0605 Unity product folder evidence](PB-0605_UNITY_PRODUCT_FOLDERS_EVIDENCE.md)
 - [PB-0606 Unity TextureImporter evidence](PB-0606_UNITY_TEXTURE_IMPORTER_EVIDENCE.md)
+- [PB-0607 Unity metallic-smoothness packing evidence](PB-0607_UNITY_METALLIC_SMOOTHNESS_EVIDENCE.md)
+- [PB-0608 Unity URP/Lit material compiler evidence](PB-0608_UNITY_URP_MATERIAL_EVIDENCE.md)
 
 ## Dependency and Licence Records
 
