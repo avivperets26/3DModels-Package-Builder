@@ -5,7 +5,7 @@
 - Task: PB-0614 — Instantiate product into Unity overview scene.
 - Canonical branch: `feat/PB-0614-unity-scene-composition`.
 - Publication branch: `feat/PB-0612-unity-overview-scene` under the approved combined cycle.
-- Status: `[ ]` / 🟡 **PROCESS**.
+- Status: `[x]` / 🟢 **DONE**.
 - Started: 2026-08-07.
 
 ## Implemented Composition
@@ -41,7 +41,11 @@ camera, saves a copy beneath the product root, reopens it, and verifies:
 - Formatting, repository safety, and `git diff --check`: passed.
 - Retained manual project: `artifacts/u/1c6667a0/p`.
 
-## Remaining Gates
+## Publication Evidence
 
-User-controlled commit/push/merge, successful required `main` CI, explicit completion confirmation,
-and next-task rollover.
+- Task commit: `dceb8838117c760a276dc2c1acbf0c4171af25b0`.
+- Pull request: [#72](https://github.com/avivperets26/3DModels-Package-Builder/pull/72).
+- Merge commit: `04de23b5204a64ad57426273991f82ce2649db40`.
+- Required [main workflow run 31254437622](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31254437622): successful.
+- User confirmation: 2026-08-08, including the intended single product and no red Play mode errors.
+- Exception used: branch topology only; no CI, quality, or completion gate was waived.

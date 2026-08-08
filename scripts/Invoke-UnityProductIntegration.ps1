@@ -36,6 +36,9 @@ $logPath = Join-Path $runRoot 'unity-product-tests.log'
 $playModeLogPath = Join-Path $runRoot 'unity-overview-playmode.log'
 $reopenLogPath = Join-Path $runRoot 'unity-product-reopen.log'
 $reopenRetryLogPath = Join-Path $runRoot 'unity-product-reopen-retry.log'
+$packageOutputPath = Join-Path $cloneRoot 'PackageBuilderExports\StoneArch.unitypackage'
+$packageManifestPath = Join-Path $runRoot 'unitypackage-assets.txt'
+$packageExtractRoot = Join-Path $runRoot 'unitypackage-extracted'
 $cacheRoot = Join-Path $repositoryRootPath 'runtime-data\unity\6000.3.10f1'
 $temporaryRoot = Join-Path $cacheRoot 'temp'
 $upmCacheRoot = Join-Path $cacheRoot 'upm-cache'
@@ -60,7 +63,8 @@ foreach ($rootName in @('Assets', 'Packages', 'ProjectSettings')) {
 # Use the repository-authored normalized FBX rather than a mock ModelImporter input. Its camera,
 # light, two meshes, and embedded materials make the PB-0609 through PB-0611 checks observable.
 $modelTestRoot = Join-Path $cloneRoot 'Assets\PBModelTests'
-foreach ($folderName in @('Source', 'Meshes', 'Materials', 'Prefabs', 'Scenes', 'Scripts')) {
+foreach ($folderName in @('Documentation', 'Source', 'Meshes', 'Materials', 'Textures',
+        'Prefabs', 'Scenes', 'Scripts')) {
     New-Item -ItemType Directory -Path (Join-Path $modelTestRoot $folderName) -Force | Out-Null
 }
 $staticFbxFixture = Join-Path $repositoryRootPath `
@@ -96,6 +100,8 @@ $environment = [ordered]@{
     UPM_CACHE_PATH = $upmCacheRoot
     UPM_CONFIG_PATH = $upmConfigRoot
     PACKAGEBUILDER_RETAIN_UNITY_TEST_ASSETS = '1'
+    PACKAGEBUILDER_UNITYPACKAGE_OUTPUT = $packageOutputPath
+    PACKAGEBUILDER_UNITYPACKAGE_MANIFEST = $packageManifestPath
 }
 try {
     foreach ($entry in $environment.GetEnumerator()) {
@@ -125,6 +131,58 @@ try {
     }
     if ($log -match '(?m)(error CS\d+|PACKAGEBUILDER_UNITY_PRODUCT_TESTS_FAIL)') {
         throw 'Unity product integration log contains a compilation or test failure.'
+    }
+    if ($log -match '(?im)(warning CS\d+|\bPackageBuilder[^\r\n]*\bwarning\b)') {
+        throw 'Unity product integration log contains a package-caused warning.'
+    }
+
+    if (-not (Test-Path -LiteralPath $packageOutputPath -PathType Leaf) -or
+        -not (Test-Path -LiteralPath $packageManifestPath -PathType Leaf)) {
+        throw 'Exact Unity package or its expected inventory evidence is missing.'
+    }
+    if ($null -eq (Get-Command tar.exe -ErrorAction SilentlyContinue)) {
+        throw 'The exact Unity package verifier requires the Windows tar.exe archive reader.'
+    }
+    New-Item -ItemType Directory -Path $packageExtractRoot -Force | Out-Null
+    & tar.exe -xzf $packageOutputPath -C $packageExtractRoot
+    if ($LASTEXITCODE -ne 0) {
+        throw "Unity package archive extraction failed with exit code $LASTEXITCODE."
+    }
+    $packageEntries = @(Get-ChildItem -LiteralPath $packageExtractRoot -Recurse -File -Filter pathname |
+        ForEach-Object { (Get-Content -LiteralPath $_.FullName -Raw -Encoding UTF8).Trim() } |
+        Sort-Object -Unique)
+    $expectedEntries = @(Get-Content -LiteralPath $packageManifestPath -Encoding UTF8 |
+        Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+        Sort-Object -Unique)
+    $archiveDifferences = @(Compare-Object -ReferenceObject $expectedEntries `
+        -DifferenceObject $packageEntries)
+    if ($archiveDifferences.Count -gt 0) {
+        throw "Unity package archive differs from its exact plan: $($archiveDifferences.InputObject -join ', ')."
+    }
+    foreach ($entry in $packageEntries) {
+        if ($entry -ne 'Assets/PBModelTests' -and
+            -not $entry.StartsWith('Assets/PBModelTests/', [StringComparison]::Ordinal)) {
+            throw "Unity package contains an unrelated asset: $entry"
+        }
+        if ($entry -match '(?i)(_Template|PBOverviewTemplate|PBTextureTests|PBMaterialTests|Assets/PackageBuilder)') {
+            throw "Unity package contains template or test-only content: $entry"
+        }
+    }
+    foreach ($entryFolder in Get-ChildItem -LiteralPath $packageExtractRoot -Directory) {
+        foreach ($requiredFile in @('asset.meta', 'pathname')) {
+            if (-not (Test-Path -LiteralPath (Join-Path $entryFolder.FullName $requiredFile) -PathType Leaf)) {
+                throw "Unity package entry is missing $requiredFile`: $($entryFolder.Name)"
+            }
+        }
+        $pathname = (Get-Content -LiteralPath (Join-Path $entryFolder.FullName 'pathname') `
+            -Raw -Encoding UTF8).Trim()
+        $isFolderRecord = @($expectedEntries | Where-Object {
+                $_.StartsWith($pathname + '/', [StringComparison]::Ordinal)
+            }).Count -gt 0
+        if (-not $isFolderRecord -and
+            -not (Test-Path -LiteralPath (Join-Path $entryFolder.FullName 'asset') -PathType Leaf)) {
+            throw "Unity package file entry is missing asset payload: $($entryFolder.Name)"
+        }
     }
 
     # Open the composed scene in a real Play mode cycle. This process intentionally omits -quit:
@@ -260,6 +318,8 @@ Write-Host 'Unity static prefab generation Editor tests: passed'
 Write-Host 'Unity generic overview scene template tests: passed'
 Write-Host 'Unity bounds-only preview controller tests: passed'
 Write-Host 'Unity product overview composition tests: passed'
+Write-Host 'Unity exact package archive and metadata validation: passed'
+Write-Host 'Unity logs, references, GUIDs, duplicates, and path validation: passed'
 Write-Host 'Unity overview Play mode smoke test: passed'
 Write-Host 'Unity URP material upgrader marker validation: passed'
 Write-Host 'Unity populated-project reopen validation: passed'

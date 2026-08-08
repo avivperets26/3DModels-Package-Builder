@@ -48,20 +48,45 @@ namespace PackageBuilder.Preview
             float verticalHalfField = Mathf.Max(1f, previewCamera.fieldOfView * 0.5f) * Mathf.Deg2Rad;
             float horizontalHalfField = Mathf.Atan(Mathf.Tan(verticalHalfField) *
                 Mathf.Max(0.01f, previewCamera.aspect));
-            float verticalDistance = bounds.extents.y / Mathf.Tan(verticalHalfField);
-            float horizontalDistance = bounds.extents.x / Mathf.Tan(horizontalHalfField);
-            float distance = (Mathf.Max(verticalDistance, horizontalDistance) + bounds.extents.z) *
-                Mathf.Max(1.01f, framingPadding);
-            distance = Mathf.Max(distance, bounds.size.magnitude);
-
             Vector3 direction = previewCamera.transform.position - bounds.center;
             if (direction.sqrMagnitude < 0.0001f)
             {
                 direction = new Vector3(1f, 0.65f, -1f);
             }
 
-            previewCamera.transform.position = bounds.center + direction.normalized * distance;
-            previewCamera.transform.LookAt(bounds.center, Vector3.up);
+            Quaternion rotation = Quaternion.LookRotation(-direction.normalized, Vector3.up);
+            Quaternion inverseRotation = Quaternion.Inverse(rotation);
+            float verticalTangent = Mathf.Tan(verticalHalfField);
+            float horizontalTangent = Mathf.Tan(horizontalHalfField);
+            float padding = Mathf.Max(1.01f, framingPadding);
+            float distance = MinimumBoundsSize;
+
+            // Fit every world-space AABB corner in camera space. Using only world X/Y/Z
+            // extents underestimates the projected height for diagonal camera directions.
+            for (int x = -1; x <= 1; x += 2)
+            {
+                for (int y = -1; y <= 1; y += 2)
+                {
+                    for (int z = -1; z <= 1; z += 2)
+                    {
+                        Vector3 cornerOffset = Vector3.Scale(
+                            bounds.extents,
+                            new Vector3(x, y, z));
+                        Vector3 cameraSpaceCorner = inverseRotation * cornerOffset;
+                        distance = Mathf.Max(
+                            distance,
+                            Mathf.Abs(cameraSpaceCorner.x) * padding / horizontalTangent -
+                                cameraSpaceCorner.z,
+                            Mathf.Abs(cameraSpaceCorner.y) * padding / verticalTangent -
+                                cameraSpaceCorner.z);
+                    }
+                }
+            }
+
+            distance = Mathf.Max(distance, bounds.size.magnitude);
+            previewCamera.transform.SetPositionAndRotation(
+                bounds.center - rotation * Vector3.forward * distance,
+                rotation);
             previewCamera.nearClipPlane = Mathf.Max(0.01f, distance - bounds.extents.magnitude * 2f);
             previewCamera.farClipPlane = Mathf.Max(previewCamera.nearClipPlane + 1f,
                 distance + bounds.extents.magnitude * 4f);

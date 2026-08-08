@@ -1,6 +1,6 @@
 # Package Builder Documentation
 
-This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. Repository, core domain/contracts, contained infrastructure, tool-version management through PB-0310, the first WPF shell, Blender normalization/export/reimport through PB-0418, the portable static vertical slice through PB-0507, and Unity product intake/static-prefab generation through PB-0611 are complete. PB-0612 through PB-0614 now have locally validated generic overview, bounds-only camera control, and exact scene-composition implementations and remain PROCESS until publication gates complete. Unity package export/reimport, rigged and animated flows, Unreal targets, broader product cases, marketplace packaging, preview generation, and the remaining desktop screens are not claimed as implemented.
+This index links the approved product, architecture, quality, workflow, and architecture-decision sources for Package Builder. Repository, core domain/contracts, contained infrastructure, tool-version management through PB-0310, the first WPF shell, Blender normalization/export/reimport through PB-0418, the portable static vertical slice through PB-0507, and Unity product intake/overview generation through PB-0614 are complete. PB-0615 and PB-0616 now have locally validated exact Unity package export and release-blocking logs/reference/console validation and remain PROCESS until publication gates complete. Unity clean package reimport, rigged and animated flows, Unreal targets, broader product cases, marketplace packaging, preview generation, and the remaining desktop screens are not claimed as implemented.
 
 ## Primary Documentation
 
@@ -130,6 +130,8 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 - [PB-0612 Unity overview scene evidence](PB-0612_UNITY_OVERVIEW_SCENE_EVIDENCE.md)
 - [PB-0613 Unity preview controller evidence](PB-0613_UNITY_PREVIEW_CONTROLLER_EVIDENCE.md)
 - [PB-0614 Unity scene composition evidence](PB-0614_UNITY_SCENE_COMPOSITION_EVIDENCE.md)
+- [PB-0615 exact Unity package export evidence](PB-0615_UNITY_PACKAGE_EXPORT_EVIDENCE.md)
+- [PB-0616 Unity validation evidence](PB-0616_UNITY_VALIDATION_EVIDENCE.md)
 
 ## Dependency and Licence Records
 

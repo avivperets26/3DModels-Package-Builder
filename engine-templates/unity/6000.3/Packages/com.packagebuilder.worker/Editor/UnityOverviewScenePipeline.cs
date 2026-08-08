@@ -25,6 +25,8 @@ namespace PackageBuilder.UnityWorker.Editor
 
         public string PreviewControllerScriptReference { get; set; }
 
+        public string OutputBackgroundMaterialReference { get; set; }
+
         public string OutputSceneReference { get; set; }
     }
 
@@ -250,7 +252,11 @@ namespace PackageBuilder.UnityWorker.Editor
             GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(request.ProductPrefabReference);
             MonoScript controllerScript = AssetDatabase.LoadAssetAtPath<MonoScript>(
                 request.PreviewControllerScriptReference);
-            if (prefab == null || controllerScript == null)
+            string templateFolder = UnityOverviewSceneTemplateBuilder.FolderOf(
+                request.TemplateSceneReference);
+            string templateMaterialReference = templateFolder + "/M_OverviewBackground.mat";
+            Material templateMaterial = AssetDatabase.LoadAssetAtPath<Material>(templateMaterialReference);
+            if (prefab == null || controllerScript == null || templateMaterial == null)
             {
                 diagnosticCode = "UNITY_OVERVIEW_COMPOSITION_REFERENCE_MISSING";
                 return false;
@@ -277,6 +283,27 @@ namespace PackageBuilder.UnityWorker.Editor
                     diagnosticCode = "UNITY_OVERVIEW_COMPOSITION_TEMPLATE_NOT_EMPTY";
                     return false;
                 }
+
+                if (!AssetDatabase.CopyAsset(templateMaterialReference,
+                    request.OutputBackgroundMaterialReference))
+                {
+                    diagnosticCode = "UNITY_OVERVIEW_COMPOSITION_BACKGROUND_COPY_FAILED";
+                    return false;
+                }
+
+                Material productBackground = AssetDatabase.LoadAssetAtPath<Material>(
+                    request.OutputBackgroundMaterialReference);
+                Transform background = UnityOverviewSceneTemplateBuilder.FindUniqueChild(
+                    root.transform,
+                    UnityOverviewSceneTemplateBuilder.BackgroundName);
+                Renderer backgroundRenderer = background == null ? null : background.GetComponent<Renderer>();
+                if (productBackground == null || backgroundRenderer == null)
+                {
+                    diagnosticCode = "UNITY_OVERVIEW_COMPOSITION_BACKGROUND_MISSING";
+                    return false;
+                }
+
+                backgroundRenderer.sharedMaterial = productBackground;
 
                 var product = PrefabUtility.InstantiatePrefab(prefab, scene) as GameObject;
                 if (product == null)
@@ -312,9 +339,16 @@ namespace PackageBuilder.UnityWorker.Editor
             }
             catch
             {
-                AssetDatabase.DeleteAsset(request.OutputSceneReference);
                 diagnosticCode = "UNITY_OVERVIEW_COMPOSITION_CREATE_FAILED";
                 return false;
+            }
+            finally
+            {
+                if (!string.IsNullOrEmpty(diagnosticCode))
+                {
+                    AssetDatabase.DeleteAsset(request.OutputSceneReference);
+                    AssetDatabase.DeleteAsset(request.OutputBackgroundMaterialReference);
+                }
             }
         }
 
@@ -340,12 +374,19 @@ namespace PackageBuilder.UnityWorker.Editor
             GameObject source = PrefabUtility.GetCorrespondingObjectFromSource(product.gameObject);
             var controller = root.GetComponent<PackageBuilderPreviewController>();
             MonoScript controllerScript = controller == null ? null : MonoScript.FromMonoBehaviour(controller);
+            Transform background = UnityOverviewSceneTemplateBuilder.FindUniqueChild(
+                root.transform,
+                UnityOverviewSceneTemplateBuilder.BackgroundName);
+            Renderer backgroundRenderer = background == null ? null : background.GetComponent<Renderer>();
             bool valid = product.name == "P_" + request.AssetId &&
                 UnityOverviewSceneTemplateBuilder.IsReset(product) && source != null &&
                 AssetDatabase.GetAssetPath(source) == request.ProductPrefabReference &&
                 controller != null && controller.PreviewTarget == previewTarget &&
                 controller.PreviewCamera != null &&
                 AssetDatabase.GetAssetPath(controllerScript) == request.PreviewControllerScriptReference &&
+                backgroundRenderer != null && backgroundRenderer.sharedMaterial != null &&
+                AssetDatabase.GetAssetPath(backgroundRenderer.sharedMaterial) ==
+                    request.OutputBackgroundMaterialReference &&
                 GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(root) == 0;
             diagnosticCode = valid ? string.Empty : "UNITY_OVERVIEW_COMPOSITION_VERIFY_FAILED";
             return valid;
@@ -359,11 +400,16 @@ namespace PackageBuilder.UnityWorker.Editor
                 !UnityOverviewSceneTemplateBuilder.IsSafeAssetReference(request.ProductPrefabReference) ||
                 !UnityOverviewSceneTemplateBuilder.IsSafeAssetReference(
                     request.PreviewControllerScriptReference) ||
+                !UnityOverviewSceneTemplateBuilder.IsSafeAssetReference(
+                    request.OutputBackgroundMaterialReference) ||
                 !request.ProductPrefabReference.EndsWith(
                     "/Prefabs/P_" + request.AssetId + ".prefab",
                     StringComparison.Ordinal) ||
                 !request.OutputSceneReference.EndsWith(
                     "/Scenes/S_" + request.AssetId + "_Overview.unity",
+                    StringComparison.Ordinal) ||
+                !request.OutputBackgroundMaterialReference.EndsWith(
+                    "/Materials/M_" + request.AssetId + "_OverviewBackground.mat",
                     StringComparison.Ordinal) ||
                 request.PreviewControllerScriptReference.IndexOf(
                     "/Scripts/",
@@ -371,7 +417,8 @@ namespace PackageBuilder.UnityWorker.Editor
                 !request.PreviewControllerScriptReference.EndsWith(
                     "PackageBuilderPreviewController.cs",
                     StringComparison.Ordinal) ||
-                AssetDatabase.LoadMainAssetAtPath(request.OutputSceneReference) != null)
+                AssetDatabase.LoadMainAssetAtPath(request.OutputSceneReference) != null ||
+                AssetDatabase.LoadMainAssetAtPath(request.OutputBackgroundMaterialReference) != null)
             {
                 return false;
             }

@@ -67,7 +67,9 @@ $expectedFiles = @(
     'Editor/UnityPrefabGenerator.cs',
     'Editor/UnityProductEditorIntegrationTests.cs',
     'Editor/UnityOverviewScenePipeline.cs',
-    'Editor/UnityOverviewPlayModeSmokeTest.cs'
+    'Editor/UnityOverviewPlayModeSmokeTest.cs',
+    'Editor/UnityPackageExporter.cs',
+    'Editor/UnityPackageValidator.cs'
 ) | Sort-Object
 
 Invoke-Check 'Embedded Unity worker package inventory is exact' {
