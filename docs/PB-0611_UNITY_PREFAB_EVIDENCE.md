@@ -6,7 +6,7 @@
 - Canonical branch: `feat/PB-0611-unity-prefabs`.
 - Publication branch: `feat/PB-0609-unity-static-importer` under the explicit user-approved
   PB-0609/PB-0610/PB-0611 combined cycle.
-- Status: `[ ]` / 🟡 **PROCESS**.
+- Status: `[x]` / 🟢 **DONE**.
 - Started: 2026-08-07.
 
 ## Implemented Policy
@@ -63,7 +63,14 @@ root with one direct `P_Model` child, both transforms reset, two rendered fixtur
 compiled `M_StoneArch_URP` material, and shared `MS_StoneArch` mesh data. Scene composition and Play
 mode remain owned by PB-0612 through PB-0614.
 
+## Publication Evidence
+
+- Task commit: `a1a547f8c579892e5dc7478747da395b3b803443`.
+- Pull request: [#71](https://github.com/avivperets26/3DModels-Package-Builder/pull/71).
+- Merge commit: `de7543ada6212e9e8d5f2795ec63dbf6a283a7f3`.
+- Required exact-merge [main workflow run 31210482067](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31210482067): successful.
+- User confirmation: 2026-08-07. No CI, quality, or completion exception was used.
+
 ## Remaining Gates
 
-- User-controlled publication, successful required `main` CI, explicit confirmation, and
-  successor-task rollover.
+None for PB-0611.

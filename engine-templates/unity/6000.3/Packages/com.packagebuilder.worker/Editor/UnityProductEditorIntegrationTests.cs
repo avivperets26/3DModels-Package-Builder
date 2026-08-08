@@ -14,6 +14,7 @@ namespace PackageBuilder.UnityWorker.Editor
         private const string TextureTestRoot = "Assets/PBTextureTests";
         private const string MaterialTestRoot = "Assets/PBMaterialTests";
         private const string ModelTestRoot = "Assets/PBModelTests";
+        private const string OverviewTemplateRoot = "Assets/PBOverviewTemplate";
         private const string ModelSourceReference = "Assets/PBModelTests/Source/StoneArch.fbx";
 
         public static void Run()
@@ -25,6 +26,7 @@ namespace PackageBuilder.UnityWorker.Editor
                 TestMetallicSmoothnessPacking();
                 TestUrpLitMaterialCompilation();
                 TestStaticModelImportMeshExtractionAndPrefab();
+                TestOverviewTemplateControllerAndComposition();
                 Debug.Log("PACKAGEBUILDER_UNITY_PRODUCT_TESTS_PASS");
                 EditorApplication.Exit(0);
             }
@@ -51,6 +53,7 @@ namespace PackageBuilder.UnityWorker.Editor
                     AssetDatabase.DeleteAsset(TextureTestRoot);
                     AssetDatabase.DeleteAsset(MaterialTestRoot);
                     AssetDatabase.DeleteAsset(ModelTestRoot);
+                    AssetDatabase.DeleteAsset(OverviewTemplateRoot);
                     AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
                 }
             }
@@ -409,6 +412,83 @@ namespace PackageBuilder.UnityWorker.Editor
             Require(!UnityPrefabGenerator.TryCreate(
                 prefabRequest, out rejectedPrefab, out diagnostic) && diagnostic == "UNITY_PREFAB_INVALID",
                 "Existing prefab outputs must fail closed.");
+        }
+
+        private static void TestOverviewTemplateControllerAndComposition()
+        {
+            AssetDatabase.DeleteAsset(OverviewTemplateRoot);
+            string templateFolderGuid = AssetDatabase.CreateFolder("Assets", "PBOverviewTemplate");
+            Require(!string.IsNullOrEmpty(templateFolderGuid),
+                "Overview template test folder could not be created.");
+
+            string templateSceneReference = OverviewTemplateRoot + "/OverviewTemplate.unity";
+            var templateRequest = new UnityOverviewSceneTemplateRequest
+            {
+                OutputSceneReference = templateSceneReference,
+            };
+            UnityEngine.SceneManagement.Scene templateScene;
+            string diagnostic;
+            Require(UnityOverviewSceneTemplateBuilder.TryCreate(
+                templateRequest,
+                out templateScene,
+                out diagnostic), diagnostic);
+            Require(UnityOverviewSceneTemplateBuilder.VerifyTemplate(templateScene, out diagnostic), diagnostic);
+
+            string outputSceneReference = ModelTestRoot + "/Scenes/S_StoneArch_Overview.unity";
+            string controllerScriptReference =
+                ModelTestRoot + "/Scripts/PackageBuilderPreviewController.cs";
+            var compositionRequest = new UnityOverviewSceneCompositionRequest
+            {
+                AssetId = "StoneArch",
+                TemplateSceneReference = templateSceneReference,
+                ProductPrefabReference = ModelTestRoot + "/Prefabs/P_StoneArch.prefab",
+                PreviewControllerScriptReference = controllerScriptReference,
+                OutputSceneReference = outputSceneReference,
+            };
+            UnityEngine.SceneManagement.Scene composedScene;
+            Require(UnityOverviewSceneComposer.TryCompose(
+                compositionRequest,
+                out composedScene,
+                out diagnostic), diagnostic);
+            Require(UnityOverviewSceneComposer.VerifyComposition(
+                composedScene,
+                compositionRequest,
+                out diagnostic), diagnostic);
+
+            GameObject root = UnityOverviewSceneTemplateBuilder.FindUniqueRoot(
+                composedScene,
+                UnityOverviewSceneTemplateBuilder.OverviewRootName);
+            var controller = root.GetComponent<PackageBuilder.Preview.PackageBuilderPreviewController>();
+            Transform product = controller.PreviewTarget.GetChild(0);
+            Transform[] productTransforms = product.GetComponentsInChildren<Transform>(true);
+            Vector3[] positions = productTransforms.Select(value => value.localPosition).ToArray();
+            Quaternion[] rotations = productTransforms.Select(value => value.localRotation).ToArray();
+            Vector3[] scales = productTransforms.Select(value => value.localScale).ToArray();
+            Vector3 cameraBefore = controller.PreviewCamera.transform.position;
+            Require(controller.AutoFrame(), "Overview auto-frame failed.");
+            Require(controller.Orbit(22f, 7f), "Overview orbit failed.");
+            Vector3 cameraAfterOrbit = controller.PreviewCamera.transform.position;
+            Require(cameraAfterOrbit != cameraBefore, "Overview orbit did not move the camera.");
+            Require(controller.Zoom(0.2f), "Overview zoom failed.");
+            Require(controller.PreviewCamera.transform.position != cameraAfterOrbit,
+                "Overview zoom did not move the camera.");
+            for (int index = 0; index < productTransforms.Length; index++)
+            {
+                Require(productTransforms[index].localPosition == positions[index] &&
+                    productTransforms[index].localRotation == rotations[index] &&
+                    productTransforms[index].localScale == scales[index],
+                    "Overview camera navigation changed a product transform.");
+            }
+
+            Require(AssetDatabase.GetAssetPath(MonoScript.FromMonoBehaviour(controller)) ==
+                controllerScriptReference, "Overview scene references a non-product controller script.");
+            Require(AssetDatabase.LoadAssetAtPath<SceneAsset>(outputSceneReference) != null,
+                "The product overview scene was not saved beneath the product root.");
+
+            UnityEngine.SceneManagement.Scene reopenedTemplate =
+                UnityEditor.SceneManagement.EditorSceneManager.OpenScene(templateSceneReference);
+            Require(UnityOverviewSceneTemplateBuilder.VerifyTemplate(reopenedTemplate, out diagnostic),
+                "The reusable overview template retained a previous product: " + diagnostic);
         }
 
         private static UnityUrpLitMaterialRequest MaterialRequest(

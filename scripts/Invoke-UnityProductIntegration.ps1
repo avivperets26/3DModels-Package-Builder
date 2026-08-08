@@ -33,6 +33,7 @@ $runId = [Guid]::NewGuid().ToString('N').Substring(0, 8)
 $runRoot = Join-Path $repositoryRootPath "artifacts\u\$runId"
 $cloneRoot = Join-Path $runRoot 'p'
 $logPath = Join-Path $runRoot 'unity-product-tests.log'
+$playModeLogPath = Join-Path $runRoot 'unity-overview-playmode.log'
 $reopenLogPath = Join-Path $runRoot 'unity-product-reopen.log'
 $reopenRetryLogPath = Join-Path $runRoot 'unity-product-reopen-retry.log'
 $cacheRoot = Join-Path $repositoryRootPath 'runtime-data\unity\6000.3.10f1'
@@ -59,7 +60,7 @@ foreach ($rootName in @('Assets', 'Packages', 'ProjectSettings')) {
 # Use the repository-authored normalized FBX rather than a mock ModelImporter input. Its camera,
 # light, two meshes, and embedded materials make the PB-0609 through PB-0611 checks observable.
 $modelTestRoot = Join-Path $cloneRoot 'Assets\PBModelTests'
-foreach ($folderName in @('Source', 'Meshes', 'Materials', 'Prefabs')) {
+foreach ($folderName in @('Source', 'Meshes', 'Materials', 'Prefabs', 'Scenes', 'Scripts')) {
     New-Item -ItemType Directory -Path (Join-Path $modelTestRoot $folderName) -Force | Out-Null
 }
 $staticFbxFixture = Join-Path $repositoryRootPath `
@@ -68,6 +69,24 @@ if (-not (Test-Path -LiteralPath $staticFbxFixture -PathType Leaf)) {
     throw "Static Unity FBX fixture is missing: $staticFbxFixture"
 }
 Copy-Item -LiteralPath $staticFbxFixture -Destination (Join-Path $modelTestRoot 'Source\StoneArch.fbx')
+
+# Move the generic controller source and assembly definition into the generated product Scripts
+# folder before Unity imports the clone. Moving both assets with their metadata preserves stable
+# script identity, keeps the worker package Editor-only, and makes the saved customer scene
+# independent of com.packagebuilder.worker.
+$previewTemplateRoot = Join-Path $cloneRoot 'Assets\PackageBuilder\Preview'
+$productScriptsRoot = Join-Path $modelTestRoot 'Scripts'
+foreach ($fileName in @(
+        'PackageBuilder.Preview.asmdef',
+        'PackageBuilder.Preview.asmdef.meta',
+        'PackageBuilderPreviewController.cs',
+        'PackageBuilderPreviewController.cs.meta')) {
+    $sourcePath = Join-Path $previewTemplateRoot $fileName
+    if (-not (Test-Path -LiteralPath $sourcePath -PathType Leaf)) {
+        throw "Unity preview-controller template file is missing: $sourcePath"
+    }
+    Move-Item -LiteralPath $sourcePath -Destination (Join-Path $productScriptsRoot $fileName)
+}
 
 $originalEnvironment = @{}
 $environment = [ordered]@{
@@ -106,6 +125,41 @@ try {
     }
     if ($log -match '(?m)(error CS\d+|PACKAGEBUILDER_UNITY_PRODUCT_TESTS_FAIL)') {
         throw 'Unity product integration log contains a compilation or test failure.'
+    }
+
+    # Open the composed scene in a real Play mode cycle. This process intentionally omits -quit:
+    # the Editor callback exits only after EnteredPlayMode and EnteredEditMode both complete.
+    $playModeArguments = @(
+        '-batchmode',
+        '-nographics',
+        '-projectPath', $cloneRoot,
+        '-executeMethod', 'PackageBuilder.UnityWorker.Editor.UnityOverviewPlayModeSmokeTest.Run',
+        '-logFile', $playModeLogPath
+    )
+    $playModeProcess = Start-Process -FilePath $unityPath -ArgumentList $playModeArguments `
+        -PassThru -NoNewWindow
+    if (-not $playModeProcess.WaitForExit(120000)) {
+        Stop-Process -Id $playModeProcess.Id -Force
+        throw 'Unity overview Play mode validation exceeded the 120-second timeout.'
+    }
+    # Complete the non-timed wait after the bounded wait so Windows PowerShell populates ExitCode
+    # consistently for Unity processes that finish from an EditorApplication callback.
+    $playModeProcess.WaitForExit()
+    $playModeProcess.Refresh()
+    $playModeLog = if (Test-Path -LiteralPath $playModeLogPath) {
+        Get-Content -LiteralPath $playModeLogPath -Raw -Encoding UTF8
+    }
+    else {
+        throw 'Unity overview Play mode log is missing.'
+    }
+    $playModeExitCode = $playModeProcess.ExitCode
+    $playModeHasNonZeroExit = $null -ne $playModeExitCode -and [int]$playModeExitCode -ne 0
+    if ($playModeHasNonZeroExit -or
+        -not $playModeLog.Contains('PACKAGEBUILDER_UNITY_OVERVIEW_PLAYMODE_PASS') -or
+        $playModeLog -match '(?m)(error CS\d+|PACKAGEBUILDER_UNITY_OVERVIEW_PLAYMODE_FAIL)') {
+        $tail = (@(Get-Content -LiteralPath $playModeLogPath -Tail 120) -join [Environment]::NewLine)
+        $exitDisplay = if ($null -eq $playModeExitCode) { 'unavailable' } else { $playModeExitCode }
+        throw "Unity overview Play mode validation failed with exit code $exitDisplay.`n$tail"
     }
 
     # Match the project marker to the actual upgrader inventory in the pinned package. A stale
@@ -203,6 +257,10 @@ Write-Host 'Unity URP/Lit material compiler tests: passed'
 Write-Host 'Unity static ModelImporter Editor tests: passed'
 Write-Host 'Unity standalone mesh extraction Editor tests: passed'
 Write-Host 'Unity static prefab generation Editor tests: passed'
+Write-Host 'Unity generic overview scene template tests: passed'
+Write-Host 'Unity bounds-only preview controller tests: passed'
+Write-Host 'Unity product overview composition tests: passed'
+Write-Host 'Unity overview Play mode smoke test: passed'
 Write-Host 'Unity URP material upgrader marker validation: passed'
 Write-Host 'Unity populated-project reopen validation: passed'
 Write-Host 'Generated folder, texture, material, model, mesh, and prefab assets retained for manual Unity inspection.'
