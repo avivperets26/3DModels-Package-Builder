@@ -65,7 +65,9 @@ $expectedFiles = @(
     'Editor/UnityStaticModelImporterPolicy.cs',
     'Editor/UnityMeshAssetExtractor.cs',
     'Editor/UnityPrefabGenerator.cs',
-    'Editor/UnityProductEditorIntegrationTests.cs'
+    'Editor/UnityProductEditorIntegrationTests.cs',
+    'Editor/UnityOverviewScenePipeline.cs',
+    'Editor/UnityOverviewPlayModeSmokeTest.cs'
 ) | Sort-Object
 
 Invoke-Check 'Embedded Unity worker package inventory is exact' {
@@ -106,8 +108,9 @@ Invoke-Check 'Assembly definition compiles only inside the Unity Editor with the
     if ([string]$assembly.name -cne 'PackageBuilder.UnityWorker.Editor' -or
         @($assembly.includePlatforms).Count -ne 1 -or
         [string]$assembly.includePlatforms[0] -cne 'Editor' -or
-        @($assembly.references).Count -ne 1 -or
-        [string]$assembly.references[0] -cne 'Unity.RenderPipelines.Universal.Editor' -or
+        @($assembly.references).Count -ne 2 -or
+        'PackageBuilder.Preview' -notin @($assembly.references) -or
+        'Unity.RenderPipelines.Universal.Editor' -notin @($assembly.references) -or
         @($assembly.precompiledReferences).Count -ne 0 -or
         [bool]$assembly.allowUnsafeCode -or
         [bool]$assembly.overrideReferences -or

@@ -1458,12 +1458,33 @@ on. Every clone is checked for vertex/submesh parity and a failed transaction de
 outputs. Generated mesh assets are accepted only beneath the product `Meshes` folder and never
 under `Source`.
 
-PB-0611 builds `P_<AssetId>.prefab` around one reset `<AssetId>` product root and one reset direct
+PB-0611 builds `P_<AssetId>.prefab` around one reset `P_<AssetId>` product root and one reset direct
 `P_Model` child. The generator instantiates the imported model, replaces every referenced mesh from
 the PB-0610 source-to-standalone plan, requires every renderer material to belong to the explicit
 compiled-material plan, saves the prefab, reloads it, and verifies hierarchy, transforms, exact
 mesh/material references, and absence of missing scripts. Output collisions and incomplete plans
-fail closed. Overview scenes and Play-mode composition remain PB-0612 through PB-0614 work.
+fail closed.
+
+PB-0612 creates the generic overview scene from an empty scene rather than retaining a prior
+product. A reset `PackageBuilderOverview` root owns an empty reset `PreviewTarget`, deterministic
+camera, neutral URP/Lit background, warm key light, cool fill light, and complete preview-controller
+references. The persisted template is reread and rejected if it contains a product, duplicate
+required object, missing script, or incomplete reference.
+
+PB-0613 keeps the preview controller outside the Editor-only worker package. The template carries
+one generic runtime source/assembly pair; each isolated job moves those assets with their metadata
+into the product `Scripts` folder before import, so exported scenes have no worker-package runtime
+dependency. Auto-frame, orbit, and zoom derive renderer bounds and move only the camera. Horizontal
+and vertical field of view, aspect, depth, padding, bounds radius, and clip planes are explicit.
+Edit-mode and Play-mode tests snapshot every product transform and reject any position, rotation,
+or scale mutation.
+
+PB-0614 opens only a verified empty template, instantiates one exact `P_<AssetId>.prefab` under
+`PreviewTarget`, resets the instance root, frames the camera, and saves
+`Scenes/S_<AssetId>_Overview.unity` beneath the configured product root. Clean reopen verifies the
+single product count, identity, prefab source, controller source, references, transforms, and
+missing-script count. A bounded second Unity process enters and exits Play mode and treats any
+Error, Exception, Assert, timeout, or structural mismatch as failure.
 
 Unity integration evidence uses the short contained layout `artifacts/u/<id>/p`. Before launching
 Unity, the harness checks a reviewed worst-case pinned-package path against a 248-character legacy

@@ -32,6 +32,13 @@ $meshExtractorSource = Get-Content -LiteralPath (Join-Path $editorRoot `
         'UnityMeshAssetExtractor.cs') -Raw -Encoding UTF8
 $prefabSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityPrefabGenerator.cs') `
     -Raw -Encoding UTF8
+$overviewSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityOverviewScenePipeline.cs') `
+    -Raw -Encoding UTF8
+$playModeSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityOverviewPlayModeSmokeTest.cs') `
+    -Raw -Encoding UTF8
+$controllerSource = Get-Content -LiteralPath (Join-Path $repositoryRootPath `
+        'engine-templates\unity\6000.3\Assets\PackageBuilder\Preview\PackageBuilderPreviewController.cs') `
+    -Raw -Encoding UTF8
 $testSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityProductEditorIntegrationTests.cs') `
     -Raw -Encoding UTF8
 $integrationSource = Get-Content -LiteralPath (Join-Path $repositoryRootPath `
@@ -198,6 +205,53 @@ Invoke-Check 'Unity prefab policy resets hierarchy and verifies mesh and materia
     }
 }
 
+Invoke-Check 'Unity overview template is product-free with URP lighting, camera, and controller references' {
+    foreach ($value in @('PackageBuilderOverview', 'PreviewTarget', 'Main Camera', 'Background',
+            'Key Light', 'Fill Light', 'Universal Render Pipeline/Lit', 'previewTarget.childCount == 0',
+            'controller.PreviewTarget == previewTarget', 'controller.PreviewCamera == previewCamera',
+            'UNITY_OVERVIEW_TEMPLATE_CONTENT_INVALID')) {
+        if (-not $overviewSource.Contains($value)) {
+            throw "Missing generic overview template behavior: $value"
+        }
+    }
+}
+
+Invoke-Check 'Unity preview controller frames by bounds and never scales product assets' {
+    foreach ($value in @('TryGetProductBounds', 'Renderer[] renderers', 'bounds.Encapsulate',
+            'previewCamera.transform.position', 'previewCamera.transform.LookAt', 'AutoFrame()',
+            'Orbit(float yawDegrees', 'Zoom(float normalizedDelta)',
+            'Product transforms are never translated, rotated, or scaled')) {
+        if (-not $controllerSource.Contains($value)) {
+            throw "Missing bounds-only preview behavior: $value"
+        }
+    }
+    if ($controllerSource -match 'previewTarget\.(localScale|position|rotation)\s*=') {
+        throw 'Preview navigation must not mutate the preview target transform.'
+    }
+}
+
+Invoke-Check 'Unity overview composition saves one intended prefab under the publisher product root' {
+    foreach ($value in @('previewTarget.childCount != 1', 'PrefabUtility.InstantiatePrefab',
+            'product.transform.SetParent(previewTarget, false)', 'S_" + request.AssetId + "_Overview.unity',
+            '/Scripts/', 'AssetDatabase.GetAssetPath(source) == request.ProductPrefabReference',
+            'GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(root) == 0')) {
+        if (-not $overviewSource.Contains($value)) {
+            throw "Missing overview composition behavior: $value"
+        }
+    }
+}
+
+Invoke-Check 'Unity overview scene has a real bounded Play mode smoke test' {
+    foreach ($value in @('EditorApplication.EnterPlaymode()', 'EnteredPlayMode', 'EnteredEditMode',
+            'PACKAGEBUILDER_UNITY_OVERVIEW_PLAYMODE_PASS', 'controller.AutoFrame()',
+            'controller.Orbit(20f, 8f)', 'controller.Zoom(0.2f)',
+            'Camera navigation changed a product transform')) {
+        if (-not $playModeSource.Contains($value)) {
+            throw "Missing overview Play mode assertion: $value"
+        }
+    }
+}
+
 Invoke-Check 'Editor integration tests cover all cases, roles, collisions, and unsafe inputs' {
     foreach ($value in @('PACKAGEBUILDER_UNITY_PRODUCT_TESTS_PASS',
             'UNITY_PRODUCT_FOLDER_COLLISION', 'orm', '../outside.png',
@@ -209,7 +263,9 @@ Invoke-Check 'Editor integration tests cover all cases, roles, collisions, and u
             'TestStaticModelImportMeshExtractionAndPrefab', 'ModelImporterAnimationType.None',
             'Material remapping changed when request order changed',
             'UNITY_MESH_EXTRACTION_OUTPUT_COLLISION', 'P_StoneArch.prefab',
-            'The product root or P_Model transform is not reset')) {
+            'The product root or P_Model transform is not reset',
+            'TestOverviewTemplateControllerAndComposition', 'Overview auto-frame failed',
+            'Overview camera navigation changed a product transform')) {
         if (-not $testSource.Contains($value)) {
             throw "Missing Editor integration assertion: $value"
         }
@@ -225,6 +281,9 @@ Invoke-Check 'Unity integration uses a legacy-safe short clone and validates a c
             'Unity static ModelImporter Editor tests',
             'Unity standalone mesh extraction Editor tests',
             'Unity static prefab generation Editor tests',
+            'Unity generic overview scene template tests',
+            'Unity overview Play mode smoke test',
+            'PackageBuilderPreviewController.cs.meta',
             'Unity populated-project reopen validation')) {
         if (-not $integrationSource.Contains($value)) {
             throw "Missing Unity reopen/path safeguard: $value"
@@ -251,6 +310,10 @@ Invoke-Check 'Unity product policy sources are deterministic public-safe text' {
         (Join-Path $editorRoot 'UnityStaticModelImporterPolicy.cs'),
         (Join-Path $editorRoot 'UnityMeshAssetExtractor.cs'),
         (Join-Path $editorRoot 'UnityPrefabGenerator.cs'),
+        (Join-Path $editorRoot 'UnityOverviewScenePipeline.cs'),
+        (Join-Path $editorRoot 'UnityOverviewPlayModeSmokeTest.cs'),
+        (Join-Path $repositoryRootPath `
+            'engine-templates\unity\6000.3\Assets\PackageBuilder\Preview\PackageBuilderPreviewController.cs'),
         (Join-Path $editorRoot 'UnityProductEditorIntegrationTests.cs')
     )
     $utf8 = New-Object Text.UTF8Encoding($false, $true)

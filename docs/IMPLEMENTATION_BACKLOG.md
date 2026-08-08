@@ -158,9 +158,52 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0609 | 🟡 **PROCESS** | `feat/PB-0609-unity-static-importer` | Unity Target Engineering for local work; user for Git gates | 2026-08-07 | Static FBX import disables rig/animation, cameras, lights, visibility, and blend shapes; applies explicit normal, tangent, scale, hierarchy, and material policies; and verifies deterministic complete remaps in real Unity. | User-controlled commit/push/merge, successful required `main` CI, explicit confirmation, and next-task rollover remain. |
-| PB-0610 | 🟡 **PROCESS** | `feat/PB-0610-unity-mesh-assets` | Unity Target Engineering for local work; user for Git gates | 2026-08-07 | Unique referenced meshes are extracted transactionally with stable `MS_` names, shared source meshes are deduplicated, and Source remains free of duplicate standalone assets. | The combined PB-0609/PB-0610/PB-0611 publication gates remain. |
-| PB-0611 | 🟡 **PROCESS** | `feat/PB-0611-unity-prefabs` | Unity Target Engineering for local work; user for Git gates | 2026-08-07 | Static prefabs use the exact `P_<AssetId>` filename, reset product root and `P_Model` child, standalone mesh references, compiled materials, and saved-reference verification. | The combined PB-0609/PB-0610/PB-0611 publication gates remain. |
+| PB-0612 | 🟡 **PROCESS** | `feat/PB-0612-unity-overview-scene` | Unity Target Engineering for local work; user for Git gates | 2026-08-07 | A product-free generic overview scene is created with URP lighting, camera, background, empty `PreviewTarget`, and complete controller references. | User-controlled combined publication, successful required `main` CI, explicit confirmation, and next-task rollover remain. |
+| PB-0613 | 🟡 **PROCESS** | `feat/PB-0613-unity-preview-controller` | Unity Target Engineering for local work; user for Git gates | 2026-08-07 | Product-local auto-frame, orbit, and zoom use renderer bounds and move only the camera; edit-mode and Play mode snapshots prove all product transforms remain unchanged. | The combined PB-0612/PB-0613/PB-0614 publication gates remain. |
+| PB-0614 | 🟡 **PROCESS** | `feat/PB-0614-unity-scene-composition` | Unity Target Engineering for local work; user for Git gates | 2026-08-07 | Exactly one requested prefab is composed beneath `PreviewTarget`, saved to the product `Scenes` folder, reopened, and exercised through a real error-free Play mode cycle. | The combined PB-0612/PB-0613/PB-0614 publication gates remain. |
+
+### PB-0612/PB-0613/PB-0614 Combined Publication Exception
+
+- **Approved:** 2026-08-07 by the user's explicit request to implement PB-0612, PB-0613, and
+  PB-0614 together.
+- **Publication branch:** `feat/PB-0612-unity-overview-scene`.
+- **Exact scope:** generic overview template construction, product-local bounds-based preview
+  controller, exact one-product scene composition, PB-0609/PB-0610/PB-0611 rollover, focused
+  dependency-free validation, real Unity edit/Play/reopen integration, and genuinely affected
+  documentation.
+- **Reason:** PB-0613 directly depends on PB-0612 and PB-0614 directly depends on PB-0611 through
+  PB-0613; the user requested one implementation and publication cycle.
+- **Independence retained:** all three tasks keep their canonical IDs, branches, acceptance
+  boundaries, evidence documents, lifecycle states, and eventual Completion Log rows.
+- **Completion:** all three remain `[ ]` / 🟡 **PROCESS** until the combined change is committed,
+  pushed, merged into and pushed on `main`, required `main` CI succeeds, the user explicitly
+  confirms completion, and rollover is synchronized on the next task branch.
+- **No precedent:** this branch-topology exception waives no test, engine, quality, CI, security,
+  documentation, or completion gate and creates no automatic precedent.
+
+### PB-0612/PB-0613/PB-0614 Local Validation Checkpoint
+
+- Unity product policy validation passed 21/21; worker package validation passed 9/9; project
+  template validation passed 8/8.
+- Real Unity 6000.3.10f1 created and reopened a product-free overview template, composed exactly one
+  retained static product, preserved all product transforms through camera auto-frame/orbit/zoom,
+  completed a real Play mode cycle without Error/Exception/Assert, and reopened the populated
+  project cleanly.
+- Retained evidence: ignored `artifacts/u/1c6667a0`; manual project:
+  `artifacts/u/1c6667a0/p`.
+
+### PB-0609/PB-0610/PB-0611 Completion Evidence
+
+- All three tasks were committed as `a1a547f8c579892e5dc7478747da395b3b803443` on their approved
+  combined publication branch.
+- [Pull request #71](https://github.com/avivperets26/3DModels-Package-Builder/pull/71) merged them
+  into `main` as `de7543ada6212e9e8d5f2795ec63dbf6a283a7f3`.
+- Required exact-merge [main workflow run 31210482067](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31210482067)
+  completed successfully.
+- The user explicitly confirmed the push, merge, green required `main` CI, and successful manual
+  Unity prefab/mesh/importer checkpoints on 2026-08-07.
+- No CI, quality, or completion exception was used. The combined publication exception governed
+  branch topology only and created no precedent.
 
 ### PB-0609/PB-0610/PB-0611 Combined Publication Exception
 
@@ -175,9 +218,11 @@ feat/PB-0607-unity-urp-material-compiler
 - **Independence retained:** all three tasks keep their canonical IDs, branches, acceptance
   boundaries, implementation types, evidence documents, lifecycle states, and eventual Completion
   Log rows.
-- **Completion:** all three remain `[ ]` / 🟡 **PROCESS** until the combined change is committed,
-  pushed, merged into and pushed on `main`, required `main` CI succeeds, the user explicitly
-  confirms completion, and rollover is synchronized on the next task branch.
+- **Completion:** all three were committed as `a1a547f8c579892e5dc7478747da395b3b803443`,
+  merged through PR #71 as `de7543ada6212e9e8d5f2795ec63dbf6a283a7f3`, passed required
+  exact-merge `main` workflow run 31210482067, and were explicitly confirmed complete by the user.
+  Their DONE state and Completion Log rows are synchronized in the PB-0612/PB-0613/PB-0614
+  branch.
 - **No precedent:** this exact branch-topology exception waives no test, engine, quality, CI,
   security, documentation, or completion gate and creates no automatic precedent.
 
@@ -1309,6 +1354,9 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0606 | `feat/PB-0606-unity-texture-importers` | `f6c12c553229b245256b519f568de7fa0772c0ad` | [#69](https://github.com/avivperets26/3DModels-Package-Builder/pull/69) | 2026-08-07 | Published on the PB-0605 branch under the approved combined exception and merged as `e575365df6ee9b93648e65bea02394596ace52e6`; required exact-merge [main workflow run 31180117662](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31180117662) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. |
 | PB-0607 | `feat/PB-0607-unity-metallic-smoothness` | `dda9130cc40b20b09f355c9ffe29db4e9e9df682` | [#70](https://github.com/avivperets26/3DModels-Package-Builder/pull/70) | 2026-08-07 | Published with PB-0608 under the approved combined exception and merged as `ea3ceedf108d9f2e867a4b00c1641a5925735cf8`; required exact-merge [main workflow run 31196967286](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31196967286) succeeded. No CI or quality exception was used; the user explicitly confirmed completion and the real Unity Inspector checkpoint. |
 | PB-0608 | `feat/PB-0608-unity-urp-material` | `dda9130cc40b20b09f355c9ffe29db4e9e9df682` | [#70](https://github.com/avivperets26/3DModels-Package-Builder/pull/70) | 2026-08-07 | Published on the PB-0607 branch under the approved combined exception and merged as `ea3ceedf108d9f2e867a4b00c1641a5925735cf8`; required exact-merge [main workflow run 31196967286](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31196967286) succeeded. No CI or quality exception was used; the user explicitly confirmed completion and the real Unity material Inspector checkpoint. |
+| PB-0609 | `feat/PB-0609-unity-static-importer` | `a1a547f8c579892e5dc7478747da395b3b803443` | [#71](https://github.com/avivperets26/3DModels-Package-Builder/pull/71) | 2026-08-07 | Published with PB-0610/PB-0611 under the approved combined exception and merged as `de7543ada6212e9e8d5f2795ec63dbf6a283a7f3`; required exact-merge [main workflow run 31210482067](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31210482067) succeeded. No CI or quality exception was used; the user explicitly confirmed completion and manual Unity validation. |
+| PB-0610 | `feat/PB-0610-unity-mesh-assets` | `a1a547f8c579892e5dc7478747da395b3b803443` | [#71](https://github.com/avivperets26/3DModels-Package-Builder/pull/71) | 2026-08-07 | Published on the PB-0609 branch under the approved combined exception and merged as `de7543ada6212e9e8d5f2795ec63dbf6a283a7f3`; required exact-merge [main workflow run 31210482067](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31210482067) succeeded. No CI or quality exception was used; the user explicitly confirmed completion and manual mesh inspection. |
+| PB-0611 | `feat/PB-0611-unity-prefabs` | `a1a547f8c579892e5dc7478747da395b3b803443` | [#71](https://github.com/avivperets26/3DModels-Package-Builder/pull/71) | 2026-08-07 | Published on the PB-0609 branch under the approved combined exception and merged as `de7543ada6212e9e8d5f2795ec63dbf6a283a7f3`; required exact-merge [main workflow run 31210482067](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31210482067) succeeded. No CI or quality exception was used; the user explicitly confirmed completion and manual prefab inspection. |
 
 ## 5. Milestones
 
@@ -1831,32 +1879,32 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0606, PB-0607
   - Done when: Base, Normal, MetallicSmoothness, Emission, AO, surface/cutout, culling, keywords, and render queue are correct without Inspector Fix prompts.
 
-- [ ] **PB-0609 — Implement static ModelImporter policy** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0609 — Implement static ModelImporter policy** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0609-unity-static-importer`
   - Depends on: PB-0603, PB-0605
   - Done when: animation/rig are disabled, cameras/lights/visibility rules apply, normals/tangents/scale/preserve-hierarchy are controlled, and material remapping is deterministic.
 
-- [ ] **PB-0610 — Implement safe mesh extraction policy** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0610 — Implement safe mesh extraction policy** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0610-unity-mesh-assets`
   - Depends on: PB-0609
   - Done when: standalone `MS_` assets are generated only where references remain correct, have stable names, and are not duplicated in Source.
 
-- [ ] **PB-0611 — Implement Unity prefab generator** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0611 — Implement Unity prefab generator** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0611-unity-prefabs`
   - Depends on: PB-0608 through PB-0610
   - Done when: `P_<AssetId>.prefab` has a reset product root, reset `P_Model` child, correct renderers/materials, and no missing references.
 
-- [ ] **PB-0612 — Create generic Unity overview scene template** — **P0**
+- [ ] **PB-0612 — Create generic Unity overview scene template** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0612-unity-overview-scene`
   - Depends on: PB-0601
   - Done when: URP lighting, camera, background, `PreviewTarget`, and controller references load cleanly and contain no previous product.
 
-- [ ] **PB-0613 — Refactor preview controller to frame camera without scaling assets** — **P0**
+- [ ] **PB-0613 — Refactor preview controller to frame camera without scaling assets** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0613-unity-preview-controller`
   - Depends on: PB-0612
   - Done when: orbit/zoom/auto-frame work using bounds while product transform and scale remain unchanged.
 
-- [ ] **PB-0614 — Instantiate product into Unity overview scene** — **P0**
+- [ ] **PB-0614 — Instantiate product into Unity overview scene** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0614-unity-scene-composition`
   - Depends on: PB-0611 through PB-0613
   - Done when: exactly the intended product is under `PreviewTarget`, scene assets save to the publisher root, and Play mode has no errors.

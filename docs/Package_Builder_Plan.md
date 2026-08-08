@@ -222,7 +222,13 @@ shared source meshes are deduplicated rather than copied repeatedly. `Source` re
 mesh assets. The resulting `P_<AssetId>.prefab` has one reset `<AssetId>` root and one reset direct
 `P_Model` child; every renderer uses an expected compiled material, every mesh reference resolves
 to the extracted plan, and post-save verification rejects missing scripts or references. Overview
-scene composition remains owned by PB-0612 through PB-0614.
+scene composition is implemented by PB-0612 through PB-0614. The generic overview is created from
+an empty scene with URP lighting, neutral background, camera, empty `PreviewTarget`, and complete
+controller references. The product-local controller frames renderer bounds and moves only the
+camera for auto-frame, orbit, and zoom; product transforms remain unchanged. Composition places
+exactly one requested prefab beneath `PreviewTarget`, saves the overview scene beneath the product
+root, cleanly reopens it, and passes a real error-free Play mode cycle. Exact package export and
+clean package reimport remain later PB-0615 through PB-0617 work.
 
 ### 3.4 Unreal Worker
 

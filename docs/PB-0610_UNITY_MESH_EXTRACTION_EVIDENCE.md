@@ -6,7 +6,7 @@
 - Canonical branch: `feat/PB-0610-unity-mesh-assets`.
 - Publication branch: `feat/PB-0609-unity-static-importer` under the explicit user-approved
   PB-0609/PB-0610/PB-0611 combined cycle.
-- Status: `[ ]` / 🟡 **PROCESS**.
+- Status: `[x]` / 🟢 **DONE**.
 - Started: 2026-08-07.
 
 ## Implemented Policy
@@ -46,7 +46,14 @@ The integration also retries extraction against the existing output and requires
 - Repository baseline: 32/32 passed across 764 tracked paths.
 - Final Core CI: all nine stages and 2,282/2,282 tests passed.
 
+## Publication Evidence
+
+- Task commit: `a1a547f8c579892e5dc7478747da395b3b803443`.
+- Pull request: [#71](https://github.com/avivperets26/3DModels-Package-Builder/pull/71).
+- Merge commit: `de7543ada6212e9e8d5f2795ec63dbf6a283a7f3`.
+- Required exact-merge [main workflow run 31210482067](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31210482067): successful.
+- User confirmation: 2026-08-07. No CI, quality, or completion exception was used.
+
 ## Remaining Gates
 
-- User-controlled publication, successful required `main` CI, explicit confirmation, and
-  successor-task rollover.
+None for PB-0610.

@@ -4,13 +4,24 @@
 
 - Task: PB-0609 — Implement static `ModelImporter` policy.
 - Canonical and publication branch: `feat/PB-0609-unity-static-importer`.
-- Status: `[ ]` / 🟡 **PROCESS**.
+- Status: `[x]` / 🟢 **DONE**.
 - Started: 2026-08-07.
 - Publication topology: combined with PB-0610 and PB-0611 under the explicit user-approved
   exception in `docs/IMPLEMENTATION_BACKLOG.md`.
 
-PB-0609 remains open until the user-controlled commit, push, merge, successful required `main` CI,
-explicit completion confirmation, and next-task rollover are complete.
+PB-0609 was completed and rolled over on 2026-08-07 after the combined publication and required
+`main` validation succeeded.
+
+## Publication Evidence
+
+- Task commit: `a1a547f8c579892e5dc7478747da395b3b803443`.
+- Pull request: [#71](https://github.com/avivperets26/3DModels-Package-Builder/pull/71).
+- Merge commit: `de7543ada6212e9e8d5f2795ec63dbf6a283a7f3`.
+- Required exact-merge [main workflow run 31210482067](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31210482067): successful.
+- User confirmation: push, merge, green required CI, and manual Unity checkpoints confirmed on
+  2026-08-07.
+- Exception used: only the documented combined branch topology; no CI, quality, or completion gate
+  was waived.
 
 ## Implemented Policy
 
@@ -66,5 +77,4 @@ final authoritative Core CI passed 2,282/2,282. No unrelated implementation or t
 
 ## Remaining Gates
 
-- User-controlled commit/push/merge, successful required `main` CI, explicit confirmation, and
-  successor-task rollover.
+None for PB-0609.

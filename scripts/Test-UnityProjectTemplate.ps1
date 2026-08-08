@@ -51,6 +51,12 @@ function Get-RelativeTemplatePath {
 }
 
 $expectedAssetFiles = @(
+    'Assets/PackageBuilder.meta',
+    'Assets/PackageBuilder/Preview.meta',
+    'Assets/PackageBuilder/Preview/PackageBuilder.Preview.asmdef',
+    'Assets/PackageBuilder/Preview/PackageBuilder.Preview.asmdef.meta',
+    'Assets/PackageBuilder/Preview/PackageBuilderPreviewController.cs',
+    'Assets/PackageBuilder/Preview/PackageBuilderPreviewController.cs.meta',
     'Assets/Settings.meta',
     'Assets/Settings/DefaultVolumeProfile.asset',
     'Assets/Settings/DefaultVolumeProfile.asset.meta',
@@ -106,7 +112,9 @@ $expectedWorkerPackageFiles = @(
     'Packages/com.packagebuilder.worker/Editor/UnityStaticModelImporterPolicy.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityMeshAssetExtractor.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityPrefabGenerator.cs',
-    'Packages/com.packagebuilder.worker/Editor/UnityProductEditorIntegrationTests.cs'
+    'Packages/com.packagebuilder.worker/Editor/UnityProductEditorIntegrationTests.cs',
+    'Packages/com.packagebuilder.worker/Editor/UnityOverviewScenePipeline.cs',
+    'Packages/com.packagebuilder.worker/Editor/UnityOverviewPlayModeSmokeTest.cs'
 )
 $expectedFiles = @(
     $expectedAssetFiles +
@@ -204,7 +212,7 @@ Invoke-Check 'URP asset metadata matches every referenced project GUID' {
     }
 }
 
-Invoke-Check 'Template contains no sample product, runtime scripts, scenes, or stale references' {
+Invoke-Check 'Template contains no sample product, scene, media, or stale reference' {
     $buildSettings = Get-Content -LiteralPath (Join-Path $script:TemplateRoot 'ProjectSettings\EditorBuildSettings.asset') -Raw -Encoding UTF8
     $playerSettings = Get-Content -LiteralPath (Join-Path $script:TemplateRoot 'ProjectSettings\ProjectSettings.asset') -Raw -Encoding UTF8
     if ($buildSettings -notmatch '(?m)^  m_Scenes: \[\]$' -or $buildSettings -notmatch '(?m)^  m_configObjects: \{\}$') {
@@ -213,11 +221,18 @@ Invoke-Check 'Template contains no sample product, runtime scripts, scenes, or s
     if ($playerSettings -match 'SampleScene|com\.unity\.template|Unity Technologies|AvivPeretsFBX') {
         throw 'Player settings retain prior template or publisher identity.'
     }
-    $forbiddenExtensions = '(?i)\.(cs|dll|exe|unity|prefab|fbx|glb|gltf|blend|png|jpg|jpeg|tga|psd)$'
+    $forbiddenExtensions = '(?i)\.(dll|exe|unity|prefab|fbx|glb|gltf|blend|png|jpg|jpeg|tga|psd)$'
     $forbiddenFiles = @(Get-ChildItem -LiteralPath (Join-Path $script:TemplateRoot 'Assets') -Recurse -File |
         Where-Object { $_.Name -match $forbiddenExtensions })
     if ($forbiddenFiles.Count -gt 0) {
-        throw "Template contains product, executable, scene, script, or media files: $($forbiddenFiles.Name -join ', ')."
+        throw "Template contains product, executable, scene, or media files: $($forbiddenFiles.Name -join ', ')."
+    }
+
+    $runtimeScripts = @(Get-ChildItem -LiteralPath (Join-Path $script:TemplateRoot 'Assets') `
+        -Recurse -File -Filter '*.cs' | ForEach-Object { Get-RelativeTemplatePath $_.FullName })
+    if ($runtimeScripts.Count -ne 1 -or
+        $runtimeScripts[0] -cne 'Assets/PackageBuilder/Preview/PackageBuilderPreviewController.cs') {
+        throw 'Only the generic product-local preview controller source is permitted in template Assets.'
     }
 }
 
