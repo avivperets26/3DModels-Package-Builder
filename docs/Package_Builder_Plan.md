@@ -227,8 +227,12 @@ an empty scene with URP lighting, neutral background, camera, empty `PreviewTarg
 controller references. The product-local controller frames renderer bounds and moves only the
 camera for auto-frame, orbit, and zoom; product transforms remain unchanged. Composition places
 exactly one requested prefab beneath `PreviewTarget`, saves the overview scene beneath the product
-root, cleanly reopens it, and passes a real error-free Play mode cycle. Exact package export and
-clean package reimport remain later PB-0615 through PB-0617 work.
+root, cleanly reopens it, and passes a real error-free Play mode cycle. PB-0615 then builds an
+explicit dependency-closed inventory and exports only the product folders, documentation, scene,
+runtime preview script, metadata, and product-local dependencies. PB-0616 blocks release for
+compile failure, package warnings/errors, broken or duplicate GUIDs, missing scripts/materials/
+textures, duplicate or misplaced files, and external `Assets` dependencies. Clean package reimport
+remains PB-0617 work.
 
 ### 3.4 Unreal Worker
 

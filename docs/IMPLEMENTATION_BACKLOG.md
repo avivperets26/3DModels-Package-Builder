@@ -158,9 +158,58 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0612 | 🟡 **PROCESS** | `feat/PB-0612-unity-overview-scene` | Unity Target Engineering for local work; user for Git gates | 2026-08-07 | A product-free generic overview scene is created with URP lighting, camera, background, empty `PreviewTarget`, and complete controller references. | User-controlled combined publication, successful required `main` CI, explicit confirmation, and next-task rollover remain. |
-| PB-0613 | 🟡 **PROCESS** | `feat/PB-0613-unity-preview-controller` | Unity Target Engineering for local work; user for Git gates | 2026-08-07 | Product-local auto-frame, orbit, and zoom use renderer bounds and move only the camera; edit-mode and Play mode snapshots prove all product transforms remain unchanged. | The combined PB-0612/PB-0613/PB-0614 publication gates remain. |
-| PB-0614 | 🟡 **PROCESS** | `feat/PB-0614-unity-scene-composition` | Unity Target Engineering for local work; user for Git gates | 2026-08-07 | Exactly one requested prefab is composed beneath `PreviewTarget`, saved to the product `Scenes` folder, reopened, and exercised through a real error-free Play mode cycle. | The combined PB-0612/PB-0613/PB-0614 publication gates remain. |
+| PB-0615 | 🟡 **PROCESS** | `feat/PB-0615-unitypackage-export` | Unity Target Engineering for local work; user for Git gates | 2026-08-08 | Exact product-only export planning and real `.unitypackage` creation pass with product-local scene/material/texture dependencies and deterministic archive verification. | User-controlled combined publication, successful required `main` CI, explicit confirmation, and next-task rollover remain. |
+| PB-0616 | 🟡 **PROCESS** | `feat/PB-0616-unity-validation` | Unity Target Engineering for local work; user for Git gates | 2026-08-08 | Real Unity validation blocks broken scripts/materials/textures/GUIDs, duplicate or misplaced files, compilation failures, and package-caused warnings/errors. | The combined PB-0615/PB-0616 publication gates remain. |
+
+### PB-0615/PB-0616 Combined Publication Exception
+
+- **Approved:** 2026-08-08 by the user's explicit request to implement PB-0615 and PB-0616
+  together.
+- **Publication branch:** `feat/PB-0615-unitypackage-export`.
+- **Exact scope:** exact product-only `.unitypackage` planning/export, product-local dependency
+  localization, logs/reference/console/GUID/path validation, PB-0612/PB-0613/PB-0614 rollover,
+  focused dependency-free validation, real Unity edit/Play/reopen integration, and genuinely
+  affected documentation.
+- **Reason:** PB-0616 directly depends on PB-0614 and PB-0615, and the user requested one
+  implementation and publication cycle.
+- **Independence retained:** both tasks keep their canonical IDs, branches, acceptance boundaries,
+  evidence documents, lifecycle states, and eventual Completion Log rows.
+- **Completion:** both remain `[ ]` / 🟡 **PROCESS** until this combined change is committed,
+  pushed, merged into and pushed on `main`, required `main` CI succeeds, the user explicitly
+  confirms completion, and rollover is synchronized on the next task branch.
+- **No precedent:** this branch-topology exception waives no test, engine, quality, CI, security,
+  documentation, or completion gate and creates no automatic precedent.
+
+### PB-0615/PB-0616 Local Validation Checkpoint
+
+- Unity product policy validation passed 23/23 and worker package validation passed 9/9.
+- Real Unity 6000.3.10f1 generated an exact product-only archive, compared every archive pathname
+  against its export plan, required metadata and file payloads, completed a real Play mode cycle,
+  and reopened the populated project cleanly.
+- Manual 1920x1080 Play-mode review exposed one lower product-bound corner outside the viewport.
+  The diagonal-camera world-axis estimate was replaced by an eight-corner camera-space fit, and a
+  real Unity regression assertion now requires every bound corner to remain inside the viewport.
+- The user opened the corrected retained project and confirmed the complete cube is visible with
+  clear margin on every side and no lower-edge clipping.
+- Real negative fixtures blocked a missing material, broken texture GUID, missing script, broken
+  GUID, duplicate planned path, misplaced file, compilation failure, and package warning/error.
+- Full Core CI passed all 9 stages in 8 minutes 47.2 seconds: 18-project Release build with zero
+  warnings/errors, 2,282/2,282 tests, formatting, Ruff, locked restore, and repository baseline.
+- Corrected retained ignored evidence: `artifacts/u/a7c04c07`; manual project:
+  `artifacts/u/a7c04c07/p`.
+
+### PB-0612/PB-0613/PB-0614 Completion Evidence
+
+- All three tasks were committed as `dceb8838117c760a276dc2c1acbf0c4171af25b0` on their approved
+  combined publication branch.
+- [Pull request #72](https://github.com/avivperets26/3DModels-Package-Builder/pull/72) merged them
+  into `main` as `04de23b5204a64ad57426273991f82ce2649db40`.
+- Required exact-merge [main workflow run 31254437622](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31254437622)
+  completed successfully.
+- The user explicitly confirmed the push, merge, green required `main` CI, and error-free manual
+  Unity scene/Play mode inspection on 2026-08-08.
+- No CI, quality, or completion exception was used. The combined publication exception governed
+  branch topology only and created no precedent.
 
 ### PB-0612/PB-0613/PB-0614 Combined Publication Exception
 
@@ -1358,6 +1407,10 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0610 | `feat/PB-0610-unity-mesh-assets` | `a1a547f8c579892e5dc7478747da395b3b803443` | [#71](https://github.com/avivperets26/3DModels-Package-Builder/pull/71) | 2026-08-07 | Published on the PB-0609 branch under the approved combined exception and merged as `de7543ada6212e9e8d5f2795ec63dbf6a283a7f3`; required exact-merge [main workflow run 31210482067](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31210482067) succeeded. No CI or quality exception was used; the user explicitly confirmed completion and manual mesh inspection. |
 | PB-0611 | `feat/PB-0611-unity-prefabs` | `a1a547f8c579892e5dc7478747da395b3b803443` | [#71](https://github.com/avivperets26/3DModels-Package-Builder/pull/71) | 2026-08-07 | Published on the PB-0609 branch under the approved combined exception and merged as `de7543ada6212e9e8d5f2795ec63dbf6a283a7f3`; required exact-merge [main workflow run 31210482067](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31210482067) succeeded. No CI or quality exception was used; the user explicitly confirmed completion and manual prefab inspection. |
 
+| PB-0612 | `feat/PB-0612-unity-overview-scene` | `dceb8838117c760a276dc2c1acbf0c4171af25b0` | [#72](https://github.com/avivperets26/3DModels-Package-Builder/pull/72) | 2026-08-08 | Published with PB-0613/PB-0614 under the approved combined exception and merged as `04de23b5204a64ad57426273991f82ce2649db40`; required exact-merge [main workflow run 31254437622](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31254437622) succeeded. No CI or quality exception was used; the user explicitly confirmed completion and manual Unity scene inspection. |
+| PB-0613 | `feat/PB-0613-unity-preview-controller` | `dceb8838117c760a276dc2c1acbf0c4171af25b0` | [#72](https://github.com/avivperets26/3DModels-Package-Builder/pull/72) | 2026-08-08 | Published on the PB-0612 branch with PB-0612/PB-0614 under the approved combined exception and merged as `04de23b5204a64ad57426273991f82ce2649db40`; required exact-merge [main workflow run 31254437622](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31254437622) succeeded. No CI or quality exception was used; the user explicitly confirmed completion and error-free Play mode. |
+| PB-0614 | `feat/PB-0614-unity-scene-composition` | `dceb8838117c760a276dc2c1acbf0c4171af25b0` | [#72](https://github.com/avivperets26/3DModels-Package-Builder/pull/72) | 2026-08-08 | Published on the PB-0612 branch with PB-0612/PB-0613 under the approved combined exception and merged as `04de23b5204a64ad57426273991f82ce2649db40`; required exact-merge [main workflow run 31254437622](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31254437622) succeeded. No CI or quality exception was used; the user explicitly confirmed completion and the intended single-product scene. |
+
 ## 5. Milestones
 
 | Milestone | Outcome | Required epics |
@@ -1894,27 +1947,27 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0608 through PB-0610
   - Done when: `P_<AssetId>.prefab` has a reset product root, reset `P_Model` child, correct renderers/materials, and no missing references.
 
-- [ ] **PB-0612 — Create generic Unity overview scene template** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0612 — Create generic Unity overview scene template** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0612-unity-overview-scene`
   - Depends on: PB-0601
   - Done when: URP lighting, camera, background, `PreviewTarget`, and controller references load cleanly and contain no previous product.
 
-- [ ] **PB-0613 — Refactor preview controller to frame camera without scaling assets** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0613 — Refactor preview controller to frame camera without scaling assets** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0613-unity-preview-controller`
   - Depends on: PB-0612
   - Done when: orbit/zoom/auto-frame work using bounds while product transform and scale remain unchanged.
 
-- [ ] **PB-0614 — Instantiate product into Unity overview scene** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0614 — Instantiate product into Unity overview scene** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0614-unity-scene-composition`
   - Depends on: PB-0611 through PB-0613
   - Done when: exactly the intended product is under `PreviewTarget`, scene assets save to the publisher root, and Play mode has no errors.
 
-- [ ] **PB-0615 — Implement exact Unity package export** — **P0**
+- [ ] **PB-0615 — Implement exact Unity package export** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0615-unitypackage-export`
   - Depends on: PB-0605, PB-0614
   - Done when: export contains only product, documentation, scene, required scripts, `.meta` files, and dependencies; no templates or unrelated assets.
 
-- [ ] **PB-0616 — Implement Unity logs, reference, and console validator** — **P0**
+- [ ] **PB-0616 — Implement Unity logs, reference, and console validator** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0616-unity-validation`
   - Depends on: PB-0614, PB-0615
   - Done when: missing scripts/materials/textures, compile errors, package-caused warnings, broken GUIDs, duplicate files, and incorrect paths block release.

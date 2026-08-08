@@ -1486,6 +1486,22 @@ single product count, identity, prefab source, controller source, references, tr
 missing-script count. A bounded second Unity process enters and exits Play mode and treats any
 Error, Exception, Assert, timeout, or structural mismatch as failure.
 
+PB-0615 plans export from the exact product root rather than requesting recursive or implicit
+dependency expansion. Every planned path is canonical, unique under ordinal-ignore-case comparison,
+inside an approved product folder, and dependency-closed within that product. The overview
+background material and all fixture textures are localized before export. `AssetDatabase.ExportPackage`
+receives the explicit ordered inventory with default flags, the output is collision-safe and outside
+Unity's mutable project trees, and the retained verifier compares every `.unitypackage` pathname
+against the plan while requiring metadata and every file payload.
+
+PB-0616 validates without repairing. It compares actual content with the PB-0615 inventory,
+requires metadata and unique GUIDs, resolves serialized GUID references, audits dependencies, opens
+prefabs and scenes to detect missing scripts/materials, and treats compilation failure or any
+package-caused Warning/Error/Exception/Assert as release-blocking. Findings are stable,
+deterministically ordered `UNITY_VALIDATION_*` codes containing logical asset references only.
+Real invalid prefabs, materials, and scenes prove the material, texture-GUID, script-GUID,
+duplicate-path, placement, compilation, and console gates.
+
 Unity integration evidence uses the short contained layout `artifacts/u/<id>/p`. Before launching
 Unity, the harness checks a reviewed worst-case pinned-package path against a 248-character legacy
 compatibility ceiling. After the Editor tests populate the project, a second clean Unity process

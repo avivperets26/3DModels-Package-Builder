@@ -36,6 +36,10 @@ $overviewSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityOverview
     -Raw -Encoding UTF8
 $playModeSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityOverviewPlayModeSmokeTest.cs') `
     -Raw -Encoding UTF8
+$packageExporterSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityPackageExporter.cs') `
+    -Raw -Encoding UTF8
+$packageValidatorSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityPackageValidator.cs') `
+    -Raw -Encoding UTF8
 $controllerSource = Get-Content -LiteralPath (Join-Path $repositoryRootPath `
         'engine-templates\unity\6000.3\Assets\PackageBuilder\Preview\PackageBuilderPreviewController.cs') `
     -Raw -Encoding UTF8
@@ -218,7 +222,7 @@ Invoke-Check 'Unity overview template is product-free with URP lighting, camera,
 
 Invoke-Check 'Unity preview controller frames by bounds and never scales product assets' {
     foreach ($value in @('TryGetProductBounds', 'Renderer[] renderers', 'bounds.Encapsulate',
-            'previewCamera.transform.position', 'previewCamera.transform.LookAt', 'AutoFrame()',
+            'Quaternion.Inverse', 'Vector3.Scale', 'SetPositionAndRotation', 'AutoFrame()',
             'Orbit(float yawDegrees', 'Zoom(float normalizedDelta)',
             'Product transforms are never translated, rotated, or scaled')) {
         if (-not $controllerSource.Contains($value)) {
@@ -227,6 +231,9 @@ Invoke-Check 'Unity preview controller frames by bounds and never scales product
     }
     if ($controllerSource -match 'previewTarget\.(localScale|position|rotation)\s*=') {
         throw 'Preview navigation must not mutate the preview target transform.'
+    }
+    if (-not $testSource.Contains('AreBoundsInsideViewport')) {
+        throw 'Real Unity integration must prove every product-bounds corner is inside the viewport.'
     }
 }
 
@@ -252,6 +259,35 @@ Invoke-Check 'Unity overview scene has a real bounded Play mode smoke test' {
     }
 }
 
+Invoke-Check 'Unity package export is exact, dependency-closed, and collision-safe' {
+    foreach ($value in @('AssetDatabase.GetAllAssetPaths()', 'AssetDatabase.GetDependencies',
+            'UNITY_PACKAGE_DEPENDENCY_OUTSIDE_PRODUCT', 'UNITY_PACKAGE_PATH_INVALID',
+            'ExportPackageOptions.Default', 'UNITY_PACKAGE_EXPORT_OUTPUT_COLLISION',
+            'OutputPackagePath', 'AllowedProductFolders')) {
+        if (-not $packageExporterSource.Contains($value)) {
+            throw "Missing exact Unity package export behavior: $value"
+        }
+    }
+    if ($packageExporterSource.Contains('ExportPackageOptions.IncludeDependencies') -or
+        $packageExporterSource.Contains('ExportPackageOptions.Recurse')) {
+        throw 'Unity package export must not use implicit recursive or dependency inclusion.'
+    }
+}
+
+Invoke-Check 'Unity release validation blocks logs, references, GUIDs, duplicates, and paths' {
+    foreach ($value in @('UNITY_VALIDATION_MISSING_SCRIPT', 'UNITY_VALIDATION_MISSING_MATERIAL',
+            'UNITY_VALIDATION_MISSING_TEXTURE', 'UNITY_VALIDATION_COMPILATION_FAILED',
+            'UNITY_VALIDATION_PACKAGE_WARNING', 'UNITY_VALIDATION_PACKAGE_ERROR',
+            'UNITY_VALIDATION_BROKEN_GUID', 'UNITY_VALIDATION_DUPLICATE_PATH',
+            'UNITY_VALIDATION_DUPLICATE_GUID', 'UNITY_VALIDATION_PATH_INVALID',
+            'UNITY_VALIDATION_DEPENDENCY_OUTSIDE_PRODUCT', 'GetMonoBehavioursWithMissingScriptCount',
+            'AssetPathToGUID', 'GUIDToAssetPath')) {
+        if (-not $packageValidatorSource.Contains($value)) {
+            throw "Missing Unity release validator behavior: $value"
+        }
+    }
+}
+
 Invoke-Check 'Editor integration tests cover all cases, roles, collisions, and unsafe inputs' {
     foreach ($value in @('PACKAGEBUILDER_UNITY_PRODUCT_TESTS_PASS',
             'UNITY_PRODUCT_FOLDER_COLLISION', 'orm', '../outside.png',
@@ -270,6 +306,13 @@ Invoke-Check 'Editor integration tests cover all cases, roles, collisions, and u
             throw "Missing Editor integration assertion: $value"
         }
     }
+    foreach ($value in @('TestExactPackageExportAndValidation',
+            'UNITY_VALIDATION_PACKAGE_WARNING', 'UNITY_VALIDATION_COMPILATION_FAILED',
+            'UNITY_PACKAGE_PATH_INVALID', 'UNITY_PACKAGE_EXPORT_OUTPUT_COLLISION')) {
+        if (-not $testSource.Contains($value)) {
+            throw "Missing package export/validation integration assertion: $value"
+        }
+    }
 }
 
 Invoke-Check 'Unity integration uses a legacy-safe short clone and validates a clean reopen' {
@@ -284,6 +327,8 @@ Invoke-Check 'Unity integration uses a legacy-safe short clone and validates a c
             'Unity generic overview scene template tests',
             'Unity overview Play mode smoke test',
             'PackageBuilderPreviewController.cs.meta',
+            'PACKAGEBUILDER_UNITYPACKAGE_OUTPUT', 'unitypackage-extracted', 'pathname',
+            'asset.meta', 'Unity exact package archive and metadata validation',
             'Unity populated-project reopen validation')) {
         if (-not $integrationSource.Contains($value)) {
             throw "Missing Unity reopen/path safeguard: $value"
@@ -312,6 +357,8 @@ Invoke-Check 'Unity product policy sources are deterministic public-safe text' {
         (Join-Path $editorRoot 'UnityPrefabGenerator.cs'),
         (Join-Path $editorRoot 'UnityOverviewScenePipeline.cs'),
         (Join-Path $editorRoot 'UnityOverviewPlayModeSmokeTest.cs'),
+        (Join-Path $editorRoot 'UnityPackageExporter.cs'),
+        (Join-Path $editorRoot 'UnityPackageValidator.cs'),
         (Join-Path $repositoryRootPath `
             'engine-templates\unity\6000.3\Assets\PackageBuilder\Preview\PackageBuilderPreviewController.cs'),
         (Join-Path $editorRoot 'UnityProductEditorIntegrationTests.cs')

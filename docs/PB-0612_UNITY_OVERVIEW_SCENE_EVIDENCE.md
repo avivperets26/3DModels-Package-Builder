@@ -4,7 +4,7 @@
 
 - Task: PB-0612 — Create generic Unity overview scene template.
 - Canonical and publication branch: `feat/PB-0612-unity-overview-scene`.
-- Status: `[ ]` / 🟡 **PROCESS**.
+- Status: `[x]` / 🟢 **DONE**.
 - Started: 2026-08-07.
 - Publication topology: combined with PB-0613 and PB-0614 under the explicit user-approved
   exception in `docs/IMPLEMENTATION_BACKLOG.md`.
@@ -43,7 +43,11 @@ copy and proves the template still contains no product.
 - Retained integration evidence: `artifacts/u/1c6667a0`.
 - Retained manual project: `artifacts/u/1c6667a0/p`.
 
-## Remaining Gates
+## Publication Evidence
 
-User-controlled commit/push/merge, successful required `main` CI, explicit completion confirmation,
-and successor-task rollover.
+- Task commit: `dceb8838117c760a276dc2c1acbf0c4171af25b0`.
+- Pull request: [#72](https://github.com/avivperets26/3DModels-Package-Builder/pull/72).
+- Merge commit: `04de23b5204a64ad57426273991f82ce2649db40`.
+- Required [main workflow run 31254437622](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31254437622): successful.
+- User confirmation: 2026-08-08, including clean manual Unity inspection.
+- Exception used: branch topology only; no CI, quality, or completion gate was waived.

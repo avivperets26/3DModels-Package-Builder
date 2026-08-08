@@ -27,6 +27,7 @@ namespace PackageBuilder.UnityWorker.Editor
                 TestUrpLitMaterialCompilation();
                 TestStaticModelImportMeshExtractionAndPrefab();
                 TestOverviewTemplateControllerAndComposition();
+                TestExactPackageExportAndValidation();
                 Debug.Log("PACKAGEBUILDER_UNITY_PRODUCT_TESTS_PASS");
                 EditorApplication.Exit(0);
             }
@@ -264,11 +265,32 @@ namespace PackageBuilder.UnityWorker.Editor
                 .ToArray();
             Require(sourceMaterialNames.Length > 0, "The static FBX fixture has no source materials.");
 
+            string productTextureRoot = ModelTestRoot + "/Textures";
+            foreach (string textureName in new[]
+            {
+                "albedo.png", "normal.png", "metallic-smoothness.png", "emission.png",
+                "ambient-occlusion.png",
+            })
+            {
+                Require(AssetDatabase.CopyAsset(TextureTestRoot + "/" + textureName,
+                    productTextureRoot + "/" + textureName),
+                    "A product-local texture dependency could not be copied: " + textureName);
+            }
+
             string compiledMaterialReference = ModelTestRoot + "/Materials/M_StoneArch_URP.mat";
-            Require(AssetDatabase.CopyAsset(
-                MaterialTestRoot + "/Opaque.mat",
-                compiledMaterialReference), "The compiled fixture material could not be copied.");
-            AssetDatabase.ImportAsset(compiledMaterialReference, ImportAssetOptions.ForceSynchronousImport);
+            var productMaterialRequest = MaterialRequest("opaque", "Opaque.mat", 1f, null, false);
+            productMaterialRequest.OutputAssetReference = compiledMaterialReference;
+            productMaterialRequest.BaseMapAssetReference = productTextureRoot + "/albedo.png";
+            productMaterialRequest.NormalMapAssetReference = productTextureRoot + "/normal.png";
+            productMaterialRequest.MetallicSmoothnessAssetReference =
+                productTextureRoot + "/metallic-smoothness.png";
+            productMaterialRequest.EmissionMapAssetReference = productTextureRoot + "/emission.png";
+            productMaterialRequest.AmbientOcclusionMapAssetReference =
+                productTextureRoot + "/ambient-occlusion.png";
+            Material productMaterial;
+            Require(UnityUrpLitMaterialCompiler.TryCompile(
+                productMaterialRequest, out productMaterial, out string productMaterialDiagnostic),
+                productMaterialDiagnostic);
 
             UnityMaterialRemap[] remaps = sourceMaterialNames
                 .Select(name => new UnityMaterialRemap(name, compiledMaterialReference))
@@ -443,6 +465,8 @@ namespace PackageBuilder.UnityWorker.Editor
                 TemplateSceneReference = templateSceneReference,
                 ProductPrefabReference = ModelTestRoot + "/Prefabs/P_StoneArch.prefab",
                 PreviewControllerScriptReference = controllerScriptReference,
+                OutputBackgroundMaterialReference =
+                    ModelTestRoot + "/Materials/M_StoneArch_OverviewBackground.mat",
                 OutputSceneReference = outputSceneReference,
             };
             UnityEngine.SceneManagement.Scene composedScene;
@@ -466,6 +490,10 @@ namespace PackageBuilder.UnityWorker.Editor
             Vector3[] scales = productTransforms.Select(value => value.localScale).ToArray();
             Vector3 cameraBefore = controller.PreviewCamera.transform.position;
             Require(controller.AutoFrame(), "Overview auto-frame failed.");
+            Require(controller.TryGetProductBounds(out Bounds framedBounds),
+                "Overview bounds were unavailable after auto-frame.");
+            Require(AreBoundsInsideViewport(controller.PreviewCamera, framedBounds),
+                "Overview auto-frame left a product-bounds corner outside the viewport.");
             Require(controller.Orbit(22f, 7f), "Overview orbit failed.");
             Vector3 cameraAfterOrbit = controller.PreviewCamera.transform.position;
             Require(cameraAfterOrbit != cameraBefore, "Overview orbit did not move the camera.");
@@ -485,10 +513,203 @@ namespace PackageBuilder.UnityWorker.Editor
             Require(AssetDatabase.LoadAssetAtPath<SceneAsset>(outputSceneReference) != null,
                 "The product overview scene was not saved beneath the product root.");
 
+            string readmeReference = ModelTestRoot + "/Documentation/README.txt";
+            File.WriteAllText(ToPhysicalPath(readmeReference),
+                "StoneArch\nStatic Unity package integration fixture.\n");
+            AssetDatabase.ImportAsset(readmeReference, ImportAssetOptions.ForceSynchronousImport);
+
             UnityEngine.SceneManagement.Scene reopenedTemplate =
                 UnityEditor.SceneManagement.EditorSceneManager.OpenScene(templateSceneReference);
             Require(UnityOverviewSceneTemplateBuilder.VerifyTemplate(reopenedTemplate, out diagnostic),
                 "The reusable overview template retained a previous product: " + diagnostic);
+        }
+
+        private static void TestExactPackageExportAndValidation()
+        {
+            string packagePath = Environment.GetEnvironmentVariable(
+                "PACKAGEBUILDER_UNITYPACKAGE_OUTPUT");
+            string manifestPath = Environment.GetEnvironmentVariable(
+                "PACKAGEBUILDER_UNITYPACKAGE_MANIFEST");
+            Require(!string.IsNullOrEmpty(packagePath) && !string.IsNullOrEmpty(manifestPath),
+                "The contained Unity package evidence paths are missing.");
+
+            var exportRequest = new UnityPackageExportRequest
+            {
+                ProductRootReference = ModelTestRoot,
+                OutputPackagePath = packagePath,
+            };
+            UnityPackageExportPlan plan;
+            string diagnostic;
+            Require(UnityPackageExporter.TryCreatePlan(exportRequest, out plan, out diagnostic), diagnostic);
+            Require(plan.AssetReferences.All(reference =>
+                reference == ModelTestRoot ||
+                reference.StartsWith(ModelTestRoot + "/", StringComparison.Ordinal)),
+                "The exact package plan contains an unrelated asset.");
+
+            UnityPackageValidationReport validReport = UnityPackageValidator.Validate(
+                new UnityPackageValidationRequest
+                {
+                    ProductRootReference = ModelTestRoot,
+                    ExpectedAssetReferences = plan.AssetReferences,
+                    PackageLogs = Array.Empty<UnityPackageLogEntry>(),
+                });
+            Require(validReport.IsSuccessful,
+                "The generated product failed validation: " + string.Join(",", validReport.Findings
+                    .Select(finding => finding.Code)));
+
+            UnityPackageValidationReport warningReport = UnityPackageValidator.Validate(
+                new UnityPackageValidationRequest
+                {
+                    ProductRootReference = ModelTestRoot,
+                    ExpectedAssetReferences = plan.AssetReferences,
+                    PackageLogs = new[] { new UnityPackageLogEntry(LogType.Warning, "package warning") },
+                });
+            Require(HasFinding(warningReport, "UNITY_VALIDATION_PACKAGE_WARNING"),
+                "A package-caused warning did not block release.");
+
+            UnityPackageValidationReport compilationReport = UnityPackageValidator.Validate(
+                new UnityPackageValidationRequest
+                {
+                    ProductRootReference = ModelTestRoot,
+                    ExpectedAssetReferences = plan.AssetReferences,
+                    CompilationFailed = true,
+                });
+            Require(HasFinding(compilationReport, "UNITY_VALIDATION_COMPILATION_FAILED"),
+                "A compilation failure did not block release.");
+
+            UnityPackageValidationReport packageErrorReport = UnityPackageValidator.Validate(
+                new UnityPackageValidationRequest
+                {
+                    ProductRootReference = ModelTestRoot,
+                    ExpectedAssetReferences = plan.AssetReferences,
+                    PackageLogs = new[] { new UnityPackageLogEntry(LogType.Error, "package error") },
+                });
+            Require(HasFinding(packageErrorReport, "UNITY_VALIDATION_PACKAGE_ERROR"),
+                "A package-caused error did not block release.");
+
+            UnityPackageValidationReport duplicatePathReport = UnityPackageValidator.Validate(
+                new UnityPackageValidationRequest
+                {
+                    ProductRootReference = ModelTestRoot,
+                    ExpectedAssetReferences = plan.AssetReferences.Concat(
+                        new[] { plan.AssetReferences[0] }).ToArray(),
+                });
+            Require(HasFinding(duplicatePathReport, "UNITY_VALIDATION_DUPLICATE_PATH"),
+                "A duplicate planned asset path did not block release.");
+
+            TestBrokenProductReferences(exportRequest);
+
+            string incorrectPath = ModelTestRoot + "/incorrect.txt";
+            File.WriteAllText(ToPhysicalPath(incorrectPath), "invalid placement");
+            AssetDatabase.ImportAsset(incorrectPath, ImportAssetOptions.ForceSynchronousImport);
+            UnityPackageExportPlan invalidPlan;
+            Require(!UnityPackageExporter.TryCreatePlan(exportRequest, out invalidPlan, out diagnostic) &&
+                diagnostic == "UNITY_PACKAGE_PATH_INVALID",
+                "An incorrectly placed product file did not block package planning.");
+            AssetDatabase.DeleteAsset(incorrectPath);
+
+            File.WriteAllLines(manifestPath, plan.AssetReferences);
+            Require(UnityPackageExporter.TryExport(exportRequest, out plan, out diagnostic), diagnostic);
+            UnityPackageExportPlan rejectedPlan;
+            Require(!UnityPackageExporter.TryExport(exportRequest, out rejectedPlan, out diagnostic) &&
+                diagnostic == "UNITY_PACKAGE_EXPORT_OUTPUT_COLLISION",
+                "An existing Unity package output did not fail closed.");
+        }
+
+        private static void TestBrokenProductReferences(UnityPackageExportRequest exportRequest)
+        {
+            string brokenMaterialPrefab = ModelTestRoot + "/Prefabs/P_BrokenMaterial.prefab";
+            string brokenTextureMaterial = ModelTestRoot + "/Materials/M_BrokenTexture.mat";
+            string brokenScriptScene = ModelTestRoot + "/Scenes/S_BrokenScript.unity";
+            try
+            {
+                GameObject prefabRoot = PrefabUtility.LoadPrefabContents(
+                    ModelTestRoot + "/Prefabs/P_StoneArch.prefab");
+                try
+                {
+                    Renderer renderer = prefabRoot.GetComponentInChildren<Renderer>(true);
+                    Require(renderer != null, "The fixture prefab has no renderer.");
+                    renderer.sharedMaterials = new Material[renderer.sharedMaterials.Length];
+                    PrefabUtility.SaveAsPrefabAsset(prefabRoot, brokenMaterialPrefab);
+                }
+                finally
+                {
+                    PrefabUtility.UnloadPrefabContents(prefabRoot);
+                }
+
+                UnityPackageExportPlan brokenPlan;
+                string diagnostic;
+                Require(UnityPackageExporter.TryCreatePlan(exportRequest, out brokenPlan, out diagnostic),
+                    diagnostic);
+                UnityPackageValidationReport missingMaterialReport = UnityPackageValidator.Validate(
+                    new UnityPackageValidationRequest
+                    {
+                        ProductRootReference = ModelTestRoot,
+                        ExpectedAssetReferences = brokenPlan.AssetReferences,
+                    });
+                Require(HasFinding(missingMaterialReport, "UNITY_VALIDATION_MISSING_MATERIAL"),
+                    "A renderer with a missing material did not block release.");
+                AssetDatabase.DeleteAsset(brokenMaterialPrefab);
+
+                string sourceMaterial = ModelTestRoot + "/Materials/M_StoneArch_URP.mat";
+                Require(AssetDatabase.CopyAsset(sourceMaterial, brokenTextureMaterial),
+                    "The broken-texture fixture material could not be copied.");
+                string albedoGuid = AssetDatabase.AssetPathToGUID(
+                    ModelTestRoot + "/Textures/albedo.png");
+                string materialYaml = File.ReadAllText(ToPhysicalPath(brokenTextureMaterial));
+                Require(materialYaml.Contains(albedoGuid),
+                    "The product material does not contain its Albedo GUID.");
+                File.WriteAllText(ToPhysicalPath(brokenTextureMaterial),
+                    materialYaml.Replace(albedoGuid, new string('f', 32)));
+                AssetDatabase.ImportAsset(brokenTextureMaterial, ImportAssetOptions.ForceSynchronousImport);
+                Require(UnityPackageExporter.TryCreatePlan(exportRequest, out brokenPlan, out diagnostic),
+                    diagnostic);
+                UnityPackageValidationReport missingTextureReport = UnityPackageValidator.Validate(
+                    new UnityPackageValidationRequest
+                    {
+                        ProductRootReference = ModelTestRoot,
+                        ExpectedAssetReferences = brokenPlan.AssetReferences,
+                    });
+                Require(HasFinding(missingTextureReport, "UNITY_VALIDATION_MISSING_TEXTURE"),
+                    "A material with a broken texture GUID did not block release.");
+                AssetDatabase.DeleteAsset(brokenTextureMaterial);
+
+                string sourceScene = ModelTestRoot + "/Scenes/S_StoneArch_Overview.unity";
+                Require(AssetDatabase.CopyAsset(sourceScene, brokenScriptScene),
+                    "The broken-script fixture scene could not be copied.");
+                string scriptGuid = AssetDatabase.AssetPathToGUID(
+                    ModelTestRoot + "/Scripts/PackageBuilderPreviewController.cs");
+                string sceneYaml = File.ReadAllText(ToPhysicalPath(brokenScriptScene));
+                Require(sceneYaml.Contains(scriptGuid),
+                    "The product overview scene does not contain its controller GUID.");
+                File.WriteAllText(ToPhysicalPath(brokenScriptScene),
+                    sceneYaml.Replace(scriptGuid, new string('e', 32)));
+                AssetDatabase.ImportAsset(brokenScriptScene, ImportAssetOptions.ForceSynchronousImport);
+                Require(UnityPackageExporter.TryCreatePlan(exportRequest, out brokenPlan, out diagnostic),
+                    diagnostic);
+                UnityPackageValidationReport missingScriptReport = UnityPackageValidator.Validate(
+                    new UnityPackageValidationRequest
+                    {
+                        ProductRootReference = ModelTestRoot,
+                        ExpectedAssetReferences = brokenPlan.AssetReferences,
+                    });
+                Require(HasFinding(missingScriptReport, "UNITY_VALIDATION_BROKEN_GUID"),
+                    "A broken script GUID did not block release.");
+                Require(HasFinding(missingScriptReport, "UNITY_VALIDATION_MISSING_SCRIPT"),
+                    "A missing scene script did not block release.");
+            }
+            finally
+            {
+                AssetDatabase.DeleteAsset(brokenMaterialPrefab);
+                AssetDatabase.DeleteAsset(brokenTextureMaterial);
+                AssetDatabase.DeleteAsset(brokenScriptScene);
+                AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+            }
+        }
+
+        private static bool HasFinding(UnityPackageValidationReport report, string code)
+        {
+            return !report.IsSuccessful && report.Findings.Any(finding => finding.Code == code);
         }
 
         private static UnityUrpLitMaterialRequest MaterialRequest(
@@ -661,6 +882,32 @@ namespace PackageBuilder.UnityWorker.Editor
         private static bool Approximately(float first, float second)
         {
             return Mathf.Abs(first - second) <= 0.0001f;
+        }
+
+        private static bool AreBoundsInsideViewport(Camera camera, Bounds bounds)
+        {
+            const float tolerance = 0.0001f;
+            for (int x = -1; x <= 1; x += 2)
+            {
+                for (int y = -1; y <= 1; y += 2)
+                {
+                    for (int z = -1; z <= 1; z += 2)
+                    {
+                        Vector3 worldCorner = bounds.center + Vector3.Scale(
+                            bounds.extents,
+                            new Vector3(x, y, z));
+                        Vector3 viewportCorner = camera.WorldToViewportPoint(worldCorner);
+                        if (viewportCorner.z <= 0f || viewportCorner.x < -tolerance ||
+                            viewportCorner.x > 1f + tolerance || viewportCorner.y < -tolerance ||
+                            viewportCorner.y > 1f + tolerance)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            return true;
         }
 
         private static bool IsReset(Transform value)
