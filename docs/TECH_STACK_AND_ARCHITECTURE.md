@@ -2501,3 +2501,57 @@ This architecture is ready for implementation when:
 - [Unity Asset Store submission guidelines](https://assetstore.unity.com/publishing/submission-guidelines)
 
 Engine and marketplace documentation is reviewed when a new candidate version or requirements profile is discovered. Links in this document are reference starting points; the version manager and requirements-profile maintenance process prevent the architecture from depending permanently on today's versions.
+
+## 35. Optional Hosted Conversion Architecture
+
+Hosted conversion is an adapter around the existing Package Builder core, not a second implementation of its naming, validation, orchestration, target, or release rules. It is optional post-version-1 work under backlog E19. The repository-local WPF/CLI workflow remains the authoritative free and offline-capable baseline.
+
+```mermaid
+flowchart LR
+    Browser[STUDIO AVIV browser] -->|HTTPS metadata and control| Next[Next.js UI and BFF]
+    Browser -->|short-lived direct upload| Store[(Object storage and quarantine)]
+    Next -->|versioned HTTPS contracts| Api[Package Builder API]
+    Api --> Db[(Hosted job and audit store)]
+    Api --> Queue[(Durable queue)]
+    Queue --> Blender[Isolated Blender workers]
+    Queue --> Unity[Licensed isolated Unity workers]
+    Queue --> Unreal[Licensed isolated Unreal workers]
+    Queue -. optional .-> Agent[User-operated local agent]
+    Blender --> Store
+    Unity --> Store
+    Unreal --> Store
+    Agent --> Store
+    Api -->|short-lived signed download| Browser
+```
+
+### Trust and execution boundaries
+
+- The browser is untrusted. It may propose metadata, but server-side typed contracts and authorization decide every accepted operation.
+- Next.js is a presentation/BFF boundary. It must not execute engines, retain large uploads on ephemeral disk, proxy multi-gigabyte payloads unnecessarily, or contain Package Builder business rules.
+- The API authenticates identities, authorizes tenant-owned resources, issues scoped upload/download grants, validates manifests, persists job state, and publishes durable work. It never interpolates user input into commands.
+- Object storage separates quarantine, immutable source snapshots, staging artifacts, promoted outputs, and expired/deleted data using tenant-safe canonical keys.
+- Workers consume typed versioned requests, operate in disposable contained workspaces, run only approved pinned executables with literal arguments, deny implicit network access, enforce resource/time limits, and return typed progress, findings, metrics, and artifacts.
+- The website, API, queue, and storage services never imply that having a file URL authorizes access. Tenant ownership is checked at every operation.
+
+### Reuse and adapter seams
+
+- `PackageBuilder.Domain` remains independent of web, storage-provider, queue-provider, and engine-hosting details.
+- `PackageBuilder.Application` retains orchestration policies behind interfaces for clock, identity, storage, leases, queue publication, worker capability, and artifact delivery.
+- `PackageBuilder.Contracts` supplies versioned API/event/worker payloads and compatibility tests.
+- Local filesystem/SQLite/process adapters and hosted object-storage/database/queue adapters implement the same application ports where their semantics match.
+- Engine-specific behavior stays in the existing Blender, Unity, and Unreal worker/target boundaries. Hosted pools provide isolation and transport, not duplicated conversion logic.
+- The STUDIO AVIV codebase consumes a generated or reviewed typed client and exposes a feature-flagged provider interface so mocks cannot accidentally become production capability claims.
+
+### Deployment and licensing policy
+
+- Blender-only hosting is the first practical engine tier because it can run headlessly on isolated workers, subject to security and capacity acceptance.
+- Unity and Unreal require dedicated Windows worker pools and explicit review of current authoritative licence, activation, automation, and redistribution terms before implementation or public enablement.
+- A target with unavailable, unhealthy, unlicensed, or exhausted capacity is hidden or reported unavailable before upload/build commitment.
+- No hosted vendor is mandatory. Storage, durable queue, database, and worker implementations are abstracted, and a self-hosted/local-agent route remains possible.
+- Hosted operating costs, quotas, limits, retention, and any customer price are separate approved product decisions. They cannot silently weaken local functionality.
+
+### Security and operations gates
+
+E19 must extend the existing threat model to cover authentication, tenant isolation, direct/resumable uploads, signed URLs, quarantine, storage keys, queue poisoning, lease theft, replay/idempotency, worker escape, denial of service, cost exhaustion, data residency, deletion, and incident response. Structured telemetry is redacted by default. Full hosted end-to-end, hostile-input, authorization, load, accessibility, recovery, deletion, and licensing acceptance is required before public enablement.
+
+The cross-repository interface and website responsibilities are defined in [the STUDIO AVIV hosted converter handoff](STUDIO_AVIV_HOSTED_CONVERTER_HANDOFF.md).
