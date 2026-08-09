@@ -15,9 +15,11 @@ namespace PackageBuilder.UnityWorker.Editor
         private const string MaterialTestRoot = "Assets/PBMaterialTests";
         private const string ModelTestRoot = "Assets/PBModelTests";
         private const string RigPolicyTestRoot = "Assets/PBRigPolicyTests";
+        private const string AnimationTestRoot = "Assets/PBAnimationTests";
         private const string OverviewTemplateRoot = "Assets/PBOverviewTemplate";
         private const string ModelSourceReference = "Assets/PBModelTests/Source/StoneArch.fbx";
         private const string RigSourceReference = "Assets/PBRigPolicyTests/Source/RiggedProp.fbx";
+        private const string AnimatedSourceReference = "Assets/PBAnimationTests/Source/AnimatedProp.fbx";
 
         public static void Run()
         {
@@ -29,6 +31,7 @@ namespace PackageBuilder.UnityWorker.Editor
                 TestUrpLitMaterialCompilation();
                 TestStaticModelImportMeshExtractionAndPrefab();
                 TestGenericAndHumanoidRigImporterPolicies();
+                TestSkinRiggedPrefabAndAnimationClips();
                 TestOverviewTemplateControllerAndComposition();
                 TestExactPackageExportAndValidation();
                 Debug.Log("PACKAGEBUILDER_UNITY_PRODUCT_TESTS_PASS");
@@ -58,6 +61,7 @@ namespace PackageBuilder.UnityWorker.Editor
                     AssetDatabase.DeleteAsset(MaterialTestRoot);
                     AssetDatabase.DeleteAsset(ModelTestRoot);
                     AssetDatabase.DeleteAsset(RigPolicyTestRoot);
+                    AssetDatabase.DeleteAsset(AnimationTestRoot);
                     AssetDatabase.DeleteAsset(OverviewTemplateRoot);
                     AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
                 }
@@ -512,6 +516,204 @@ namespace PackageBuilder.UnityWorker.Editor
             Require((importer.extraExposedTransformPaths ?? Array.Empty<string>())
                 .SequenceEqual(new[] { rootPath }, StringComparer.Ordinal),
                 "Exposed transform paths are not deterministic.");
+        }
+
+        /// <summary>
+        /// Exercises PB-0703 through PB-0705 against Blender-authored FBX files imported by the
+        /// real Unity ModelImporter. This keeps skin, prefab, and clip policy coupled to engine
+        /// behavior while retaining structured negative-path assertions.
+        /// </summary>
+        private static void TestSkinRiggedPrefabAndAnimationClips()
+        {
+            var rigImporter = AssetImporter.GetAtPath(RigSourceReference) as ModelImporter;
+            Require(rigImporter != null, "The real rigged FBX importer is missing.");
+            string rigRootPath = (rigImporter.transformPaths ?? Array.Empty<string>())
+                .Where(path => !string.IsNullOrEmpty(path))
+                .OrderBy(path => path.Count(character => character == '/'))
+                .ThenBy(path => path, StringComparer.Ordinal)
+                .FirstOrDefault();
+            Require(!string.IsNullOrEmpty(rigRootPath),
+                "The real rigged FBX has no transform root.");
+            UnityRigImportResult rigImportResult;
+            string diagnostic;
+            Require(UnityRigModelImporterPolicy.TryApply(
+                new UnityRigImportRequest
+                {
+                    ModelAssetReference = RigSourceReference,
+                    Mode = UnityRigImportMode.Generic,
+                    RootNodePath = rigRootPath,
+                    PreserveHierarchy = true,
+                    OptimizeGameObjects = false,
+                    ExposedTransformPaths = Array.Empty<string>(),
+                },
+                out rigImportResult,
+                out diagnostic), diagnostic);
+
+            GameObject rigAsset = AssetDatabase.LoadAssetAtPath<GameObject>(RigSourceReference);
+            Require(rigAsset != null, "The real rigged FBX fixture was not imported.");
+            GameObject rigInstance = UnityEngine.Object.Instantiate(rigAsset);
+            try
+            {
+                UnitySkinSkeletonReport skinReport = UnitySkinSkeletonValidator.Validate(rigInstance, 4);
+                Require(skinReport.IsValid, "The real rig failed skin validation: " +
+                    string.Join(",", skinReport.Findings.Select(finding => finding.Code)));
+                Require(skinReport.RendererCount == 1 && skinReport.UniqueBoneCount == 2 &&
+                    skinReport.UnweightedVertexCount == 0 && skinReport.MaximumInfluences <= 4,
+                    "The real rig produced unexpected skin or skeleton metrics.");
+
+                SkinnedMeshRenderer renderer = rigInstance.GetComponentInChildren<SkinnedMeshRenderer>(true);
+                Require(renderer != null, "The rig fixture has no SkinnedMeshRenderer.");
+                Transform originalRootBone = renderer.rootBone;
+                renderer.rootBone = null;
+                UnitySkinSkeletonReport missingRootReport =
+                    UnitySkinSkeletonValidator.Validate(rigInstance, 4);
+                Require(missingRootReport.Findings.Any(finding =>
+                    finding.Code == "UNITY_SKIN_ROOT_BONE_MISSING"),
+                    "A missing root bone did not produce a stable finding.");
+                renderer.rootBone = originalRootBone;
+
+                Transform[] originalBones = renderer.bones;
+                Transform[] missingBoneFixture = originalBones.ToArray();
+                missingBoneFixture[0] = null;
+                renderer.bones = missingBoneFixture;
+                UnitySkinSkeletonReport missingBoneReport =
+                    UnitySkinSkeletonValidator.Validate(rigInstance, 4);
+                Require(missingBoneReport.Findings.Any(finding =>
+                    finding.Code == "UNITY_SKIN_BONE_MISSING"),
+                    "A missing skin bone did not produce a stable finding.");
+                renderer.bones = originalBones;
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(rigInstance);
+            }
+
+            string riggedPrefabReference = RigPolicyTestRoot + "/Prefabs/P_RiggedProp.prefab";
+            string skeletonMetadataReference =
+                RigPolicyTestRoot + "/Documentation/SKEL_RiggedProp.json";
+            GameObject riggedPrefab;
+            UnitySkinSkeletonReport prefabSkinReport;
+            Require(UnityRiggedPrefabGenerator.TryCreate(
+                new UnityRiggedPrefabRequest
+                {
+                    AssetId = "RiggedProp",
+                    SourceModelReference = RigSourceReference,
+                    OutputPrefabReference = riggedPrefabReference,
+                    OutputSkeletonMetadataReference = skeletonMetadataReference,
+                    AllowedMaximumInfluences = 4,
+                },
+                out riggedPrefab,
+                out prefabSkinReport,
+                out diagnostic), diagnostic);
+            Require(riggedPrefab != null && riggedPrefab.name == "P_RiggedProp" &&
+                riggedPrefab.transform.childCount == 1 &&
+                riggedPrefab.transform.GetChild(0).name == "P_Model" &&
+                IsReset(riggedPrefab.transform) && IsReset(riggedPrefab.transform.GetChild(0)),
+                "The rigged-no-animation prefab hierarchy is incorrect.");
+            Require(prefabSkinReport.IsValid &&
+                riggedPrefab.GetComponentsInChildren<SkinnedMeshRenderer>(true).Length == 1,
+                "The saved rigged prefab did not preserve its validated skin.");
+            Require(riggedPrefab.GetComponentsInChildren<Animation>(true).Length == 0 &&
+                riggedPrefab.GetComponentsInChildren<Animator>(true).Length == 0,
+                "The rigged-no-animation prefab retained an empty animation component.");
+            Require(!AssetDatabase.IsValidFolder(RigPolicyTestRoot + "/Animations") &&
+                !AssetDatabase.IsValidFolder(RigPolicyTestRoot + "/Controllers"),
+                "Case 2 must not emit empty Animations or Controllers folders.");
+            TextAsset skeletonMetadata = AssetDatabase.LoadAssetAtPath<TextAsset>(
+                skeletonMetadataReference);
+            Require(skeletonMetadata != null &&
+                skeletonMetadata.text.Contains("\"hasAnimationClips\": false"),
+                "Rigged-no-animation skeleton metadata is missing or incorrect.");
+            Require(!UnityRiggedPrefabGenerator.TryCreate(
+                new UnityRiggedPrefabRequest
+                {
+                    AssetId = "RiggedProp",
+                    SourceModelReference = RigSourceReference,
+                    OutputPrefabReference = riggedPrefabReference,
+                    OutputSkeletonMetadataReference = skeletonMetadataReference,
+                    AllowedMaximumInfluences = 4,
+                },
+                out riggedPrefab,
+                out prefabSkinReport,
+                out diagnostic) && diagnostic == "UNITY_RIGGED_PREFAB_INVALID",
+                "Existing rigged prefab outputs must fail closed.");
+
+            var animationImporter = AssetImporter.GetAtPath(AnimatedSourceReference) as ModelImporter;
+            Require(animationImporter != null, "The animated FBX importer is missing.");
+            string animationRootPath = (animationImporter.transformPaths ?? Array.Empty<string>())
+                .Where(path => !string.IsNullOrEmpty(path))
+                .OrderBy(path => path.Count(character => character == '/'))
+                .ThenBy(path => path, StringComparer.Ordinal)
+                .FirstOrDefault();
+            Require(!string.IsNullOrEmpty(animationRootPath),
+                "The animated FBX has no transform root.");
+            UnityRigImportResult animationRigResult;
+            Require(UnityRigModelImporterPolicy.TryApply(
+                new UnityRigImportRequest
+                {
+                    ModelAssetReference = AnimatedSourceReference,
+                    Mode = UnityRigImportMode.Generic,
+                    RootNodePath = animationRootPath,
+                    PreserveHierarchy = true,
+                    OptimizeGameObjects = true,
+                    ExposedTransformPaths = new[] { animationRootPath },
+                },
+                out animationRigResult,
+                out diagnostic), diagnostic);
+
+            UnityAnimationClipPlan[] discoveredActions;
+            Require(UnityAnimationClipImporter.TryDiscoverSourceActions(
+                AnimatedSourceReference, out discoveredActions, out diagnostic), diagnostic);
+            Require(discoveredActions.Length == 1,
+                "The animated fixture must expose exactly one source action.");
+            UnityAnimationClipPlan discovered = discoveredActions[0];
+            var exactPlan = new UnityAnimationClipPlan
+            {
+                ClipId = "Bend",
+                SourceTakeName = discovered.SourceTakeName,
+                FirstFrame = discovered.FirstFrame,
+                LastFrame = discovered.LastFrame,
+                SampleRate = discovered.SampleRate,
+            };
+            UnityAnimationClipImportResult clipResult;
+            Require(UnityAnimationClipImporter.TryImportAndExtract(
+                new UnityAnimationClipImportRequest
+                {
+                    AssetId = "AnimatedProp",
+                    SourceModelReference = AnimatedSourceReference,
+                    OutputAnimationFolderReference = AnimationTestRoot + "/Animations",
+                    Clips = new[] { exactPlan },
+                },
+                out clipResult,
+                out diagnostic), diagnostic);
+            string expectedClipReference =
+                AnimationTestRoot + "/Animations/A_AnimatedProp_Bend.anim";
+            Require(clipResult.OutputAssetReferences.SequenceEqual(
+                new[] { expectedClipReference }, StringComparer.Ordinal),
+                "The extracted animation clip name or location is incorrect.");
+            AnimationClip extractedClip = AssetDatabase.LoadAssetAtPath<AnimationClip>(
+                expectedClipReference);
+            Require(extractedClip != null &&
+                Approximately(extractedClip.frameRate, exactPlan.SampleRate),
+                "The extracted clip sample rate is incorrect.");
+            animationImporter = AssetImporter.GetAtPath(AnimatedSourceReference) as ModelImporter;
+            Require(animationImporter != null && animationImporter.importAnimation &&
+                animationImporter.clipAnimations.Length == 1 &&
+                animationImporter.clipAnimations[0].name == "A_AnimatedProp_Bend" &&
+                Approximately(animationImporter.clipAnimations[0].firstFrame, exactPlan.FirstFrame) &&
+                Approximately(animationImporter.clipAnimations[0].lastFrame, exactPlan.LastFrame),
+                "The imported clip range or name is not exact.");
+            Require(!UnityAnimationClipImporter.TryImportAndExtract(
+                new UnityAnimationClipImportRequest
+                {
+                    AssetId = "AnimatedProp",
+                    SourceModelReference = AnimatedSourceReference,
+                    OutputAnimationFolderReference = AnimationTestRoot + "/Animations",
+                    Clips = new[] { exactPlan },
+                },
+                out clipResult,
+                out diagnostic) && diagnostic == "UNITY_ANIMATION_CLIP_PLAN_INVALID",
+                "Existing extracted animation outputs must fail closed.");
         }
 
         private static void TestOverviewTemplateControllerAndComposition()

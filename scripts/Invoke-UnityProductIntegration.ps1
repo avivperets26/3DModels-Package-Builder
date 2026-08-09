@@ -92,10 +92,23 @@ Copy-Item -LiteralPath $staticFbxFixture -Destination (Join-Path $modelTestRoot 
 
 # Generate a real armature-and-skin FBX so PB-0701 verifies Generic avatar, hierarchy, motion-root,
 # optimization, and exposed-transform behavior against Unity's FBX importer rather than a mock.
-$rigTestRoot = Join-Path $cloneRoot 'Assets\PBRigPolicyTests\Source'
+$rigProductRoot = Join-Path $cloneRoot 'Assets\PBRigPolicyTests'
+$rigTestRoot = Join-Path $rigProductRoot 'Source'
 $rigFbxPath = Join-Path $rigTestRoot 'RiggedProp.fbx'
+$animatedProductRoot = Join-Path $cloneRoot 'Assets\PBAnimationTests'
+$animatedSourceRoot = Join-Path $animatedProductRoot 'Source'
+$animatedFbxPath = Join-Path $animatedSourceRoot 'AnimatedProp.fbx'
 $rigGenerationLog = Join-Path $runRoot 'blender-rig-fixture.log'
-New-Item -ItemType Directory -Path $rigTestRoot -Force | Out-Null
+# Case 2 intentionally has no Animations or Controllers output. The animated fixture receives
+# those folders separately so an empty animation surface cannot leak into rigged-only packages.
+foreach ($folderName in @('Documentation', 'Source', 'Meshes', 'Materials', 'Textures',
+        'Prefabs', 'Scenes', 'Scripts')) {
+    New-Item -ItemType Directory -Path (Join-Path $rigProductRoot $folderName) -Force | Out-Null
+}
+foreach ($folderName in @('Documentation', 'Source', 'Meshes', 'Materials', 'Textures',
+        'Prefabs', 'Scenes', 'Scripts', 'Animations', 'Controllers')) {
+    New-Item -ItemType Directory -Path (Join-Path $animatedProductRoot $folderName) -Force | Out-Null
+}
 $blenderArguments = @(
     '--background',
     '--factory-startup',
@@ -107,6 +120,22 @@ $blenderProcess = Start-Process -FilePath $blenderPath -ArgumentList $blenderArg
     -RedirectStandardError (Join-Path $runRoot 'blender-rig-fixture-error.log')
 if ($blenderProcess.ExitCode -ne 0 -or -not (Test-Path -LiteralPath $rigFbxPath -PathType Leaf)) {
     throw "The real PB-0701 rig fixture could not be generated. See $rigGenerationLog"
+}
+
+# Reuse the same topology and weighting fixture with one sampled Blender action for PB-0705.
+$animatedBlenderArguments = @(
+    '--background',
+    '--factory-startup',
+    '--python', (Join-Path $repositoryRootPath 'tests\blender\engine\pb0701_generate_rig_fbx.py'),
+    '--', $animatedFbxPath, 'animated'
+)
+$animatedBlenderProcess = Start-Process -FilePath $blenderPath -ArgumentList $animatedBlenderArguments `
+    -Wait -PassThru -NoNewWindow -RedirectStandardOutput `
+    (Join-Path $runRoot 'blender-animation-fixture.log') `
+    -RedirectStandardError (Join-Path $runRoot 'blender-animation-fixture-error.log')
+if ($animatedBlenderProcess.ExitCode -ne 0 -or
+    -not (Test-Path -LiteralPath $animatedFbxPath -PathType Leaf)) {
+    throw 'The real PB-0705 animation fixture could not be generated.'
 }
 
 # Move the generic controller source and assembly definition into the generated product Scripts
@@ -453,6 +482,9 @@ Write-Host 'Unity metallic-smoothness exact pixel tests: passed'
 Write-Host 'Unity URP/Lit material compiler tests: passed'
 Write-Host 'Unity static ModelImporter Editor tests: passed'
 Write-Host 'Unity Generic and optional Humanoid rig importer Editor tests: passed'
+Write-Host 'Unity skin and skeleton validation Editor tests: passed'
+Write-Host 'Unity rigged-no-animation prefab and skeleton metadata tests: passed'
+Write-Host 'Unity exact animation clip extraction Editor tests: passed'
 Write-Host 'Unity standalone mesh extraction Editor tests: passed'
 Write-Host 'Unity static prefab generation Editor tests: passed'
 Write-Host 'Unity generic overview scene template tests: passed'
@@ -478,6 +510,11 @@ $resultPointer = [ordered]@{
     packageManifest = $packageManifestPath
     scene = Join-Path $cloneRoot 'Assets\PBModelTests\Scenes\S_StoneArch_Overview.unity'
     rigFixture = Join-Path $cloneRoot 'Assets\PBRigPolicyTests\Source\RiggedProp.fbx'
+    riggedPrefab = Join-Path $cloneRoot 'Assets\PBRigPolicyTests\Prefabs\P_RiggedProp.prefab'
+    skeletonMetadata = Join-Path $cloneRoot `
+        'Assets\PBRigPolicyTests\Documentation\SKEL_RiggedProp.json'
+    animatedFixture = Join-Path $cloneRoot 'Assets\PBAnimationTests\Source\AnimatedProp.fbx'
+    animationClip = Join-Path $cloneRoot 'Assets\PBAnimationTests\Animations\A_AnimatedProp_Bend.anim'
     integrationLog = $logPath
     cleanReimportLog = $cleanReimportLogPath
     cleanReimportResult = $cleanReimportResultPath

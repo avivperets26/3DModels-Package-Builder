@@ -4,7 +4,7 @@
 
 - Task: PB-0701 — Implement Unity Generic rig importer policy.
 - Canonical and publication branch: `feat/PB-0701-unity-generic-rig`.
-- Status: `[ ]` / 🟡 **PROCESS**.
+- Status: `[x]` / 🟢 **DONE**.
 - Started: 2026-08-09.
 - Publication is combined with PB-0702 under the explicitly approved exception recorded in the
   implementation backlog. The exception creates no precedent.
@@ -76,8 +76,12 @@ The latest retained successful run is beneath `artifacts/u/dee856f4`. Its manual
 - Reuse audit: PB-0701 owns the single Unity rig-import transaction used by Generic requests and the
   explicitly approved PB-0702 fallback. No product-topology-specific importer copy was introduced.
 
-## Remaining Gates
+## Publication and Completion
 
-PB-0701 remains PROCESS until the combined task commit is published, merged into `main`, required
-`main` CI succeeds, the user explicitly confirms completion, and the next task synchronizes the
-Completion Log.
+- Task commit: `6c3a7945558317a69ee77ba38a0cc959e26a4a04`.
+- Pull request: [#75](https://github.com/avivperets26/3DModels-Package-Builder/pull/75).
+- Merge commit: `dc239ec565925898e5206336ea51eeff27692e92`.
+- Required exact-merge [main workflow run 31312634024](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31312634024): succeeded.
+- User confirmation and completion date: 2026-08-09.
+- Exception used: only the approved PB-0701/PB-0702 combined publication topology; no quality,
+  dependency, validation, engine, CI, or security gate was waived.

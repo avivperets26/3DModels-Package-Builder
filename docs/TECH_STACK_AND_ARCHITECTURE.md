@@ -1523,6 +1523,28 @@ Generic fallback is permitted only by a separate explicit approval and is report
 never disguised as the requested result. A contained Blender-generated armature/skinned FBX drives
 real Unity tests for Generic configuration, invalid-Humanoid rollback, and approved fallback.
 
+PB-0703 provides the canonical non-mutating Unity skin/skeleton validator. It audits every
+`SkinnedMeshRenderer`, shared mesh, root bone, renderer bone array, hierarchy containment, bind-pose
+count, per-vertex bone index, influence limit, and unweighted vertex. Findings are stable and
+deterministically ordered. The validator uses Unity's variable-influence APIs and contains no
+Humanoid or topology assumptions, so every Generic creature, prop, vehicle, weapon, wing, tail,
+quadruped, and non-humanoid biped follows the same boundary.
+
+PB-0704 owns the case-2 rigged-no-animation product flow. It creates a reset `P_<AssetId>` root and
+reset `P_Model` child, preserves the validated skinned hierarchy, and emits deterministic
+`SKEL_<AssetId>.json` metadata. A rig-only product must not contain clip/controller assets,
+Animations/Controllers output folders, empty Animation components, or controller-less Animator
+components. Creation and post-save verification both call the PB-0703 validator, and failures
+remove partial assets.
+
+PB-0705 owns exact source-take and manifest-frame-range conversion to Unity AnimationClip assets.
+Outputs use `A_<AssetId>_<ClipId>`, are collision-safe, and preserve the declared sample rate and
+range-derived duration. Because PB-0701 disables animation while configuring a rig, take discovery
+may temporarily enable source animation only when metadata is absent; it copies the take inventory
+and restores the original importer state in `finally`. Failed extraction restores all reviewed
+settings and deletes partial outputs. Loop, compression, root motion, controller generation, and
+animated-prefab composition remain with PB-0706 through PB-0708.
+
 Unity integration evidence uses the short contained layout `artifacts/u/<id>/p`. Before launching
 Unity, the harness checks a reviewed worst-case pinned-package path against a 248-character legacy
 compatibility ceiling. After the Editor tests populate the project, a second clean Unity process
