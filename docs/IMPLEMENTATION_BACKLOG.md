@@ -158,8 +158,28 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0701 | 🟡 **PROCESS** | `feat/PB-0701-unity-generic-rig` | Unity Rig Engineering for local work; user for Git gates | 2026-08-09 | Deterministic topology-neutral Generic rig policy passed a real contained-Blender FBX and Unity importer transaction; the user confirmed the expected Rig Inspector settings and no Console errors; Unity product policies passed 28/28, repository baseline passed 32/32, real Unity integration passed beneath `artifacts/u/dee856f4`, and full Core CI passed all 2,282 tests. | User-controlled combined publication, required `main` CI, explicit confirmation, and rollover remain. |
-| PB-0702 | 🟡 **PROCESS** | `feat/PB-0702-unity-humanoid-policy` | Unity Rig Engineering for local work; user for Git gates | 2026-08-09 | Manifest-only Humanoid validation, rollback, and explicitly approved Generic fallback passed real Unity integration; Humanoid remains optional and arbitrary creature, prop, wing, tail, and vehicle rigs stay on the Generic path. Unity product policies passed 28/28, repository baseline passed 32/32, and full Core CI passed all 2,282 tests. | The combined PB-0701/PB-0702 publication, required `main` CI, confirmation, and rollover gates remain. |
+| PB-0703 | 🟡 **PROCESS** | `feat/PB-0703-unity-skin-validator` | Unity Rig Engineering for local work; user for Git gates | 2026-08-09 | Non-mutating skin/skeleton validation reports renderers, roots, bones, bind poses, influence limits, invalid indices, and unweighted vertices with stable findings. A real contained-Blender skinned FBX passed in Unity beneath `artifacts/u/7650ee0`. | User-controlled combined publication, required `main` CI, explicit confirmation, and rollover remain. |
+| PB-0704 | 🟡 **PROCESS** | `feat/PB-0704-unity-rigged-no-animation` | Unity Rig Engineering for local work; user for Git gates | 2026-08-09 | Case 2 creates a reset `P_<AssetId>` / `P_Model` skinned prefab and deterministic `SKEL_<AssetId>.json`, while omitting animation/controller folders, clips, controllers, and empty animation components. Real Unity integration passed. | User-controlled combined publication, required `main` CI, explicit confirmation, and rollover remain. |
+| PB-0705 | 🟡 **PROCESS** | `feat/PB-0705-unity-animation-clips` | Unity Animation Engineering for local work; user for Git gates | 2026-08-09 | Source takes and manifest ranges now create collision-safe `A_<AssetId>_<ClipId>` assets with exact frame bounds and sample rate. Discovery remains valid after the rig policy disables animation, and real Unity extraction passed. | User-controlled combined publication, required `main` CI, explicit confirmation, and rollover remain. |
+
+### PB-0703/PB-0704/PB-0705 Combined Publication Exception
+
+- **Approved:** 2026-08-09 by the user's explicit request to implement the three tasks together.
+- **Publication branch:** `feat/PB-0703-unity-skin-validator`.
+- **Exact scope:** non-mutating Unity skin/skeleton validation; the case-2 rigged prefab and
+  skeleton-metadata flow; source-take discovery and exact manifest-driven animation clip
+  extraction; procedural Blender fixtures; focused policy and real Unity integration tests;
+  PB-0701/PB-0702 rollover; and genuinely affected documentation.
+- **Reason:** PB-0704 consumes PB-0703 validation, while PB-0705 consumes the same PB-0701 importer
+  and PB-0408 animation metadata boundary. One real skinned/animated fixture verifies the three
+  adjacent stages without duplicating engine setup.
+- **Independence retained:** each task keeps its canonical ID, branch, acceptance boundary,
+  lifecycle state, evidence document, and eventual Completion Log row.
+- **Completion:** all three remain `[ ]` / 🟡 **PROCESS** until the combined change is committed,
+  pushed, merged into and pushed on `main`, required `main` CI succeeds, the user explicitly
+  confirms completion, and rollover is synchronized on the next task branch.
+- **No precedent:** this branch-topology exception waives no dependency, validation, engine,
+  quality, CI, security, documentation, or completion gate.
 
 ### PB-0701/PB-0702 Combined Publication Exception
 
@@ -175,9 +195,9 @@ feat/PB-0607-unity-urp-material-compiler
   `ModelImporter` rig boundary.
 - **Independence retained:** both tasks keep their canonical IDs, branches, acceptance boundaries,
   lifecycle states, evidence documents, and eventual Completion Log rows.
-- **Completion:** both remain `[ ]` / 🟡 **PROCESS** until the combined implementation is committed,
-  pushed, merged into and pushed on `main`, required `main` CI succeeds, the user explicitly
-  confirms completion, and rollover is synchronized on the next task branch.
+- **Completion:** completed on 2026-08-09. Commit `6c3a7945558317a69ee77ba38a0cc959e26a4a04`
+  merged through PR #75 as `dc239ec565925898e5206336ea51eeff27692e92`; required exact-merge
+  workflow run 31312634024 succeeded and the user explicitly confirmed completion.
 - **No precedent:** this exact branch-topology exception waives no dependency, test, engine,
   quality, CI, security, documentation, or completion gate.
 
@@ -1457,6 +1477,8 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0617 | `test/PB-0617-unity-clean-reimport` | `6d82a7d55be66f8db0d63af36070b88ebe616a3b` | [#74](https://github.com/avivperets26/3DModels-Package-Builder/pull/74) | 2026-08-09 | Published with PB-0618/PB-0619 under the approved combined exception and merged as `73261cfdb578de968d8f72aa553742deab75eff8`; required exact-merge [main workflow run 31308970351](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31308970351) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. |
 | PB-0618 | `test/PB-0618-unity-static-e2e` | `6d82a7d55be66f8db0d63af36070b88ebe616a3b` | [#74](https://github.com/avivperets26/3DModels-Package-Builder/pull/74) | 2026-08-09 | Published on the PB-0617 branch with PB-0617/PB-0619 under the approved combined exception and merged as `73261cfdb578de968d8f72aa553742deab75eff8`; required exact-merge [main workflow run 31308970351](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31308970351) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. |
 | PB-0619 | `feat/PB-0619-unity-interactive-preview` | `6d82a7d55be66f8db0d63af36070b88ebe616a3b` | [#74](https://github.com/avivperets26/3DModels-Package-Builder/pull/74) | 2026-08-09 | Published on the PB-0617 branch with PB-0617/PB-0618 under the approved combined exception and merged as `73261cfdb578de968d8f72aa553742deab75eff8`; required exact-merge [main workflow run 31308970351](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31308970351) succeeded. No CI or quality exception was used; the user explicitly confirmed completion and visually accepted the error-free Unity Play-mode preview. |
+| PB-0701 | `feat/PB-0701-unity-generic-rig` | `6c3a7945558317a69ee77ba38a0cc959e26a4a04` | [#75](https://github.com/avivperets26/3DModels-Package-Builder/pull/75) | 2026-08-09 | Published with PB-0702 under the approved combined exception and merged as `dc239ec565925898e5206336ea51eeff27692e92`; required exact-merge [main workflow run 31312634024](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31312634024) succeeded. No CI or quality exception was used; the user explicitly confirmed completion and the error-free Generic-rig Inspector checkpoint. |
+| PB-0702 | `feat/PB-0702-unity-humanoid-policy` | `6c3a7945558317a69ee77ba38a0cc959e26a4a04` | [#75](https://github.com/avivperets26/3DModels-Package-Builder/pull/75) | 2026-08-09 | Published on the PB-0701 branch under the approved combined exception and merged as `dc239ec565925898e5206336ea51eeff27692e92`; required exact-merge [main workflow run 31312634024](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31312634024) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. |
 
 ## 5. Milestones
 
@@ -2042,27 +2064,27 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** Unity correctly handles rigs without animations and rigs with one or more animations.
 
-- [ ] **PB-0701 — Implement Unity Generic rig importer policy** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0701 — Implement Unity Generic rig importer policy** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0701-unity-generic-rig`
   - Depends on: PB-0407, PB-0609
   - Done when: Generic rig, root node, hierarchy, optimization, exposed transforms, and avatar settings are deterministic.
 
-- [ ] **PB-0702 — Implement optional Humanoid validation policy** — **P1** — 🟡 **PROCESS**
+- [x] **PB-0702 — Implement optional Humanoid validation policy** — **P1** — 🟢 **DONE**
   - Branch: `feat/PB-0702-unity-humanoid-policy`
   - Depends on: PB-0701
   - Done when: Humanoid is allowed only by manifest and a valid avatar mapping; failures fall back only with explicit user approval.
 
-- [ ] **PB-0703 — Implement Unity skin and skeleton validator** — **P0**
+- [ ] **PB-0703 — Implement Unity skin and skeleton validator** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0703-unity-skin-validator`
   - Depends on: PB-0407, PB-0701
   - Done when: SkinnedMeshRenderer, bones, root bone, bindposes, maximum influences, and missing/unweighted data are validated.
 
-- [ ] **PB-0704 — Implement rigged-no-animation prefab flow** — **P0**
+- [ ] **PB-0704 — Implement rigged-no-animation prefab flow** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0704-unity-rigged-no-animation`
   - Depends on: PB-0611, PB-0703
   - Done when: case 2 generates a skinned prefab and skeleton metadata without empty clips/controllers.
 
-- [ ] **PB-0705 — Implement animation import and clip extraction** — **P0**
+- [ ] **PB-0705 — Implement animation import and clip extraction** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0705-unity-animation-clips`
   - Depends on: PB-0408, PB-0701
   - Done when: source actions or manifest frame ranges create consistently named `A_` clips with exact ranges and sample rate.

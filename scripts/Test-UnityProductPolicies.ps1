@@ -30,6 +30,12 @@ $modelImporterSource = Get-Content -LiteralPath (Join-Path $editorRoot `
         'UnityStaticModelImporterPolicy.cs') -Raw -Encoding UTF8
 $rigImporterSource = Get-Content -LiteralPath (Join-Path $editorRoot `
         'UnityRigModelImporterPolicy.cs') -Raw -Encoding UTF8
+$skinValidatorSource = Get-Content -LiteralPath (Join-Path $editorRoot `
+        'UnitySkinSkeletonValidator.cs') -Raw -Encoding UTF8
+$riggedPrefabSource = Get-Content -LiteralPath (Join-Path $editorRoot `
+        'UnityRiggedPrefabGenerator.cs') -Raw -Encoding UTF8
+$animationClipSource = Get-Content -LiteralPath (Join-Path $editorRoot `
+        'UnityAnimationClipImporter.cs') -Raw -Encoding UTF8
 $meshExtractorSource = Get-Content -LiteralPath (Join-Path $editorRoot `
         'UnityMeshAssetExtractor.cs') -Raw -Encoding UTF8
 $prefabSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityPrefabGenerator.cs') `
@@ -437,6 +443,66 @@ Invoke-Check 'Unity Humanoid import is opt-in, validated, and never silently dow
     }
 }
 
+Invoke-Check 'Unity skin and skeleton validation is complete and finding-driven' {
+    foreach ($value in @('SkinnedMeshRenderer', 'rootBone', 'bindposes',
+            'GetBonesPerVertex', 'GetAllBoneWeights', 'UNITY_SKIN_BONE_MISSING',
+            'UNITY_SKIN_BINDPOSE_COUNT_INVALID', 'UNITY_SKIN_UNWEIGHTED_VERTICES',
+            'UNITY_SKIN_MAXIMUM_INFLUENCES_EXCEEDED', 'StringComparer.Ordinal')) {
+        if (-not $skinValidatorSource.Contains($value)) {
+            throw "Missing skin/skeleton validation behavior: $value"
+        }
+    }
+    foreach ($value in @('TestSkinRiggedPrefabAndAnimationClips',
+            'UNITY_SKIN_ROOT_BONE_MISSING', 'UNITY_SKIN_BONE_MISSING',
+            'UnweightedVertexCount == 0', 'MaximumInfluences <= 4')) {
+        if (-not $testSource.Contains($value)) {
+            throw "Missing real Unity skin validation assertion: $value"
+        }
+    }
+}
+
+Invoke-Check 'Unity rigged-no-animation prefab flow preserves skin without empty outputs' {
+    foreach ($value in @('P_Model', '/Prefabs/P_', '/Documentation/SKEL_',
+            'hasAnimationClips = false', 'RemoveEmptyAnimationComponents',
+            'UnitySkinSkeletonValidator.Validate', 't:AnimationClip', 't:AnimatorController',
+            'UNITY_RIGGED_PREFAB_EMPTY_ANIMATION_OUTPUT')) {
+        if (-not $riggedPrefabSource.Contains($value)) {
+            throw "Missing rigged-no-animation prefab behavior: $value"
+        }
+    }
+    foreach ($value in @('P_RiggedProp.prefab', 'SKEL_RiggedProp.json',
+            '!AssetDatabase.IsValidFolder(RigPolicyTestRoot + "/Animations")',
+            '!AssetDatabase.IsValidFolder(RigPolicyTestRoot + "/Controllers")')) {
+        if (-not $testSource.Contains($value)) {
+            throw "Missing real Unity rigged prefab assertion: $value"
+        }
+    }
+}
+
+Invoke-Check 'Unity action import creates exact deterministic A_ clips' {
+    foreach ($value in @('importedTakeInfos', 'clipAnimations', 'firstFrame', 'lastFrame',
+            'sampleRate', 'resampleCurves', 'SaveAndReimport', 'A_',
+            'UNITY_ANIMATION_CLIP_RANGE_VERIFY_FAILED', 'AssetDatabase.CreateAsset')) {
+        if (-not $animationClipSource.Contains($value)) {
+            throw "Missing animation clip import behavior: $value"
+        }
+    }
+    foreach ($value in @('A_AnimatedProp_Bend.anim', 'OutputAssetReferences.SequenceEqual',
+            'clipAnimations[0].firstFrame', 'clipAnimations[0].lastFrame')) {
+        if (-not $testSource.Contains($value)) {
+            throw "Missing real Unity animation clip assertion: $value"
+        }
+    }
+    foreach ($value in @("'--', `$animatedFbxPath, 'animated'",
+            'Unity skin and skeleton validation Editor tests: passed',
+            'Unity rigged-no-animation prefab and skeleton metadata tests: passed',
+            'Unity exact animation clip extraction Editor tests: passed')) {
+        if (-not $integrationSource.Contains($value)) {
+            throw "Missing Blender-to-Unity rig/animation integration behavior: $value"
+        }
+    }
+}
+
 Invoke-Check 'Unity product policy sources are deterministic public-safe text' {
     $files = @(
         (Join-Path $editorRoot 'UnityProductFolderGenerator.cs'),
@@ -445,6 +511,9 @@ Invoke-Check 'Unity product policy sources are deterministic public-safe text' {
         (Join-Path $editorRoot 'UnityUrpLitMaterialCompiler.cs'),
         (Join-Path $editorRoot 'UnityStaticModelImporterPolicy.cs'),
         (Join-Path $editorRoot 'UnityRigModelImporterPolicy.cs'),
+        (Join-Path $editorRoot 'UnitySkinSkeletonValidator.cs'),
+        (Join-Path $editorRoot 'UnityRiggedPrefabGenerator.cs'),
+        (Join-Path $editorRoot 'UnityAnimationClipImporter.cs'),
         (Join-Path $editorRoot 'UnityMeshAssetExtractor.cs'),
         (Join-Path $editorRoot 'UnityPrefabGenerator.cs'),
         (Join-Path $editorRoot 'UnityOverviewScenePipeline.cs'),

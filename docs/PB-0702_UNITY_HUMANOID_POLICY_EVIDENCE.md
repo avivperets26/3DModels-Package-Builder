@@ -5,7 +5,7 @@
 - Task: PB-0702 — Implement optional Humanoid validation policy.
 - Canonical branch: `feat/PB-0702-unity-humanoid-policy`.
 - Publication branch: `feat/PB-0701-unity-generic-rig` under the approved combined exception.
-- Status: `[ ]` / 🟡 **PROCESS**.
+- Status: `[x]` / 🟢 **DONE**.
 - Started: 2026-08-09.
 
 ## Manifest-Only Humanoid Boundary
@@ -68,7 +68,12 @@ Avatar, and verify its validity and human classification. Production behavior wa
 - Reuse audit: Humanoid validation extends the same importer transaction and structured-result
   boundary as Generic import; fallback calls the canonical Generic policy instead of duplicating it.
 
-## Remaining Gates
+## Publication and Completion
 
-PB-0702 remains PROCESS until the combined publication is merged, required `main` CI succeeds, the
-user explicitly confirms completion, and rollover records independent completion evidence.
+- Task commit: `6c3a7945558317a69ee77ba38a0cc959e26a4a04`.
+- Pull request: [#75](https://github.com/avivperets26/3DModels-Package-Builder/pull/75).
+- Merge commit: `dc239ec565925898e5206336ea51eeff27692e92`.
+- Required exact-merge [main workflow run 31312634024](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31312634024): succeeded.
+- User confirmation and completion date: 2026-08-09.
+- Exception used: only the approved PB-0701/PB-0702 combined publication topology; no quality,
+  dependency, validation, engine, CI, or security gate was waived.
