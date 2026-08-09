@@ -1,7 +1,8 @@
 [CmdletBinding()]
 param(
     [string]$RepositoryRoot,
-    [string]$UnityExecutable
+    [string]$UnityExecutable,
+    [string]$ResultPointerPath
 )
 
 Set-StrictMode -Version Latest
@@ -32,8 +33,12 @@ if (-not (Test-Path -LiteralPath $unityPath -PathType Leaf)) {
 $runId = [Guid]::NewGuid().ToString('N').Substring(0, 8)
 $runRoot = Join-Path $repositoryRootPath "artifacts\u\$runId"
 $cloneRoot = Join-Path $runRoot 'p'
+$cleanCloneRoot = Join-Path $runRoot 'r'
 $logPath = Join-Path $runRoot 'unity-product-tests.log'
 $playModeLogPath = Join-Path $runRoot 'unity-overview-playmode.log'
+$cleanImportLogPath = Join-Path $runRoot 'unity-clean-import.log'
+$cleanReimportLogPath = Join-Path $runRoot 'unity-clean-reimport.log'
+$cleanReimportResultPath = Join-Path $runRoot 'unity-clean-reimport-result.json'
 $reopenLogPath = Join-Path $runRoot 'unity-product-reopen.log'
 $reopenRetryLogPath = Join-Path $runRoot 'unity-product-reopen-retry.log'
 $packageOutputPath = Join-Path $cloneRoot 'PackageBuilderExports\StoneArch.unitypackage'
@@ -102,6 +107,7 @@ $environment = [ordered]@{
     PACKAGEBUILDER_RETAIN_UNITY_TEST_ASSETS = '1'
     PACKAGEBUILDER_UNITYPACKAGE_OUTPUT = $packageOutputPath
     PACKAGEBUILDER_UNITYPACKAGE_MANIFEST = $packageManifestPath
+    PACKAGEBUILDER_UNITY_REIMPORT_RESULT = $cleanReimportResultPath
 }
 try {
     foreach ($entry in $environment.GetEnumerator()) {
@@ -185,6 +191,117 @@ try {
         }
     }
 
+    # PB-0617 imports the completed package into a second clone that contains only the approved
+    # Unity template. Removing the template preview source proves that the exported product owns
+    # every runtime script, scene, material, texture, mesh, prefab, and metadata dependency it uses.
+    New-Item -ItemType Directory -Path $cleanCloneRoot -Force | Out-Null
+    foreach ($rootName in @('Assets', 'Packages', 'ProjectSettings')) {
+        Copy-Item -LiteralPath (Join-Path $templateRoot $rootName) -Destination $cleanCloneRoot -Recurse
+    }
+    $cleanWorkerPackageRoot = Join-Path $cleanCloneRoot 'Packages\com.packagebuilder.worker'
+    if (Test-Path -LiteralPath $cleanWorkerPackageRoot) {
+        Remove-Item -LiteralPath $cleanWorkerPackageRoot -Recurse -Force
+    }
+    $cleanPreviewRoot = Join-Path $cleanCloneRoot 'Assets\PackageBuilder'
+    if (Test-Path -LiteralPath $cleanPreviewRoot) {
+        Remove-Item -LiteralPath $cleanPreviewRoot -Recurse -Force
+    }
+    $cleanPreviewMetaPath = "$cleanPreviewRoot.meta"
+    if (Test-Path -LiteralPath $cleanPreviewMetaPath) {
+        Remove-Item -LiteralPath $cleanPreviewMetaPath -Force
+    }
+    if (Test-Path -LiteralPath (Join-Path $cleanCloneRoot 'Assets\PBModelTests')) {
+        throw 'The clean Unity clone unexpectedly contains product assets before package import.'
+    }
+
+    # Unity resolves and compiles the clean template before processing -importPackage. Import and
+    # validation therefore use separate Editor processes: the first completes the package import
+    # and domain reload, and the second executes the structured validator against that settled
+    # customer project. Combining both operations can compile the Editor worker before the
+    # package-owned runtime assembly exists, which hides the behavior PB-0617 must prove.
+    $cleanImportArguments = @(
+        '-batchmode',
+        '-nographics',
+        '-quit',
+        '-projectPath', $cleanCloneRoot,
+        '-importPackage', $packageOutputPath,
+        '-logFile', $cleanImportLogPath
+    )
+    # Unity is a GUI-subsystem executable and can transfer work to a child Editor process. The
+    # timed Process.WaitForExit overload observes only the original launcher on some hosts and can
+    # leave ExitCode unavailable even though the Editor completed successfully. Start-Process
+    # -Wait follows the process tree and returns the actual batch-mode exit code.
+    $cleanImportProcess = Start-Process -FilePath $unityPath `
+        -ArgumentList $cleanImportArguments -Wait -PassThru -NoNewWindow
+    $cleanImportLog = if (Test-Path -LiteralPath $cleanImportLogPath) {
+        Get-Content -LiteralPath $cleanImportLogPath -Raw -Encoding UTF8
+    }
+    else {
+        throw 'Unity clean package import log is missing.'
+    }
+    if ($null -eq $cleanImportProcess.ExitCode -or [int]$cleanImportProcess.ExitCode -ne 0 -or
+        $cleanImportLog -match '(?m)(error CS\d+|Aborting batchmode due to failure)') {
+        $tail = (@(Get-Content -LiteralPath $cleanImportLogPath -Tail 160) -join `
+                [Environment]::NewLine)
+        $exitDisplay = if ($null -eq $cleanImportProcess.ExitCode) { 'unavailable' } else {
+            $cleanImportProcess.ExitCode
+        }
+        throw "Unity clean package import failed with exit code $exitDisplay.`n$tail"
+    }
+    foreach ($requiredImportedAsset in @(
+            'Assets\PBModelTests\Scripts\PackageBuilder.Preview.asmdef',
+            'Assets\PBModelTests\Scripts\PackageBuilderPreviewController.cs',
+            'Assets\PBModelTests\Scenes\S_StoneArch_Overview.unity',
+            'Assets\PBModelTests\Prefabs\P_StoneArch.prefab')) {
+        if (-not (Test-Path -LiteralPath (Join-Path $cleanCloneRoot $requiredImportedAsset) -PathType Leaf)) {
+            throw "Unity clean package import omitted required asset: $requiredImportedAsset"
+        }
+    }
+
+    # The import process deliberately contains no Package Builder worker. Add the Editor-only
+    # validator only after the customer package and its runtime assembly have compiled, then use a
+    # fresh process for the structured inspection. This prevents the test harness from satisfying
+    # any customer runtime dependency while still allowing deep Editor API validation afterward.
+    Copy-Item -LiteralPath (Join-Path $templateRoot 'Packages\com.packagebuilder.worker') `
+        -Destination (Join-Path $cleanCloneRoot 'Packages') -Recurse
+
+    $cleanReimportArguments = @(
+        '-batchmode',
+        '-nographics',
+        '-projectPath', $cleanCloneRoot,
+        '-executeMethod', 'PackageBuilder.UnityWorker.Editor.UnityCleanReimportIntegration.Run',
+        '-logFile', $cleanReimportLogPath
+    )
+    $cleanReimportProcess = Start-Process -FilePath $unityPath `
+        -ArgumentList $cleanReimportArguments -Wait -PassThru -NoNewWindow
+    $cleanReimportLog = if (Test-Path -LiteralPath $cleanReimportLogPath) {
+        Get-Content -LiteralPath $cleanReimportLogPath -Raw -Encoding UTF8
+    }
+    else {
+        throw 'Unity clean package reimport log is missing.'
+    }
+    $cleanReimportExitCode = $cleanReimportProcess.ExitCode
+    if ($null -eq $cleanReimportExitCode -or [int]$cleanReimportExitCode -ne 0 -or
+        -not $cleanReimportLog.Contains('PACKAGEBUILDER_UNITY_CLEAN_REIMPORT_PASS') -or
+        $cleanReimportLog -match '(?m)(error CS\d+|PACKAGEBUILDER_UNITY_CLEAN_REIMPORT_FAIL)') {
+        $tail = (@(Get-Content -LiteralPath $cleanReimportLogPath -Tail 160) -join `
+                [Environment]::NewLine)
+        $exitDisplay = if ($null -eq $cleanReimportExitCode) { 'unavailable' } else {
+            $cleanReimportExitCode
+        }
+        throw "Unity clean package reimport failed with exit code $exitDisplay.`n$tail"
+    }
+    if (-not (Test-Path -LiteralPath $cleanReimportResultPath -PathType Leaf)) {
+        throw 'Unity clean package reimport did not write its structured result.'
+    }
+    $cleanReimportResult = Get-Content -LiteralPath $cleanReimportResultPath -Raw -Encoding UTF8 |
+        ConvertFrom-Json
+    if ($cleanReimportResult.schemaVersion -ne 1 -or -not $cleanReimportResult.passed -or
+        $cleanReimportResult.rendererCount -lt 1 -or $cleanReimportResult.materialCount -lt 1 -or
+        $cleanReimportResult.textureCount -lt 1 -or @($cleanReimportResult.findings).Count -ne 0) {
+        throw 'Unity clean package reimport returned an invalid or failing structured result.'
+    }
+
     # Open the composed scene in a real Play mode cycle. This process intentionally omits -quit:
     # the Editor callback exits only after EnteredPlayMode and EnteredEditMode both complete.
     $playModeArguments = @(
@@ -195,15 +312,7 @@ try {
         '-logFile', $playModeLogPath
     )
     $playModeProcess = Start-Process -FilePath $unityPath -ArgumentList $playModeArguments `
-        -PassThru -NoNewWindow
-    if (-not $playModeProcess.WaitForExit(120000)) {
-        Stop-Process -Id $playModeProcess.Id -Force
-        throw 'Unity overview Play mode validation exceeded the 120-second timeout.'
-    }
-    # Complete the non-timed wait after the bounded wait so Windows PowerShell populates ExitCode
-    # consistently for Unity processes that finish from an EditorApplication callback.
-    $playModeProcess.WaitForExit()
-    $playModeProcess.Refresh()
+        -Wait -PassThru -NoNewWindow
     $playModeLog = if (Test-Path -LiteralPath $playModeLogPath) {
         Get-Content -LiteralPath $playModeLogPath -Raw -Encoding UTF8
     }
@@ -323,6 +432,30 @@ Write-Host 'Unity logs, references, GUIDs, duplicates, and path validation: pass
 Write-Host 'Unity overview Play mode smoke test: passed'
 Write-Host 'Unity URP material upgrader marker validation: passed'
 Write-Host 'Unity populated-project reopen validation: passed'
+Write-Host 'Unity clean package reimport, scene, prefab, material, texture, and render validation: passed'
 Write-Host 'Generated folder, texture, material, model, mesh, and prefab assets retained for manual Unity inspection.'
 Write-Host "Manual Unity project: $cloneRoot"
+Write-Host "Clean reimport Unity project: $cleanCloneRoot"
 Write-Host "Retained integration evidence: $runRoot"
+
+$resultPointer = [ordered]@{
+    schemaVersion = 1
+    runRoot = $runRoot
+    project = $cloneRoot
+    cleanProject = $cleanCloneRoot
+    package = $packageOutputPath
+    packageManifest = $packageManifestPath
+    scene = Join-Path $cloneRoot 'Assets\PBModelTests\Scenes\S_StoneArch_Overview.unity'
+    integrationLog = $logPath
+    cleanReimportLog = $cleanReimportLogPath
+    cleanReimportResult = $cleanReimportResultPath
+}
+$defaultResultPointerPath = Join-Path $runRoot 'integration-result.json'
+$resultPointer | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $defaultResultPointerPath `
+    -Encoding UTF8
+if (-not [string]::IsNullOrWhiteSpace($ResultPointerPath)) {
+    $resolvedPointerPath = [IO.Path]::GetFullPath($ResultPointerPath)
+    $pointerDirectory = Split-Path $resolvedPointerPath -Parent
+    New-Item -ItemType Directory -Path $pointerDirectory -Force | Out-Null
+    Copy-Item -LiteralPath $defaultResultPointerPath -Destination $resolvedPointerPath -Force
+}

@@ -95,6 +95,10 @@ These rules are mandatory acceptance requirements. Follow [the detailed quality 
 - Critical workflows must provide keyboard navigation, clear progress and current stage, elapsed time, cancellation, actionable errors, safe retry, and preserved user input.
 - Use sensible defaults and progressive disclosure so advanced options do not overwhelm first-time users.
 - Provide dry-run previews before changing or generating files, and validate critical workflows with automated UI tests and representative first-time users.
+- Generated Unity and Unreal preview scenes must implement the same versioned, engine-neutral interaction and presentation contract. Share state semantics, defaults, validation, labels, and test vectors; keep only engine API adaptation platform-specific.
+- Do not copy business or interaction rules between the desktop application, Unity, and Unreal. Reuse typed contracts and reusable engine-local components for camera orbit/zoom, studio lighting, item selection, animation transport, and preview overlays.
+- Preview controls must be discoverable, responsive, and accessible: pointer interaction requires keyboard equivalents, visible focus, clear labels and state, safe reset behavior, and layouts that remain usable at supported resolutions and UI scaling.
+- Customer-facing preview code must remain minimal and dependency-safe. Do not export editor workers, test harnesses, prior-product state, or unrelated runtime logic with a product package.
 
 ### 3. Testing
 

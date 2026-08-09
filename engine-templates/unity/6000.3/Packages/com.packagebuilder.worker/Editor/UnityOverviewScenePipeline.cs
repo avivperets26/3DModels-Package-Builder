@@ -27,6 +27,8 @@ namespace PackageBuilder.UnityWorker.Editor
 
         public string OutputBackgroundMaterialReference { get; set; }
 
+        public string OutputBackgroundTextureReference { get; set; }
+
         public string OutputSceneReference { get; set; }
     }
 
@@ -62,6 +64,7 @@ namespace PackageBuilder.UnityWorker.Editor
             }
 
             string materialReference = folder + "/M_OverviewBackground.mat";
+            string textureReference = folder + "/T_OverviewBackground.png";
             if (AssetDatabase.LoadMainAssetAtPath(materialReference) != null)
             {
                 diagnosticCode = "UNITY_OVERVIEW_TEMPLATE_OUTPUT_COLLISION";
@@ -71,18 +74,28 @@ namespace PackageBuilder.UnityWorker.Editor
             Material backgroundMaterial = null;
             try
             {
-                Shader shader = Shader.Find("Universal Render Pipeline/Lit");
+                Shader shader = Shader.Find("Universal Render Pipeline/Unlit");
                 if (shader == null)
                 {
                     diagnosticCode = "UNITY_OVERVIEW_TEMPLATE_URP_SHADER_MISSING";
                     return false;
                 }
 
+                CreateRadialBackgroundTexture(textureReference);
+                Texture2D backgroundTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(textureReference);
+                if (backgroundTexture == null)
+                {
+                    diagnosticCode = "UNITY_OVERVIEW_TEMPLATE_BACKGROUND_TEXTURE_MISSING";
+                    return false;
+                }
+
                 backgroundMaterial = new Material(shader)
                 {
                     name = "M_OverviewBackground",
-                    color = new Color(0.16f, 0.18f, 0.22f, 1f),
                 };
+                backgroundMaterial.SetTexture("_BaseMap", backgroundTexture);
+                backgroundMaterial.SetColor("_BaseColor", Color.white);
+                backgroundMaterial.SetFloat("_Cull", 0f);
                 AssetDatabase.CreateAsset(backgroundMaterial, materialReference);
 
                 scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
@@ -102,21 +115,20 @@ namespace PackageBuilder.UnityWorker.Editor
                 previewCamera.backgroundColor = new Color(0.08f, 0.09f, 0.12f, 1f);
                 previewCamera.fieldOfView = 35f;
 
-                CreateDirectionalLight(root.transform, KeyLightName, new Vector3(42f, -32f, 0f),
+                Light keyLight = CreateDirectionalLight(
+                    root.transform, KeyLightName, new Vector3(42f, -32f, 0f),
                     1.15f, new Color(1f, 0.94f, 0.84f, 1f));
                 CreateDirectionalLight(root.transform, FillLightName, new Vector3(25f, 145f, 0f),
                     0.55f, new Color(0.62f, 0.75f, 1f, 1f));
 
-                GameObject background = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                GameObject background = GameObject.CreatePrimitive(PrimitiveType.Quad);
                 background.name = BackgroundName;
                 background.transform.SetParent(root.transform, false);
-                background.transform.localPosition = new Vector3(0f, -1f, 0f);
-                background.transform.localScale = new Vector3(10f, 1f, 10f);
                 UnityEngine.Object.DestroyImmediate(background.GetComponent<Collider>());
                 background.GetComponent<Renderer>().sharedMaterial = backgroundMaterial;
 
                 var controller = root.AddComponent<PackageBuilderPreviewController>();
-                controller.Configure(previewTarget.transform, previewCamera);
+                controller.Configure(previewTarget.transform, previewCamera, keyLight, background.transform);
 
                 if (!EditorSceneManager.SaveScene(scene, request.OutputSceneReference) ||
                     !VerifyTemplate(scene, out diagnosticCode))
@@ -139,6 +151,7 @@ namespace PackageBuilder.UnityWorker.Editor
                 {
                     AssetDatabase.DeleteAsset(request.OutputSceneReference);
                     AssetDatabase.DeleteAsset(materialReference);
+                    AssetDatabase.DeleteAsset(textureReference);
                 }
             }
         }
@@ -159,8 +172,8 @@ namespace PackageBuilder.UnityWorker.Editor
             bool valid = previewTarget != null && previewTarget.childCount == 0 &&
                 previewCamera != null && controller != null &&
                 controller.PreviewTarget == previewTarget && controller.PreviewCamera == previewCamera &&
-                FindUniqueChild(root.transform, BackgroundName) != null &&
-                FindUniqueChild(root.transform, KeyLightName)?.GetComponent<Light>() != null &&
+                controller.StudioBackground == FindUniqueChild(root.transform, BackgroundName) &&
+                controller.KeyLight == FindUniqueChild(root.transform, KeyLightName)?.GetComponent<Light>() &&
                 FindUniqueChild(root.transform, FillLightName)?.GetComponent<Light>() != null &&
                 GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(root) == 0;
             diagnosticCode = valid ? string.Empty : "UNITY_OVERVIEW_TEMPLATE_CONTENT_INVALID";
@@ -215,7 +228,7 @@ namespace PackageBuilder.UnityWorker.Editor
                 value.localScale == Vector3.one;
         }
 
-        private static void CreateDirectionalLight(
+        private static Light CreateDirectionalLight(
             Transform parent,
             string name,
             Vector3 eulerAngles,
@@ -230,6 +243,54 @@ namespace PackageBuilder.UnityWorker.Editor
             lightValue.intensity = intensity;
             lightValue.color = colour;
             lightValue.shadows = LightShadows.Soft;
+            return lightValue;
+        }
+
+        private static void CreateRadialBackgroundTexture(string assetReference)
+        {
+            const int size = 256;
+            var texture = new Texture2D(size, size, TextureFormat.RGBA32, false, true);
+            try
+            {
+                var pixels = new Color32[size * size];
+                Vector2 centre = new(0.5f, 0.58f);
+                Color outer = new(0.012f, 0.014f, 0.018f, 1f);
+                Color inner = new(0.14f, 0.16f, 0.20f, 1f);
+                for (int y = 0; y < size; y++)
+                {
+                    for (int x = 0; x < size; x++)
+                    {
+                        Vector2 uv = new((x + 0.5f) / size, (y + 0.5f) / size);
+                        Vector2 delta = uv - centre;
+                        delta.x *= 0.82f;
+                        float radial = Mathf.Clamp01(delta.magnitude / 0.7f);
+                        float blend = radial * radial * (3f - 2f * radial);
+                        pixels[y * size + x] = Color.Lerp(inner, outer, blend);
+                    }
+                }
+
+                texture.SetPixels32(pixels);
+                texture.Apply(false, false);
+                string physicalPath = System.IO.Path.Combine(
+                    Application.dataPath,
+                    assetReference.Substring("Assets/".Length).Replace('/', System.IO.Path.DirectorySeparatorChar));
+                System.IO.File.WriteAllBytes(physicalPath, texture.EncodeToPNG());
+                AssetDatabase.ImportAsset(assetReference, ImportAssetOptions.ForceSynchronousImport);
+                var importer = AssetImporter.GetAtPath(assetReference) as TextureImporter;
+                if (importer != null)
+                {
+                    importer.sRGBTexture = true;
+                    importer.alphaSource = TextureImporterAlphaSource.None;
+                    importer.mipmapEnabled = false;
+                    importer.wrapMode = TextureWrapMode.Clamp;
+                    importer.textureCompression = TextureImporterCompression.Uncompressed;
+                    importer.SaveAndReimport();
+                }
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(texture);
+            }
         }
     }
 
@@ -255,8 +316,11 @@ namespace PackageBuilder.UnityWorker.Editor
             string templateFolder = UnityOverviewSceneTemplateBuilder.FolderOf(
                 request.TemplateSceneReference);
             string templateMaterialReference = templateFolder + "/M_OverviewBackground.mat";
+            string templateTextureReference = templateFolder + "/T_OverviewBackground.png";
             Material templateMaterial = AssetDatabase.LoadAssetAtPath<Material>(templateMaterialReference);
-            if (prefab == null || controllerScript == null || templateMaterial == null)
+            Texture2D templateTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(templateTextureReference);
+            if (prefab == null || controllerScript == null || templateMaterial == null ||
+                templateTexture == null)
             {
                 diagnosticCode = "UNITY_OVERVIEW_COMPOSITION_REFERENCE_MISSING";
                 return false;
@@ -291,6 +355,13 @@ namespace PackageBuilder.UnityWorker.Editor
                     return false;
                 }
 
+                if (!AssetDatabase.CopyAsset(templateTextureReference,
+                    request.OutputBackgroundTextureReference))
+                {
+                    diagnosticCode = "UNITY_OVERVIEW_COMPOSITION_BACKGROUND_TEXTURE_COPY_FAILED";
+                    return false;
+                }
+
                 Material productBackground = AssetDatabase.LoadAssetAtPath<Material>(
                     request.OutputBackgroundMaterialReference);
                 Transform background = UnityOverviewSceneTemplateBuilder.FindUniqueChild(
@@ -303,7 +374,22 @@ namespace PackageBuilder.UnityWorker.Editor
                     return false;
                 }
 
+                Texture2D productBackgroundTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(
+                    request.OutputBackgroundTextureReference);
+                if (productBackgroundTexture == null)
+                {
+                    diagnosticCode = "UNITY_OVERVIEW_COMPOSITION_BACKGROUND_TEXTURE_MISSING";
+                    return false;
+                }
+                productBackground.SetTexture("_BaseMap", productBackgroundTexture);
                 backgroundRenderer.sharedMaterial = productBackground;
+                controller.Configure(
+                    previewTarget,
+                    controller.PreviewCamera,
+                    UnityOverviewSceneTemplateBuilder.FindUniqueChild(
+                        root.transform,
+                        UnityOverviewSceneTemplateBuilder.KeyLightName)?.GetComponent<Light>(),
+                    background);
 
                 var product = PrefabUtility.InstantiatePrefab(prefab, scene) as GameObject;
                 if (product == null)
@@ -348,6 +434,7 @@ namespace PackageBuilder.UnityWorker.Editor
                 {
                     AssetDatabase.DeleteAsset(request.OutputSceneReference);
                     AssetDatabase.DeleteAsset(request.OutputBackgroundMaterialReference);
+                    AssetDatabase.DeleteAsset(request.OutputBackgroundTextureReference);
                 }
             }
         }
@@ -382,11 +469,14 @@ namespace PackageBuilder.UnityWorker.Editor
                 UnityOverviewSceneTemplateBuilder.IsReset(product) && source != null &&
                 AssetDatabase.GetAssetPath(source) == request.ProductPrefabReference &&
                 controller != null && controller.PreviewTarget == previewTarget &&
-                controller.PreviewCamera != null &&
+                controller.PreviewCamera != null && controller.KeyLight != null &&
+                controller.StudioBackground == background &&
                 AssetDatabase.GetAssetPath(controllerScript) == request.PreviewControllerScriptReference &&
                 backgroundRenderer != null && backgroundRenderer.sharedMaterial != null &&
                 AssetDatabase.GetAssetPath(backgroundRenderer.sharedMaterial) ==
                     request.OutputBackgroundMaterialReference &&
+                AssetDatabase.GetAssetPath(backgroundRenderer.sharedMaterial.GetTexture("_BaseMap")) ==
+                    request.OutputBackgroundTextureReference &&
                 GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(root) == 0;
             diagnosticCode = valid ? string.Empty : "UNITY_OVERVIEW_COMPOSITION_VERIFY_FAILED";
             return valid;
@@ -402,6 +492,8 @@ namespace PackageBuilder.UnityWorker.Editor
                     request.PreviewControllerScriptReference) ||
                 !UnityOverviewSceneTemplateBuilder.IsSafeAssetReference(
                     request.OutputBackgroundMaterialReference) ||
+                !UnityOverviewSceneTemplateBuilder.IsSafeAssetReference(
+                    request.OutputBackgroundTextureReference) ||
                 !request.ProductPrefabReference.EndsWith(
                     "/Prefabs/P_" + request.AssetId + ".prefab",
                     StringComparison.Ordinal) ||
@@ -411,6 +503,9 @@ namespace PackageBuilder.UnityWorker.Editor
                 !request.OutputBackgroundMaterialReference.EndsWith(
                     "/Materials/M_" + request.AssetId + "_OverviewBackground.mat",
                     StringComparison.Ordinal) ||
+                !request.OutputBackgroundTextureReference.EndsWith(
+                    "/Textures/T_" + request.AssetId + "_OverviewBackground.png",
+                    StringComparison.Ordinal) ||
                 request.PreviewControllerScriptReference.IndexOf(
                     "/Scripts/",
                     StringComparison.Ordinal) < 0 ||
@@ -418,7 +513,8 @@ namespace PackageBuilder.UnityWorker.Editor
                     "PackageBuilderPreviewController.cs",
                     StringComparison.Ordinal) ||
                 AssetDatabase.LoadMainAssetAtPath(request.OutputSceneReference) != null ||
-                AssetDatabase.LoadMainAssetAtPath(request.OutputBackgroundMaterialReference) != null)
+                AssetDatabase.LoadMainAssetAtPath(request.OutputBackgroundMaterialReference) != null ||
+                AssetDatabase.LoadMainAssetAtPath(request.OutputBackgroundTextureReference) != null)
             {
                 return false;
             }

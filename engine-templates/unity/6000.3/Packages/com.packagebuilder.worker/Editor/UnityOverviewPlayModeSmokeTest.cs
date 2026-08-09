@@ -75,6 +75,35 @@ namespace PackageBuilder.UnityWorker.Editor
                         throw new InvalidOperationException("Overview camera navigation failed.");
                     }
 
+                    if (controller.KeyLight == null || controller.StudioBackground == null ||
+                        !controller.SetKeyLightDirection(120f, 35f) || !controller.ResetKeyLight() ||
+                        !controller.RefreshStudioBackground())
+                    {
+                        throw new InvalidOperationException("Interactive studio controls failed.");
+                    }
+
+                    controller.SetControlsVisible(false);
+                    if (controller.ControlsVisible)
+                    {
+                        throw new InvalidOperationException("Capture-mode overlay did not hide.");
+                    }
+                    controller.SetControlsVisible(true);
+                    if (!controller.ControlsVisible || !controller.Orbit(0f, 1000f))
+                    {
+                        throw new InvalidOperationException("Accessible overlay or bounded orbit failed.");
+                    }
+
+                    if (!controller.TryGetProductBounds(out Bounds boundedBounds))
+                    {
+                        throw new InvalidOperationException("Product bounds disappeared during navigation.");
+                    }
+                    Vector3 boundedOffset = controller.PreviewCamera.transform.position - boundedBounds.center;
+                    float boundedPitch = Mathf.Asin(boundedOffset.normalized.y) * Mathf.Rad2Deg;
+                    if (boundedPitch > PackageBuilderPreviewController.MaximumPitchDegrees + 0.001f)
+                    {
+                        throw new InvalidOperationException("Orbit exceeded its pitch bound.");
+                    }
+
                     for (int index = 0; index < productTransforms.Length; index++)
                     {
                         if (productTransforms[index].localPosition != positions[index] ||

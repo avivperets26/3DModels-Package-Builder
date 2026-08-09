@@ -40,6 +40,8 @@ $packageExporterSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityP
     -Raw -Encoding UTF8
 $packageValidatorSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityPackageValidator.cs') `
     -Raw -Encoding UTF8
+$cleanReimportSource = Get-Content -LiteralPath (Join-Path $editorRoot `
+        'UnityCleanReimportIntegration.cs') -Raw -Encoding UTF8
 $controllerSource = Get-Content -LiteralPath (Join-Path $repositoryRootPath `
         'engine-templates\unity\6000.3\Assets\PackageBuilder\Preview\PackageBuilderPreviewController.cs') `
     -Raw -Encoding UTF8
@@ -47,6 +49,8 @@ $testSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityProductEdito
     -Raw -Encoding UTF8
 $integrationSource = Get-Content -LiteralPath (Join-Path $repositoryRootPath `
         'scripts\Invoke-UnityProductIntegration.ps1') -Raw -Encoding UTF8
+$staticSliceSource = Get-Content -LiteralPath (Join-Path $repositoryRootPath `
+        'scripts\Invoke-UnityStaticVerticalSlice.ps1') -Raw -Encoding UTF8
 $script:PassCount = 0
 $script:FailureCount = 0
 
@@ -211,7 +215,7 @@ Invoke-Check 'Unity prefab policy resets hierarchy and verifies mesh and materia
 
 Invoke-Check 'Unity overview template is product-free with URP lighting, camera, and controller references' {
     foreach ($value in @('PackageBuilderOverview', 'PreviewTarget', 'Main Camera', 'Background',
-            'Key Light', 'Fill Light', 'Universal Render Pipeline/Lit', 'previewTarget.childCount == 0',
+            'Key Light', 'Fill Light', 'Universal Render Pipeline/Unlit', 'previewTarget.childCount == 0',
             'controller.PreviewTarget == previewTarget', 'controller.PreviewCamera == previewCamera',
             'UNITY_OVERVIEW_TEMPLATE_CONTENT_INVALID')) {
         if (-not $overviewSource.Contains($value)) {
@@ -224,7 +228,7 @@ Invoke-Check 'Unity preview controller frames by bounds and never scales product
     foreach ($value in @('TryGetProductBounds', 'Renderer[] renderers', 'bounds.Encapsulate',
             'Quaternion.Inverse', 'Vector3.Scale', 'SetPositionAndRotation', 'AutoFrame()',
             'Orbit(float yawDegrees', 'Zoom(float normalizedDelta)',
-            'Product transforms are never translated, rotated, or scaled')) {
+            'Product transforms are never modified')) {
         if (-not $controllerSource.Contains($value)) {
             throw "Missing bounds-only preview behavior: $value"
         }
@@ -234,6 +238,29 @@ Invoke-Check 'Unity preview controller frames by bounds and never scales product
     }
     if (-not $testSource.Contains('AreBoundsInsideViewport')) {
         throw 'Real Unity integration must prove every product-bounds corner is inside the viewport.'
+    }
+}
+
+Invoke-Check 'Unity preview implements the shared interactive dark-studio contract' {
+    foreach ($value in @('ContractVersion = "1"', 'EventType.MouseDrag',
+            'EventType.ScrollWheel', 'EventType.KeyDown', 'KeyCode.R', 'KeyCode.H', 'KeyCode.L',
+            'SetControlsVisible', 'SetKeyLightDirection', 'ResetKeyLight',
+            'MinimumPitchDegrees = -80f', 'MaximumPitchDegrees = 80f', 'OnGUI()',
+            'Reset View', 'Reset Light', 'StudioBackground')) {
+        if (-not $controllerSource.Contains($value)) {
+            throw "Missing interactive preview behavior: $value"
+        }
+    }
+    if ($controllerSource.Contains('Input.')) {
+        throw 'Interactive preview must not call the backend-specific UnityEngine.Input API.'
+    }
+    foreach ($value in @('CreateRadialBackgroundTexture', 'T_OverviewBackground.png',
+            'Universal Render Pipeline/Unlit', 'TextureWrapMode.Clamp',
+            'OutputBackgroundTextureReference', 'controller.KeyLight == FindUniqueChild',
+            'controller.StudioBackground == background')) {
+        if (-not $overviewSource.Contains($value)) {
+            throw "Missing dark-studio scene behavior: $value"
+        }
     }
 }
 
@@ -346,6 +373,38 @@ Invoke-Check 'Unity integration rejects a stale URP material upgrader marker' {
     }
 }
 
+Invoke-Check 'Unity package clean-reimport validation is isolated and structured' {
+    foreach ($value in @('UnityCleanReimportResult', 'schemaVersion = 1',
+            'UNITY_REIMPORT_PRODUCT_ROOT_MISSING', 'UNITY_REIMPORT_SCENE_REFERENCES_INVALID',
+            'UNITY_REIMPORT_MISSING_SCRIPT', 'UNITY_REIMPORT_MATERIAL_OUTSIDE_PRODUCT',
+            'UNITY_REIMPORT_TEXTURE_OUTSIDE_PRODUCT', 'UNITY_REIMPORT_PREFAB_NOT_RENDERABLE',
+            'PACKAGEBUILDER_UNITY_CLEAN_REIMPORT_PASS', 'JsonUtility.ToJson')) {
+        if (-not $cleanReimportSource.Contains($value)) {
+            throw "Missing clean-reimport validator behavior: $value"
+        }
+    }
+    foreach ($value in @('$cleanCloneRoot', "'-importPackage'",
+            'PACKAGEBUILDER_UNITY_REIMPORT_RESULT', 'unity-clean-reimport-result.json',
+            'The clean Unity clone unexpectedly contains product assets before package import',
+            'Unity clean package reimport, scene, prefab, material, texture, and render validation')) {
+        if (-not $integrationSource.Contains($value)) {
+            throw "Missing clean-reimport harness behavior: $value"
+        }
+    }
+}
+
+Invoke-Check 'Unity static vertical slice composes both targets and promotes atomically' {
+    foreach ($value in @('Invoke-PB0507PortableStaticManualTest.ps1',
+            'Invoke-UnityProductIntegration.ps1', 'sourceSha256',
+            'Portable\Stone_Arch_FBX.zip', 'Unity\StoneArch.unitypackage',
+            'unity-clean-reimport-result.json', '[IO.Directory]::Move',
+            "status = 'passed'", 'validation-report.json')) {
+        if (-not $staticSliceSource.Contains($value)) {
+            throw "Missing Unity static vertical-slice behavior: $value"
+        }
+    }
+}
+
 Invoke-Check 'Unity product policy sources are deterministic public-safe text' {
     $files = @(
         (Join-Path $editorRoot 'UnityProductFolderGenerator.cs'),
@@ -359,9 +418,11 @@ Invoke-Check 'Unity product policy sources are deterministic public-safe text' {
         (Join-Path $editorRoot 'UnityOverviewPlayModeSmokeTest.cs'),
         (Join-Path $editorRoot 'UnityPackageExporter.cs'),
         (Join-Path $editorRoot 'UnityPackageValidator.cs'),
+        (Join-Path $editorRoot 'UnityCleanReimportIntegration.cs'),
         (Join-Path $repositoryRootPath `
             'engine-templates\unity\6000.3\Assets\PackageBuilder\Preview\PackageBuilderPreviewController.cs'),
-        (Join-Path $editorRoot 'UnityProductEditorIntegrationTests.cs')
+        (Join-Path $editorRoot 'UnityProductEditorIntegrationTests.cs'),
+        (Join-Path $repositoryRootPath 'scripts\Invoke-UnityStaticVerticalSlice.ps1')
     )
     $utf8 = New-Object Text.UTF8Encoding($false, $true)
     foreach ($file in $files) {

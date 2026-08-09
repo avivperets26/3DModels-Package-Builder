@@ -132,6 +132,9 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 - [PB-0614 Unity scene composition evidence](PB-0614_UNITY_SCENE_COMPOSITION_EVIDENCE.md)
 - [PB-0615 exact Unity package export evidence](PB-0615_UNITY_PACKAGE_EXPORT_EVIDENCE.md)
 - [PB-0616 Unity validation evidence](PB-0616_UNITY_VALIDATION_EVIDENCE.md)
+- [PB-0617 clean Unity package reimport evidence](PB-0617_UNITY_CLEAN_REIMPORT_EVIDENCE.md)
+- [PB-0618 Unity static vertical-slice evidence](PB-0618_UNITY_STATIC_VERTICAL_SLICE_EVIDENCE.md)
+- [PB-0619 Unity interactive dark-studio preview evidence](PB-0619_UNITY_INTERACTIVE_PREVIEW_EVIDENCE.md)
 
 ## Dependency and Licence Records
 

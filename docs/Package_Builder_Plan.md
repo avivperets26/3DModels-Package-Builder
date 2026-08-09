@@ -751,11 +751,23 @@ Documentation is generated from UTF-8 templates to prevent corrupted characters 
 
 ### Presentation Goals
 
-- Neutral studio lighting that reveals form and materials.
+- A dark studio presentation matching the approved visual reference: a seamless, horizon-free near-black outer background with a soft, brighter neutral centre behind the product.
+- Neutral key/fill studio lighting that reveals form and materials without changing their authored appearance.
 - Consistent framing across products.
 - No clipped geometry or extreme perspective distortion.
 - Honest scale and material representation.
 - Repeatable camera positions.
+
+### Interactive Preview Controls
+
+- Hold the left mouse button and drag horizontally or vertically to orbit around the product; constrained pitch prevents disorienting camera inversion.
+- Use the mouse wheel to change camera distance without scaling or moving the product.
+- Provide keyboard-accessible orbit, zoom, and reset equivalents with visible focus and concise help.
+- Expose a minimal in-scene lighting control for key-light direction, with reset and approved intensity limits.
+- For sets and collections, provide Previous and Next controls, current item name/index, direct selection where practical, and an all-items overview.
+- For animated products, provide an animation list plus play, pause/resume, replay, timeline scrubbing, loop state, and current-time/duration feedback.
+- Controls use the same labels, state model, defaults, and validation semantics in Unity and Unreal while engine adapters remain platform-specific.
+- The desktop application configures and previews the same typed presentation options; it does not duplicate engine interaction rules.
 
 ### Static and Rigged Models
 
@@ -786,6 +798,8 @@ Documentation is generated from UTF-8 templates to prevent corrupted characters 
 - Gallery still images kept below the current Fab total-size limit.
 - Camera distance is adjusted to fit bounds; the asset itself remains at scale `(1,1,1)`.
 - Preview validation checks empty backgrounds, clipping, exposure, missing materials, and excessive transparent margins.
+- The approved dark-studio reference, theme tokens, interaction-state fixtures, and perceptual tolerances are versioned so Unity and Unreal can be compared without requiring pixel-identical renderers.
+- Preview UI must remain legible and operable at the supported 16:9 resolutions and UI scaling, must not obscure the product in captured media, and must be hideable for clean stills.
 
 ## 12. Validation Gates
 

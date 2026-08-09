@@ -160,6 +160,31 @@ feat/PB-0607-unity-urp-material-compiler
 |---|---|---|---|---|---|---|
 | PB-0615 | 🟡 **PROCESS** | `feat/PB-0615-unitypackage-export` | Unity Target Engineering for local work; user for Git gates | 2026-08-08 | Exact product-only export planning and real `.unitypackage` creation pass with product-local scene/material/texture dependencies and deterministic archive verification. | User-controlled combined publication, successful required `main` CI, explicit confirmation, and next-task rollover remain. |
 | PB-0616 | 🟡 **PROCESS** | `feat/PB-0616-unity-validation` | Unity Target Engineering for local work; user for Git gates | 2026-08-08 | Real Unity validation blocks broken scripts/materials/textures/GUIDs, duplicate or misplaced files, compilation failures, and package-caused warnings/errors. | The combined PB-0615/PB-0616 publication gates remain. |
+| PB-0617 | 🟡 **PROCESS** | `test/PB-0617-unity-clean-reimport` | Unity Target Engineering for local work; user for Git gates | 2026-08-08 | Corrected real Unity export, fresh-template package import, scene/prefab/material/texture/reference validation, camera render, Play mode, structured result, reopen, repository baseline 32/32, and full Core CI all pass. | Combined publication, required `main` CI, explicit confirmation, and rollover remain. |
+| PB-0618 | 🟡 **PROCESS** | `test/PB-0618-unity-static-e2e` | Target Integration Engineering for local work; user for Git gates | 2026-08-08 | The retained StoneArch run produced validated portable and Unity releases, reports/logs, aggregate hashes, zero findings, and an eight-file release through atomic same-volume promotion; full Core CI passes. | Combined publication through `test/PB-0617-unity-clean-reimport`, required `main` CI, explicit confirmation, and rollover remain. |
+| PB-0619 | 🟡 **PROCESS** | `feat/PB-0619-unity-interactive-preview` | Unity Preview Engineering for local work; user for Git gates | 2026-08-08 | Corrected real Editor, Play mode, clean reimport, camera-render, repository baseline, and Core CI checks pass after replacing legacy Input reads with active IMGUI-event handling; product transforms remain unchanged. | Manual visual acceptance, combined publication through `test/PB-0617-unity-clean-reimport`, shared-contract follow-up ownership, required `main` CI, explicit confirmation, and rollover remain. |
+
+### PB-0617/PB-0618/PB-0619 Combined Publication Exception
+
+- **Approved:** 2026-08-08 by the user's explicit request to implement all three tasks on one
+  branch.
+- **Publication branch:** `test/PB-0617-unity-clean-reimport`.
+- **Exact scope:** fresh-project package reimport and structured results, the static portable-plus-
+  Unity release composition and atomic promotion, the Unity interactive dark-studio preview shell,
+  PB-0615/PB-0616 rollover when their final CI evidence is confirmed, focused validators, real
+  Unity edit/Play/reimport integration, and genuinely affected documentation.
+- **Reason:** PB-0618 directly depends on PB-0617 and PB-0619, and the user requested one cohesive
+  implementation and publication cycle.
+- **Independence retained:** every task keeps its canonical ID, acceptance boundary, evidence
+  document, lifecycle state, and eventual Completion Log row.
+- **PB-0913 boundary:** PB-0619 implements the Unity runtime behavior and a versioned contract
+  surface now. PB-0913 remains the owner of the later engine-neutral serialized contract, Unreal
+  conformance, and cross-engine test vectors; it is neither marked complete nor silently absorbed.
+- **Completion:** all three remain `[ ]` / 🟡 **PROCESS** until validation passes, the combined
+  change is committed and merged, required `main` CI succeeds, the user explicitly confirms it,
+  and rollover is synchronized.
+- **No precedent:** the exception changes branch topology only; it waives no dependency, test,
+  engine, quality, CI, security, documentation, or completion gate.
 
 ### PB-0615/PB-0616 Combined Publication Exception
 
@@ -1972,15 +1997,20 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0614, PB-0615
   - Done when: missing scripts/materials/textures, compile errors, package-caused warnings, broken GUIDs, duplicate files, and incorrect paths block release.
 
-- [ ] **PB-0617 — Implement clean Unity package reimport** — **P0**
+- [ ] **PB-0617 — Implement clean Unity package reimport** — **P0** — 🟡 **PROCESS**
   - Branch: `test/PB-0617-unity-clean-reimport`
   - Depends on: PB-0615, PB-0616
   - Done when: exported package imports into a fresh project, scene opens, prefab renders, material references resolve, and tests return structured results.
 
-- [ ] **PB-0618 — Complete Unity static vertical slice** — **P0**
+- [ ] **PB-0618 — Complete Unity static vertical slice** — **P0** — 🟡 **PROCESS**
   - Branch: `test/PB-0618-unity-static-e2e`
-  - Depends on: PB-0213, PB-0507, PB-0617
+  - Depends on: PB-0213, PB-0507, PB-0617, PB-0619
   - Done when: one static source produces portable and Unity releases, overview scene, validation report, and atomic promotion.
+
+- [ ] **PB-0619 — Implement Unity interactive dark-studio preview shell** — **P0** — 🟡 **PROCESS**
+  - Branch: `feat/PB-0619-unity-interactive-preview`
+  - Depends on: PB-0613, PB-0614, PB-0913
+  - Done when: the exported overview scene implements the shared contract with left-drag bounded yaw/pitch orbit, mouse-wheel distance zoom, keyboard/reset equivalents, an approved seamless horizon-free near-black background with soft brighter centre, adjustable/resettable key-light direction through a minimal accessible overlay, hideable controls for capture, and tests proving no product transform or scale mutation, missing references, editor-only dependency, or Play-mode error.
 
 **E06 exit:** M3 is complete.
 
@@ -2032,8 +2062,8 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 - [ ] **PB-0709 — Implement Unity animation preview controls** — **P0**
   - Branch: `feat/PB-0709-unity-animation-preview`
-  - Depends on: PB-0613, PB-0707
-  - Done when: overview scene lists, selects, plays, stops, and replays clips without modifying packaged source animation.
+  - Depends on: PB-0619, PB-0707, PB-0913
+  - Done when: the overview scene uses the shared animation-transport contract to list/select clips and provide play, pause/resume, replay, timeline scrubbing, loop state, and current-time/duration feedback with pointer and keyboard operation, without modifying packaged source animation.
 
 - [ ] **PB-0710 — Implement animation movement and duration validation** — **P0**
   - Branch: `test/PB-0710-unity-animation-validation`
@@ -2100,8 +2130,8 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 - [ ] **PB-0808 — Implement preview item visibility selector** — **P0**
   - Branch: `feat/PB-0808-item-preview-selector`
-  - Depends on: PB-0613, PB-0807
-  - Done when: one selected item can be shown without modifying prefab assets and an all-items overview mode remains available.
+  - Depends on: PB-0619, PB-0807, PB-0913
+  - Done when: Previous, Next, direct selection, current item name/index, and all-items overview use the shared selector contract; exactly the selected item can be shown without modifying prefab assets; and pointer/keyboard tests cover bounds, wrap policy, empty/single-item states, and deterministic order.
 
 - [ ] **PB-0809 — Implement set/collection portable archives and inventories** — **P0**
   - Branch: `feat/PB-0809-multi-item-portable-output`
@@ -2185,6 +2215,16 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Branch: `feat/PB-0912-support-bundle`
   - Depends on: PB-0212, PB-0910
   - Done when: logs/manifests/versions/reports can be bundled while source models, textures, credentials, and personal paths are excluded or redacted.
+
+- [ ] **PB-0913 — Define shared interactive preview experience contract** — **P0**
+  - Branch: `feat/PB-0913-interactive-preview-contract`
+  - Depends on: PB-0906
+  - Done when: a versioned engine-neutral typed contract and ADR define bounded orbit/zoom/reset actions, pointer and keyboard bindings, the approved dark-studio background and lighting tokens, light-direction controls, overlay visibility, item Previous/Next/direct/all states, animation list/play/pause/replay/scrub/loop states, accessibility labels/focus semantics, deterministic serialization, validation, and shared test vectors without Unity, Unreal, WPF, or renderer dependencies.
+
+- [ ] **PB-0914 — Validate cross-engine interactive preview UX and visual parity** — **P0**
+  - Branch: `test/PB-0914-interactive-preview-parity`
+  - Depends on: PB-0619, PB-0709, PB-0808, PB-1116, PB-1205, PB-1208
+  - Done when: static, animated, set, and collection fixtures prove equivalent Unity/Unreal actions and state transitions; pointer and keyboard controls, focus, reset, resolution/UI-scale behavior, overlay hiding, clean Play/PIE execution, and minimal packaged dependencies pass; and reference-based perceptual checks confirm the approved near-black/bright-centre studio presentation and useful lighting without requiring pixel-identical engine output.
 
 **E09 exit:** Every supported case has accurate docs, compliant media, and JSON/HTML reports.
 
@@ -2324,8 +2364,13 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 - [ ] **PB-1115 — Complete Unreal static vertical slice** — **P0**
   - Branch: `test/PB-1115-unreal-static-e2e`
-  - Depends on: PB-0213, PB-0507, PB-1111, PB-1114, PB-1006
+  - Depends on: PB-0213, PB-0507, PB-1111, PB-1114, PB-1116, PB-1006
   - Done when: static source produces portable, Unity, Unreal, media, docs, and Fab release outputs with clean reimport/reopen.
+
+- [ ] **PB-1116 — Implement Unreal interactive dark-studio preview shell** — **P0**
+  - Branch: `feat/PB-1116-unreal-interactive-preview`
+  - Depends on: PB-0913, PB-1110
+  - Done when: the packaged overview map implements the shared contract with left-drag bounded yaw/pitch orbit, mouse-wheel distance zoom, keyboard/reset equivalents, the approved seamless horizon-free near-black background with soft brighter centre, adjustable/resettable key-light direction through a minimal accessible UMG overlay, hideable controls for capture, and tests proving unchanged product transforms, clean PIE execution, and no unnecessary editor/plugin runtime dependency.
 
 **E11 exit:** Unreal static output is production-valid and Fab-compliant.
 
@@ -2357,8 +2402,8 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 - [ ] **PB-1205 — Implement Unreal animation preview controller** — **P0**
   - Branch: `feat/PB-1205-unreal-animation-preview`
-  - Depends on: PB-1204
-  - Done when: overview map can select/replay each sequence through a minimal preview Blueprint or Animation Blueprint without shipping unnecessary logic.
+  - Depends on: PB-0913, PB-1116, PB-1204
+  - Done when: the overview map uses the shared animation-transport contract to list/select sequences and provide play, pause/resume, replay, timeline scrubbing, loop state, and current-time/duration feedback through minimal Blueprint/UMG logic without shipping unnecessary editor or worker code.
 
 - [ ] **PB-1206 — Implement Unreal animation motion validator** — **P0**
   - Branch: `test/PB-1206-unreal-animation-validation`
@@ -2372,8 +2417,8 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 - [ ] **PB-1208 — Implement Unreal collection overview and selector** — **P0**
   - Branch: `feat/PB-1208-unreal-item-collection`
-  - Depends on: PB-0806 through PB-0808, PB-1110
-  - Done when: all collection items lay out deterministically and can be previewed individually.
+  - Depends on: PB-0806 through PB-0808, PB-0913, PB-1116
+  - Done when: all collection items lay out deterministically and the shared selector exposes Previous, Next, direct selection, current item name/index, and all-items overview with pointer/keyboard operation and safe empty/single-item behavior.
 
 - [ ] **PB-1209 — Complete Unreal rigged-no-animation fixture** — **P0**
   - Branch: `test/PB-1209-unreal-rigged-e2e`
@@ -2465,8 +2510,8 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 - [ ] **PB-1312 — Implement preview review and approval screen** — **P0**
   - Branch: `feat/PB-1312-preview-review-ui`
-  - Depends on: PB-0907 through PB-0909, PB-1310
-  - Done when: users compare views, approve/reject, change presentation options, and rerender before final packaging.
+  - Depends on: PB-0907 through PB-0909, PB-0913, PB-1310
+  - Done when: users compare views, approve/reject, configure and preview the shared dark-studio, lighting, item-selection, and animation-presentation options, and rerender before final packaging through the accessible desktop design system without duplicating engine interaction logic.
 
 - [ ] **PB-1313 — Implement build history and artifact browser** — **P0**
   - Branch: `feat/PB-1313-build-history-ui`
