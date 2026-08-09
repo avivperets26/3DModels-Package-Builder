@@ -4,9 +4,9 @@
 
 - Task: PB-1901 — Ratify hosted conversion architecture, threat model, licensing, and cost boundary
 - Branch: `docs/PB-1901-hosted-conversion-architecture`
-- State: `[ ]` / 🟡 **PROCESS**
+- State: `[x]` / 🟢 **DONE**
 - Started: 2026-08-09
-- Completion Log entry: none
+- Completion Log entry: exactly one
 
 ## Scope implemented locally
 
@@ -26,11 +26,14 @@
 - `docs/README.md`
 - `docs/PB-1901_HOSTED_CONVERSION_ARCHITECTURE_EVIDENCE.md`
 
-## Remaining gates
+## Publication Evidence
 
-- Review and approve the architecture, security, licensing, privacy, and cost decisions.
-- Run and retain repository documentation validation.
-- User-controlled commit, push, merge, successful required `main` CI, and explicit completion confirmation.
-- Complete the future E19 implementation tasks before enabling or advertising a production online converter.
+- Task commit: `1c277a2a0ae4efabae3e175e8f7cf093cc9e91a5`.
+- Pull request: [#77](https://github.com/avivperets26/3DModels-Package-Builder/pull/77).
+- Merge commit: `9e86df27d9808243d265a2ca19d8143d5f23e58a`.
+- Required `main` CI and completion: explicitly confirmed by the user on 2026-08-09.
+- Exceptions: none.
 
-PB-1901 remains PROCESS and is absent from the Completion Log until those gates are satisfied.
+PB-1901 was removed from Active Work and recorded exactly once in the Completion Log during the
+PB-0706 rollover. The future E19 implementation tasks remain required before enabling or
+advertising a production online converter; that future scope does not reopen PB-1901.

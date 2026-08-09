@@ -4,7 +4,7 @@
 
 - Task: PB-0703 — Implement Unity skin and skeleton validator.
 - Canonical and publication branch: `feat/PB-0703-unity-skin-validator`.
-- Status: `[ ]` / 🟡 **PROCESS**.
+- Status: `[x]` / 🟢 **DONE**.
 - Started: 2026-08-09.
 - Publication is combined with PB-0704 and PB-0705 under the explicitly approved exception in the
   implementation backlog. The exception creates no precedent.
@@ -56,8 +56,14 @@ indices, and unweighted vertices.
 - `git diff --check`: passed before documentation synchronization.
 - No production dependency was added and no source asset was modified by validation.
 
-## Remaining Gates
+## Publication Evidence
 
-PB-0703 remains PROCESS until the combined change is committed, pushed, merged into and pushed on
-`main`, required `main` CI succeeds, the user explicitly confirms completion, and the next-task
-rollover records it exactly once in the Completion Log.
+- Task commit: `03ec3ee6e28a78975c86e8352b26ee02a91c2a8d`.
+- Pull request: [#76](https://github.com/avivperets26/3DModels-Package-Builder/pull/76).
+- Merge commit: `3c58790b738d0b3998356bfa9a95742e1d72f195`.
+- Required `main` CI: explicitly confirmed successful by the user on 2026-08-09.
+- Exception: the approved PB-0703/PB-0704/PB-0705 combined-publication exception; no CI or quality
+  exception was used, and the publication exception creates no precedent.
+
+PB-0703 was removed from Active Work and recorded exactly once in the Completion Log during the
+PB-0706 rollover.

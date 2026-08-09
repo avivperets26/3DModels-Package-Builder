@@ -36,6 +36,12 @@ $riggedPrefabSource = Get-Content -LiteralPath (Join-Path $editorRoot `
         'UnityRiggedPrefabGenerator.cs') -Raw -Encoding UTF8
 $animationClipSource = Get-Content -LiteralPath (Join-Path $editorRoot `
         'UnityAnimationClipImporter.cs') -Raw -Encoding UTF8
+$prefabHierarchySource = Get-Content -LiteralPath (Join-Path $editorRoot `
+        'UnityPrefabHierarchyUtility.cs') -Raw -Encoding UTF8
+$animatorControllerSource = Get-Content -LiteralPath (Join-Path $editorRoot `
+        'UnityAnimatorControllerGenerator.cs') -Raw -Encoding UTF8
+$animatedPrefabSource = Get-Content -LiteralPath (Join-Path $editorRoot `
+        'UnityAnimatedPrefabGenerator.cs') -Raw -Encoding UTF8
 $meshExtractorSource = Get-Content -LiteralPath (Join-Path $editorRoot `
         'UnityMeshAssetExtractor.cs') -Raw -Encoding UTF8
 $prefabSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityPrefabGenerator.cs') `
@@ -487,8 +493,9 @@ Invoke-Check 'Unity action import creates exact deterministic A_ clips' {
             throw "Missing animation clip import behavior: $value"
         }
     }
-    foreach ($value in @('A_AnimatedProp_Bend.anim', 'OutputAssetReferences.SequenceEqual',
-            'clipAnimations[0].firstFrame', 'clipAnimations[0].lastFrame')) {
+    foreach ($value in @('A_AnimatedProp_Attack.anim', 'A_AnimatedProp_BendLoop.anim',
+            'OutputAssetReferences.SequenceEqual', 'importedAttack.firstFrame',
+            'importedLoop.lastFrame')) {
         if (-not $testSource.Contains($value)) {
             throw "Missing real Unity animation clip assertion: $value"
         }
@@ -499,6 +506,72 @@ Invoke-Check 'Unity action import creates exact deterministic A_ clips' {
             'Unity exact animation clip extraction Editor tests: passed')) {
         if (-not $integrationSource.Contains($value)) {
             throw "Missing Blender-to-Unity rig/animation integration behavior: $value"
+        }
+    }
+}
+
+Invoke-Check 'Unity clip loop, compression, and root-motion policy is explicit' {
+    foreach ($value in @('UnityAnimationCompressionPolicy', 'UnityRootMotionPolicy',
+            'ModelImporterAnimationCompression.Optimal', 'loopTime', 'loopPose',
+            'lockRootRotation', 'lockRootHeightY', 'lockRootPositionXZ',
+            'CompressionPolicy == UnityAnimationCompressionPolicy.Unspecified',
+            'RootMotionPolicy == UnityRootMotionPolicy.Unspecified')) {
+        if (-not $animationClipSource.Contains($value)) {
+            throw "Missing explicit animation clip policy behavior: $value"
+        }
+    }
+    foreach ($value in @('!importedAttack.loopTime', 'importedLoop.loopTime',
+            'ModelImporterAnimationCompression.Optimal', 'UnityRootMotionPolicy.BakeIntoPose',
+            'UnityRootMotionPolicy.Preserve')) {
+        if (-not $testSource.Contains($value)) {
+            throw "Missing real Unity clip-policy assertion: $value"
+        }
+    }
+}
+
+Invoke-Check 'Unity Animator Controller generation is deterministic and replayable' {
+    foreach ($value in @('AC_', 'Replay_', 'AnimatorControllerParameterType.Trigger',
+            'AddAnyStateTransition', 'defaultState', 'StringComparer.Ordinal',
+            'UNITY_ANIMATOR_CONTROLLER_MOTION_MISSING', 'UNITY_ANIMATOR_CONTROLLER_INVALID')) {
+        if (-not $animatorControllerSource.Contains($value)) {
+            throw "Missing Animator Controller behavior: $value"
+        }
+    }
+    foreach ($value in @('AC_AnimatedProp.controller', 'Replay_Attack', 'Replay_BendLoop',
+            'states.Length == 2', 'defaultState.motion == attackClip')) {
+        if (-not $testSource.Contains($value)) {
+            throw "Missing real Animator Controller assertion: $value"
+        }
+    }
+}
+
+Invoke-Check 'Unity animated prefab preserves validated skin and assigns one controller' {
+    foreach ($value in @('UnityPrefabHierarchyUtility.TryCreate',
+            'UnitySkinSkeletonValidator.Validate', 'runtimeAnimatorController',
+            'applyRootMotion', 'SkinnedMeshRenderer', 'UNITY_ANIMATED_PREFAB_INVALID',
+            'GameObjectUtility.GetMonoBehavioursWithMissingScriptCount')) {
+        if (-not $animatedPrefabSource.Contains($value)) {
+            throw "Missing animated prefab behavior: $value"
+        }
+    }
+    foreach ($value in @('P_AnimatedProp.prefab', 'savedAnimators.Length == 1',
+            'savedAnimators[0].runtimeAnimatorController == controller',
+            'GetComponentsInChildren<SkinnedMeshRenderer>(true).Length == 1')) {
+        if (-not $testSource.Contains($value)) {
+            throw "Missing real animated prefab assertion: $value"
+        }
+    }
+}
+
+Invoke-Check 'Unity rigged and animated prefabs share one hierarchy policy' {
+    foreach ($source in @($riggedPrefabSource, $animatedPrefabSource)) {
+        if (-not $source.Contains('UnityPrefabHierarchyUtility.TryCreate')) {
+            throw 'A rigged prefab flow bypasses the shared hierarchy policy.'
+        }
+    }
+    foreach ($value in @('P_Model', 'Reset', 'IsSafeReference', 'IsReset')) {
+        if (-not $prefabHierarchySource.Contains($value)) {
+            throw "Missing shared prefab hierarchy behavior: $value"
         }
     }
 }
@@ -514,6 +587,9 @@ Invoke-Check 'Unity product policy sources are deterministic public-safe text' {
         (Join-Path $editorRoot 'UnitySkinSkeletonValidator.cs'),
         (Join-Path $editorRoot 'UnityRiggedPrefabGenerator.cs'),
         (Join-Path $editorRoot 'UnityAnimationClipImporter.cs'),
+        (Join-Path $editorRoot 'UnityPrefabHierarchyUtility.cs'),
+        (Join-Path $editorRoot 'UnityAnimatorControllerGenerator.cs'),
+        (Join-Path $editorRoot 'UnityAnimatedPrefabGenerator.cs'),
         (Join-Path $editorRoot 'UnityMeshAssetExtractor.cs'),
         (Join-Path $editorRoot 'UnityPrefabGenerator.cs'),
         (Join-Path $editorRoot 'UnityOverviewScenePipeline.cs'),

@@ -143,6 +143,9 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 - [PB-0703 Unity skin and skeleton validator evidence](PB-0703_UNITY_SKIN_SKELETON_VALIDATOR_EVIDENCE.md)
 - [PB-0704 Unity rigged-no-animation prefab evidence](PB-0704_UNITY_RIGGED_NO_ANIMATION_EVIDENCE.md)
 - [PB-0705 Unity animation import and clip evidence](PB-0705_UNITY_ANIMATION_CLIP_EVIDENCE.md)
+- [PB-0706 Unity clip settings evidence](PB-0706_UNITY_CLIP_SETTINGS_EVIDENCE.md)
+- [PB-0707 Unity Animator Controller evidence](PB-0707_UNITY_ANIMATOR_CONTROLLER_EVIDENCE.md)
+- [PB-0708 Unity animated prefab evidence](PB-0708_UNITY_ANIMATED_PREFAB_EVIDENCE.md)
 
 ## Dependency and Licence Records
 

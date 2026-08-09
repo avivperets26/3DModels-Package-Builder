@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -655,11 +656,18 @@ namespace PackageBuilder.UnityWorker.Editor
                     Mode = UnityRigImportMode.Generic,
                     RootNodePath = animationRootPath,
                     PreserveHierarchy = true,
-                    OptimizeGameObjects = true,
-                    ExposedTransformPaths = new[] { animationRootPath },
+                    OptimizeGameObjects = false,
+                    ExposedTransformPaths = Array.Empty<string>(),
                 },
                 out animationRigResult,
                 out diagnostic), diagnostic);
+
+            GameObject animatedSource = AssetDatabase.LoadAssetAtPath<GameObject>(
+                AnimatedSourceReference);
+            UnitySkinSkeletonReport animatedSourceSkinReport =
+                UnitySkinSkeletonValidator.Validate(animatedSource, 4);
+            Require(animatedSourceSkinReport.IsValid,
+                "The animated source skin must be valid before clip import.");
 
             UnityAnimationClipPlan[] discoveredActions;
             Require(UnityAnimationClipImporter.TryDiscoverSourceActions(
@@ -667,53 +675,205 @@ namespace PackageBuilder.UnityWorker.Editor
             Require(discoveredActions.Length == 1,
                 "The animated fixture must expose exactly one source action.");
             UnityAnimationClipPlan discovered = discoveredActions[0];
-            var exactPlan = new UnityAnimationClipPlan
+            var attackPlan = new UnityAnimationClipPlan
             {
-                ClipId = "Bend",
+                ClipId = "Attack",
                 SourceTakeName = discovered.SourceTakeName,
                 FirstFrame = discovered.FirstFrame,
                 LastFrame = discovered.LastFrame,
                 SampleRate = discovered.SampleRate,
+                LoopTime = false,
+                RootMotionPolicy = UnityRootMotionPolicy.BakeIntoPose,
+            };
+            var loopPlan = new UnityAnimationClipPlan
+            {
+                ClipId = "BendLoop",
+                SourceTakeName = discovered.SourceTakeName,
+                FirstFrame = discovered.FirstFrame,
+                LastFrame = discovered.LastFrame,
+                SampleRate = discovered.SampleRate,
+                LoopTime = true,
+                RootMotionPolicy = UnityRootMotionPolicy.Preserve,
             };
             UnityAnimationClipImportResult clipResult;
-            Require(UnityAnimationClipImporter.TryImportAndExtract(
-                new UnityAnimationClipImportRequest
-                {
-                    AssetId = "AnimatedProp",
-                    SourceModelReference = AnimatedSourceReference,
-                    OutputAnimationFolderReference = AnimationTestRoot + "/Animations",
-                    Clips = new[] { exactPlan },
-                },
-                out clipResult,
-                out diagnostic), diagnostic);
-            string expectedClipReference =
-                AnimationTestRoot + "/Animations/A_AnimatedProp_Bend.anim";
-            Require(clipResult.OutputAssetReferences.SequenceEqual(
-                new[] { expectedClipReference }, StringComparer.Ordinal),
-                "The extracted animation clip name or location is incorrect.");
-            AnimationClip extractedClip = AssetDatabase.LoadAssetAtPath<AnimationClip>(
-                expectedClipReference);
-            Require(extractedClip != null &&
-                Approximately(extractedClip.frameRate, exactPlan.SampleRate),
-                "The extracted clip sample rate is incorrect.");
-            animationImporter = AssetImporter.GetAtPath(AnimatedSourceReference) as ModelImporter;
-            Require(animationImporter != null && animationImporter.importAnimation &&
-                animationImporter.clipAnimations.Length == 1 &&
-                animationImporter.clipAnimations[0].name == "A_AnimatedProp_Bend" &&
-                Approximately(animationImporter.clipAnimations[0].firstFrame, exactPlan.FirstFrame) &&
-                Approximately(animationImporter.clipAnimations[0].lastFrame, exactPlan.LastFrame),
-                "The imported clip range or name is not exact.");
             Require(!UnityAnimationClipImporter.TryImportAndExtract(
                 new UnityAnimationClipImportRequest
                 {
                     AssetId = "AnimatedProp",
                     SourceModelReference = AnimatedSourceReference,
                     OutputAnimationFolderReference = AnimationTestRoot + "/Animations",
-                    Clips = new[] { exactPlan },
+                    CompressionPolicy = UnityAnimationCompressionPolicy.Unspecified,
+                    Clips = new[] { attackPlan },
+                },
+                out clipResult,
+                out diagnostic) && diagnostic == "UNITY_ANIMATION_CLIP_PLAN_INVALID",
+                "An omitted animation compression policy must fail closed.");
+            Require(!UnityAnimationClipImporter.TryImportAndExtract(
+                new UnityAnimationClipImportRequest
+                {
+                    AssetId = "AnimatedProp",
+                    SourceModelReference = AnimatedSourceReference,
+                    OutputAnimationFolderReference = AnimationTestRoot + "/Animations",
+                    CompressionPolicy = UnityAnimationCompressionPolicy.Off,
+                    Clips = new[]
+                    {
+                        new UnityAnimationClipPlan
+                        {
+                            ClipId = "InvalidRootMotion",
+                            SourceTakeName = discovered.SourceTakeName,
+                            FirstFrame = discovered.FirstFrame,
+                            LastFrame = discovered.LastFrame,
+                            SampleRate = discovered.SampleRate,
+                            LoopTime = false,
+                            RootMotionPolicy = UnityRootMotionPolicy.Unspecified,
+                        },
+                    },
+                },
+                out clipResult,
+                out diagnostic) && diagnostic == "UNITY_ANIMATION_CLIP_PLAN_INVALID",
+                "An omitted root-motion policy must fail closed.");
+            Require(UnityAnimationClipImporter.TryImportAndExtract(
+                new UnityAnimationClipImportRequest
+                {
+                    AssetId = "AnimatedProp",
+                    SourceModelReference = AnimatedSourceReference,
+                    OutputAnimationFolderReference = AnimationTestRoot + "/Animations",
+                    CompressionPolicy = UnityAnimationCompressionPolicy.Optimal,
+                    Clips = new[] { loopPlan, attackPlan },
+                },
+                out clipResult,
+                out diagnostic), diagnostic);
+            string attackClipReference =
+                AnimationTestRoot + "/Animations/A_AnimatedProp_Attack.anim";
+            string loopClipReference =
+                AnimationTestRoot + "/Animations/A_AnimatedProp_BendLoop.anim";
+            Require(clipResult.OutputAssetReferences.SequenceEqual(
+                new[] { attackClipReference, loopClipReference }, StringComparer.Ordinal),
+                "The extracted animation clip names, order, or locations are incorrect.");
+            AnimationClip attackClip = AssetDatabase.LoadAssetAtPath<AnimationClip>(
+                attackClipReference);
+            AnimationClip loopClip = AssetDatabase.LoadAssetAtPath<AnimationClip>(
+                loopClipReference);
+            Require(attackClip != null && loopClip != null &&
+                Approximately(attackClip.frameRate, attackPlan.SampleRate) &&
+                Approximately(loopClip.frameRate, loopPlan.SampleRate),
+                "The extracted clip sample rates are incorrect.");
+            animationImporter = AssetImporter.GetAtPath(AnimatedSourceReference) as ModelImporter;
+            Require(animationImporter != null && animationImporter.importAnimation &&
+                animationImporter.animationCompression == ModelImporterAnimationCompression.Optimal &&
+                animationImporter.clipAnimations.Length == 2,
+                "The explicit animation compression or clip count is incorrect.");
+            ModelImporterClipAnimation importedAttack = animationImporter.clipAnimations.Single(
+                value => value.name == "A_AnimatedProp_Attack");
+            ModelImporterClipAnimation importedLoop = animationImporter.clipAnimations.Single(
+                value => value.name == "A_AnimatedProp_BendLoop");
+            Require(!importedAttack.loopTime && importedAttack.lockRootRotation &&
+                importedAttack.lockRootHeightY && importedAttack.lockRootPositionXZ &&
+                Approximately(importedAttack.firstFrame, attackPlan.FirstFrame) &&
+                Approximately(importedAttack.lastFrame, attackPlan.LastFrame),
+                "One-shot or baked root-motion clip policy is incorrect.");
+            Require(importedLoop.loopTime && importedLoop.loopPose &&
+                !importedLoop.lockRootRotation && !importedLoop.lockRootHeightY &&
+                !importedLoop.lockRootPositionXZ &&
+                Approximately(importedLoop.firstFrame, loopPlan.FirstFrame) &&
+                Approximately(importedLoop.lastFrame, loopPlan.LastFrame),
+                "Declared loop or preserved root-motion clip policy is incorrect.");
+            animatedSource = AssetDatabase.LoadAssetAtPath<GameObject>(AnimatedSourceReference);
+            animatedSourceSkinReport = UnitySkinSkeletonValidator.Validate(animatedSource, 4);
+            Require(animatedSourceSkinReport.IsValid,
+                "Clip import must preserve the animated source skin and bind poses.");
+
+            string controllerReference =
+                AnimationTestRoot + "/Controllers/AC_AnimatedProp.controller";
+            AnimatorController controller;
+            Require(UnityAnimatorControllerGenerator.TryCreate(
+                new UnityAnimatorControllerRequest
+                {
+                    AssetId = "AnimatedProp",
+                    OutputControllerReference = controllerReference,
+                    DefaultClipReference = attackClipReference,
+                    ClipReferences = clipResult.OutputAssetReferences,
+                },
+                out controller,
+                out diagnostic), diagnostic);
+            Require(controller != null && controller.name == "AC_AnimatedProp" &&
+                controller.layers.Length == 1 &&
+                controller.layers[0].stateMachine.states.Length == 2 &&
+                controller.layers[0].stateMachine.defaultState.motion == attackClip &&
+                controller.layers[0].stateMachine.states.All(value => value.state.motion != null) &&
+                controller.parameters.Select(value => value.name)
+                    .OrderBy(value => value, StringComparer.Ordinal)
+                    .SequenceEqual(new[] { "Replay_Attack", "Replay_BendLoop" },
+                        StringComparer.Ordinal),
+                "The generated Animator Controller state, default, motion, or replay contract is incorrect.");
+
+            string animatedPrefabReference =
+                AnimationTestRoot + "/Prefabs/P_AnimatedProp.prefab";
+            GameObject animatedPrefab;
+            UnitySkinSkeletonReport animatedSkinReport;
+            Require(UnityAnimatedPrefabGenerator.TryCreate(
+                new UnityAnimatedPrefabRequest
+                {
+                    AssetId = "AnimatedProp",
+                    SourceModelReference = AnimatedSourceReference,
+                    AnimatorControllerReference = controllerReference,
+                    OutputPrefabReference = animatedPrefabReference,
+                    AllowedMaximumInfluences = 4,
+                    ApplyRootMotion = true,
+                },
+                out animatedPrefab,
+                out animatedSkinReport,
+                out diagnostic), diagnostic);
+            Animator[] savedAnimators = animatedPrefab.GetComponentsInChildren<Animator>(true);
+            Require(animatedPrefab != null && animatedSkinReport.IsValid &&
+                animatedPrefab.name == "P_AnimatedProp" &&
+                animatedPrefab.transform.childCount == 1 &&
+                animatedPrefab.transform.GetChild(0).name == "P_Model" &&
+                IsReset(animatedPrefab.transform) &&
+                IsReset(animatedPrefab.transform.GetChild(0)) &&
+                animatedPrefab.GetComponentsInChildren<SkinnedMeshRenderer>(true).Length == 1 &&
+                savedAnimators.Length == 1 &&
+                savedAnimators[0].runtimeAnimatorController == controller &&
+                savedAnimators[0].applyRootMotion,
+                "The animated prefab hierarchy, skin, controller, or root-motion setting is incorrect.");
+
+            Require(!UnityAnimationClipImporter.TryImportAndExtract(
+                new UnityAnimationClipImportRequest
+                {
+                    AssetId = "AnimatedProp",
+                    SourceModelReference = AnimatedSourceReference,
+                    OutputAnimationFolderReference = AnimationTestRoot + "/Animations",
+                    CompressionPolicy = UnityAnimationCompressionPolicy.Optimal,
+                    Clips = new[] { attackPlan, loopPlan },
                 },
                 out clipResult,
                 out diagnostic) && diagnostic == "UNITY_ANIMATION_CLIP_PLAN_INVALID",
                 "Existing extracted animation outputs must fail closed.");
+            Require(!UnityAnimatorControllerGenerator.TryCreate(
+                new UnityAnimatorControllerRequest
+                {
+                    AssetId = "AnimatedProp",
+                    OutputControllerReference = controllerReference,
+                    DefaultClipReference = attackClipReference,
+                    ClipReferences = new[] { attackClipReference, loopClipReference },
+                },
+                out controller,
+                out diagnostic) && diagnostic == "UNITY_ANIMATOR_CONTROLLER_INVALID",
+                "Existing Animator Controller outputs must fail closed.");
+            Require(!UnityAnimatedPrefabGenerator.TryCreate(
+                new UnityAnimatedPrefabRequest
+                {
+                    AssetId = "AnimatedProp",
+                    SourceModelReference = AnimatedSourceReference,
+                    AnimatorControllerReference = controllerReference,
+                    OutputPrefabReference = animatedPrefabReference,
+                    AllowedMaximumInfluences = 4,
+                    ApplyRootMotion = true,
+                },
+                out animatedPrefab,
+                out animatedSkinReport,
+                out diagnostic) && diagnostic == "UNITY_ANIMATED_PREFAB_INVALID",
+                "Existing animated prefab outputs must fail closed.");
         }
 
         private static void TestOverviewTemplateControllerAndComposition()
