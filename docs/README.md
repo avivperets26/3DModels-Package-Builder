@@ -12,6 +12,8 @@ This index links the approved product, architecture, quality, workflow, and arch
 - [Technology stack and architecture](TECH_STACK_AND_ARCHITECTURE.md)
 - [Implementation backlog](IMPLEMENTATION_BACKLOG.md)
 - [Quality and release gates](QUALITY_AND_RELEASE_GATES.md)
+- [STUDIO AVIV hosted converter handoff](STUDIO_AVIV_HOSTED_CONVERTER_HANDOFF.md)
+- [PB-1901 hosted conversion architecture evidence](PB-1901_HOSTED_CONVERSION_ARCHITECTURE_EVIDENCE.md)
 - [Project engineering reuse and separation skill](../skills/package-builder-engineering/SKILL.md)
 
 ## Architecture Decision Records

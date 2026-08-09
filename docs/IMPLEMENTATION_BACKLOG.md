@@ -6,7 +6,7 @@
 **GitHub visibility:** Public, approved by the user on 2026-07-22
 **Runtime data:** `C:\Dev\PackageBuilder\runtime-data`
 **Planned default branch:** `main`
-**Last reviewed:** 2026-08-05
+**Last reviewed:** 2026-08-09
 
 ## 1. Purpose
 
@@ -22,6 +22,8 @@ It covers:
 - Unreal static, rigged, animated, set, and collection outputs.
 - Documentation, preview media, reports, and the Fab marketplace adapter.
 - Desktop UI, CLI, testing, security, CI, installer, and release validation.
+- An optional post-v1 hosted conversion service and STUDIO AVIV web integration that preserve the
+  free local workflow and reuse the same versioned contracts and engine workers.
 
 The product and architecture documents remain authoritative for requirements and technical decisions. This backlog turns those decisions into branch-sized implementation work.
 
@@ -161,6 +163,7 @@ feat/PB-0607-unity-urp-material-compiler
 | PB-0703 | 🟡 **PROCESS** | `feat/PB-0703-unity-skin-validator` | Unity Rig Engineering for local work; user for Git gates | 2026-08-09 | Non-mutating skin/skeleton validation reports renderers, roots, bones, bind poses, influence limits, invalid indices, and unweighted vertices with stable findings. A real contained-Blender skinned FBX passed in Unity beneath `artifacts/u/7650ee0`. | User-controlled combined publication, required `main` CI, explicit confirmation, and rollover remain. |
 | PB-0704 | 🟡 **PROCESS** | `feat/PB-0704-unity-rigged-no-animation` | Unity Rig Engineering for local work; user for Git gates | 2026-08-09 | Case 2 creates a reset `P_<AssetId>` / `P_Model` skinned prefab and deterministic `SKEL_<AssetId>.json`, while omitting animation/controller folders, clips, controllers, and empty animation components. Real Unity integration passed. | User-controlled combined publication, required `main` CI, explicit confirmation, and rollover remain. |
 | PB-0705 | 🟡 **PROCESS** | `feat/PB-0705-unity-animation-clips` | Unity Animation Engineering for local work; user for Git gates | 2026-08-09 | Source takes and manifest ranges now create collision-safe `A_<AssetId>_<ClipId>` assets with exact frame bounds and sample rate. Discovery remains valid after the rig policy disables animation, and real Unity extraction passed. | User-controlled combined publication, required `main` CI, explicit confirmation, and rollover remain. |
+| PB-1901 | 🟡 **PROCESS** | `docs/PB-1901-hosted-conversion-architecture` | Architecture and Security for local work; user for Git gates | 2026-08-09 | Optional hosted-conversion boundaries and a STUDIO AVIV integration handoff are being documented without changing the local/offline default or claiming that a hosted API exists. | Local documentation validation, user-controlled publication, required `main` CI, explicit confirmation, and rollover remain. |
 
 ### PB-0703/PB-0704/PB-0705 Combined Publication Exception
 
@@ -1494,6 +1497,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | M7 — Unreal Complete | All five product cases work in Unreal | E11–E12 |
 | M8 — Operator Experience | WPF and CLI drive the same production pipeline | E13–E14 |
 | M9 — Release Candidate | Security, CI, installer, quality gates, and full regression pass | E15–E18 |
+| M10 — Optional Hosted Conversion | STUDIO AVIV can submit isolated, tenant-safe conversion jobs without running engines in Next.js | E19 |
 
 M0 — Repository Ready is complete: every E00 task from PB-0001 through PB-0013 is `[x]` / 🟢 **DONE**, and each appears exactly once in the Completion Log.
 
@@ -1522,6 +1526,7 @@ flowchart LR
     E15 --> E18
     E16 --> E18
     E18 --> E17["E17 Release"]
+    E17 -. optional post-v1 .-> E19["E19 Hosted conversion"]
 ```
 
 ---
@@ -2946,6 +2951,89 @@ E18 appears before E17 in execution order because the quality gate was added aft
   - Done when: repository plus documented prerequisites rebuild the release, sample jobs reproduce logically equivalent outputs, and recovery procedure is verified.
 
 **E17 exit:** M9 and Package Builder version 1 are complete.
+
+---
+
+# E19 — Optional Hosted Conversion and STUDIO AVIV Integration
+
+**Goal:** Offer Package Builder conversion through STUDIO AVIV without moving Blender, Unity, or Unreal into the Next.js process, weakening tenant isolation, or making the paid hosted path a requirement for the free local product.
+
+**Roadmap status:** Optional post-version-1 work. E19 does not block the version 1 definition of working system. The repository-local desktop and CLI workflow remains the free, offline-capable baseline. Any hosted engine tier requires explicit infrastructure, licence, privacy, abuse, and operating-cost approval before public release. A Blender-only service or an optional user-operated local agent may ship before hosted Unity or Unreal workers.
+
+- [ ] **PB-1901 — Ratify hosted conversion architecture, threat model, licensing, and cost boundary** — **P2** — 🟡 **PROCESS**
+  - Branch: `docs/PB-1901-hosted-conversion-architecture`
+  - Owner: Architecture and Security Engineering
+  - Depends on: PB-0012, PB-0112
+  - Done when: the browser, Next.js application, Package Builder API, durable queue, object storage, and isolated engine-worker trust boundaries are approved; the free local path remains supported; Blender, Unity, and Unreal licensing and unattended-worker assumptions are reviewed with authoritative evidence; data residency, retention, deletion, abuse, quota, and cost controls are explicit; the STUDIO AVIV handoff is current; and no document claims that a hosted converter already exists.
+
+- [ ] **PB-1902 — Define hosted API, identity, tenancy, and authorization contracts** — **P2**
+  - Branch: `feat/PB-1902-hosted-api-contracts`
+  - Owner: Contracts, Application, and Security Engineering
+  - Depends on: PB-0108, PB-0109, PB-0112, PB-1901
+  - Done when: versioned OpenAPI and event contracts cover job creation, manifest review, upload authorization, progress, findings, cancellation, retry, artifacts, deletion, and expiry; every operation enforces authenticated tenant ownership and idempotency; untrusted client fields cannot select executable paths or worker commands; and compatibility, authorization, hostile-input, and cross-tenant negative tests pass.
+
+- [ ] **PB-1903 — Implement direct resumable upload, quarantine, and object-storage abstraction** — **P2**
+  - Branch: `feat/PB-1903-hosted-upload-storage`
+  - Owner: Infrastructure and Security Engineering
+  - Depends on: PB-0202, PB-0203, PB-0204, PB-1501, PB-1502, PB-1902
+  - Done when: large model/archive/texture uploads go directly to configured storage using short-lived scoped authorization; resumable integrity checks, canonical keys, content limits, quarantine, malware/content scanning hooks, deduplication boundaries, tenant isolation, expiry, deletion, and storage-provider substitution are tested; and neither the browser nor Next.js application filesystem becomes the asset store.
+
+- [ ] **PB-1904 — Implement durable hosted queue, leases, idempotency, retry, and cancellation** — **P2**
+  - Branch: `feat/PB-1904-hosted-job-queue`
+  - Owner: Application and Infrastructure Engineering
+  - Depends on: PB-0208, PB-0209, PB-0213, PB-0215, PB-1404, PB-1902
+  - Done when: durable jobs survive API and worker restarts; leases prevent duplicate writers; idempotency prevents duplicate paid work; cancellation, bounded retry, dead-letter handling, progress replay, worker capability routing, quotas, and fair concurrency are deterministic; and terminal artifacts are promoted only after validation.
+
+- [ ] **PB-1905 — Implement isolated hosted Blender worker pool** — **P2**
+  - Branch: `feat/PB-1905-hosted-blender-workers`
+  - Owner: Blender Worker and Security Engineering
+  - Depends on: PB-0418, PB-1503, PB-1504, PB-1505, PB-1506, PB-1507, PB-1508, PB-1903, PB-1904
+  - Done when: each job runs in a disposable restricted workspace with pinned Blender and worker versions, no implicit network access, bounded CPU/memory/disk/time, safe process termination, source immutability, structured progress/findings, clean promotion, and hostile/corrupt isolation tests; and worker images can be reproduced from reviewed inputs.
+
+- [ ] **PB-1906 — Establish licensed isolated Unity hosted worker pool** — **P2**
+  - Branch: `feat/PB-1906-hosted-unity-workers`
+  - Owner: Unity Worker, Legal, and Infrastructure Engineering
+  - Depends on: PB-0618, PB-0714, PB-1608, PB-1901, PB-1904
+  - Done when: authoritative Unity terms and activation requirements are approved for the deployment model; dedicated Windows workers use pinned approved editor/modules, isolated clones, bounded resources, licence-safe activation, deterministic cleanup, and structured results; and no Unity conversion is exposed when compliant worker capacity is unavailable.
+
+- [ ] **PB-1907 — Establish licensed isolated Unreal hosted worker pool** — **P2**
+  - Branch: `feat/PB-1907-hosted-unreal-workers`
+  - Owner: Unreal Worker, Legal, and Infrastructure Engineering
+  - Depends on: PB-1115, PB-1214, PB-1608, PB-1901, PB-1904
+  - Done when: authoritative Unreal terms and redistribution/automation requirements are approved for the deployment model; dedicated Windows workers use pinned approved engine versions, isolated clones, bounded resources, deterministic cleanup, and structured results; and no Unreal conversion is exposed when compliant worker capacity is unavailable.
+
+- [ ] **PB-1908 — Implement signed artifact delivery, retention, deletion, quota, and cost controls** — **P2**
+  - Branch: `feat/PB-1908-hosted-artifact-delivery`
+  - Owner: Infrastructure, Security, and Operations Engineering
+  - Depends on: PB-1902, PB-1903, PB-1904
+  - Done when: completed artifacts use short-lived tenant-scoped downloads; hashes, sizes, content types, expiry, retention, deletion, audit, per-user limits, rate limits, concurrency, estimated/actual resource cost, and denial behavior are visible and tested; expired or deleted objects cannot be recovered through stale URLs; and no paid service is mandatory for local use.
+
+- [ ] **PB-1909 — Implement STUDIO AVIV Next.js converter experience and typed client** — **P2**
+  - Branch: `feat/PB-1909-studio-aviv-web-converter`
+  - Owner: STUDIO AVIV Web and UX Engineering
+  - Delivery repository: STUDIO AVIV website; this PB task tracks the cross-repository contract and acceptance evidence.
+  - Depends on: PB-1902, PB-1908
+  - Done when: the responsive accessible converter page supports sign-in, direct/resumable upload, target selection, case detection and manifest review, explicit terms/privacy consent, progress, findings, cancel/retry, signed downloads, deletion, expiry, and actionable failure states; large files never traverse a Next.js server action or persistent application filesystem; a feature flag and mock adapter support UI work before backend launch; and browser/API contract tests prevent unsupported capability claims.
+
+- [ ] **PB-1910 — Implement optional user-operated local Package Builder agent** — **P2**
+  - Branch: `feat/PB-1910-local-conversion-agent`
+  - Owner: Application, Desktop, and Security Engineering
+  - Depends on: PB-1407, PB-1902, PB-1904
+  - Done when: an explicitly enrolled local agent can claim only the authenticated user's jobs, download scoped inputs, run already installed local engines, upload validated outputs, rotate/revoke credentials, report capability/version/health, and recover safely; the website cannot issue arbitrary commands or paths; and users can choose the lower-hosting-cost agent path without weakening local privacy or source safety.
+
+- [ ] **PB-1911 — Add hosted observability, privacy, abuse controls, and operational runbooks** — **P2**
+  - Branch: `test/PB-1911-hosted-operations-security`
+  - Owner: Security, Reliability, and Operations Engineering
+  - Depends on: PB-1810, PB-1811, PB-1812, PB-1903, PB-1904, PB-1905, PB-1908
+  - Done when: redacted metrics, traces, logs, alerts, audit events, worker health, queue age, capacity, cost, abuse detection, incident response, backup/restore, deletion verification, data-subject handling, vulnerability response, and engine outage/degradation runbooks are tested without recording model contents, credentials, signed URLs, or private paths; every enabled worker tier is covered, and Unity/Unreal operational coverage becomes mandatory before those tiers are exposed.
+
+- [ ] **PB-1912 — Complete hosted end-to-end, security, load, licensing, and launch acceptance** — **P2**
+  - Branch: `release/PB-1912-hosted-conversion-acceptance`
+  - Owner: Release, Security, Legal, UX, and Quality Engineering
+  - Depends on: PB-1905, PB-1908, PB-1909, PB-1911
+  - Done when: approved browsers and devices complete the upload-to-download journey through at least the Blender-backed hosted tier; tenant-isolation, authorization, hostile-input, quota, cancellation, retry, retention/deletion, accessibility, performance, cost, disaster-recovery, and engine-worker tests pass at approved limits; every exposed target has completed its own worker task and has current licensing approval and healthy capacity; optional local-agent acceptance applies only when that mode is enabled; unsupported targets remain hidden or clearly unavailable; and the user explicitly approves public launch.
+
+**E19 exit:** Optional M10 is complete only when STUDIO AVIV can submit, monitor, review, download, and delete tenant-safe conversion jobs through approved hosted or local-agent workers, while the free local Package Builder workflow remains fully usable and no unavailable or unlicensed engine capability is advertised.
 
 ---
 

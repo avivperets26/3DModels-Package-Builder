@@ -1302,3 +1302,40 @@ Package Builder version 1 is complete when:
 - [Unity model importing documentation](https://docs.unity3d.com/6000.0/Documentation/Manual/ImportingModelFiles.html)
 
 These rules can change. The builder should version its requirements profile and include a maintenance checklist rather than hardcoding marketplace assumptions permanently.
+
+## 19. Optional Hosted Conversion and STUDIO AVIV
+
+Package Builder may later expose its conversion pipeline through the STUDIO AVIV website, but this is an optional post-version-1 delivery channel. It does not replace the Windows desktop/CLI product, make a paid hosted service mandatory, or change the requirement that local development and conversion remain usable without paid software or subscriptions.
+
+### User outcome
+
+A signed-in STUDIO AVIV customer can upload an approved 3D source set, review detected product type and findings, select supported outputs, follow conversion progress, download validated artifacts, and delete the job data. Supported outputs may include normalized FBX/GLB, Unity packages, Unreal projects/packages, previews, documentation, and validation reports only when the corresponding worker tier is operational and approved.
+
+### Required system boundary
+
+- The Next.js site owns the storefront, authentication experience, converter UI, browser-safe validation, progress presentation, and download experience.
+- A versioned Package Builder web API owns tenant authorization, upload authorization, job state, manifest validation, findings, cancellation, retention, and artifact delivery policy.
+- Large source files upload directly to approved object storage; they do not pass through Next.js Server Actions or depend on an application-instance filesystem.
+- A durable queue schedules work to isolated workers according to declared engine capability and version.
+- Blender, Unity, and Unreal execute only in restricted worker environments or in an explicitly enrolled user-operated local agent. They never run inside the browser or Next.js process.
+- Existing Domain, Application, Contracts, validation, naming, and target components remain the canonical business behavior. Hosted adapters do not duplicate those rules.
+
+### Delivery phases
+
+1. Define and test the hosted contracts, security boundary, licensing assumptions, and feature-flagged STUDIO AVIV UI using mocks.
+2. Add direct uploads, quarantined storage, durable jobs, signed downloads, deletion, quotas, and observability.
+3. Offer Blender-based normalization where worker isolation and operating cost are approved.
+4. Offer Unity and Unreal only after current authoritative licensing, activation, redistribution, and unattended-operation requirements are explicitly approved and dedicated Windows capacity exists.
+5. Optionally offer a local Package Builder agent so a user can run conversions with locally installed engines while the website supplies job management.
+
+### Hosted release conditions
+
+- No capability is advertised before its complete worker, security, licensing, capacity, and end-to-end acceptance evidence passes.
+- Authentication never substitutes for per-job tenant authorization; cross-tenant reads, writes, cancellation, and downloads are denied and tested.
+- Upload size, extracted size, file count, extension, nesting, content, CPU, memory, disk, duration, concurrency, retry, and cost limits are explicit and fail closed.
+- Inputs are quarantined until approved checks pass, workers have no implicit outbound network access, and imported content cannot supply executable commands or host paths.
+- Downloads are short-lived and tenant scoped; retention, expiry, deletion, and audit behavior are visible to the user and verified.
+- Logs, metrics, traces, and support bundles do not contain model contents, credentials, private paths, or signed URLs.
+- The local free path remains fully documented and available even if the hosted service is disabled, at capacity, or commercially withdrawn.
+
+The implementation tasks and dependencies are tracked in E19 of `docs/IMPLEMENTATION_BACKLOG.md`. The integration contract for the separate website project is `docs/STUDIO_AVIV_HOSTED_CONVERTER_HANDOFF.md`.
