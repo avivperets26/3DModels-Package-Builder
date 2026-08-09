@@ -6,6 +6,24 @@ using UnityEngine;
 
 namespace PackageBuilder.UnityWorker.Editor
 {
+    /// <summary>Defines how Unity imports and stores animation curves for a product.</summary>
+    internal enum UnityAnimationCompressionPolicy
+    {
+        Unspecified = 0,
+        Off = 1,
+        KeyframeReduction = 2,
+        KeyframeReductionAndCompression = 3,
+        Optimal = 4,
+    }
+
+    /// <summary>Defines whether a clip preserves root motion or bakes it into the pose.</summary>
+    internal enum UnityRootMotionPolicy
+    {
+        Unspecified = 0,
+        Preserve = 1,
+        BakeIntoPose = 2,
+    }
+
     /// <summary>Defines one manifest-owned source take and exact output clip boundary.</summary>
     internal sealed class UnityAnimationClipPlan
     {
@@ -18,6 +36,10 @@ namespace PackageBuilder.UnityWorker.Editor
         internal float LastFrame { get; set; }
 
         internal float SampleRate { get; set; }
+
+        internal bool LoopTime { get; set; }
+
+        internal UnityRootMotionPolicy RootMotionPolicy { get; set; }
     }
 
     /// <summary>Defines deterministic animation import and extracted-clip output paths.</summary>
@@ -28,6 +50,8 @@ namespace PackageBuilder.UnityWorker.Editor
         internal string SourceModelReference { get; set; }
 
         internal string OutputAnimationFolderReference { get; set; }
+
+        internal UnityAnimationCompressionPolicy CompressionPolicy { get; set; }
 
         internal UnityAnimationClipPlan[] Clips { get; set; } = Array.Empty<UnityAnimationClipPlan>();
     }
@@ -82,6 +106,8 @@ namespace PackageBuilder.UnityWorker.Editor
                     FirstFrame = take.bakeStartTime * take.sampleRate,
                     LastFrame = take.bakeStopTime * take.sampleRate,
                     SampleRate = take.sampleRate,
+                    LoopTime = false,
+                    RootMotionPolicy = UnityRootMotionPolicy.BakeIntoPose,
                 });
             }
 
@@ -107,21 +133,16 @@ namespace PackageBuilder.UnityWorker.Editor
 
             bool originalImportAnimation = importer.importAnimation;
             bool originalResampleCurves = importer.resampleCurves;
+            ModelImporterAnimationCompression originalCompression = importer.animationCompression;
             ModelImporterClipAnimation[] originalClips = importer.clipAnimations;
             var created = new List<string>();
             try
             {
                 importer.importAnimation = true;
                 importer.resampleCurves = true;
-                importer.clipAnimations = plans.Select(plan => new ModelImporterClipAnimation
-                {
-                    name = OutputName(request.AssetId, plan.ClipId),
-                    takeName = plan.SourceTakeName,
-                    firstFrame = plan.FirstFrame,
-                    lastFrame = plan.LastFrame,
-                    loopTime = false,
-                    loopPose = false,
-                }).ToArray();
+                importer.animationCompression = ToImporterCompression(request.CompressionPolicy);
+                importer.clipAnimations = plans.Select(plan => CreateImporterClip(
+                    request.AssetId, plan)).ToArray();
                 importer.SaveAndReimport();
 
                 AnimationClip[] imported = AssetDatabase.LoadAllAssetsAtPath(request.SourceModelReference)
@@ -182,6 +203,7 @@ namespace PackageBuilder.UnityWorker.Editor
                     {
                         current.importAnimation = originalImportAnimation;
                         current.resampleCurves = originalResampleCurves;
+                        current.animationCompression = originalCompression;
                         current.clipAnimations = originalClips;
                         current.SaveAndReimport();
                     }
@@ -202,7 +224,9 @@ namespace PackageBuilder.UnityWorker.Editor
                 !IsSafeModelReference(request.SourceModelReference) ||
                 !IsSafeAnimationFolder(request.OutputAnimationFolderReference) ||
                 !AssetDatabase.IsValidFolder(request.OutputAnimationFolderReference) ||
-                request.Clips == null || request.Clips.Length == 0)
+                request.Clips == null || request.Clips.Length == 0 ||
+                request.CompressionPolicy == UnityAnimationCompressionPolicy.Unspecified ||
+                !Enum.IsDefined(typeof(UnityAnimationCompressionPolicy), request.CompressionPolicy))
             {
                 return false;
             }
@@ -232,7 +256,9 @@ namespace PackageBuilder.UnityWorker.Editor
             if (plans.Any(plan => plan == null || !IsClipId(plan.ClipId) ||
                 string.IsNullOrEmpty(plan.SourceTakeName) || !takesByName.ContainsKey(plan.SourceTakeName) ||
                 !IsFinite(plan.FirstFrame) || !IsFinite(plan.LastFrame) ||
-                plan.LastFrame <= plan.FirstFrame || !IsFinitePositive(plan.SampleRate)) ||
+                plan.LastFrame <= plan.FirstFrame || !IsFinitePositive(plan.SampleRate) ||
+                plan.RootMotionPolicy == UnityRootMotionPolicy.Unspecified ||
+                !Enum.IsDefined(typeof(UnityRootMotionPolicy), plan.RootMotionPolicy)) ||
                 plans.Select(plan => plan.ClipId).Distinct(StringComparer.Ordinal).Count() != plans.Length)
             {
                 return false;
@@ -320,6 +346,46 @@ namespace PackageBuilder.UnityWorker.Editor
         private static string OutputName(string assetId, string clipId)
         {
             return "A_" + assetId + "_" + clipId;
+        }
+
+        private static ModelImporterClipAnimation CreateImporterClip(
+            string assetId,
+            UnityAnimationClipPlan plan)
+        {
+            bool bakeRootMotion = plan.RootMotionPolicy == UnityRootMotionPolicy.BakeIntoPose;
+            return new ModelImporterClipAnimation
+            {
+                name = OutputName(assetId, plan.ClipId),
+                takeName = plan.SourceTakeName,
+                firstFrame = plan.FirstFrame,
+                lastFrame = plan.LastFrame,
+                loopTime = plan.LoopTime,
+                loopPose = plan.LoopTime,
+                lockRootRotation = bakeRootMotion,
+                lockRootHeightY = bakeRootMotion,
+                lockRootPositionXZ = bakeRootMotion,
+                keepOriginalOrientation = true,
+                keepOriginalPositionY = true,
+                keepOriginalPositionXZ = true,
+            };
+        }
+
+        private static ModelImporterAnimationCompression ToImporterCompression(
+            UnityAnimationCompressionPolicy policy)
+        {
+            switch (policy)
+            {
+                case UnityAnimationCompressionPolicy.Off:
+                    return ModelImporterAnimationCompression.Off;
+                case UnityAnimationCompressionPolicy.KeyframeReduction:
+                    return ModelImporterAnimationCompression.KeyframeReduction;
+                case UnityAnimationCompressionPolicy.KeyframeReductionAndCompression:
+                    return ModelImporterAnimationCompression.KeyframeReductionAndCompression;
+                case UnityAnimationCompressionPolicy.Optimal:
+                    return ModelImporterAnimationCompression.Optimal;
+                default:
+                    throw new InvalidOperationException("Animation compression must be explicit.");
+            }
         }
 
         private static string ToClipId(string value)

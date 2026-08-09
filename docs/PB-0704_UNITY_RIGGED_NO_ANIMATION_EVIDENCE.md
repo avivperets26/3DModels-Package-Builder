@@ -5,7 +5,7 @@
 - Task: PB-0704 — Implement rigged-no-animation prefab flow.
 - Canonical branch: `feat/PB-0704-unity-rigged-no-animation`.
 - Publication branch: `feat/PB-0703-unity-skin-validator` under the approved combined exception.
-- Status: `[ ]` / 🟡 **PROCESS**.
+- Status: `[x]` / 🟢 **DONE**.
 - Started: 2026-08-09.
 
 ## Case-2 Output Contract
@@ -46,8 +46,14 @@ project under `artifacts/u/7650ee0/r`.
 - Full real Unity product integration: passed in 309.3 seconds.
 - `git diff --check`: passed before documentation synchronization.
 
-## Remaining Gates
+## Publication Evidence
 
-PB-0704 remains PROCESS until the combined change is committed, pushed, merged into and pushed on
-`main`, required `main` CI succeeds, the user explicitly confirms completion, and rollover records
-independent completion evidence.
+- Task commit: `03ec3ee6e28a78975c86e8352b26ee02a91c2a8d`.
+- Pull request: [#76](https://github.com/avivperets26/3DModels-Package-Builder/pull/76).
+- Merge commit: `3c58790b738d0b3998356bfa9a95742e1d72f195`.
+- Required `main` CI: explicitly confirmed successful by the user on 2026-08-09.
+- Exception: the approved PB-0703/PB-0704/PB-0705 combined-publication exception; no CI or quality
+  exception was used, and the publication exception creates no precedent.
+
+PB-0704 was removed from Active Work and recorded exactly once in the Completion Log during the
+PB-0706 rollover.

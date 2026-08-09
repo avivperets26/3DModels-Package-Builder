@@ -1542,8 +1542,24 @@ Outputs use `A_<AssetId>_<ClipId>`, are collision-safe, and preserve the declare
 range-derived duration. Because PB-0701 disables animation while configuring a rig, take discovery
 may temporarily enable source animation only when metadata is absent; it copies the take inventory
 and restores the original importer state in `finally`. Failed extraction restores all reviewed
-settings and deletes partial outputs. Loop, compression, root motion, controller generation, and
-animated-prefab composition remain with PB-0706 through PB-0708.
+settings and deletes partial outputs.
+
+PB-0706 extends that transaction with explicit loop, compression, and root-motion intent. One-shot
+clips never loop, declared loops enable both loop-time and loop-pose behavior, and each request
+selects a reviewed Unity compression mode. Root motion is either preserved or baked into pose;
+unspecified policies fail closed rather than inheriting engine defaults.
+
+PB-0707 creates collision-safe `AC_<AssetId>` controllers. Ordinally sorted clip identities produce
+one state and one `Replay_<ClipId>` trigger per clip, while the manifest declares the stable default
+state. A saved controller is reloaded and verified for exact states, replay transitions,
+parameters, default state, and non-null motion references.
+
+PB-0708 owns case-3 animated prefab composition. Static, rig-only, and animated flows share one
+prefab hierarchy utility for reset `P_<AssetId>` and `P_Model` transforms, safe source references,
+and deterministic names. The animated generator validates the skin before saving, adds exactly one
+Animator with the requested controller and root-motion behavior, then reloads the prefab and
+revalidates the hierarchy, skinned renderers, meshes, controller, and missing-script boundary.
+Partial assets are removed on failure.
 
 Unity integration evidence uses the short contained layout `artifacts/u/<id>/p`. Before launching
 Unity, the harness checks a reviewed worst-case pinned-package path against a 248-character legacy

@@ -485,6 +485,9 @@ Write-Host 'Unity Generic and optional Humanoid rig importer Editor tests: passe
 Write-Host 'Unity skin and skeleton validation Editor tests: passed'
 Write-Host 'Unity rigged-no-animation prefab and skeleton metadata tests: passed'
 Write-Host 'Unity exact animation clip extraction Editor tests: passed'
+Write-Host 'Unity clip loop, compression, and root-motion policy tests: passed'
+Write-Host 'Unity Animator Controller generation tests: passed'
+Write-Host 'Unity animated prefab flow tests: passed'
 Write-Host 'Unity standalone mesh extraction Editor tests: passed'
 Write-Host 'Unity static prefab generation Editor tests: passed'
 Write-Host 'Unity generic overview scene template tests: passed'
@@ -514,7 +517,14 @@ $resultPointer = [ordered]@{
     skeletonMetadata = Join-Path $cloneRoot `
         'Assets\PBRigPolicyTests\Documentation\SKEL_RiggedProp.json'
     animatedFixture = Join-Path $cloneRoot 'Assets\PBAnimationTests\Source\AnimatedProp.fbx'
-    animationClip = Join-Path $cloneRoot 'Assets\PBAnimationTests\Animations\A_AnimatedProp_Bend.anim'
+    animationClips = @(
+        Join-Path $cloneRoot 'Assets\PBAnimationTests\Animations\A_AnimatedProp_Attack.anim'
+        Join-Path $cloneRoot 'Assets\PBAnimationTests\Animations\A_AnimatedProp_BendLoop.anim'
+    )
+    animatorController = Join-Path $cloneRoot `
+        'Assets\PBAnimationTests\Controllers\AC_AnimatedProp.controller'
+    animatedPrefab = Join-Path $cloneRoot `
+        'Assets\PBAnimationTests\Prefabs\P_AnimatedProp.prefab'
     integrationLog = $logPath
     cleanReimportLog = $cleanReimportLogPath
     cleanReimportResult = $cleanReimportResultPath

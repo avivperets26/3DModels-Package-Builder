@@ -39,28 +39,17 @@ namespace PackageBuilder.UnityWorker.Editor
                 return false;
             }
 
-            GameObject source = AssetDatabase.LoadAssetAtPath<GameObject>(request.SourceModelReference);
-            if (source == null)
-            {
-                diagnosticCode = "UNITY_RIGGED_PREFAB_MODEL_MISSING";
-                return false;
-            }
-
             GameObject root = null;
+            GameObject model = null;
             try
             {
-                root = new GameObject("P_" + request.AssetId);
-                GameObject model = PrefabUtility.InstantiatePrefab(source) as GameObject;
-                if (model == null)
+                if (!UnityPrefabHierarchyUtility.TryCreate(
+                    request.AssetId, request.SourceModelReference, out root, out model))
                 {
                     diagnosticCode = "UNITY_RIGGED_PREFAB_INSTANTIATION_FAILED";
                     return false;
                 }
 
-                model.name = "P_Model";
-                model.transform.SetParent(root.transform, false);
-                ResetTransform(root.transform);
-                ResetTransform(model.transform);
                 report = UnitySkinSkeletonValidator.Validate(model, request.AllowedMaximumInfluences);
                 if (!report.IsValid)
                 {
@@ -120,11 +109,14 @@ namespace PackageBuilder.UnityWorker.Editor
         private static bool TryValidate(UnityRiggedPrefabRequest request)
         {
             return request != null && UnityAssetNameValidator.IsProductFolder(request.AssetId) &&
-                IsSafeReference(request.SourceModelReference, "/Source/", ".fbx") &&
-                IsSafeReference(request.OutputPrefabReference, "/Prefabs/P_", ".prefab") &&
+                UnityPrefabHierarchyUtility.IsSafeReference(
+                    request.SourceModelReference, "/Source/", ".fbx") &&
+                UnityPrefabHierarchyUtility.IsSafeReference(
+                    request.OutputPrefabReference, "/Prefabs/P_", ".prefab") &&
                 request.OutputPrefabReference.EndsWith("/P_" + request.AssetId + ".prefab",
                     StringComparison.Ordinal) &&
-                IsSafeReference(request.OutputSkeletonMetadataReference, "/Documentation/SKEL_", ".json") &&
+                UnityPrefabHierarchyUtility.IsSafeReference(
+                    request.OutputSkeletonMetadataReference, "/Documentation/SKEL_", ".json") &&
                 request.OutputSkeletonMetadataReference.EndsWith(
                     "/SKEL_" + request.AssetId + ".json", StringComparison.Ordinal) &&
                 request.AllowedMaximumInfluences > 0 && request.AllowedMaximumInfluences <= 255 &&
@@ -166,13 +158,14 @@ namespace PackageBuilder.UnityWorker.Editor
             report = null;
             diagnosticCode = "UNITY_RIGGED_PREFAB_VERIFY_FAILED";
             if (prefab == null || prefab.name != "P_" + request.AssetId ||
-                prefab.transform.childCount != 1 || !IsReset(prefab.transform))
+                prefab.transform.childCount != 1 ||
+                !UnityPrefabHierarchyUtility.IsReset(prefab.transform))
             {
                 return false;
             }
 
             Transform model = prefab.transform.GetChild(0);
-            if (model.name != "P_Model" || !IsReset(model) ||
+            if (model.name != "P_Model" || !UnityPrefabHierarchyUtility.IsReset(model) ||
                 GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(prefab) != 0)
             {
                 return false;
@@ -213,28 +206,6 @@ namespace PackageBuilder.UnityWorker.Editor
                     UnityEngine.Object.DestroyImmediate(animator);
                 }
             }
-        }
-
-        private static bool IsSafeReference(string value, string requiredFolder, string extension)
-        {
-            return !string.IsNullOrEmpty(value) && value.StartsWith("Assets/", StringComparison.Ordinal) &&
-                value.IndexOf(requiredFolder, StringComparison.Ordinal) >= 0 &&
-                value.EndsWith(extension, StringComparison.OrdinalIgnoreCase) &&
-                value.IndexOf('\\') < 0 && value.IndexOf(':') < 0 &&
-                value.IndexOf("/../", StringComparison.Ordinal) < 0;
-        }
-
-        private static void ResetTransform(Transform value)
-        {
-            value.localPosition = Vector3.zero;
-            value.localRotation = Quaternion.identity;
-            value.localScale = Vector3.one;
-        }
-
-        private static bool IsReset(Transform value)
-        {
-            return value.localPosition == Vector3.zero && value.localRotation == Quaternion.identity &&
-                value.localScale == Vector3.one;
         }
 
         [Serializable]
