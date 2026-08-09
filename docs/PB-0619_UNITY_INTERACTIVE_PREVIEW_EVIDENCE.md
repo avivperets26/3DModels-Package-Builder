@@ -5,7 +5,7 @@
 - Task: PB-0619 — Implement Unity interactive dark-studio preview shell.
 - Canonical branch: `feat/PB-0619-unity-interactive-preview`.
 - Publication branch: `test/PB-0617-unity-clean-reimport` under the approved combined cycle.
-- Status: `[ ]` / 🟡 **PROCESS**.
+- Status: `[x]` / 🟢 **DONE**.
 - Started: 2026-08-08.
 
 ## Runtime Interaction and Studio Contract
@@ -19,7 +19,8 @@ Runtime controls are:
 - Use arrow keys for keyboard orbit.
 - Press `R` to restore automatic bounds framing.
 - Press `L` to restore the approved key-light direction.
-- Press `H` or use the overlay button to hide/show all controls for clean capture.
+- Press `H` or use the overlay button to hide the main controls; a compact labelled `Show Controls`
+  button remains visible so pointer users can always restore the panel.
 - Use labelled yaw/pitch sliders and a reset button to adjust the key light.
 
 The generic overview template generates a deterministic radial near-black image with a subtly
@@ -48,11 +49,25 @@ engine integrations.
 - Automated tests verify that orbit, zoom, reset, and light controls do not mutate product position,
   rotation, or scale; clean reimport reports one renderer, one material, five textures, and zero
   findings.
+- A user follow-up identified that the original hidden state could only be recovered with the `H`
+  key. The PB-0701/PB-0702 publication cycle now adds a compact pointer-accessible restore control,
+  excludes its rectangle from orbit capture, and retains the keyboard shortcut. This is a narrowly
+  scoped UX enhancement; PB-0619's published completion evidence and contract ownership remain
+  unchanged.
+- The compact restore-control follow-up passed focused policy checks, the real Unity Editor/Play
+  integration beneath `artifacts/u/dee856f4`, clean package reimport, and the full Core CI suite.
 - Manual visual review is now available in the retained project
-  `artifacts/u/c22a6b24/p`; user visual acceptance remains pending.
+  `artifacts/u/c22a6b24/p`; the user visually accepted the error-free Play-mode result on
+  2026-08-09.
 - Repository baseline: 32/32 passed. Full nine-stage Core CI passed with all 2,282 tests passing.
 
-## Remaining Gates
+## Publication Completion
 
-Manual visual acceptance, user-controlled publication, successful required `main` CI, explicit
-confirmation, and next-task rollover remain.
+- Final task commit: `6d82a7d55be66f8db0d63af36070b88ebe616a3b`.
+- Published on the PB-0617 branch and merged through
+  [PR #74](https://github.com/avivperets26/3DModels-Package-Builder/pull/74) as
+  `73261cfdb578de968d8f72aa553742deab75eff8`.
+- Required exact-merge [main workflow run 31308970351](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31308970351)
+  succeeded.
+- The user explicitly confirmed completion and visually accepted the error-free Play-mode result
+  on 2026-08-09. No CI or quality exception was used.

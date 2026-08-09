@@ -32,6 +32,13 @@ These rules apply permanently to the entire `C:\Dev\PackageBuilder` tree unless 
 24. At the end of every task, Codex must report the changed files, test and validation results, suggested branch name, suggested commit message, and manual commands the user can run.
 25. Codex must leave each PB task `[ ]` and active in its own task branch. After successful `main` CI and explicit user confirmation make it logically complete, its `[x]`, 🟢 **DONE**, Active Work removal, and Completion Log row are recorded at the beginning of the next task branch.
 26. Pull requests are optional. A direct merge requires local validation, the task commit, task-branch push, merge into `main`, push of `main`, successful `main` CI, and explicit user confirmation; branch CI is not required when the direct branch push does not trigger it.
+27. Before adding a class, method, validator, state machine, or engine behavior, search for an existing implementation or contract that can be reused or extended.
+28. Keep domain rules, application orchestration, engine adapters, UI presentation, persistence, and external-process concerns in their documented layers; do not copy business rules into Unity, Unreal, WPF, CLI, or marketplace adapters.
+29. Prefer small cohesive types, composition, dependency injection, typed contracts, shared test vectors, and explicit adapter boundaries. Do not create god classes, unrelated utility collections, or speculative abstractions.
+30. Extract genuinely shared behavior when semantics and lifecycle match. Do not force unrelated behavior through a shared abstraction merely to reduce line count.
+31. Treat duplicated validation rules, state transitions, serialization rules, naming rules, and cross-engine preview semantics as defects unless a documented platform constraint requires a separate implementation.
+32. New or changed public/internal functionality must include concise XML/documentation comments that explain responsibility, invariants, side effects, and non-obvious platform constraints without restating the code.
+33. Every implementation handoff must report the reuse/duplication audit performed for the changed scope and identify any intentional duplication with its reason and follow-up owner.
 
 ## Public Repository Safeguards
 

@@ -5,7 +5,7 @@
 - Task: PB-0616 — Implement Unity logs, reference, and console validator.
 - Canonical branch: `feat/PB-0616-unity-validation`.
 - Publication branch: `feat/PB-0615-unitypackage-export` under the approved combined cycle.
-- Status: `[ ]` / 🟡 **PROCESS**.
+- Status: `[x]` / 🟢 **DONE**.
 - Started: 2026-08-08.
 
 ## Implemented Blocking Validation
@@ -63,7 +63,12 @@ a package-caused warning or error.
 - Corrected retained ignored evidence after the manual framing regression cycle:
   `artifacts/u/a7c04c07`.
 
-## Remaining Gates
+## Publication Completion
 
-The combined PB-0615/PB-0616 change still requires user-controlled commit/push/merge, successful
-required `main` CI, explicit completion confirmation, and next-task rollover.
+- Final task commit: `906645a4ccb78672eb6a73bdbb1e79a16b11d0a4`.
+- Published on the PB-0615 branch and merged through
+  [PR #73](https://github.com/avivperets26/3DModels-Package-Builder/pull/73) as
+  `22a59ab98693823d38de97d0d347c53a2adb2a76`.
+- Required exact-merge [main workflow run 31259425572](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31259425572)
+  succeeded.
+- The user explicitly confirmed completion on 2026-08-08. No CI or quality exception was used.

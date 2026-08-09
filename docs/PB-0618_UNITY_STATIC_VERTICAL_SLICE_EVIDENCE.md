@@ -5,7 +5,7 @@
 - Task: PB-0618 — Complete Unity static vertical slice.
 - Canonical branch: `test/PB-0618-unity-static-e2e`.
 - Publication branch: `test/PB-0617-unity-clean-reimport` under the approved combined cycle.
-- Status: `[ ]` / 🟡 **PROCESS**.
+- Status: `[x]` / 🟢 **DONE**.
 - Started: 2026-08-08.
 
 ## Implemented Composition
@@ -42,7 +42,12 @@ exposed at the destination.
   promoted release, and no staging directory remains after the same-volume atomic move.
 - Repository baseline: 32/32 passed. Full nine-stage Core CI passed with all 2,282 tests passing.
 
-## Remaining Gates
+## Publication Completion
 
-User-controlled publication, successful required `main` CI, explicit confirmation, and next-task
-rollover remain.
+- Final task commit: `6d82a7d55be66f8db0d63af36070b88ebe616a3b`.
+- Published on the PB-0617 branch and merged through
+  [PR #74](https://github.com/avivperets26/3DModels-Package-Builder/pull/74) as
+  `73261cfdb578de968d8f72aa553742deab75eff8`.
+- Required exact-merge [main workflow run 31308970351](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31308970351)
+  succeeded.
+- The user explicitly confirmed completion on 2026-08-09. No CI or quality exception was used.

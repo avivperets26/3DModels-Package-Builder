@@ -4,7 +4,7 @@
 
 - Task: PB-0615 — Implement exact Unity package export.
 - Canonical and publication branch: `feat/PB-0615-unitypackage-export`.
-- Status: `[ ]` / 🟡 **PROCESS**.
+- Status: `[x]` / 🟢 **DONE**.
 - Started: 2026-08-08.
 - Combined publication: PB-0616 under the explicitly approved, no-precedent branch-topology
   exception recorded in the implementation backlog.
@@ -62,7 +62,11 @@ inside the product root.
   payload checks for every file record. The complete rerun passed.
 - Generated evidence remains ignored beneath the repository `artifacts` root.
 
-## Remaining Gates
+## Publication Completion
 
-User-controlled commit, branch push, merge into and push of `main`, successful required `main` CI,
-explicit user completion confirmation, and next-task rollover remain.
+- Final task commit: `906645a4ccb78672eb6a73bdbb1e79a16b11d0a4`.
+- Merged through [PR #73](https://github.com/avivperets26/3DModels-Package-Builder/pull/73)
+  as `22a59ab98693823d38de97d0d347c53a2adb2a76`.
+- Required exact-merge [main workflow run 31259425572](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31259425572)
+  succeeded.
+- The user explicitly confirmed completion on 2026-08-08. No CI or quality exception was used.

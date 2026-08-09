@@ -28,6 +28,8 @@ $materialSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityUrpLitMa
     -Raw -Encoding UTF8
 $modelImporterSource = Get-Content -LiteralPath (Join-Path $editorRoot `
         'UnityStaticModelImporterPolicy.cs') -Raw -Encoding UTF8
+$rigImporterSource = Get-Content -LiteralPath (Join-Path $editorRoot `
+        'UnityRigModelImporterPolicy.cs') -Raw -Encoding UTF8
 $meshExtractorSource = Get-Content -LiteralPath (Join-Path $editorRoot `
         'UnityMeshAssetExtractor.cs') -Raw -Encoding UTF8
 $prefabSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityPrefabGenerator.cs') `
@@ -244,7 +246,8 @@ Invoke-Check 'Unity preview controller frames by bounds and never scales product
 Invoke-Check 'Unity preview implements the shared interactive dark-studio contract' {
     foreach ($value in @('ContractVersion = "1"', 'EventType.MouseDrag',
             'EventType.ScrollWheel', 'EventType.KeyDown', 'KeyCode.R', 'KeyCode.H', 'KeyCode.L',
-            'SetControlsVisible', 'SetKeyLightDirection', 'ResetKeyLight',
+            'SetControlsVisible', 'RestoreControls', 'RestoreControlsRect', 'Show Controls',
+            'Restore the 3D preview controls (H)', 'SetKeyLightDirection', 'ResetKeyLight',
             'MinimumPitchDegrees = -80f', 'MaximumPitchDegrees = 80f', 'OnGUI()',
             'Reset View', 'Reset Light', 'StudioBackground')) {
         if (-not $controllerSource.Contains($value)) {
@@ -405,6 +408,35 @@ Invoke-Check 'Unity static vertical slice composes both targets and promotes ato
     }
 }
 
+Invoke-Check 'Unity Generic rig importer policy is explicit and deterministic' {
+    foreach ($value in @('ModelImporterAnimationType.Generic',
+            'ModelImporterAvatarSetup.CreateFromThisModel', 'motionNodeName',
+            'preserveHierarchy', 'optimizeGameObjects', 'extraExposedTransformPaths',
+            'StringComparer.Ordinal', 'UNITY_GENERIC_RIG_VERIFY_FAILED')) {
+        if (-not $rigImporterSource.Contains($value)) {
+            throw "Missing Generic rig importer behavior: $value"
+        }
+    }
+}
+
+Invoke-Check 'Unity Humanoid import is opt-in, validated, and never silently downgraded' {
+    foreach ($value in @('HumanoidRequestedByManifest', 'HumanoidBoneMappings',
+            'HumanTrait.BoneName', 'avatar.isValid', 'avatar.isHuman',
+            'UNITY_HUMANOID_MANIFEST_OPT_IN_REQUIRED', 'UNITY_HUMANOID_MAPPING_INVALID',
+            'UNITY_HUMANOID_AVATAR_INVALID', 'ApproveGenericFallback',
+            'UsedApprovedFallback', 'Restore(request.ModelAssetReference, snapshot)')) {
+        if (-not $rigImporterSource.Contains($value)) {
+            throw "Missing Humanoid validation behavior: $value"
+        }
+    }
+    foreach ($value in @('humanoidWithoutManifestApproval', 'humanoidWithoutFallbackApproval',
+            'ApproveGenericFallback = true', 'TestGenericAndHumanoidRigImporterPolicies')) {
+        if (-not $testSource.Contains($value)) {
+            throw "Missing real Unity rig policy test: $value"
+        }
+    }
+}
+
 Invoke-Check 'Unity product policy sources are deterministic public-safe text' {
     $files = @(
         (Join-Path $editorRoot 'UnityProductFolderGenerator.cs'),
@@ -412,6 +444,7 @@ Invoke-Check 'Unity product policy sources are deterministic public-safe text' {
         (Join-Path $editorRoot 'UnityMetallicSmoothnessPacker.cs'),
         (Join-Path $editorRoot 'UnityUrpLitMaterialCompiler.cs'),
         (Join-Path $editorRoot 'UnityStaticModelImporterPolicy.cs'),
+        (Join-Path $editorRoot 'UnityRigModelImporterPolicy.cs'),
         (Join-Path $editorRoot 'UnityMeshAssetExtractor.cs'),
         (Join-Path $editorRoot 'UnityPrefabGenerator.cs'),
         (Join-Path $editorRoot 'UnityOverviewScenePipeline.cs'),

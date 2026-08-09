@@ -180,8 +180,11 @@ namespace PackageBuilder.Preview
             return true;
         }
 
-        /// <summary>Shows or hides the overlay so clean screenshots can be captured.</summary>
+        /// <summary>Shows or hides the main overlay while retaining a small restore affordance.</summary>
         public void SetControlsVisible(bool visible) => controlsVisible = visible;
+
+        /// <summary>Restores the main overlay from its compact, hidden state.</summary>
+        public void RestoreControls() => SetControlsVisible(true);
 
         /// <summary>Applies an absolute, bounded key-light direction without changing the product.</summary>
         public bool SetKeyLightDirection(float yawDegrees, float pitchDegrees)
@@ -323,10 +326,10 @@ namespace PackageBuilder.Preview
                 return;
             }
 
-            Rect overlay = OverlayRect();
+            Rect interactiveControls = controlsVisible ? OverlayRect() : RestoreControlsRect();
             if (currentEvent.type == EventType.MouseDown && currentEvent.button == 0)
             {
-                dragging = !controlsVisible || !overlay.Contains(currentEvent.mousePosition);
+                dragging = !interactiveControls.Contains(currentEvent.mousePosition);
                 if (dragging)
                 {
                     currentEvent.Use();
@@ -363,6 +366,13 @@ namespace PackageBuilder.Preview
             HandleNavigationEvent(Event.current);
             if (!controlsVisible)
             {
+                if (GUI.Button(
+                    RestoreControlsRect(),
+                    new GUIContent("Show Controls", "Restore the 3D preview controls (H)")))
+                {
+                    RestoreControls();
+                }
+
                 return;
             }
 
@@ -401,6 +411,8 @@ namespace PackageBuilder.Preview
         }
 
         private static Rect OverlayRect() => new(12f, 12f, 256f, 228f);
+
+        private static Rect RestoreControlsRect() => new(12f, 12f, 120f, 32f);
 
         [ContextMenu("Auto Frame Preview")]
         private void AutoFrameFromInspector() => AutoFrame();

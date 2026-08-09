@@ -650,6 +650,9 @@ Detection:
 Unity:
 
 - Generic rig by default; Humanoid only when explicitly selected and validated.
+- Generic is topology-neutral: articulated props and vehicles, quadrupeds, winged creatures, and
+  non-humanoid bipeds with tails use the same declared skeleton/root/skin contract rather than a
+  human-bone assumption.
 - SkinnedMeshRenderer prefab.
 - Skeleton hierarchy and weights validated.
 - No Animator Controller unless a runtime pose controller is requested.
@@ -657,6 +660,8 @@ Unity:
 Unreal:
 
 - Skeletal Mesh and Skeleton assets.
+- Ordinary Unreal skeletal import remains topology-neutral and does not depend on Unity Humanoid
+  mappings.
 - Reference-pose validation.
 - No empty animation assets.
 
@@ -672,6 +677,8 @@ Detection:
 Unity:
 
 - Generic or explicitly validated Humanoid rig.
+- Generic animation covers arbitrary declared bone hierarchies, including bows, vehicles, dragons,
+  dogs and other quadrupeds, wings, and tails.
 - Named clips extracted or defined from the manifest.
 - Loop settings applied per clip.
 - Animator Controller with one state per clip.
@@ -681,6 +688,8 @@ Unity:
 Unreal:
 
 - Skeletal Mesh, Skeleton, and Animation Sequence assets.
+- Skeletal and transform animation cover the same non-humanoid topology families without a
+  Humanoid-only branch.
 - Optional Animation Blueprint for preview and demonstration.
 - Clip duration, frame rate, root motion, and curve integrity checks.
 

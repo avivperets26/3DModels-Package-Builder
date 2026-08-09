@@ -4,7 +4,7 @@
 
 - Task: PB-0617 — Implement clean Unity package reimport.
 - Canonical and publication branch: `test/PB-0617-unity-clean-reimport`.
-- Status: `[ ]` / 🟡 **PROCESS**.
+- Status: `[x]` / 🟢 **DONE**.
 - Started: 2026-08-08.
 - Combined publication: PB-0618 and PB-0619 under the explicitly approved branch-topology
   exception in the implementation backlog.
@@ -40,7 +40,11 @@ asset references rather than local absolute paths.
 - Repository baseline: 32/32 passed. Full nine-stage Core CI passed; the Release build completed
   without warnings or errors and all 2,282 tests passed with none failed or skipped.
 
-## Remaining Gates
+## Publication Completion
 
-User-controlled commit and merge, successful required `main` CI, explicit user confirmation, and
-next-task rollover remain.
+- Final task commit: `6d82a7d55be66f8db0d63af36070b88ebe616a3b`.
+- Merged through [PR #74](https://github.com/avivperets26/3DModels-Package-Builder/pull/74)
+  as `73261cfdb578de968d8f72aa553742deab75eff8`.
+- Required exact-merge [main workflow run 31308970351](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31308970351)
+  succeeded.
+- The user explicitly confirmed completion on 2026-08-09. No CI or quality exception was used.
