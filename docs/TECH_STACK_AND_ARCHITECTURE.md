@@ -1973,15 +1973,24 @@ This prevents Unity- or Unreal-specific texture packing from becoming the canoni
 
 ## 19. Preview Architecture
 
-Preview generation has three layers:
+Preview generation and interactive product review have four layers:
 
-1. **Presentation specification** — camera roles, background, lighting intent, item visibility, and animation pose.
-2. **Engine renderer** — Unity or Unreal creates the image with final engine-native materials.
-3. **Media processor** — verifies dimensions, compresses within limits, and records hashes.
+1. **Presentation and interaction contract** — versioned engine-neutral camera roles, dark-studio theme, lighting intent, input actions, item selection, animation transport, control visibility, and accessibility labels/state.
+2. **Engine adapter** — reusable Unity components or Unreal Blueprint/C++ components translate the shared contract to engine APIs without redefining business rules.
+3. **Engine renderer** — Unity or Unreal renders the product with final engine-native materials and can hide interactive overlays for clean media capture.
+4. **Media processor and validator** — verifies dimensions, framing, exposure, visual-reference tolerance, interaction-state fixtures, compresses within limits, and records hashes.
 
 The preview system changes camera distance instead of scaling the product. Product transforms remain reset and real-world scale remains inspectable.
 
 Static models, animated products, item sets, and collections use different presentation strategies defined in the product plan.
+
+The default interactive camera maps left-button drag to bounded yaw/pitch orbit and mouse-wheel input to camera-distance zoom. Keyboard actions provide equivalent orbit, zoom, reset, item navigation, and animation transport. Input is ignored when a UI control owns focus, and pointer capture is released safely.
+
+The default studio theme is derived from the approved reference: a seamless, horizon-free near-black outer background, a soft brighter neutral centre behind the product, and bounded key/fill lighting that reveals form without altering material data. A compact accessible overlay can adjust and reset key-light direction. Theme values are typed and versioned rather than copied as unrelated Unity and Unreal constants.
+
+Sets and collections share one selection state with Previous, Next, direct-selection, item identity/index, and all-items overview actions. Animated products share one transport state with clip list/selection, play, pause/resume, replay, scrub, loop, current time, and duration. Unity and Unreal may use different engine APIs, but action names, state transitions, validation, defaults, and test vectors remain equivalent.
+
+The desktop application edits the shared preview specification and reviews rendered results. It does not host or duplicate engine runtime controllers. Cross-target reuse means sharing contracts, policies, state machines, fixtures, and acceptance tests; engine-specific code remains in the Unity and Unreal adapters. Customer packages contain only the minimal preview runtime components and assets required by their generated scene or map.
 
 ## 20. Documentation Architecture
 

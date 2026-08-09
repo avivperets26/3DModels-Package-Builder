@@ -467,6 +467,8 @@ namespace PackageBuilder.UnityWorker.Editor
                 PreviewControllerScriptReference = controllerScriptReference,
                 OutputBackgroundMaterialReference =
                     ModelTestRoot + "/Materials/M_StoneArch_OverviewBackground.mat",
+                OutputBackgroundTextureReference =
+                    ModelTestRoot + "/Textures/T_StoneArch_OverviewBackground.png",
                 OutputSceneReference = outputSceneReference,
             };
             UnityEngine.SceneManagement.Scene composedScene;
@@ -483,6 +485,10 @@ namespace PackageBuilder.UnityWorker.Editor
                 composedScene,
                 UnityOverviewSceneTemplateBuilder.OverviewRootName);
             var controller = root.GetComponent<PackageBuilder.Preview.PackageBuilderPreviewController>();
+            Require(PackageBuilder.Preview.PackageBuilderPreviewController.ContractVersion == "1",
+                "The Unity scene does not declare the approved preview contract version.");
+            Require(controller.KeyLight != null && controller.StudioBackground != null &&
+                controller.ControlsVisible, "Interactive studio references are incomplete.");
             Transform product = controller.PreviewTarget.GetChild(0);
             Transform[] productTransforms = product.GetComponentsInChildren<Transform>(true);
             Vector3[] positions = productTransforms.Select(value => value.localPosition).ToArray();
@@ -500,6 +506,21 @@ namespace PackageBuilder.UnityWorker.Editor
             Require(controller.Zoom(0.2f), "Overview zoom failed.");
             Require(controller.PreviewCamera.transform.position != cameraAfterOrbit,
                 "Overview zoom did not move the camera.");
+            Quaternion keyLightBefore = controller.KeyLight.transform.rotation;
+            Require(controller.SetKeyLightDirection(160f, 75f) &&
+                controller.KeyLight.transform.rotation != keyLightBefore,
+                "Overview key-light direction control failed.");
+            Require(controller.ResetKeyLight(), "Overview key-light reset failed.");
+            controller.SetControlsVisible(false);
+            Require(!controller.ControlsVisible, "Overview capture-mode controls did not hide.");
+            controller.SetControlsVisible(true);
+            Require(controller.ControlsVisible, "Overview controls did not restore.");
+            Require(controller.Orbit(0f, 1000f), "Overview bounded pitch orbit failed.");
+            Vector3 boundedOffset = controller.PreviewCamera.transform.position - framedBounds.center;
+            float boundedPitch = Mathf.Asin(boundedOffset.normalized.y) * Mathf.Rad2Deg;
+            Require(boundedPitch <= PackageBuilder.Preview.PackageBuilderPreviewController.MaximumPitchDegrees +
+                0.001f, "Overview pitch exceeded its approved upper bound.");
+            Require(controller.RefreshStudioBackground(), "Overview studio background did not refresh.");
             for (int index = 0; index < productTransforms.Length; index++)
             {
                 Require(productTransforms[index].localPosition == positions[index] &&
@@ -512,6 +533,13 @@ namespace PackageBuilder.UnityWorker.Editor
                 controllerScriptReference, "Overview scene references a non-product controller script.");
             Require(AssetDatabase.LoadAssetAtPath<SceneAsset>(outputSceneReference) != null,
                 "The product overview scene was not saved beneath the product root.");
+            Material backgroundMaterial = AssetDatabase.LoadAssetAtPath<Material>(
+                compositionRequest.OutputBackgroundMaterialReference);
+            Require(backgroundMaterial != null &&
+                backgroundMaterial.shader.name == "Universal Render Pipeline/Unlit" &&
+                AssetDatabase.GetAssetPath(backgroundMaterial.GetTexture("_BaseMap")) ==
+                    compositionRequest.OutputBackgroundTextureReference,
+                "The horizon-free dark-studio background is not product-local and unlit.");
 
             string readmeReference = ModelTestRoot + "/Documentation/README.txt";
             File.WriteAllText(ToPhysicalPath(readmeReference),
