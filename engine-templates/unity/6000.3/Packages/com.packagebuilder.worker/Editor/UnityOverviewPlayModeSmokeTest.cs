@@ -87,7 +87,7 @@ namespace PackageBuilder.UnityWorker.Editor
                     {
                         throw new InvalidOperationException("Capture-mode overlay did not hide.");
                     }
-                    controller.SetControlsVisible(true);
+                    controller.RestoreControls();
                     if (!controller.ControlsVisible || !controller.Orbit(0f, 1000f))
                     {
                         throw new InvalidOperationException("Accessible overlay or bounded orbit failed.");

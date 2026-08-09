@@ -2,6 +2,7 @@
 param(
     [string]$RepositoryRoot,
     [string]$UnityExecutable,
+    [string]$BlenderExecutable,
     [string]$ResultPointerPath
 )
 
@@ -25,6 +26,16 @@ if ([string]::IsNullOrWhiteSpace($UnityExecutable)) {
 $unityPath = [IO.Path]::GetFullPath($UnityExecutable)
 if (-not (Test-Path -LiteralPath $unityPath -PathType Leaf)) {
     throw "Approved Unity executable is unavailable: $unityPath"
+}
+$toolsRoot = Join-Path $repositoryRootPath 'tools'
+if ([string]::IsNullOrWhiteSpace($BlenderExecutable)) {
+    $BlenderExecutable = Join-Path $toolsRoot 'blender\5.0.0\blender.exe'
+}
+$blenderPath = [IO.Path]::GetFullPath($BlenderExecutable)
+if (-not (Test-Path -LiteralPath $blenderPath -PathType Leaf) -or
+    -not $blenderPath.StartsWith($toolsRoot + [IO.Path]::DirectorySeparatorChar,
+        [StringComparison]::OrdinalIgnoreCase)) {
+    throw "The approved repository-contained Blender executable is unavailable: $blenderPath"
 }
 
 & (Join-Path $repositoryRootPath 'scripts\Test-UnityProductPolicies.ps1') `
@@ -78,6 +89,25 @@ if (-not (Test-Path -LiteralPath $staticFbxFixture -PathType Leaf)) {
     throw "Static Unity FBX fixture is missing: $staticFbxFixture"
 }
 Copy-Item -LiteralPath $staticFbxFixture -Destination (Join-Path $modelTestRoot 'Source\StoneArch.fbx')
+
+# Generate a real armature-and-skin FBX so PB-0701 verifies Generic avatar, hierarchy, motion-root,
+# optimization, and exposed-transform behavior against Unity's FBX importer rather than a mock.
+$rigTestRoot = Join-Path $cloneRoot 'Assets\PBRigPolicyTests\Source'
+$rigFbxPath = Join-Path $rigTestRoot 'RiggedProp.fbx'
+$rigGenerationLog = Join-Path $runRoot 'blender-rig-fixture.log'
+New-Item -ItemType Directory -Path $rigTestRoot -Force | Out-Null
+$blenderArguments = @(
+    '--background',
+    '--factory-startup',
+    '--python', (Join-Path $repositoryRootPath 'tests\blender\engine\pb0701_generate_rig_fbx.py'),
+    '--', $rigFbxPath
+)
+$blenderProcess = Start-Process -FilePath $blenderPath -ArgumentList $blenderArguments `
+    -Wait -PassThru -NoNewWindow -RedirectStandardOutput $rigGenerationLog `
+    -RedirectStandardError (Join-Path $runRoot 'blender-rig-fixture-error.log')
+if ($blenderProcess.ExitCode -ne 0 -or -not (Test-Path -LiteralPath $rigFbxPath -PathType Leaf)) {
+    throw "The real PB-0701 rig fixture could not be generated. See $rigGenerationLog"
+}
 
 # Move the generic controller source and assembly definition into the generated product Scripts
 # folder before Unity imports the clone. Moving both assets with their metadata preserves stable
@@ -422,6 +452,7 @@ Write-Host 'Unity TextureImporter Editor tests: passed'
 Write-Host 'Unity metallic-smoothness exact pixel tests: passed'
 Write-Host 'Unity URP/Lit material compiler tests: passed'
 Write-Host 'Unity static ModelImporter Editor tests: passed'
+Write-Host 'Unity Generic and optional Humanoid rig importer Editor tests: passed'
 Write-Host 'Unity standalone mesh extraction Editor tests: passed'
 Write-Host 'Unity static prefab generation Editor tests: passed'
 Write-Host 'Unity generic overview scene template tests: passed'
@@ -446,6 +477,7 @@ $resultPointer = [ordered]@{
     package = $packageOutputPath
     packageManifest = $packageManifestPath
     scene = Join-Path $cloneRoot 'Assets\PBModelTests\Scenes\S_StoneArch_Overview.unity'
+    rigFixture = Join-Path $cloneRoot 'Assets\PBRigPolicyTests\Source\RiggedProp.fbx'
     integrationLog = $logPath
     cleanReimportLog = $cleanReimportLogPath
     cleanReimportResult = $cleanReimportResultPath

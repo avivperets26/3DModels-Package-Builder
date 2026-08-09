@@ -14,8 +14,10 @@ namespace PackageBuilder.UnityWorker.Editor
         private const string TextureTestRoot = "Assets/PBTextureTests";
         private const string MaterialTestRoot = "Assets/PBMaterialTests";
         private const string ModelTestRoot = "Assets/PBModelTests";
+        private const string RigPolicyTestRoot = "Assets/PBRigPolicyTests";
         private const string OverviewTemplateRoot = "Assets/PBOverviewTemplate";
         private const string ModelSourceReference = "Assets/PBModelTests/Source/StoneArch.fbx";
+        private const string RigSourceReference = "Assets/PBRigPolicyTests/Source/RiggedProp.fbx";
 
         public static void Run()
         {
@@ -26,6 +28,7 @@ namespace PackageBuilder.UnityWorker.Editor
                 TestMetallicSmoothnessPacking();
                 TestUrpLitMaterialCompilation();
                 TestStaticModelImportMeshExtractionAndPrefab();
+                TestGenericAndHumanoidRigImporterPolicies();
                 TestOverviewTemplateControllerAndComposition();
                 TestExactPackageExportAndValidation();
                 Debug.Log("PACKAGEBUILDER_UNITY_PRODUCT_TESTS_PASS");
@@ -54,6 +57,7 @@ namespace PackageBuilder.UnityWorker.Editor
                     AssetDatabase.DeleteAsset(TextureTestRoot);
                     AssetDatabase.DeleteAsset(MaterialTestRoot);
                     AssetDatabase.DeleteAsset(ModelTestRoot);
+                    AssetDatabase.DeleteAsset(RigPolicyTestRoot);
                     AssetDatabase.DeleteAsset(OverviewTemplateRoot);
                     AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
                 }
@@ -436,6 +440,80 @@ namespace PackageBuilder.UnityWorker.Editor
                 "Existing prefab outputs must fail closed.");
         }
 
+        private static void TestGenericAndHumanoidRigImporterPolicies()
+        {
+            var importer = AssetImporter.GetAtPath(RigSourceReference) as ModelImporter;
+            Require(importer != null, "The rig-policy FBX importer is missing.");
+            string rootPath = (importer.transformPaths ?? Array.Empty<string>())
+                .Where(path => !string.IsNullOrEmpty(path))
+                .OrderBy(path => path.Count(character => character == '/'))
+                .ThenBy(path => path, StringComparer.Ordinal)
+                .FirstOrDefault();
+            Require(!string.IsNullOrEmpty(rootPath), "The rig-policy FBX has no transform root.");
+
+            var genericRequest = new UnityRigImportRequest
+            {
+                ModelAssetReference = RigSourceReference,
+                Mode = UnityRigImportMode.Generic,
+                RootNodePath = rootPath,
+                PreserveHierarchy = true,
+                OptimizeGameObjects = true,
+                ExposedTransformPaths = new[] { rootPath },
+            };
+            UnityRigImportResult result;
+            string diagnostic;
+            Require(UnityRigModelImporterPolicy.TryApply(genericRequest, out result, out diagnostic),
+                diagnostic);
+            Require(result.AppliedMode == UnityRigImportMode.Generic &&
+                !result.UsedApprovedFallback && result.AvatarIsValid && !result.AvatarIsHuman,
+                "Generic rig import reported an incorrect outcome.");
+
+            var humanoidWithoutManifestApproval = new UnityRigImportRequest
+            {
+                ModelAssetReference = RigSourceReference,
+                Mode = UnityRigImportMode.Humanoid,
+                RootNodePath = rootPath,
+                PreserveHierarchy = true,
+                OptimizeGameObjects = true,
+                ExposedTransformPaths = new[] { rootPath },
+                HumanoidBoneMappings = new[] { new UnityHumanoidBoneMapping("Hips", rootPath) },
+            };
+            Require(!UnityRigModelImporterPolicy.TryApply(
+                humanoidWithoutManifestApproval, out result, out diagnostic) &&
+                diagnostic == "UNITY_HUMANOID_MANIFEST_OPT_IN_REQUIRED",
+                "Humanoid import must require explicit manifest selection.");
+
+            var humanoidWithoutFallbackApproval = new UnityRigImportRequest
+            {
+                ModelAssetReference = RigSourceReference,
+                Mode = UnityRigImportMode.Humanoid,
+                RootNodePath = rootPath,
+                PreserveHierarchy = true,
+                OptimizeGameObjects = true,
+                ExposedTransformPaths = new[] { rootPath },
+                HumanoidRequestedByManifest = true,
+                HumanoidBoneMappings = new[] { new UnityHumanoidBoneMapping("Hips", rootPath) },
+            };
+            Require(!UnityRigModelImporterPolicy.TryApply(
+                humanoidWithoutFallbackApproval, out result, out diagnostic),
+                "An invalid Humanoid avatar must fail closed without fallback approval.");
+
+            humanoidWithoutFallbackApproval.ApproveGenericFallback = true;
+            Require(UnityRigModelImporterPolicy.TryApply(
+                humanoidWithoutFallbackApproval, out result, out diagnostic), diagnostic);
+            Require(result.RequestedMode == UnityRigImportMode.Humanoid &&
+                result.AppliedMode == UnityRigImportMode.Generic && result.UsedApprovedFallback,
+                "Explicitly approved Generic fallback was not reported exactly.");
+
+            importer = AssetImporter.GetAtPath(RigSourceReference) as ModelImporter;
+            Require(importer != null && importer.animationType == ModelImporterAnimationType.Generic &&
+                importer.optimizeGameObjects && importer.preserveHierarchy && !importer.importAnimation,
+                "Final Generic fallback settings are incorrect.");
+            Require((importer.extraExposedTransformPaths ?? Array.Empty<string>())
+                .SequenceEqual(new[] { rootPath }, StringComparer.Ordinal),
+                "Exposed transform paths are not deterministic.");
+        }
+
         private static void TestOverviewTemplateControllerAndComposition()
         {
             AssetDatabase.DeleteAsset(OverviewTemplateRoot);
@@ -513,7 +591,7 @@ namespace PackageBuilder.UnityWorker.Editor
             Require(controller.ResetKeyLight(), "Overview key-light reset failed.");
             controller.SetControlsVisible(false);
             Require(!controller.ControlsVisible, "Overview capture-mode controls did not hide.");
-            controller.SetControlsVisible(true);
+            controller.RestoreControls();
             Require(controller.ControlsVisible, "Overview controls did not restore.");
             Require(controller.Orbit(0f, 1000f), "Overview bounded pitch orbit failed.");
             Vector3 boundedOffset = controller.PreviewCamera.transform.position - framedBounds.center;

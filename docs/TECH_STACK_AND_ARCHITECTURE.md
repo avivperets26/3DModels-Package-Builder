@@ -1502,6 +1502,27 @@ deterministically ordered `UNITY_VALIDATION_*` codes containing logical asset re
 Real invalid prefabs, materials, and scenes prove the material, texture-GUID, script-GUID,
 duplicate-path, placement, compilation, and console gates.
 
+PB-0701 and PB-0702 share one transactional `UnityRigModelImporterPolicy`. Generic is the explicit
+default rig type and never an implicit Humanoid fallback. A request owns the exact motion root,
+preserve-hierarchy and optimization choices, and an ordinal set of exposed transforms that must
+already exist in Unity's imported hierarchy. The worker saves, reimports, reloads, and verifies the
+complete importer state; failed changes restore the prior snapshot.
+
+Generic and skeletal processing is topology-neutral. Dragons, dogs and other quadrupeds, winged
+creatures, non-humanoid bipeds with tails, bows, vehicles, and other articulated props use the
+same inspected skeleton, skin, transform-animation, clip, and validation contracts. Unity imports
+these as Generic; Unreal imports them as ordinary skeletal or transform-animated assets. Humanoid
+mapping is an optional human-retargeting adapter and must never be required for arbitrary rigs.
+PB-0714 owns a reusable procedural topology matrix and Unity conformance; PB-1214 reuses the same
+matrix for Unreal conformance so engine adapters cannot drift into topology-specific assumptions.
+
+Humanoid requires separate manifest opt-in and a unique mapping from reviewed Unity human-bone
+identities to uniquely resolved source bones. A Human import succeeds only when the single Avatar
+generated as an FBX sub-asset is both valid and human. Invalid mapping or Avatar state fails closed.
+Generic fallback is permitted only by a separate explicit approval and is reported as a fallback,
+never disguised as the requested result. A contained Blender-generated armature/skinned FBX drives
+real Unity tests for Generic configuration, invalid-Humanoid rollback, and approved fallback.
+
 Unity integration evidence uses the short contained layout `artifacts/u/<id>/p`. Before launching
 Unity, the harness checks a reviewed worst-case pinned-package path against a 248-character legacy
 compatibility ceiling. After the Editor tests populate the project, a second clean Unity process
@@ -1991,6 +2012,25 @@ The default studio theme is derived from the approved reference: a seamless, hor
 Sets and collections share one selection state with Previous, Next, direct-selection, item identity/index, and all-items overview actions. Animated products share one transport state with clip list/selection, play, pause/resume, replay, scrub, loop, current time, and duration. Unity and Unreal may use different engine APIs, but action names, state transitions, validation, defaults, and test vectors remain equivalent.
 
 The desktop application edits the shared preview specification and reviews rendered results. It does not host or duplicate engine runtime controllers. Cross-target reuse means sharing contracts, policies, state machines, fixtures, and acceptance tests; engine-specific code remains in the Unity and Unreal adapters. Customer packages contain only the minimal preview runtime components and assets required by their generated scene or map.
+
+When the Unity control panel is hidden, a compact labelled restore control remains visible and the
+`H` shortcut remains available. Pointer navigation excludes that restore control from orbit capture,
+so the user cannot become trapped in capture mode. Unreal must conform to the same visible recovery
+state through the PB-0913 shared contract and its engine adapter.
+
+## 19.1 Reuse and Separation Policy
+
+Repository work searches for an existing contract or implementation before introducing another.
+Canonical validation, naming, serialization, state-machine, and orchestration rules live in shared
+Domain, Contracts, or Application components; Unity, Unreal, WPF, CLI, persistence, marketplace,
+and process layers translate those rules to their platform APIs without redefining them.
+
+Reuse is based on matching semantics and lifecycle, not on superficial similarity. Cohesive types,
+composition, dependency injection, and shared test vectors are preferred over inheritance-heavy
+frameworks, god classes, or miscellaneous utility modules. A platform-specific duplicate requires
+a documented constraint and paired conformance tests. PB-1816 will add a pinned free duplication
+baseline and architecture regression gates; until then every task records a focused reuse and
+duplication audit for its changed scope.
 
 ## 20. Documentation Architecture
 

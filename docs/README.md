@@ -12,6 +12,7 @@ This index links the approved product, architecture, quality, workflow, and arch
 - [Technology stack and architecture](TECH_STACK_AND_ARCHITECTURE.md)
 - [Implementation backlog](IMPLEMENTATION_BACKLOG.md)
 - [Quality and release gates](QUALITY_AND_RELEASE_GATES.md)
+- [Project engineering reuse and separation skill](../skills/package-builder-engineering/SKILL.md)
 
 ## Architecture Decision Records
 
@@ -135,6 +136,8 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 - [PB-0617 clean Unity package reimport evidence](PB-0617_UNITY_CLEAN_REIMPORT_EVIDENCE.md)
 - [PB-0618 Unity static vertical-slice evidence](PB-0618_UNITY_STATIC_VERTICAL_SLICE_EVIDENCE.md)
 - [PB-0619 Unity interactive dark-studio preview evidence](PB-0619_UNITY_INTERACTIVE_PREVIEW_EVIDENCE.md)
+- [PB-0701 Unity Generic rig importer evidence](PB-0701_UNITY_GENERIC_RIG_EVIDENCE.md)
+- [PB-0702 optional Unity Humanoid policy evidence](PB-0702_UNITY_HUMANOID_POLICY_EVIDENCE.md)
 
 ## Dependency and Licence Records
 

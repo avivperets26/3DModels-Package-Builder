@@ -110,6 +110,7 @@ $expectedWorkerPackageFiles = @(
     'Packages/com.packagebuilder.worker/Editor/UnityMetallicSmoothnessPacker.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityUrpLitMaterialCompiler.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityStaticModelImporterPolicy.cs',
+    'Packages/com.packagebuilder.worker/Editor/UnityRigModelImporterPolicy.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityMeshAssetExtractor.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityPrefabGenerator.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityProductEditorIntegrationTests.cs',

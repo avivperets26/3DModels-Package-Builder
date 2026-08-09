@@ -158,11 +158,28 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0615 | 🟡 **PROCESS** | `feat/PB-0615-unitypackage-export` | Unity Target Engineering for local work; user for Git gates | 2026-08-08 | Exact product-only export planning and real `.unitypackage` creation pass with product-local scene/material/texture dependencies and deterministic archive verification. | User-controlled combined publication, successful required `main` CI, explicit confirmation, and next-task rollover remain. |
-| PB-0616 | 🟡 **PROCESS** | `feat/PB-0616-unity-validation` | Unity Target Engineering for local work; user for Git gates | 2026-08-08 | Real Unity validation blocks broken scripts/materials/textures/GUIDs, duplicate or misplaced files, compilation failures, and package-caused warnings/errors. | The combined PB-0615/PB-0616 publication gates remain. |
-| PB-0617 | 🟡 **PROCESS** | `test/PB-0617-unity-clean-reimport` | Unity Target Engineering for local work; user for Git gates | 2026-08-08 | Corrected real Unity export, fresh-template package import, scene/prefab/material/texture/reference validation, camera render, Play mode, structured result, reopen, repository baseline 32/32, and full Core CI all pass. | Combined publication, required `main` CI, explicit confirmation, and rollover remain. |
-| PB-0618 | 🟡 **PROCESS** | `test/PB-0618-unity-static-e2e` | Target Integration Engineering for local work; user for Git gates | 2026-08-08 | The retained StoneArch run produced validated portable and Unity releases, reports/logs, aggregate hashes, zero findings, and an eight-file release through atomic same-volume promotion; full Core CI passes. | Combined publication through `test/PB-0617-unity-clean-reimport`, required `main` CI, explicit confirmation, and rollover remain. |
-| PB-0619 | 🟡 **PROCESS** | `feat/PB-0619-unity-interactive-preview` | Unity Preview Engineering for local work; user for Git gates | 2026-08-08 | Corrected real Editor, Play mode, clean reimport, camera-render, repository baseline, and Core CI checks pass after replacing legacy Input reads with active IMGUI-event handling; product transforms remain unchanged. | Manual visual acceptance, combined publication through `test/PB-0617-unity-clean-reimport`, shared-contract follow-up ownership, required `main` CI, explicit confirmation, and rollover remain. |
+| PB-0701 | 🟡 **PROCESS** | `feat/PB-0701-unity-generic-rig` | Unity Rig Engineering for local work; user for Git gates | 2026-08-09 | Deterministic topology-neutral Generic rig policy passed a real contained-Blender FBX and Unity importer transaction; the user confirmed the expected Rig Inspector settings and no Console errors; Unity product policies passed 28/28, repository baseline passed 32/32, real Unity integration passed beneath `artifacts/u/dee856f4`, and full Core CI passed all 2,282 tests. | User-controlled combined publication, required `main` CI, explicit confirmation, and rollover remain. |
+| PB-0702 | 🟡 **PROCESS** | `feat/PB-0702-unity-humanoid-policy` | Unity Rig Engineering for local work; user for Git gates | 2026-08-09 | Manifest-only Humanoid validation, rollback, and explicitly approved Generic fallback passed real Unity integration; Humanoid remains optional and arbitrary creature, prop, wing, tail, and vehicle rigs stay on the Generic path. Unity product policies passed 28/28, repository baseline passed 32/32, and full Core CI passed all 2,282 tests. | The combined PB-0701/PB-0702 publication, required `main` CI, confirmation, and rollover gates remain. |
+
+### PB-0701/PB-0702 Combined Publication Exception
+
+- **Approved:** 2026-08-09 by the user's explicit request to implement both tasks as the next work
+  cycle.
+- **Publication branch:** `feat/PB-0701-unity-generic-rig`.
+- **Exact scope:** deterministic Generic rig import settings; manifest-gated Humanoid mapping and
+  avatar validation; explicitly approved Generic fallback; focused validators; real Unity
+  integration; PB-0615 through PB-0619 rollover; the user-requested PB-0619 compact restore-control
+  enhancement; reusable-engineering governance and project skill guidance; topology-neutral rig
+  roadmap coverage; and genuinely affected documentation.
+- **Reason:** PB-0702 directly depends on PB-0701 and both policies configure the same Unity
+  `ModelImporter` rig boundary.
+- **Independence retained:** both tasks keep their canonical IDs, branches, acceptance boundaries,
+  lifecycle states, evidence documents, and eventual Completion Log rows.
+- **Completion:** both remain `[ ]` / 🟡 **PROCESS** until the combined implementation is committed,
+  pushed, merged into and pushed on `main`, required `main` CI succeeds, the user explicitly
+  confirms completion, and rollover is synchronized on the next task branch.
+- **No precedent:** this exact branch-topology exception waives no dependency, test, engine,
+  quality, CI, security, documentation, or completion gate.
 
 ### PB-0617/PB-0618/PB-0619 Combined Publication Exception
 
@@ -1435,6 +1452,11 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0612 | `feat/PB-0612-unity-overview-scene` | `dceb8838117c760a276dc2c1acbf0c4171af25b0` | [#72](https://github.com/avivperets26/3DModels-Package-Builder/pull/72) | 2026-08-08 | Published with PB-0613/PB-0614 under the approved combined exception and merged as `04de23b5204a64ad57426273991f82ce2649db40`; required exact-merge [main workflow run 31254437622](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31254437622) succeeded. No CI or quality exception was used; the user explicitly confirmed completion and manual Unity scene inspection. |
 | PB-0613 | `feat/PB-0613-unity-preview-controller` | `dceb8838117c760a276dc2c1acbf0c4171af25b0` | [#72](https://github.com/avivperets26/3DModels-Package-Builder/pull/72) | 2026-08-08 | Published on the PB-0612 branch with PB-0612/PB-0614 under the approved combined exception and merged as `04de23b5204a64ad57426273991f82ce2649db40`; required exact-merge [main workflow run 31254437622](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31254437622) succeeded. No CI or quality exception was used; the user explicitly confirmed completion and error-free Play mode. |
 | PB-0614 | `feat/PB-0614-unity-scene-composition` | `dceb8838117c760a276dc2c1acbf0c4171af25b0` | [#72](https://github.com/avivperets26/3DModels-Package-Builder/pull/72) | 2026-08-08 | Published on the PB-0612 branch with PB-0612/PB-0613 under the approved combined exception and merged as `04de23b5204a64ad57426273991f82ce2649db40`; required exact-merge [main workflow run 31254437622](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31254437622) succeeded. No CI or quality exception was used; the user explicitly confirmed completion and the intended single-product scene. |
+| PB-0615 | `feat/PB-0615-unitypackage-export` | `906645a4ccb78672eb6a73bdbb1e79a16b11d0a4` | [#73](https://github.com/avivperets26/3DModels-Package-Builder/pull/73) | 2026-08-08 | Published with PB-0616 under the approved combined exception and merged as `22a59ab98693823d38de97d0d347c53a2adb2a76`; required exact-merge [main workflow run 31259425572](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31259425572) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. |
+| PB-0616 | `feat/PB-0616-unity-validation` | `906645a4ccb78672eb6a73bdbb1e79a16b11d0a4` | [#73](https://github.com/avivperets26/3DModels-Package-Builder/pull/73) | 2026-08-08 | Published on the PB-0615 branch under the approved combined exception and merged as `22a59ab98693823d38de97d0d347c53a2adb2a76`; required exact-merge [main workflow run 31259425572](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31259425572) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. |
+| PB-0617 | `test/PB-0617-unity-clean-reimport` | `6d82a7d55be66f8db0d63af36070b88ebe616a3b` | [#74](https://github.com/avivperets26/3DModels-Package-Builder/pull/74) | 2026-08-09 | Published with PB-0618/PB-0619 under the approved combined exception and merged as `73261cfdb578de968d8f72aa553742deab75eff8`; required exact-merge [main workflow run 31308970351](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31308970351) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. |
+| PB-0618 | `test/PB-0618-unity-static-e2e` | `6d82a7d55be66f8db0d63af36070b88ebe616a3b` | [#74](https://github.com/avivperets26/3DModels-Package-Builder/pull/74) | 2026-08-09 | Published on the PB-0617 branch with PB-0617/PB-0619 under the approved combined exception and merged as `73261cfdb578de968d8f72aa553742deab75eff8`; required exact-merge [main workflow run 31308970351](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31308970351) succeeded. No CI or quality exception was used; the user explicitly confirmed completion. |
+| PB-0619 | `feat/PB-0619-unity-interactive-preview` | `6d82a7d55be66f8db0d63af36070b88ebe616a3b` | [#74](https://github.com/avivperets26/3DModels-Package-Builder/pull/74) | 2026-08-09 | Published on the PB-0617 branch with PB-0617/PB-0618 under the approved combined exception and merged as `73261cfdb578de968d8f72aa553742deab75eff8`; required exact-merge [main workflow run 31308970351](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31308970351) succeeded. No CI or quality exception was used; the user explicitly confirmed completion and visually accepted the error-free Unity Play-mode preview. |
 
 ## 5. Milestones
 
@@ -1987,27 +2009,27 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0611 through PB-0613
   - Done when: exactly the intended product is under `PreviewTarget`, scene assets save to the publisher root, and Play mode has no errors.
 
-- [ ] **PB-0615 — Implement exact Unity package export** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0615 — Implement exact Unity package export** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0615-unitypackage-export`
   - Depends on: PB-0605, PB-0614
   - Done when: export contains only product, documentation, scene, required scripts, `.meta` files, and dependencies; no templates or unrelated assets.
 
-- [ ] **PB-0616 — Implement Unity logs, reference, and console validator** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0616 — Implement Unity logs, reference, and console validator** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0616-unity-validation`
   - Depends on: PB-0614, PB-0615
   - Done when: missing scripts/materials/textures, compile errors, package-caused warnings, broken GUIDs, duplicate files, and incorrect paths block release.
 
-- [ ] **PB-0617 — Implement clean Unity package reimport** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0617 — Implement clean Unity package reimport** — **P0** — 🟢 **DONE**
   - Branch: `test/PB-0617-unity-clean-reimport`
   - Depends on: PB-0615, PB-0616
   - Done when: exported package imports into a fresh project, scene opens, prefab renders, material references resolve, and tests return structured results.
 
-- [ ] **PB-0618 — Complete Unity static vertical slice** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0618 — Complete Unity static vertical slice** — **P0** — 🟢 **DONE**
   - Branch: `test/PB-0618-unity-static-e2e`
   - Depends on: PB-0213, PB-0507, PB-0617, PB-0619
   - Done when: one static source produces portable and Unity releases, overview scene, validation report, and atomic promotion.
 
-- [ ] **PB-0619 — Implement Unity interactive dark-studio preview shell** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0619 — Implement Unity interactive dark-studio preview shell** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0619-unity-interactive-preview`
   - Depends on: PB-0613, PB-0614, PB-0913
   - Done when: the exported overview scene implements the shared contract with left-drag bounded yaw/pitch orbit, mouse-wheel distance zoom, keyboard/reset equivalents, an approved seamless horizon-free near-black background with soft brighter centre, adjustable/resettable key-light direction through a minimal accessible overlay, hideable controls for capture, and tests proving no product transform or scale mutation, missing references, editor-only dependency, or Play-mode error.
@@ -2020,12 +2042,12 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** Unity correctly handles rigs without animations and rigs with one or more animations.
 
-- [ ] **PB-0701 — Implement Unity Generic rig importer policy** — **P0**
+- [ ] **PB-0701 — Implement Unity Generic rig importer policy** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0701-unity-generic-rig`
   - Depends on: PB-0407, PB-0609
   - Done when: Generic rig, root node, hierarchy, optimization, exposed transforms, and avatar settings are deterministic.
 
-- [ ] **PB-0702 — Implement optional Humanoid validation policy** — **P1**
+- [ ] **PB-0702 — Implement optional Humanoid validation policy** — **P1** — 🟡 **PROCESS**
   - Branch: `feat/PB-0702-unity-humanoid-policy`
   - Depends on: PB-0701
   - Done when: Humanoid is allowed only by manifest and a valid avatar mapping; failures fall back only with explicit user approval.
@@ -2084,6 +2106,11 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Branch: `test/PB-0713-unity-multi-clip`
   - Depends on: PB-0710
   - Done when: multiple clips with mixed loop settings generate correct controller states and survive clean reimport.
+
+- [ ] **PB-0714 — Validate Unity arbitrary Generic rig topology matrix** — **P0**
+  - Branch: `test/PB-0714-unity-generic-topologies`
+  - Depends on: PB-0617, PB-0703, PB-0705, PB-0710
+  - Done when: reusable redistribution-safe procedural fixtures cover articulated mechanical rigs such as bows and vehicles, quadrupeds with tails, winged creatures, and non-humanoid bipeds with tails; each imports as Generic without a Humanoid mapping, preserves declared roots, hierarchy, skin weights and clips, renders representative deformation, survives clean reimport, and emits stable findings for invalid multi-root or binding data.
 
 **E07 exit:** M4 is complete.
 
@@ -2444,6 +2471,11 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Branch: `test/PB-1213-fab-unreal-release-e2e`
   - Depends on: PB-1006, PB-1115, PB-1209 through PB-1212
   - Done when: all five cases produce Unreal ZIPs that pass current Fab requirements and clean reopen.
+
+- [ ] **PB-1214 — Validate Unreal arbitrary skeletal rig topology matrix** — **P0**
+  - Branch: `test/PB-1214-unreal-skeletal-topologies`
+  - Depends on: PB-0714, PB-1114, PB-1202, PB-1204, PB-1206
+  - Done when: Unreal reuses the approved topology matrix for articulated mechanical rigs, quadrupeds with tails, winged creatures, and non-humanoid bipeds with tails; skeletal meshes, skeletons and Animation Sequences preserve declared roots, hierarchy, skin weights and representative deformation, clean reopen passes, and no Humanoid-only assumption exists.
 
 **E12 exit:** M7 is complete.
 
@@ -2824,8 +2856,14 @@ E18 appears before E17 in execution order because the quality gate was added aft
 - [ ] **PB-1815 — Implement the fail-closed release-gate evaluator and evidence bundle** — **P0**
   - Branch: `feat/PB-1815-release-gate-evidence`
   - Owner: Release and Quality Engineering
-  - Depends on: PB-1608, PB-1611, PB-1613, PB-1801 through PB-1814
+  - Depends on: PB-1608, PB-1611, PB-1613, PB-1801 through PB-1814, PB-1816
   - Done when: one documented free local/self-hosted command validates evidence schema, commit/tool identity, freshness, traceability, required tests/engine fixtures, coverage, mutation, vulnerabilities, performance budgets, accessibility, installer lifecycle, package integrity, and clean import/reopen; automated negative tests prove every REL-001 through REL-008 condition blocks release; exceptions record requirement, risk, scope, explicit user approval, expiry, and follow-up; the evidence bundle is complete and reviewable; and the evaluator cannot commit, push, merge, tag, create a pull request, publish, or release automatically.
+
+- [ ] **PB-1816 — Enforce reuse, duplication, and separation-of-concerns quality gates** — **P0**
+  - Branch: `test/PB-1816-reuse-duplication-gates`
+  - Owner: Architecture and Build Engineering
+  - Depends on: PB-1814
+  - Done when: a pinned free local duplication analysis establishes a reviewed baseline and blocks regressions; architecture tests keep domain, application, UI, persistence, process, marketplace, Unity, and Unreal responsibilities separated; duplicated business rules and cross-engine state semantics are replaced by typed contracts or documented exceptions; representative negative fixtures prove the gates fail; and the review checklist records reuse searches, intentional duplication, and extraction decisions.
 
 **E18 exit:** Every QUALITY_AND_RELEASE_GATES requirement maps to an owned completed task and concrete passing evidence, and the fail-closed release evaluator passes through the free local or self-hosted workflow.
 
@@ -2842,12 +2880,12 @@ E18 appears before E17 in execution order because the quality gate was added aft
 
 - [ ] **PB-1702 — Run full rigged-no-animation release acceptance** — **P0**
   - Branch: `release/PB-1702-rigged-acceptance`
-  - Depends on: PB-0711, PB-1209, PB-1701
+  - Depends on: PB-0711, PB-0714, PB-1209, PB-1214, PB-1701
   - Done when: all targets contain valid rigs and no unintended animation/controller assets.
 
 - [ ] **PB-1703 — Run full animated-product release acceptance** — **P0**
   - Branch: `release/PB-1703-animated-acceptance`
-  - Depends on: PB-0712, PB-1210, PB-1701
+  - Depends on: PB-0712, PB-0714, PB-1210, PB-1214, PB-1701
   - Done when: one-shot and loop fixtures plus Silverwing preserve rigs, motion, materials, previews, and documentation in all targets.
 
 - [ ] **PB-1704 — Run full item-set release acceptance** — **P0**

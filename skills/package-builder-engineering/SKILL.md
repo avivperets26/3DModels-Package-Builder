@@ -1,0 +1,37 @@
+---
+name: package-builder-engineering
+description: Apply Package Builder's repository-specific architecture, reuse, documentation, validation, and manual-Git workflow when implementing or reviewing work under C:\Dev\PackageBuilder.
+---
+
+# Package Builder Engineering
+
+Use this skill for implementation, review, refactoring, or roadmap work in the Package Builder
+repository.
+
+## Required workflow
+
+1. Read `/AGENTS.md` completely, then read the affected plan, architecture, backlog, and quality
+   sections before changing files.
+2. Confirm the current branch, working-tree state, active PB task, dependencies, and rollover state.
+3. Search for existing types, functions, policies, validators, state machines, fixtures, and test
+   vectors before adding behavior.
+4. Put canonical rules in the documented Domain, Contracts, or Application boundary. Keep WPF,
+   CLI, Unity, Unreal, persistence, marketplace, and process code as adapters.
+5. Reuse only when semantics, ownership, error behavior, and lifecycle match. Prefer composition and
+   cohesive types; avoid speculative abstractions, god classes, and miscellaneous utility modules.
+6. Add concise comments for responsibilities, invariants, side effects, and non-obvious engine or
+   security constraints. Do not narrate self-evident statements.
+7. Add focused tests plus architecture or conformance tests when behavior crosses a boundary.
+8. Run the narrow tests first, then the repository-required validation proportional to the change.
+9. Synchronize only genuinely affected documentation and lifecycle evidence.
+10. Report the reuse/duplication audit, intentional duplicates, validation evidence, and manual Git
+    handoff. Never stage, commit, push, merge, or publish without exact user authorization.
+
+## Reuse audit questions
+
+- Does an equivalent canonical rule already exist?
+- Would extraction reduce real duplication without coupling unrelated platform behavior?
+- Can Unity and Unreal share a typed contract or test vector while keeping engine calls separate?
+- Is the class or method responsible for one cohesive concern?
+- Are errors structured, deterministic, and tested at the owning boundary?
+- Is any remaining duplication justified by a documented platform constraint?

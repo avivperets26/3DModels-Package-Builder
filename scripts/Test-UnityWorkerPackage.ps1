@@ -63,6 +63,7 @@ $expectedFiles = @(
     'Editor/UnityMetallicSmoothnessPacker.cs',
     'Editor/UnityUrpLitMaterialCompiler.cs',
     'Editor/UnityStaticModelImporterPolicy.cs',
+    'Editor/UnityRigModelImporterPolicy.cs',
     'Editor/UnityMeshAssetExtractor.cs',
     'Editor/UnityPrefabGenerator.cs',
     'Editor/UnityProductEditorIntegrationTests.cs',
