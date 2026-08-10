@@ -128,7 +128,9 @@ namespace PackageBuilder.UnityWorker.Editor
                 background.GetComponent<Renderer>().sharedMaterial = backgroundMaterial;
 
                 var controller = root.AddComponent<PackageBuilderPreviewController>();
+                root.AddComponent<PackageBuilderAnimationTransport>();
                 controller.Configure(previewTarget.transform, previewCamera, keyLight, background.transform);
+                controller.ConfigureAnimation(null);
 
                 if (!EditorSceneManager.SaveScene(scene, request.OutputSceneReference) ||
                     !VerifyTemplate(scene, out diagnosticCode))
@@ -169,9 +171,12 @@ namespace PackageBuilder.UnityWorker.Editor
             Transform previewTarget = FindUniqueChild(root.transform, PreviewTargetName);
             Camera previewCamera = FindUniqueChild(root.transform, CameraName)?.GetComponent<Camera>();
             PackageBuilderPreviewController controller = root.GetComponent<PackageBuilderPreviewController>();
+            PackageBuilderAnimationTransport transport =
+                root.GetComponent<PackageBuilderAnimationTransport>();
             bool valid = previewTarget != null && previewTarget.childCount == 0 &&
-                previewCamera != null && controller != null &&
+                previewCamera != null && controller != null && transport != null &&
                 controller.PreviewTarget == previewTarget && controller.PreviewCamera == previewCamera &&
+                controller.AnimationTransport == transport && !transport.Available &&
                 controller.StudioBackground == FindUniqueChild(root.transform, BackgroundName) &&
                 controller.KeyLight == FindUniqueChild(root.transform, KeyLightName)?.GetComponent<Light>() &&
                 FindUniqueChild(root.transform, FillLightName)?.GetComponent<Light>() != null &&
@@ -400,6 +405,13 @@ namespace PackageBuilder.UnityWorker.Editor
 
                 product.transform.SetParent(previewTarget, false);
                 UnityOverviewSceneTemplateBuilder.Reset(product.transform);
+                Animator[] animators = product.GetComponentsInChildren<Animator>(true);
+                if (animators.Length > 1)
+                {
+                    diagnosticCode = "UNITY_OVERVIEW_COMPOSITION_ANIMATOR_COUNT_INVALID";
+                    return false;
+                }
+                controller.ConfigureAnimation(animators.Length == 1 ? animators[0] : null);
                 if (!controller.AutoFrame())
                 {
                     diagnosticCode = "UNITY_OVERVIEW_COMPOSITION_BOUNDS_MISSING";
@@ -460,6 +472,7 @@ namespace PackageBuilder.UnityWorker.Editor
             Transform product = previewTarget.GetChild(0);
             GameObject source = PrefabUtility.GetCorrespondingObjectFromSource(product.gameObject);
             var controller = root.GetComponent<PackageBuilderPreviewController>();
+            var transport = root.GetComponent<PackageBuilderAnimationTransport>();
             MonoScript controllerScript = controller == null ? null : MonoScript.FromMonoBehaviour(controller);
             Transform background = UnityOverviewSceneTemplateBuilder.FindUniqueChild(
                 root.transform,
@@ -469,6 +482,7 @@ namespace PackageBuilder.UnityWorker.Editor
                 UnityOverviewSceneTemplateBuilder.IsReset(product) && source != null &&
                 AssetDatabase.GetAssetPath(source) == request.ProductPrefabReference &&
                 controller != null && controller.PreviewTarget == previewTarget &&
+                transport != null && controller.AnimationTransport == transport &&
                 controller.PreviewCamera != null && controller.KeyLight != null &&
                 controller.StudioBackground == background &&
                 AssetDatabase.GetAssetPath(controllerScript) == request.PreviewControllerScriptReference &&
@@ -478,6 +492,11 @@ namespace PackageBuilder.UnityWorker.Editor
                 AssetDatabase.GetAssetPath(backgroundRenderer.sharedMaterial.GetTexture("_BaseMap")) ==
                     request.OutputBackgroundTextureReference &&
                 GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(root) == 0;
+            Animator[] animators = product.GetComponentsInChildren<Animator>(true);
+            valid = valid && animators.Length <= 1 &&
+                (animators.Length == 0
+                    ? !transport.Available
+                    : transport.Available && transport.Animator == animators[0]);
             diagnosticCode = valid ? string.Empty : "UNITY_OVERVIEW_COMPOSITION_VERIFY_FAILED";
             return valid;
         }

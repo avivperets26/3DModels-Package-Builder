@@ -1898,11 +1898,12 @@ engine-templates/unreal/5.8/
 Templates are copied to staging and migrated there. The source template is updated only through a reviewed migration change.
 
 The initial tracked Unity compatibility family is `engine-templates/unity/6000.3`. It pins Editor
-`6000.3.10f1` revision `e35f0c77bd8e` and URP `17.3.0`. Its only top-level directories are
-`Assets`, `Packages`, and `ProjectSettings`; its asset content is limited to the required URP
-pipeline settings. Samples, tutorial code/media, product content, engine caches, and generated
-output are prohibited. A dependency-free repository validator checks the exact inventory, version
-pair, URP GUID graph, public safety, and text portability without launching Unity.
+`6000.3.10f1` revision `e35f0c77bd8e`, URP `17.3.0`, and Unity's built-in Animation module
+`1.0.0`. Its only top-level directories are `Assets`, `Packages`, and `ProjectSettings`; its asset
+content is limited to required URP pipeline settings and minimal product-local preview runtime
+sources. Samples, tutorial code/media, product content, engine caches, and generated output are
+prohibited. A dependency-free repository validator checks the exact inventory, version pair,
+manifest, URP GUID graph, public safety, and text portability without launching Unity.
 
 The Unity compatibility template embeds `Packages/com.packagebuilder.worker` as an Editor-only
 assembly. Its protocol-v1 batch entrypoint accepts one bounded strict request file,
@@ -2074,6 +2075,28 @@ When the Unity control panel is hidden, a compact labelled restore control remai
 `H` shortcut remains available. Pointer navigation excludes that restore control from orbit capture,
 so the user cannot become trapped in capture mode. Unreal must conform to the same visible recovery
 state through the PB-0913 shared contract and its engine adapter.
+
+PB-0709 maps the shared animation transport into the customer-safe
+`PackageBuilderAnimationTransport` Unity runtime component. The component discovers the generated
+controller's deterministic clip order, serializes scene-local transport state, manually samples the
+assigned Animator, and exposes select, play, pause/resume, replay, scrub, loop, current-time, and
+duration behavior. Its loop override never writes an AnimationClip, importer, controller, or prefab.
+The IMGUI overlay supplies pointer controls plus a visible Tab focus cycle and Enter/Space or arrow
+equivalents. Unity's built-in Animation module is explicitly pinned at `1.0.0` in the template
+manifest; no paid or hosted dependency is introduced.
+
+PB-0710 keeps import validation in the Editor worker. It checks exact clip inventory, duration,
+frame rate, loop intent, and bone-rotation bindings, then samples a disposable prefab instance to
+prove both bone rotation and skinned-renderer vertex deformation. The non-looping assertion runs
+through the same Unity transport adapter used by the overview. PB-0711 reuses the existing
+repository-owned Blender generator in no-action mode and the shared clean-package helper; a second
+fresh Unity clone proves one valid skinned renderer with two unique bones, no Animator, no clips or
+controllers, and no animation output folders.
+
+The small Unity transport state mapping intentionally mirrors the PB-0913 state transitions because
+exported customer assemblies cannot reference the repository's .NET 10 Domain assembly. This is a
+documented engine-boundary duplication, owned by Unity Preview Engineering and constrained by the
+shared contract defaults, policy checks, immutable-source hash assertions, and real-engine tests.
 
 ## 19.1 Reuse and Separation Policy
 

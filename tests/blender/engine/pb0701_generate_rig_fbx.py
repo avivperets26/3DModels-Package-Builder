@@ -49,9 +49,25 @@ def _create_fixture(animated: bool) -> tuple[bpy.types.Object, bpy.types.Object]
 
     mesh = bpy.data.meshes.new("MS_RiggedProp")
     mesh.from_pydata(
-        ((-0.4, 0.0, 0.0), (0.4, 0.0, 0.0), (-0.4, 0.0, 2.0), (0.4, 0.0, 2.0)),
+        (
+            (-0.4, -0.1, 0.0),
+            (0.4, -0.1, 0.0),
+            (0.4, 0.1, 0.0),
+            (-0.4, 0.1, 0.0),
+            (-0.4, -0.1, 2.0),
+            (0.4, -0.1, 2.0),
+            (0.4, 0.1, 2.0),
+            (-0.4, 0.1, 2.0),
+        ),
         (),
-        ((0, 1, 3), (0, 3, 2)),
+        (
+            (0, 3, 2, 1),
+            (4, 5, 6, 7),
+            (0, 1, 5, 4),
+            (3, 7, 6, 2),
+            (0, 4, 7, 3),
+            (1, 2, 6, 5),
+        ),
     )
     mesh.update()
     mesh_object = bpy.data.objects.new("P_RiggedProp", mesh)
@@ -59,9 +75,9 @@ def _create_fixture(animated: bool) -> tuple[bpy.types.Object, bpy.types.Object]
     mesh_object.parent = armature
 
     root_group = mesh_object.vertex_groups.new(name="Root")
-    root_group.add((0, 1), 1.0, "REPLACE")
+    root_group.add((0, 1, 2, 3), 1.0, "REPLACE")
     tip_group = mesh_object.vertex_groups.new(name="Tip")
-    tip_group.add((2, 3), 1.0, "REPLACE")
+    tip_group.add((4, 5, 6, 7), 1.0, "REPLACE")
     modifier = mesh_object.modifiers.new(name="Armature", type="ARMATURE")
     modifier.object = armature
 

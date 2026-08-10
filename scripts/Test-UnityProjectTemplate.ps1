@@ -55,6 +55,8 @@ $expectedAssetFiles = @(
     'Assets/PackageBuilder/Preview.meta',
     'Assets/PackageBuilder/Preview/PackageBuilder.Preview.asmdef',
     'Assets/PackageBuilder/Preview/PackageBuilder.Preview.asmdef.meta',
+    'Assets/PackageBuilder/Preview/PackageBuilderAnimationTransport.cs',
+    'Assets/PackageBuilder/Preview/PackageBuilderAnimationTransport.cs.meta',
     'Assets/PackageBuilder/Preview/PackageBuilderPreviewController.cs',
     'Assets/PackageBuilder/Preview/PackageBuilderPreviewController.cs.meta',
     'Assets/Settings.meta',
@@ -115,6 +117,7 @@ $expectedWorkerPackageFiles = @(
     'Packages/com.packagebuilder.worker/Editor/UnityPrefabHierarchyUtility.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityRiggedPrefabGenerator.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityAnimationClipImporter.cs',
+    'Packages/com.packagebuilder.worker/Editor/UnityAnimationMotionValidator.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityAnimatorControllerGenerator.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityAnimatedPrefabGenerator.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityMeshAssetExtractor.cs',
@@ -166,10 +169,14 @@ Invoke-Check 'Unity Editor and URP versions are pinned to the approved pair' {
     $manifestPath = Join-Path $script:TemplateRoot 'Packages\manifest.json'
     $manifest = Get-Content -LiteralPath $manifestPath -Raw -Encoding UTF8 | ConvertFrom-Json
     $dependencies = @($manifest.dependencies.PSObject.Properties)
-    if ($dependencies.Count -ne 1 -or
-        $dependencies[0].Name -cne 'com.unity.render-pipelines.universal' -or
-        [string]$dependencies[0].Value -cne '17.3.0') {
-        throw 'Packages/manifest.json must pin only URP 17.3.0 as a direct dependency.'
+    $dependencyMap = @{}
+    foreach ($dependency in $dependencies) {
+        $dependencyMap[$dependency.Name] = [string]$dependency.Value
+    }
+    if ($dependencies.Count -ne 2 -or
+        $dependencyMap['com.unity.modules.animation'] -cne '1.0.0' -or
+        $dependencyMap['com.unity.render-pipelines.universal'] -cne '17.3.0') {
+        throw 'Packages/manifest.json must pin Animation 1.0.0 and URP 17.3.0.'
     }
 
     $urpProjectSettings = Get-Content -LiteralPath (Join-Path $script:TemplateRoot `
@@ -240,9 +247,14 @@ Invoke-Check 'Template contains no sample product, scene, media, or stale refere
 
     $runtimeScripts = @(Get-ChildItem -LiteralPath (Join-Path $script:TemplateRoot 'Assets') `
         -Recurse -File -Filter '*.cs' | ForEach-Object { Get-RelativeTemplatePath $_.FullName })
-    if ($runtimeScripts.Count -ne 1 -or
-        $runtimeScripts[0] -cne 'Assets/PackageBuilder/Preview/PackageBuilderPreviewController.cs') {
-        throw 'Only the generic product-local preview controller source is permitted in template Assets.'
+    $expectedRuntimeScripts = @(
+        'Assets/PackageBuilder/Preview/PackageBuilderAnimationTransport.cs',
+        'Assets/PackageBuilder/Preview/PackageBuilderPreviewController.cs'
+    )
+    if ($runtimeScripts.Count -ne $expectedRuntimeScripts.Count -or
+        @(Compare-Object -ReferenceObject $expectedRuntimeScripts `
+            -DifferenceObject @($runtimeScripts | Sort-Object)).Count -ne 0) {
+        throw 'Only the generic product-local preview runtime sources are permitted in template Assets.'
     }
 }
 

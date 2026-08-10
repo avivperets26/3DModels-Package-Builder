@@ -191,7 +191,7 @@ A Unity Editor assembly is executed either from its Editor window or with `-batc
 - Validates the package in the Editor.
 - Exports the exact intended paths as a `.unitypackage`.
 
-The initial target is the installed Unity `6000.3.10f1` project using URP `17.3.0`. Engine and pipeline versions remain configurable. The tracked `engine-templates/unity/6000.3` foundation contains only required URP settings beneath `Assets`, the pinned package manifest and dependency-free Editor-only `com.packagebuilder.worker` beneath `Packages`, and versioned `ProjectSettings`; workers always clone it before Unity is allowed to create caches or generated state.
+The initial target is the installed Unity `6000.3.10f1` project using URP `17.3.0`. Engine and pipeline versions remain configurable. The tracked `engine-templates/unity/6000.3` foundation contains only required URP settings and product-local preview runtime sources beneath `Assets`, the pinned URP and built-in Animation module manifest plus the dependency-light Editor-only `com.packagebuilder.worker` beneath `Packages`, and versioned `ProjectSettings`; workers always clone it before Unity is allowed to create caches or generated state.
 
 The first worker foundation reads one bounded protocol-v1 request, emits JSON Lines progress and
 metrics, writes the final result atomically, saves generated assets, honors the project-contained
@@ -848,6 +848,13 @@ transport, labels/focus semantics, strict deterministic JSON, and shared cross-e
 vectors. Engine adapters consume these rules without changing packaged product transforms,
 visibility assets, or source animation settings. PB-0907/PB-0908 remain responsible for renderer
 capture and measured image validation.
+
+The Unity adapter presents clip selection, play/pause, replay, timeline, preview-loop, and time
+feedback through product-local runtime components. Pointer operations have Tab-focusable keyboard
+equivalents, and loop changes remain scene runtime state. Editor validation uses generated
+redistribution-safe rig fixtures to verify exact clip metadata, curve bindings, bone and renderer
+motion, one-shot completion, and a separate rigged/no-animation clean import with no animation
+assets.
 
 ## 12. Validation Gates
 

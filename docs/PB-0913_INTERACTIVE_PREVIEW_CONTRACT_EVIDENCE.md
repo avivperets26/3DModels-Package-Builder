@@ -4,9 +4,9 @@
 
 - Task: PB-0913 — Define shared interactive preview experience contract.
 - Canonical branch: `feat/PB-0913-interactive-preview-contract`.
-- Status: `[ ]` / 🟡 **PROCESS**.
+- Status: `[x]` / 🟢 **DONE**.
 - Started: 2026-08-10.
-- Current state: implemented and fully validated locally; publication gates are pending.
+- Completed: 2026-08-10.
 
 ## Implemented Contract
 
@@ -76,5 +76,13 @@ All named code tests carry `[Trait("Task", "PB-0913")]` through their containing
 - Markdownlint CLI 0.23.2: 137/137 Markdown files passed with zero issues. The shared
   `.markdownlint.jsonc` disables only the repository-incompatible line-length, single-H1 backlog,
   and table-column-alignment rules.
-- Publication, merge, required exact-merge `main` CI, and explicit user completion confirmation:
-  pending.
+
+## Publication Completion
+
+- Final task commit: `f6b38c22b3c50b6e69d13a32d15d9cc323fcf1fc`.
+- Published through [pull request #82](https://github.com/avivperets26/3DModels-Package-Builder/pull/82)
+  and merged into `main` as `34f6b06d308dcf5c363999eef5aeb48b80025f14`.
+- Required exact-merge [main workflow run 31387407667](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31387407667)
+  completed successfully.
+- The user explicitly confirmed the push, merge, green required `main` CI, and continuation on
+  2026-08-10. No CI, quality, completion, or workflow exception was used.

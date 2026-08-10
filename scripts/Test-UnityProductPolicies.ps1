@@ -36,6 +36,8 @@ $riggedPrefabSource = Get-Content -LiteralPath (Join-Path $editorRoot `
         'UnityRiggedPrefabGenerator.cs') -Raw -Encoding UTF8
 $animationClipSource = Get-Content -LiteralPath (Join-Path $editorRoot `
         'UnityAnimationClipImporter.cs') -Raw -Encoding UTF8
+$animationValidatorSource = Get-Content -LiteralPath (Join-Path $editorRoot `
+        'UnityAnimationMotionValidator.cs') -Raw -Encoding UTF8
 $prefabHierarchySource = Get-Content -LiteralPath (Join-Path $editorRoot `
         'UnityPrefabHierarchyUtility.cs') -Raw -Encoding UTF8
 $animatorControllerSource = Get-Content -LiteralPath (Join-Path $editorRoot `
@@ -58,6 +60,9 @@ $cleanReimportSource = Get-Content -LiteralPath (Join-Path $editorRoot `
         'UnityCleanReimportIntegration.cs') -Raw -Encoding UTF8
 $controllerSource = Get-Content -LiteralPath (Join-Path $repositoryRootPath `
         'engine-templates\unity\6000.3\Assets\PackageBuilder\Preview\PackageBuilderPreviewController.cs') `
+    -Raw -Encoding UTF8
+$transportSource = Get-Content -LiteralPath (Join-Path $repositoryRootPath `
+        'engine-templates\unity\6000.3\Assets\PackageBuilder\Preview\PackageBuilderAnimationTransport.cs') `
     -Raw -Encoding UTF8
 $testSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityProductEditorIntegrationTests.cs') `
     -Raw -Encoding UTF8
@@ -279,6 +284,28 @@ Invoke-Check 'Unity preview implements the shared interactive dark-studio contra
     }
 }
 
+Invoke-Check 'Unity animation preview maps shared transport semantics to pointer and keyboard controls' {
+    foreach ($value in @('Select(int index)', 'Play()', 'Pause()', 'Replay()',
+            'Scrub(float timeSeconds)', 'SetLoop(bool enabled)', 'Tick(float deltaSeconds)',
+            'PackageBuilderPlaybackState.Completed', 'clips[index].isLooping',
+            'animator.Play', 'animator.Update(0f)', 'KeyboardTimelineStepSeconds = 0.1f')) {
+        if (-not $transportSource.Contains($value)) {
+            throw "Missing Unity animation transport behavior: $value"
+        }
+    }
+    foreach ($value in @('GUI.SelectionGrid', 'GUI.HorizontalSlider', 'GUI.Toggle',
+            'AnimationSelectorControl', 'PlayPauseControl', 'ReplayControl', 'TimelineControl',
+            'LoopControl', 'KeyCode.Tab', 'KeyCode.Space', 'GUI.FocusControl',
+            'CurrentTimeSeconds', 'DurationSeconds')) {
+        if (-not $controllerSource.Contains($value)) {
+            throw "Missing accessible animation control behavior: $value"
+        }
+    }
+    if ($transportSource.Contains('AssetDatabase') -or $transportSource.Contains('UnityEditor')) {
+        throw 'Customer animation transport must not depend on Editor APIs.'
+    }
+}
+
 Invoke-Check 'Unity overview composition saves one intended prefab under the publisher product root' {
     foreach ($value in @('previewTarget.childCount != 1', 'PrefabUtility.InstantiatePrefab',
             'product.transform.SetParent(previewTarget, false)', 'S_" + request.AssetId + "_Overview.unity',
@@ -369,6 +396,7 @@ Invoke-Check 'Unity integration uses a legacy-safe short clone and validates a c
             'Unity generic overview scene template tests',
             'Unity overview Play mode smoke test',
             'PackageBuilderPreviewController.cs.meta',
+            'PackageBuilderAnimationTransport.cs.meta',
             'PACKAGEBUILDER_UNITYPACKAGE_OUTPUT', 'unitypackage-extracted', 'pathname',
             'asset.meta', 'Unity exact package archive and metadata validation',
             'Unity populated-project reopen validation')) {
@@ -400,10 +428,28 @@ Invoke-Check 'Unity package clean-reimport validation is isolated and structured
     }
     foreach ($value in @('$cleanCloneRoot', "'-importPackage'",
             'PACKAGEBUILDER_UNITY_REIMPORT_RESULT', 'unity-clean-reimport-result.json',
-            'The clean Unity clone unexpectedly contains product assets before package import',
+            'The clean Unity clone unexpectedly contains product assets',
             'Unity clean package reimport, scene, prefab, material, texture, and render validation')) {
         if (-not $integrationSource.Contains($value)) {
             throw "Missing clean-reimport harness behavior: $value"
+        }
+    }
+}
+
+Invoke-Check 'Unity rigged-no-animation package is validated in a separate clean project' {
+    foreach ($value in @('rigged-no-animation', 'UNITY_REIMPORT_RIG_ANIMATION_FOLDER_PRESENT',
+            'UNITY_REIMPORT_RIG_ANIMATION_ASSET_PRESENT', 'UNITY_REIMPORT_RIG_IMPORT_POLICY_INVALID',
+            'UNITY_REIMPORT_RIG_PREFAB_INVALID', 'animationClipCount', 'animatorCount',
+            'UniqueBoneCount')) {
+        if (-not $cleanReimportSource.Contains($value)) {
+            throw "Missing rigged clean-reimport behavior: $value"
+        }
+    }
+    foreach ($value in @('$rigCleanCloneRoot', '$rigPackageOutputPath',
+            'PACKAGEBUILDER_UNITY_RIG_PACKAGE_OUTPUT', 'Invoke-CleanUnityPackageValidation',
+            'Unity rigged-no-animation clean package reimport validation')) {
+        if (-not $integrationSource.Contains($value)) {
+            throw "Missing rigged clean-reimport harness behavior: $value"
         }
     }
 }
@@ -510,6 +556,29 @@ Invoke-Check 'Unity action import creates exact deterministic A_ clips' {
     }
 }
 
+Invoke-Check 'Unity animation validation proves imported metadata, bindings, and sampled motion' {
+    foreach ($value in @('DurationSeconds', 'FramesPerSecond', 'AnimationUtility.GetCurveBindings',
+            'm_LocalRotation', 'AnimationMode.SampleAnimationClip', 'renderer.BakeMesh',
+            'BoneMotionVerified', 'RendererMotionVerified', 'NonLoopingCompletionVerified')) {
+        if (-not $animationValidatorSource.Contains($value)) {
+            throw "Missing animation validation behavior: $value"
+        }
+    }
+    foreach ($value in @('RenderableVolumeVerified',
+            'UNITY_ANIMATION_RENDERER_VOLUME_DEGENERATE', 'renderer.localBounds.size')) {
+        if (-not $animationValidatorSource.Contains($value)) {
+            throw "Missing renderable-volume validation behavior: $value"
+        }
+    }
+    foreach ($value in @('UnityAnimationMotionValidator.Validate',
+            'GetAssetDependencyHash', 'transport.Scrub', 'transport.SetLoop',
+            'transport.Playback', 'A_AnimatedProp_Attack', 'A_AnimatedProp_BendLoop')) {
+        if (-not $testSource.Contains($value)) {
+            throw "Missing animation validation integration assertion: $value"
+        }
+    }
+}
+
 Invoke-Check 'Unity clip loop, compression, and root-motion policy is explicit' {
     foreach ($value in @('UnityAnimationCompressionPolicy', 'UnityRootMotionPolicy',
             'ModelImporterAnimationCompression.Optimal', 'loopTime', 'loopPose',
@@ -587,6 +656,7 @@ Invoke-Check 'Unity product policy sources are deterministic public-safe text' {
         (Join-Path $editorRoot 'UnitySkinSkeletonValidator.cs'),
         (Join-Path $editorRoot 'UnityRiggedPrefabGenerator.cs'),
         (Join-Path $editorRoot 'UnityAnimationClipImporter.cs'),
+        (Join-Path $editorRoot 'UnityAnimationMotionValidator.cs'),
         (Join-Path $editorRoot 'UnityPrefabHierarchyUtility.cs'),
         (Join-Path $editorRoot 'UnityAnimatorControllerGenerator.cs'),
         (Join-Path $editorRoot 'UnityAnimatedPrefabGenerator.cs'),
@@ -599,6 +669,8 @@ Invoke-Check 'Unity product policy sources are deterministic public-safe text' {
         (Join-Path $editorRoot 'UnityCleanReimportIntegration.cs'),
         (Join-Path $repositoryRootPath `
             'engine-templates\unity\6000.3\Assets\PackageBuilder\Preview\PackageBuilderPreviewController.cs'),
+        (Join-Path $repositoryRootPath `
+            'engine-templates\unity\6000.3\Assets\PackageBuilder\Preview\PackageBuilderAnimationTransport.cs'),
         (Join-Path $editorRoot 'UnityProductEditorIntegrationTests.cs'),
         (Join-Path $repositoryRootPath 'scripts\Invoke-UnityStaticVerticalSlice.ps1')
     )
