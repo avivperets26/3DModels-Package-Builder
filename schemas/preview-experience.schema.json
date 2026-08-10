@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.packagebuilder.dev/preview-experience/v1",
+  "title": "Package Builder interactive preview experience",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "contractVersion", "presentation", "navigation", "lightControls", "overlay", "itemSelection", "animationTransport", "bindings", "accessibility"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "contractVersion": { "const": 1 },
+    "presentation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["background", "lighting"],
+      "properties": {
+        "background": { "$ref": "#/$defs/background" },
+        "lighting": { "$ref": "#/$defs/lighting" }
+      }
+    },
+    "navigation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimumPitchDegrees", "maximumPitchDegrees", "minimumDistanceMultiplier", "maximumDistanceMultiplier", "pointerOrbitDegreesPerUnit", "keyboardOrbitStepDegrees", "pointerZoomStep", "keyboardZoomStep"],
+      "properties": {
+        "minimumPitchDegrees": { "type": "number", "minimum": -90, "maximum": 90 },
+        "maximumPitchDegrees": { "type": "number", "minimum": -90, "maximum": 90 },
+        "minimumDistanceMultiplier": { "type": "number", "exclusiveMinimum": 0 },
+        "maximumDistanceMultiplier": { "type": "number", "minimum": 1 },
+        "pointerOrbitDegreesPerUnit": { "type": "number", "exclusiveMinimum": 0 },
+        "keyboardOrbitStepDegrees": { "type": "number", "exclusiveMinimum": 0 },
+        "pointerZoomStep": { "type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1 },
+        "keyboardZoomStep": { "type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1 }
+      }
+    },
+    "lightControls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimumPitchDegrees", "maximumPitchDegrees", "pointerStepDegrees", "keyboardStepDegrees"],
+      "properties": {
+        "minimumPitchDegrees": { "type": "number", "minimum": -90, "maximum": 90 },
+        "maximumPitchDegrees": { "type": "number", "minimum": -90, "maximum": 90 },
+        "pointerStepDegrees": { "type": "number", "exclusiveMinimum": 0 },
+        "keyboardStepDegrees": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "overlay": {
+      "type": "object", "additionalProperties": false,
+      "required": ["initiallyVisible", "restoreControlId"],
+      "properties": { "initiallyVisible": { "type": "boolean" }, "restoreControlId": { "$ref": "#/$defs/nonEmptyString" } }
+    },
+    "itemSelection": {
+      "type": "object", "additionalProperties": false,
+      "required": ["wrapPreviousNext", "initiallyShowAll"],
+      "properties": { "wrapPreviousNext": { "type": "boolean" }, "initiallyShowAll": { "type": "boolean" } }
+    },
+    "animationTransport": {
+      "type": "object", "additionalProperties": false,
+      "required": ["selectFirstAnimation", "initiallyPlaying", "keyboardScrubSeconds"],
+      "properties": {
+        "selectFirstAnimation": { "type": "boolean" },
+        "initiallyPlaying": { "type": "boolean" },
+        "keyboardScrubSeconds": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "bindings": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["action", "input"],
+        "properties": {
+          "action": { "type": "string", "enum": ["OrbitPointer", "OrbitUp", "OrbitDown", "OrbitLeft", "OrbitRight", "ZoomPointer", "ZoomIn", "ZoomOut", "ResetView", "LightDirectionPointer", "LightUp", "LightDown", "LightLeft", "LightRight", "ResetLight", "ToggleOverlay", "FocusNext", "FocusPrevious", "ActivateFocusedControl", "ItemPrevious", "ItemNext", "ItemDirect", "ItemAll", "AnimationSelect", "AnimationPlayPause", "AnimationReplay", "AnimationScrub", "AnimationLoop"] },
+          "input": { "$ref": "#/$defs/nonEmptyString" }
+        }
+      }
+    },
+    "accessibility": {
+      "type": "object", "additionalProperties": false,
+      "required": ["visibleFocusRequired", "controls"],
+      "properties": {
+        "visibleFocusRequired": { "const": true },
+        "controls": {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["id", "label", "accessibleName", "accessibleHelp", "focusOrder"],
+            "properties": {
+              "id": { "$ref": "#/$defs/nonEmptyString" }, "label": { "$ref": "#/$defs/nonEmptyString" },
+              "accessibleName": { "$ref": "#/$defs/nonEmptyString" }, "accessibleHelp": { "$ref": "#/$defs/nonEmptyString" },
+              "focusOrder": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "colour": {
+      "type": "object", "additionalProperties": false, "required": ["red", "green", "blue"],
+      "properties": { "red": { "type": "number", "minimum": 0, "maximum": 1 }, "green": { "type": "number", "minimum": 0, "maximum": 1 }, "blue": { "type": "number", "minimum": 0, "maximum": 1 } }
+    },
+    "light": {
+      "type": "object", "additionalProperties": false, "required": ["yawDegrees", "pitchDegrees", "intensity", "colour"],
+      "properties": { "yawDegrees": { "type": "number", "minimum": -180, "maximum": 180 }, "pitchDegrees": { "type": "number", "minimum": -90, "maximum": 90 }, "intensity": { "type": "number", "minimum": 0 }, "colour": { "$ref": "#/$defs/colour" } }
+    },
+    "background": {
+      "type": "object", "additionalProperties": false,
+      "required": ["outerColour", "centreColour", "centreX", "centreY", "radius", "horizontalScale"],
+      "properties": { "outerColour": { "$ref": "#/$defs/colour" }, "centreColour": { "$ref": "#/$defs/colour" }, "centreX": { "type": "number", "minimum": 0, "maximum": 1 }, "centreY": { "type": "number", "minimum": 0, "maximum": 1 }, "radius": { "type": "number", "exclusiveMinimum": 0 }, "horizontalScale": { "type": "number", "exclusiveMinimum": 0 } }
+    },
+    "lighting": {
+      "type": "object", "additionalProperties": false, "required": ["keyLight", "fillLight"],
+      "properties": { "keyLight": { "$ref": "#/$defs/light" }, "fillLight": { "$ref": "#/$defs/light" } }
+    }
+  }
+}

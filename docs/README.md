@@ -33,6 +33,7 @@ All initial ADRs have status **Accepted**. Acceptance records the architecture d
 11. [ADR-0011: Threat Model, Secrets, and Network Consent](adr/ADR-0011-threat-model-secrets-and-network-consent.md)
 12. [ADR-0012: Quality Toolchain and Thresholds](adr/ADR-0012-quality-toolchain-and-thresholds.md)
 13. [ADR-0013: Installer, Portable Distribution, and Lifecycle Safety](adr/ADR-0013-installer-portable-and-lifecycle-safety.md)
+14. [ADR-0014: Shared Interactive Preview Experience](adr/ADR-0014-shared-interactive-preview-experience.md)
 
 The [ADR index](adr/README.md) explains status and evolution conventions.
 
@@ -150,6 +151,7 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 ## Preview and Media Evidence
 
 - [PB-0906 preview presentation specification evidence](PB-0906_PREVIEW_PRESENTATION_SPECIFICATION_EVIDENCE.md)
+- [PB-0913 interactive preview contract evidence](PB-0913_INTERACTIVE_PREVIEW_CONTRACT_EVIDENCE.md)
 
 ## Dependency and Licence Records
 
