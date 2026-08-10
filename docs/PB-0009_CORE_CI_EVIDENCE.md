@@ -94,7 +94,7 @@ The correction replaces that permission extraction with a deterministic line-ori
 - Counts every `permissions:` declaration anywhere in the workflow.
 - Requires exactly one declaration and requires it to have no indentation.
 - Reads child lines until the next YAML key at the declaration's indentation level, while ignoring blank separator lines.
-- Requires exactly one nonblank entry whose text is exactly `  contents: read`.
+- Requires exactly one nonblank entry with two leading spaces and text `contents: read`.
 - Rejects missing, duplicate, nested/job-level, extra, write, and malformed-indentation cases.
 - Reports permission-block count, permission-entry count, and sanitized entries for every rejection.
 - Uses only spaces/tabs in its line-level regexes; no permission-parser `\s` can consume a newline.

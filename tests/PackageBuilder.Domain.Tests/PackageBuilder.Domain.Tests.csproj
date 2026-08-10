@@ -28,4 +28,10 @@
     <ProjectReference Include="..\..\src\PackageBuilder.Domain\PackageBuilder.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\fixtures\preview\preview-experience-v1-vectors.json"
+          Link="fixtures\preview\preview-experience-v1-vectors.json"
+          CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

@@ -26,6 +26,7 @@ Acceptance records the architecture direction; it does not indicate that impleme
 11. [ADR-0011: Threat Model, Secrets, and Network Consent](ADR-0011-threat-model-secrets-and-network-consent.md) — **Accepted**
 12. [ADR-0012: Quality Toolchain and Thresholds](ADR-0012-quality-toolchain-and-thresholds.md) — **Accepted**
 13. [ADR-0013: Installer, Portable Distribution, and Lifecycle Safety](ADR-0013-installer-portable-and-lifecycle-safety.md) — **Accepted**
+14. [ADR-0014: Shared Interactive Preview Experience](ADR-0014-shared-interactive-preview-experience.md) — **Accepted**
 
 ## Evolution Rules
 

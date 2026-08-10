@@ -4,10 +4,9 @@
 
 - Task: PB-0906 — Implement preview presentation specification.
 - Canonical branch: `feat/PB-0906-preview-specification`.
-- Status: `[ ]` / 🟡 **PROCESS**.
+- Status: `[x]` / 🟢 **DONE**.
 - Started: 2026-08-10.
-- Current blocker: none for local implementation; publication, required `main` CI, explicit user
-  confirmation, and next-task rollover remain.
+- Completed: 2026-08-10.
 
 ## Implemented Contract
 
@@ -83,6 +82,12 @@ All named tests carry `[Trait("Task", "PB-0906")]` through their containing test
 - .NET and Ruff format/lint verification: passed.
 - `git diff --check`: passed.
 
-PB-0906 remains PROCESS until the user performs the Git publication sequence, required exact-main
-CI succeeds, the user explicitly confirms completion, and its status is synchronized during the
-next task rollover.
+## Publication Completion
+
+- Final task commit: `c4482d70fe967d8033ce970da44fdf6600e5d7f4`.
+- Published through [pull request #81](https://github.com/avivperets26/3DModels-Package-Builder/pull/81)
+  and merged into `main` as `6b8c8c513e9ce5c4734b05f6b6133934f7fd44dd`.
+- Required exact-merge [main workflow run 31380639820](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31380639820)
+  completed successfully.
+- The user explicitly confirmed the push, merge, green required `main` CI, and continuation on
+  2026-08-10. No CI, quality, completion, or workflow exception was used.

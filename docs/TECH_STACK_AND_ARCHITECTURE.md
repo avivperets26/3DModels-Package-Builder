@@ -634,7 +634,8 @@ C:\Dev\PackageBuilder\
 │       ├── README.md
 │       ├── ADR-0001-dotnet-10-and-wpf.md
 │       ├── ...
-│       └── ADR-0013-installer-portable-and-lifecycle-safety.md
+│       ├── ADR-0013-installer-portable-and-lifecycle-safety.md
+│       └── ADR-0014-shared-interactive-preview-experience.md
 ├── schemas/
 │   ├── product-manifest.schema.json
 │   ├── publisher-profile.schema.json
@@ -2060,11 +2061,14 @@ The approved defaults codify the existing Unity studio values once; later Unity,
 and media adapters translate them instead of creating independent constants. The aggregate exposes
 no product transform, scale, renderer, scene, input, playback, or persistence mutation surface.
 
-PB-0913 adds the separately versioned interactive and serialization layer above this presentation
-model. It owns input bindings, accessibility labels/focus semantics, overlay state, item-selection
-state transitions, animation transport, deterministic wire serialization, and cross-engine test
-vectors. PB-0906 therefore introduces no Unity/Unreal runtime controller and no speculative
-transport state.
+PB-0913 implements the separately versioned interactive and serialization layer above this
+presentation model. Contract version 1 owns bounded camera-distance navigation, bounded key-light
+direction, normalized pointer/keyboard actions, accessible labels and focus order, hidden-overlay
+recovery, deterministic item selection, and non-destructive animation transport. Strict JSON
+Schema Draft 2020-12 serialization rejects duplicate or unknown properties and revalidates Domain
+invariants. The shared versioned vectors cover camera bounds, empty/single/wrapped item selection,
+one-shot completion, preview-only loop override, replay, and overlay recovery. Engine adapters map
+these rules to native APIs; they do not copy them.
 
 When the Unity control panel is hidden, a compact labelled restore control remains visible and the
 `H` shortcut remains available. Pointer navigation excludes that restore control from orbit capture,
@@ -2448,8 +2452,9 @@ The initial ADR inventory is:
 11. [ADR-0011: Threat Model, Secrets, and Network Consent](adr/ADR-0011-threat-model-secrets-and-network-consent.md)
 12. [ADR-0012: Quality Toolchain and Thresholds](adr/ADR-0012-quality-toolchain-and-thresholds.md)
 13. [ADR-0013: Installer, Portable Distribution, and Lifecycle Safety](adr/ADR-0013-installer-portable-and-lifecycle-safety.md)
+14. [ADR-0014: Shared Interactive Preview Experience](adr/ADR-0014-shared-interactive-preview-experience.md)
 
-All thirteen initial ADRs are **Accepted**. Each records context, decision, alternatives, consequences and trade-offs, migration or evolution considerations, implementation status and follow-up work, and relevant repository links. Accepted architecture direction does not mean its implementation is complete. The [ADR index](adr/README.md) defines status and evolution conventions.
+All fourteen ADRs are **Accepted**. Each records context, decision, alternatives, consequences and trade-offs, migration or evolution considerations, implementation status and follow-up work, and relevant repository links. Accepted architecture direction does not mean its implementation is complete. The [ADR index](adr/README.md) defines status and evolution conventions.
 
 ## 30. Implementation Order
 

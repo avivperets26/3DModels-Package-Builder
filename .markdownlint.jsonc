@@ -1,0 +1,8 @@
+{
+  // Long evidence rows, command lines, and links are intentionally preserved.
+  "MD013": false,
+  // The backlog intentionally uses one H1 per independently navigable epic.
+  "MD025": false,
+  // Tables use readable compact separators; column-width alignment is not required.
+  "MD060": false
+}

@@ -841,9 +841,13 @@ The approved defaults preserve the existing Unity dark-studio presentation as sh
 | Key light | yaw -32 degrees, pitch 42 degrees, intensity 1.15, RGB (1.00, 0.94, 0.84) |
 | Fill light | yaw 145 degrees, pitch 25 degrees, intensity 0.55, RGB (0.62, 0.75, 1.00) |
 
-PB-0913 remains responsible for the versioned interactive contract, serialization, input actions,
-selection and animation state machines, accessibility semantics, and shared cross-engine test
-vectors. PB-0907/PB-0908 remain responsible for renderer capture and measured image validation.
+PB-0913 implements version-one interactive policy and state in the same engine-neutral namespace.
+It defines bounded orbit/camera-distance zoom/reset, key-light direction/reset, normalized pointer
+and keyboard actions, overlay recovery, deterministic item selection, non-destructive animation
+transport, labels/focus semantics, strict deterministic JSON, and shared cross-engine transition
+vectors. Engine adapters consume these rules without changing packaged product transforms,
+visibility assets, or source animation settings. PB-0907/PB-0908 remain responsible for renderer
+capture and measured image validation.
 
 ## 12. Validation Gates
 

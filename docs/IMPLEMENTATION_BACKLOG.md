@@ -160,7 +160,20 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0906 | 🟡 **PROCESS** | `feat/PB-0906-preview-specification` | Preview Domain Engineering for local work; user for Git gates | 2026-08-10 | Engine-neutral views, projections, visibility, approved background/lighting defaults, case/member validation, focused tests, and full local Core CI are implemented and passing. | User-controlled commit, push, merge, required `main` CI, explicit confirmation, and next-task rollover remain. |
+| PB-0913 | 🟡 **PROCESS** | `feat/PB-0913-interactive-preview-contract` | Preview Contract Engineering for local work; user for Git gates | 2026-08-10 | PB-0906 rollover synchronized; version-one Domain contract/state, strict JSON/schema, ADR, shared vectors, and automated tests are implemented and validated locally. Publication, merge, required `main` CI, and user confirmation remain. | None. |
+
+### PB-0906 Completion Evidence
+
+- Final task commit `c4482d70fe967d8033ce970da44fdf6600e5d7f4` was published on
+  `feat/PB-0906-preview-specification`.
+- [Pull request #81](https://github.com/avivperets26/3DModels-Package-Builder/pull/81) merged the
+  task into `main` as `6b8c8c513e9ce5c4734b05f6b6133934f7fd44dd`.
+- Required exact-merge [main workflow run 31380639820](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31380639820)
+  completed successfully for that merge commit.
+- The user explicitly confirmed the push, merge, green required `main` CI, and continuation on
+  2026-08-10.
+- No CI, quality, completion, or workflow exception was used. This PB-0913 rollover marks PB-0906
+  `[x]` / 🟢 **DONE**, removes it from Active Work, and adds exactly one Completion Log row.
 
 ### PB-0706/PB-0707/PB-0708 Combined Publication Exception
 
@@ -247,9 +260,9 @@ feat/PB-0607-unity-urp-material-compiler
   implementation and publication cycle.
 - **Independence retained:** every task keeps its canonical ID, acceptance boundary, evidence
   document, lifecycle state, and eventual Completion Log row.
-- **PB-0913 boundary:** PB-0619 implements the Unity runtime behavior and a versioned contract
-  surface now. PB-0913 remains the owner of the later engine-neutral serialized contract, Unreal
-  conformance, and cross-engine test vectors; it is neither marked complete nor silently absorbed.
+- **PB-0913 boundary:** PB-0619 implements the earlier Unity runtime behavior and its local contract
+  surface. PB-0913 now owns the engine-neutral serialized contract and cross-engine test vectors;
+  PB-0709/PB-0808 and the documented Unreal tasks own adapter conformance.
 - **Completion:** all three remain `[ ]` / 🟡 **PROCESS** until validation passes, the combined
   change is committed and merged, required `main` CI succeeds, the user explicitly confirms it,
   and rollover is synchronized.
@@ -1519,6 +1532,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0706 | `feat/PB-0706-unity-clip-settings` | `1e135e426389460162f938c5e8c7ea0e76aa1156` | [#78](https://github.com/avivperets26/3DModels-Package-Builder/pull/78) | 2026-08-09 | Published with PB-0707/PB-0708 under the approved combined exception and merged as `997e19f2e1837157e0f977b598f941a50c46ea06`; required exact-merge [main workflow run 31335169320](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31335169320) succeeded. No CI or quality exception was used; the user explicitly confirmed the push, merge, and continuation. |
 | PB-0707 | `feat/PB-0707-unity-animator-controller` | `1e135e426389460162f938c5e8c7ea0e76aa1156` | [#78](https://github.com/avivperets26/3DModels-Package-Builder/pull/78) | 2026-08-09 | Published on the PB-0706 branch with PB-0706/PB-0708 under the approved combined exception and merged as `997e19f2e1837157e0f977b598f941a50c46ea06`; required exact-merge [main workflow run 31335169320](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31335169320) succeeded. No CI or quality exception was used; the user explicitly confirmed the push, merge, and continuation. |
 | PB-0708 | `feat/PB-0708-unity-animated-prefab` | `1e135e426389460162f938c5e8c7ea0e76aa1156` | [#78](https://github.com/avivperets26/3DModels-Package-Builder/pull/78) | 2026-08-09 | Published on the PB-0706 branch with PB-0706/PB-0707 under the approved combined exception and merged as `997e19f2e1837157e0f977b598f941a50c46ea06`; required exact-merge [main workflow run 31335169320](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31335169320) succeeded. No CI or quality exception was used; the user explicitly confirmed the push, merge, and continuation. |
+| PB-0906 | `feat/PB-0906-preview-specification` | `c4482d70fe967d8033ce970da44fdf6600e5d7f4` | [#81](https://github.com/avivperets26/3DModels-Package-Builder/pull/81) | 2026-08-10 | Merged into `main` as `6b8c8c513e9ce5c4734b05f6b6133934f7fd44dd`; required exact-merge [main workflow run 31380639820](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31380639820) succeeded. No CI or quality exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and continuation. |
 
 ## 5. Milestones
 
@@ -2272,7 +2286,7 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0408, PB-0801, PB-0904
   - Done when: animation frames/duration/FPS/loop/root motion and item dimensions/triangles/materials are generated from measured data.
 
-- [ ] **PB-0906 — Implement preview presentation specification** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0906 — Implement preview presentation specification** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0906-preview-specification`
   - Depends on: PB-0102, PB-0106
   - Done when: hero, orthographic, detail, animation pose, set overview, collection overview, background, lighting, and visibility are typed and validated.
@@ -2307,7 +2321,7 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0212, PB-0910
   - Done when: logs/manifests/versions/reports can be bundled while source models, textures, credentials, and personal paths are excluded or redacted.
 
-- [ ] **PB-0913 — Define shared interactive preview experience contract** — **P0**
+- [ ] **PB-0913 — Define shared interactive preview experience contract** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0913-interactive-preview-contract`
   - Depends on: PB-0906
   - Done when: a versioned engine-neutral typed contract and ADR define bounded orbit/zoom/reset actions, pointer and keyboard bindings, the approved dark-studio background and lighting tokens, light-direction controls, overlay visibility, item Previous/Next/direct/all states, animation list/play/pause/replay/scrub/loop states, accessibility labels/focus semantics, deterministic serialization, validation, and shared test vectors without Unity, Unreal, WPF, or renderer dependencies.
