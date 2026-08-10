@@ -2051,6 +2051,21 @@ Sets and collections share one selection state with Previous, Next, direct-selec
 
 The desktop application edits the shared preview specification and reviews rendered results. It does not host or duplicate engine runtime controllers. Cross-target reuse means sharing contracts, policies, state machines, fixtures, and acceptance tests; engine-specific code remains in the Unity and Unreal adapters. Customer packages contain only the minimal preview runtime components and assets required by their generated scene or map.
 
+PB-0906 implements the presentation half of this boundary in `PackageBuilder.Domain.Preview`.
+`PreviewPresentationSpecification` owns case-aware view ordering, stable view IDs, closed view roles
+and projections, visibility, normalized radial-background intent, and directional key/fill intent.
+Its factories consume the existing `ProductCase`, `ItemSetDefinition`, `ItemCollectionDefinition`,
+and `InternalAssetId` contracts so selected-item visibility cannot reference an unknown group member.
+The approved defaults codify the existing Unity studio values once; later Unity, Unreal, desktop,
+and media adapters translate them instead of creating independent constants. The aggregate exposes
+no product transform, scale, renderer, scene, input, playback, or persistence mutation surface.
+
+PB-0913 adds the separately versioned interactive and serialization layer above this presentation
+model. It owns input bindings, accessibility labels/focus semantics, overlay state, item-selection
+state transitions, animation transport, deterministic wire serialization, and cross-engine test
+vectors. PB-0906 therefore introduces no Unity/Unreal runtime controller and no speculative
+transport state.
+
 When the Unity control panel is hidden, a compact labelled restore control remains visible and the
 `H` shortcut remains available. Pointer navigation excludes that restore control from orbit capture,
 so the user cannot become trapped in capture mode. Unreal must conform to the same visible recovery

@@ -147,6 +147,10 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 - [PB-0707 Unity Animator Controller evidence](PB-0707_UNITY_ANIMATOR_CONTROLLER_EVIDENCE.md)
 - [PB-0708 Unity animated prefab evidence](PB-0708_UNITY_ANIMATED_PREFAB_EVIDENCE.md)
 
+## Preview and Media Evidence
+
+- [PB-0906 preview presentation specification evidence](PB-0906_PREVIEW_PRESENTATION_SPECIFICATION_EVIDENCE.md)
+
 ## Dependency and Licence Records
 
 - [Third-party dependency notices](THIRD_PARTY_NOTICES.md)

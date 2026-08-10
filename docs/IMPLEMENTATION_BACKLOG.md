@@ -6,7 +6,7 @@
 **GitHub visibility:** Public, approved by the user on 2026-07-22
 **Runtime data:** `C:\Dev\PackageBuilder\runtime-data`
 **Planned default branch:** `main`
-**Last reviewed:** 2026-08-09
+**Last reviewed:** 2026-08-10
 
 ## 1. Purpose
 
@@ -160,9 +160,7 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0706 | 🟡 **PROCESS** | `feat/PB-0706-unity-clip-settings` | Unity Animation Engineering for local work; user for Git gates | 2026-08-09 | Explicit one-shot/loop, compression, and root-motion policies are implemented and verified against two real imported clips. | Combined publication, required `main` CI, explicit confirmation, and rollover remain. |
-| PB-0707 | 🟡 **PROCESS** | `feat/PB-0707-unity-animator-controller` | Unity Animation Engineering for local work; user for Git gates | 2026-08-09 | Deterministic `AC_<AssetId>` generation creates one stable state and replay trigger per clip, a declared default, and no missing motions. | Combined publication, required `main` CI, explicit confirmation, and rollover remain. |
-| PB-0708 | 🟡 **PROCESS** | `feat/PB-0708-unity-animated-prefab` | Unity Animation Engineering for local work; user for Git gates | 2026-08-09 | Case 3 creates a reset animated prefab with one configured Animator while preserving and revalidating all skinned renderers. | Combined publication, required `main` CI, explicit confirmation, and rollover remain. |
+| PB-0906 | 🟡 **PROCESS** | `feat/PB-0906-preview-specification` | Preview Domain Engineering for local work; user for Git gates | 2026-08-10 | Engine-neutral views, projections, visibility, approved background/lighting defaults, case/member validation, focused tests, and full local Core CI are implemented and passing. | User-controlled commit, push, merge, required `main` CI, explicit confirmation, and next-task rollover remain. |
 
 ### PB-0706/PB-0707/PB-0708 Combined Publication Exception
 
@@ -177,11 +175,25 @@ feat/PB-0607-unity-urp-material-compiler
   duplicating Unity project setup or prefab hierarchy logic.
 - **Independence retained:** each task keeps its canonical ID, branch, acceptance boundary,
   lifecycle state, evidence document, and eventual Completion Log row.
-- **Completion:** all three remain `[ ]` / 🟡 **PROCESS** until the combined change is committed,
-  pushed, merged into and pushed on `main`, required `main` CI succeeds, the user explicitly
-  confirms completion, and rollover is synchronized on the next task branch.
+- **Completion:** all three were committed as `1e135e426389460162f938c5e8c7ea0e76aa1156`,
+  merged through PR #78 as `997e19f2e1837157e0f977b598f941a50c46ea06`, passed required
+  exact-merge `main` workflow run 31335169320, and were explicitly confirmed complete by the user.
+  Their independent DONE states and Completion Log rows are synchronized in the PB-0906 branch.
 - **No precedent:** this branch-topology exception waives no dependency, validation, engine,
   quality, CI, security, documentation, or completion gate.
+
+### PB-0706/PB-0707/PB-0708 Completion Evidence
+
+- All three tasks were committed as `1e135e426389460162f938c5e8c7ea0e76aa1156` on their approved
+  combined publication branch.
+- [Pull request #78](https://github.com/avivperets26/3DModels-Package-Builder/pull/78) merged them
+  into `main` as `997e19f2e1837157e0f977b598f941a50c46ea06`.
+- Required exact-merge [main workflow run 31335169320](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31335169320)
+  completed successfully for that merge commit.
+- The user explicitly confirmed the push, merge, and continuation to the next task on 2026-08-09.
+- No CI, quality, completion, or workflow exception was used. This PB-0906 rollover marks all
+  three tasks `[x]` / 🟢 **DONE**, removes them from Active Work, and adds one Completion Log row
+  for each.
 
 ### PB-0703/PB-0704/PB-0705 Combined Publication Exception
 
@@ -1504,6 +1516,9 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0704 | `feat/PB-0704-unity-rigged-no-animation` | `03ec3ee6e28a78975c86e8352b26ee02a91c2a8d` | [#76](https://github.com/avivperets26/3DModels-Package-Builder/pull/76) | 2026-08-09 | Published on the PB-0703 branch under the approved combined exception and merged as `3c58790b738d0b3998356bfa9a95742e1d72f195`; the user explicitly confirmed successful required `main` CI. No CI or quality exception was used. |
 | PB-0705 | `feat/PB-0705-unity-animation-clips` | `03ec3ee6e28a78975c86e8352b26ee02a91c2a8d` | [#76](https://github.com/avivperets26/3DModels-Package-Builder/pull/76) | 2026-08-09 | Published on the PB-0703 branch under the approved combined exception and merged as `3c58790b738d0b3998356bfa9a95742e1d72f195`; the user explicitly confirmed successful required `main` CI. No CI or quality exception was used. |
 | PB-1901 | `docs/PB-1901-hosted-conversion-architecture` | `1c277a2a0ae4efabae3e175e8f7cf093cc9e91a5` | [#77](https://github.com/avivperets26/3DModels-Package-Builder/pull/77) | 2026-08-09 | Merged into `main` as `9e86df27d9808243d265a2ca19d8143d5f23e58a`; the user explicitly confirmed successful required `main` CI and completion. No CI or quality exception was used. |
+| PB-0706 | `feat/PB-0706-unity-clip-settings` | `1e135e426389460162f938c5e8c7ea0e76aa1156` | [#78](https://github.com/avivperets26/3DModels-Package-Builder/pull/78) | 2026-08-09 | Published with PB-0707/PB-0708 under the approved combined exception and merged as `997e19f2e1837157e0f977b598f941a50c46ea06`; required exact-merge [main workflow run 31335169320](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31335169320) succeeded. No CI or quality exception was used; the user explicitly confirmed the push, merge, and continuation. |
+| PB-0707 | `feat/PB-0707-unity-animator-controller` | `1e135e426389460162f938c5e8c7ea0e76aa1156` | [#78](https://github.com/avivperets26/3DModels-Package-Builder/pull/78) | 2026-08-09 | Published on the PB-0706 branch with PB-0706/PB-0708 under the approved combined exception and merged as `997e19f2e1837157e0f977b598f941a50c46ea06`; required exact-merge [main workflow run 31335169320](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31335169320) succeeded. No CI or quality exception was used; the user explicitly confirmed the push, merge, and continuation. |
+| PB-0708 | `feat/PB-0708-unity-animated-prefab` | `1e135e426389460162f938c5e8c7ea0e76aa1156` | [#78](https://github.com/avivperets26/3DModels-Package-Builder/pull/78) | 2026-08-09 | Published on the PB-0706 branch with PB-0706/PB-0707 under the approved combined exception and merged as `997e19f2e1837157e0f977b598f941a50c46ea06`; required exact-merge [main workflow run 31335169320](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31335169320) succeeded. No CI or quality exception was used; the user explicitly confirmed the push, merge, and continuation. |
 
 ## 5. Milestones
 
@@ -2116,17 +2131,17 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0408, PB-0701
   - Done when: source actions or manifest frame ranges create consistently named `A_` clips with exact ranges and sample rate.
 
-- [ ] **PB-0706 — Implement clip loop, compression, and root-motion policy** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0706 — Implement clip loop, compression, and root-motion policy** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0706-unity-clip-settings`
   - Depends on: PB-0705
   - Done when: one-shot attacks do not loop, declared loops do, compression is configurable, and root motion is explicit and documented.
 
-- [ ] **PB-0707 — Implement Animator Controller generator** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0707 — Implement Animator Controller generator** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0707-unity-animator-controller`
   - Depends on: PB-0705, PB-0706
   - Done when: `AC_<AssetId>` contains one stable state per clip, sensible default, replay transitions/parameters, and no missing motions.
 
-- [ ] **PB-0708 — Implement animated prefab flow** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0708 — Implement animated prefab flow** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0708-unity-animated-prefab`
   - Depends on: PB-0611, PB-0703, PB-0707
   - Done when: case 3 prefab contains the correct Animator and controller while preserving all skinned renderers.
@@ -2257,7 +2272,7 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0408, PB-0801, PB-0904
   - Done when: animation frames/duration/FPS/loop/root motion and item dimensions/triangles/materials are generated from measured data.
 
-- [ ] **PB-0906 — Implement preview presentation specification** — **P0**
+- [ ] **PB-0906 — Implement preview presentation specification** — **P0** — 🟡 **PROCESS**
   - Branch: `feat/PB-0906-preview-specification`
   - Depends on: PB-0102, PB-0106
   - Done when: hero, orthographic, detail, animation pose, set overview, collection overview, background, lighting, and visibility are typed and validated.
