@@ -810,6 +810,41 @@ Documentation is generated from UTF-8 templates to prevent corrupted characters 
 - The approved dark-studio reference, theme tokens, interaction-state fixtures, and perceptual tolerances are versioned so Unity and Unreal can be compared without requiring pixel-identical renderers.
 - Preview UI must remain legible and operable at the supported 16:9 resolutions and UI scaling, must not obscure the product in captured media, and must be hideable for clean stills.
 
+### PB-0906 Presentation Specification Baseline
+
+PB-0906 represents preview intent in `PackageBuilder.Domain.Preview`; it does not store Unity,
+Unreal, WPF, filesystem, or renderer objects. Every view has a validated stable ID, a closed role,
+the role's required perspective or orthographic projection, and explicit visibility. The supported
+roles are hero, front/back/left/right orthographic, detail, animation pose, set overview, and
+collection overview. Repeated detail and animation-pose views use distinct stable IDs.
+
+Validation requires a hero for every case, an animation pose for animated products, a set overview
+for sets, and a collection overview for collections. Set visibility is either assembled-set or one
+known member; collection visibility is either all items or one known member; non-group products
+use entire-product visibility. Wrong-case roles, unknown selected items, duplicate view IDs, empty
+view lists, missing required roles, invalid normalized colours, non-finite values, and absent
+background or lighting are rejected explicitly.
+
+The approved defaults preserve the existing Unity dark-studio presentation as shared intent:
+
+| Setting | Approved default |
+|---|---|
+| Standard capture order | Hero, front, back, left, right |
+| Animated addition | Animation pose |
+| Set addition | Assembled set overview |
+| Collection addition | All-items collection overview |
+| Perspective field of view | 35 degrees |
+| Bounds-framing padding | 1.25 |
+| Radial outer RGB | (0.012, 0.014, 0.018) |
+| Radial centre RGB | (0.14, 0.16, 0.20) |
+| Radial centre / radius / horizontal scale | (0.50, 0.58) / 0.70 / 0.82 |
+| Key light | yaw -32 degrees, pitch 42 degrees, intensity 1.15, RGB (1.00, 0.94, 0.84) |
+| Fill light | yaw 145 degrees, pitch 25 degrees, intensity 0.55, RGB (0.62, 0.75, 1.00) |
+
+PB-0913 remains responsible for the versioned interactive contract, serialization, input actions,
+selection and animation state machines, accessibility semantics, and shared cross-engine test
+vectors. PB-0907/PB-0908 remain responsible for renderer capture and measured image validation.
+
 ## 12. Validation Gates
 
 ### Source Gate

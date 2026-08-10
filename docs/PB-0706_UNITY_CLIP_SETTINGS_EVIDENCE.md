@@ -4,7 +4,7 @@
 
 - Task: PB-0706 — Implement clip loop, compression, and root-motion policy.
 - Canonical and publication branch: `feat/PB-0706-unity-clip-settings`.
-- Status: `[ ]` / 🟡 **PROCESS**.
+- Status: `[x]` / 🟢 **DONE**.
 - Started: 2026-08-09.
 - Publication is combined with PB-0707 and PB-0708 under the explicitly approved exception in the
   implementation backlog. The exception creates no precedent.
@@ -52,8 +52,12 @@ requests were rejected without modifying the source.
   warnings and zero errors.
 - `git diff --check`: passed.
 
-## Remaining Gates
+## Publication Completion
 
-PB-0706 remains PROCESS until the combined change is committed, pushed, merged into and pushed on
-`main`, required `main` CI succeeds, the user explicitly confirms completion, and next-task
-rollover records it exactly once in the Completion Log.
+- Final combined task commit: `1e135e426389460162f938c5e8c7ea0e76aa1156`.
+- Published with PB-0707/PB-0708 through
+  [PR #78](https://github.com/avivperets26/3DModels-Package-Builder/pull/78) and merged as
+  `997e19f2e1837157e0f977b598f941a50c46ea06`.
+- Required exact-merge [main workflow run 31335169320](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31335169320)
+  succeeded, and the user explicitly confirmed the push, merge, and continuation on 2026-08-09.
+- No CI, quality, completion, or workflow exception was used.

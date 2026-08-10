@@ -5,7 +5,7 @@
 - Task: PB-0708 — Implement animated prefab flow.
 - Canonical branch: `feat/PB-0708-unity-animated-prefab`.
 - Publication branch: `feat/PB-0706-unity-clip-settings` under the approved combined exception.
-- Status: `[ ]` / 🟡 **PROCESS**.
+- Status: `[x]` / 🟢 **DONE**.
 - Started: 2026-08-09.
 
 ## Implemented Case-3 Contract
@@ -49,8 +49,12 @@ clean reimport.
   warnings and zero errors.
 - `git diff --check`: passed.
 
-## Remaining Gates
+## Publication Completion
 
-PB-0708 remains PROCESS until the combined change is committed, pushed, merged into and pushed on
-`main`, required `main` CI succeeds, the user explicitly confirms completion, and rollover records
-its independent Completion Log entry.
+- Final combined task commit: `1e135e426389460162f938c5e8c7ea0e76aa1156`.
+- Published on the PB-0706 branch with PB-0706/PB-0707 through
+  [PR #78](https://github.com/avivperets26/3DModels-Package-Builder/pull/78) and merged as
+  `997e19f2e1837157e0f977b598f941a50c46ea06`.
+- Required exact-merge [main workflow run 31335169320](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31335169320)
+  succeeded, and the user explicitly confirmed the push, merge, and continuation on 2026-08-09.
+- No CI, quality, completion, or workflow exception was used.
