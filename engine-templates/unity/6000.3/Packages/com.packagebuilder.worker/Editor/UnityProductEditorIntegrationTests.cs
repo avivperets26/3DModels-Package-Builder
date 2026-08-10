@@ -837,6 +837,36 @@ namespace PackageBuilder.UnityWorker.Editor
                 savedAnimators[0].applyRootMotion,
                 "The animated prefab hierarchy, skin, controller, or root-motion setting is incorrect.");
 
+            float expectedDuration = (discovered.LastFrame - discovered.FirstFrame) /
+                discovered.SampleRate;
+            UnityAnimationMotionReport motionReport = UnityAnimationMotionValidator.Validate(
+                AnimationTestRoot + "/Animations",
+                animatedPrefabReference,
+                new[]
+                {
+                    new UnityAnimationClipExpectation
+                    {
+                        Name = "A_AnimatedProp_Attack",
+                        DurationSeconds = expectedDuration,
+                        FramesPerSecond = discovered.SampleRate,
+                        Looping = false,
+                    },
+                    new UnityAnimationClipExpectation
+                    {
+                        Name = "A_AnimatedProp_BendLoop",
+                        DurationSeconds = expectedDuration,
+                        FramesPerSecond = discovered.SampleRate,
+                        Looping = true,
+                    },
+                });
+            Require(motionReport.IsValid && motionReport.ClipNames.Length == 2 &&
+                motionReport.BindingsVerified && motionReport.BoneMotionVerified &&
+                motionReport.RendererMotionVerified &&
+                motionReport.RenderableVolumeVerified &&
+                motionReport.NonLoopingCompletionVerified,
+                "Imported animation movement or metadata validation failed: " +
+                    string.Join(",", motionReport.Findings));
+
             Require(!UnityAnimationClipImporter.TryImportAndExtract(
                 new UnityAnimationClipImportRequest
                 {
@@ -981,6 +1011,69 @@ namespace PackageBuilder.UnityWorker.Editor
                     compositionRequest.OutputBackgroundTextureReference,
                 "The horizon-free dark-studio background is not product-local and unlit.");
 
+            Hash128 attackDependencyBefore = AssetDatabase.GetAssetDependencyHash(
+                AnimationTestRoot + "/Animations/A_AnimatedProp_Attack.anim");
+            Hash128 loopDependencyBefore = AssetDatabase.GetAssetDependencyHash(
+                AnimationTestRoot + "/Animations/A_AnimatedProp_BendLoop.anim");
+            string animatedSceneReference =
+                AnimationTestRoot + "/Scenes/S_AnimatedProp_Overview.unity";
+            var animatedCompositionRequest = new UnityOverviewSceneCompositionRequest
+            {
+                AssetId = "AnimatedProp",
+                TemplateSceneReference = templateSceneReference,
+                ProductPrefabReference = AnimationTestRoot + "/Prefabs/P_AnimatedProp.prefab",
+                PreviewControllerScriptReference = controllerScriptReference,
+                OutputBackgroundMaterialReference =
+                    AnimationTestRoot + "/Materials/M_AnimatedProp_OverviewBackground.mat",
+                OutputBackgroundTextureReference =
+                    AnimationTestRoot + "/Textures/T_AnimatedProp_OverviewBackground.png",
+                OutputSceneReference = animatedSceneReference,
+            };
+            UnityEngine.SceneManagement.Scene animatedScene;
+            Require(UnityOverviewSceneComposer.TryCompose(
+                animatedCompositionRequest, out animatedScene, out diagnostic), diagnostic);
+            Require(UnityOverviewSceneComposer.VerifyComposition(
+                animatedScene, animatedCompositionRequest, out diagnostic), diagnostic);
+            GameObject animatedRoot = UnityOverviewSceneTemplateBuilder.FindUniqueRoot(
+                animatedScene, UnityOverviewSceneTemplateBuilder.OverviewRootName);
+            var animatedController = animatedRoot.GetComponent<
+                PackageBuilder.Preview.PackageBuilderPreviewController>();
+            var transport = animatedController.AnimationTransport;
+            Require(transport != null && transport.Available && transport.SelectedIndex == 0 &&
+                transport.Playback == PackageBuilder.Preview.PackageBuilderPlaybackState.Stopped &&
+                transport.ClipNames.SequenceEqual(
+                    new[] { "A_AnimatedProp_Attack", "A_AnimatedProp_BendLoop" },
+                    StringComparer.Ordinal) && !transport.LoopEnabled,
+                "The overview did not initialize the shared animation transport contract.");
+            transport.Play();
+            Require(transport.Playback == PackageBuilder.Preview.PackageBuilderPlaybackState.Playing,
+                "Animation play did not enter the playing state.");
+            transport.Pause();
+            Require(transport.Playback == PackageBuilder.Preview.PackageBuilderPlaybackState.Paused,
+                "Animation pause did not retain the timeline.");
+            transport.Replay();
+            Require(transport.Playback == PackageBuilder.Preview.PackageBuilderPlaybackState.Playing &&
+                Approximately(transport.CurrentTimeSeconds, 0f),
+                "Animation replay did not restart the selected clip.");
+            Require(transport.Scrub(transport.DurationSeconds + 1f) &&
+                transport.Playback == PackageBuilder.Preview.PackageBuilderPlaybackState.Completed &&
+                Approximately(transport.CurrentTimeSeconds, transport.DurationSeconds),
+                "Animation scrubbing did not clamp and complete the one-shot clip.");
+            transport.SetLoop(true);
+            Require(transport.LoopEnabled &&
+                transport.Playback == PackageBuilder.Preview.PackageBuilderPlaybackState.Paused,
+                "The preview-only loop override did not leave completion safely paused.");
+            Require(transport.Select(1) && transport.LoopEnabled &&
+                Approximately(transport.CurrentTimeSeconds, 0f),
+                "Clip selection did not restore source-derived loop state and reset time.");
+            Require(AssetDatabase.GetAssetDependencyHash(
+                    AnimationTestRoot + "/Animations/A_AnimatedProp_Attack.anim") ==
+                    attackDependencyBefore &&
+                AssetDatabase.GetAssetDependencyHash(
+                    AnimationTestRoot + "/Animations/A_AnimatedProp_BendLoop.anim") ==
+                    loopDependencyBefore,
+                "Preview transport modified a packaged source animation asset.");
+
             string readmeReference = ModelTestRoot + "/Documentation/README.txt";
             File.WriteAllText(ToPhysicalPath(readmeReference),
                 "StoneArch\nStatic Unity package integration fixture.\n");
@@ -998,8 +1091,14 @@ namespace PackageBuilder.UnityWorker.Editor
                 "PACKAGEBUILDER_UNITYPACKAGE_OUTPUT");
             string manifestPath = Environment.GetEnvironmentVariable(
                 "PACKAGEBUILDER_UNITYPACKAGE_MANIFEST");
+            string rigPackagePath = Environment.GetEnvironmentVariable(
+                "PACKAGEBUILDER_UNITY_RIG_PACKAGE_OUTPUT");
+            string rigManifestPath = Environment.GetEnvironmentVariable(
+                "PACKAGEBUILDER_UNITY_RIG_PACKAGE_MANIFEST");
             Require(!string.IsNullOrEmpty(packagePath) && !string.IsNullOrEmpty(manifestPath),
                 "The contained Unity package evidence paths are missing.");
+            Require(!string.IsNullOrEmpty(rigPackagePath) && !string.IsNullOrEmpty(rigManifestPath),
+                "The rigged clean-reimport package evidence paths are missing.");
 
             var exportRequest = new UnityPackageExportRequest
             {
@@ -1082,6 +1181,24 @@ namespace PackageBuilder.UnityWorker.Editor
             Require(!UnityPackageExporter.TryExport(exportRequest, out rejectedPlan, out diagnostic) &&
                 diagnostic == "UNITY_PACKAGE_EXPORT_OUTPUT_COLLISION",
                 "An existing Unity package output did not fail closed.");
+
+            var rigExportRequest = new UnityPackageExportRequest
+            {
+                ProductRootReference = RigPolicyTestRoot,
+                OutputPackagePath = rigPackagePath,
+            };
+            UnityPackageExportPlan rigPlan;
+            Require(UnityPackageExporter.TryCreatePlan(
+                rigExportRequest, out rigPlan, out diagnostic), diagnostic);
+            Require(rigPlan.AssetReferences.All(reference =>
+                    reference == RigPolicyTestRoot ||
+                    reference.StartsWith(RigPolicyTestRoot + "/", StringComparison.Ordinal)) &&
+                !rigPlan.AssetReferences.Any(reference =>
+                    reference.Contains("/Animations/") || reference.Contains("/Controllers/")),
+                "The rigged-no-animation package inventory is not isolated.");
+            File.WriteAllLines(rigManifestPath, rigPlan.AssetReferences);
+            Require(UnityPackageExporter.TryExport(
+                rigExportRequest, out rigPlan, out diagnostic), diagnostic);
         }
 
         private static void TestBrokenProductReferences(UnityPackageExportRequest exportRequest)

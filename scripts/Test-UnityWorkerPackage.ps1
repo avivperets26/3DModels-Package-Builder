@@ -68,6 +68,7 @@ $expectedFiles = @(
     'Editor/UnityPrefabHierarchyUtility.cs',
     'Editor/UnityRiggedPrefabGenerator.cs',
     'Editor/UnityAnimationClipImporter.cs',
+    'Editor/UnityAnimationMotionValidator.cs',
     'Editor/UnityAnimatorControllerGenerator.cs',
     'Editor/UnityAnimatedPrefabGenerator.cs',
     'Editor/UnityMeshAssetExtractor.cs',

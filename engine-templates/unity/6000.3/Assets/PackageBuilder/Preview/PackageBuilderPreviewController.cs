@@ -21,11 +21,17 @@ namespace PackageBuilder.Preview
         private const float WheelZoomSpeed = 0.16f;
         private const float DefaultKeyLightYaw = -32f;
         private const float DefaultKeyLightPitch = 42f;
+        private const string AnimationSelectorControl = "animation-selector";
+        private const string PlayPauseControl = "animation-play-pause";
+        private const string ReplayControl = "animation-replay";
+        private const string TimelineControl = "animation-timeline";
+        private const string LoopControl = "animation-loop";
 
         [SerializeField] private Transform previewTarget;
         [SerializeField] private Camera previewCamera;
         [SerializeField] private Light keyLight;
         [SerializeField] private Transform studioBackground;
+        [SerializeField] private PackageBuilderAnimationTransport animationTransport;
         [SerializeField, Min(1.01f)] private float framingPadding = 1.25f;
         [SerializeField] private bool controlsVisible = true;
 
@@ -48,6 +54,9 @@ namespace PackageBuilder.Preview
         /// <summary>Gets whether the accessible capture controls are currently visible.</summary>
         public bool ControlsVisible => controlsVisible;
 
+        /// <summary>Gets the optional shared animation-transport adapter for an animated product.</summary>
+        public PackageBuilderAnimationTransport AnimationTransport => animationTransport;
+
         /// <summary>Assigns the complete scene references used by preview operations.</summary>
         public void Configure(Transform target, Camera camera, Light light, Transform background)
         {
@@ -57,6 +66,20 @@ namespace PackageBuilder.Preview
             studioBackground = background;
             ResetKeyLight();
             RefreshStudioBackground();
+        }
+
+        /// <summary>Connects the product Animator to preview-only transport state.</summary>
+        public void ConfigureAnimation(Animator animator)
+        {
+            if (animationTransport == null)
+            {
+                animationTransport = GetComponent<PackageBuilderAnimationTransport>();
+            }
+
+            if (animationTransport != null)
+            {
+                animationTransport.Configure(animator);
+            }
         }
 
         /// <summary>Retains compatibility with product scenes created before studio controls.</summary>
@@ -272,6 +295,11 @@ namespace PackageBuilder.Preview
 
             if (currentEvent.type == EventType.KeyDown)
             {
+                if (HandleAnimationKeyboardEvent(currentEvent))
+                {
+                    return;
+                }
+
                 bool handled = true;
                 switch (currentEvent.keyCode)
                 {
@@ -408,9 +436,216 @@ namespace PackageBuilder.Preview
             {
                 ResetKeyLight();
             }
+
+            DrawAnimationControls(panel);
         }
 
-        private static Rect OverlayRect() => new(12f, 12f, 256f, 228f);
+        private void DrawAnimationControls(Rect panel)
+        {
+            if (animationTransport == null || !animationTransport.Available)
+            {
+                return;
+            }
+
+            GUI.Label(new Rect(panel.x + 12f, panel.y + 224f, 232f, 22f), "Animation preview");
+            string[] clipNames = animationTransport.ClipNames;
+            GUI.SetNextControlName(AnimationSelectorControl);
+            int requestedIndex = GUI.SelectionGrid(
+                new Rect(panel.x + 12f, panel.y + 248f, 232f, 28f),
+                animationTransport.SelectedIndex,
+                clipNames,
+                Mathf.Max(1, clipNames.Length));
+            if (requestedIndex != animationTransport.SelectedIndex)
+            {
+                animationTransport.Select(requestedIndex);
+            }
+
+            GUI.SetNextControlName(PlayPauseControl);
+            string playLabel = animationTransport.Playback == PackageBuilderPlaybackState.Playing
+                ? "Pause"
+                : "Play";
+            if (GUI.Button(
+                new Rect(panel.x + 12f, panel.y + 282f, 112f, 28f),
+                new GUIContent(playLabel, "Play or pause the selected animation (Enter or Space)")))
+            {
+                TogglePlayback();
+            }
+
+            GUI.SetNextControlName(ReplayControl);
+            if (GUI.Button(
+                new Rect(panel.x + 132f, panel.y + 282f, 112f, 28f),
+                new GUIContent("Replay", "Restart the selected animation (Enter or Space)")))
+            {
+                animationTransport.Replay();
+            }
+
+            GUI.Label(new Rect(panel.x + 12f, panel.y + 316f, 232f, 20f),
+                string.Format(
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    "{0:0.00} s / {1:0.00} s",
+                    animationTransport.CurrentTimeSeconds,
+                    animationTransport.DurationSeconds));
+            GUI.SetNextControlName(TimelineControl);
+            float requestedTime = GUI.HorizontalSlider(
+                new Rect(panel.x + 12f, panel.y + 340f, 232f, 20f),
+                animationTransport.CurrentTimeSeconds,
+                0f,
+                animationTransport.DurationSeconds);
+            if (!Mathf.Approximately(requestedTime, animationTransport.CurrentTimeSeconds))
+            {
+                animationTransport.Scrub(requestedTime);
+            }
+
+            GUI.SetNextControlName(LoopControl);
+            bool requestedLoop = GUI.Toggle(
+                new Rect(panel.x + 12f, panel.y + 366f, 232f, 24f),
+                animationTransport.LoopEnabled,
+                new GUIContent("Loop preview", "Override looping for preview only (Enter or Space)"));
+            if (requestedLoop != animationTransport.LoopEnabled)
+            {
+                animationTransport.SetLoop(requestedLoop);
+            }
+
+            DrawKeyboardFocus(panel);
+        }
+
+        private bool HandleAnimationKeyboardEvent(Event currentEvent)
+        {
+            if (animationTransport == null || !animationTransport.Available)
+            {
+                return false;
+            }
+
+            string focused = GUI.GetNameOfFocusedControl();
+            if (currentEvent.keyCode == KeyCode.Tab)
+            {
+                GUI.FocusControl(NextAnimationControl(focused, currentEvent.shift));
+                currentEvent.Use();
+                return true;
+            }
+
+            if (focused == AnimationSelectorControl &&
+                (currentEvent.keyCode == KeyCode.LeftArrow ||
+                    currentEvent.keyCode == KeyCode.RightArrow))
+            {
+                int direction = currentEvent.keyCode == KeyCode.LeftArrow ? -1 : 1;
+                int count = animationTransport.ClipNames.Length;
+                animationTransport.Select((animationTransport.SelectedIndex + direction + count) % count);
+            }
+            else if (focused == TimelineControl &&
+                (currentEvent.keyCode == KeyCode.LeftArrow ||
+                    currentEvent.keyCode == KeyCode.RightArrow))
+            {
+                float direction = currentEvent.keyCode == KeyCode.LeftArrow ? -1f : 1f;
+                animationTransport.Scrub(Mathf.Max(
+                    0f,
+                    animationTransport.CurrentTimeSeconds +
+                        direction * PackageBuilderAnimationTransport.KeyboardTimelineStepSeconds));
+            }
+            else if (IsActivationKey(currentEvent) && focused == PlayPauseControl)
+            {
+                TogglePlayback();
+            }
+            else if (IsActivationKey(currentEvent) && focused == ReplayControl)
+            {
+                animationTransport.Replay();
+            }
+            else if (IsActivationKey(currentEvent) && focused == LoopControl)
+            {
+                animationTransport.SetLoop(!animationTransport.LoopEnabled);
+            }
+            else
+            {
+                return false;
+            }
+
+            currentEvent.Use();
+            return true;
+        }
+
+        private void TogglePlayback()
+        {
+            if (animationTransport.Playback == PackageBuilderPlaybackState.Playing)
+            {
+                animationTransport.Pause();
+            }
+            else
+            {
+                animationTransport.Play();
+            }
+        }
+
+        private static bool IsActivationKey(Event currentEvent) =>
+            currentEvent.keyCode == KeyCode.Return || currentEvent.keyCode == KeyCode.KeypadEnter ||
+            currentEvent.keyCode == KeyCode.Space;
+
+        private static string NextAnimationControl(string current, bool reverse)
+        {
+            string[] controls =
+            {
+                AnimationSelectorControl,
+                PlayPauseControl,
+                ReplayControl,
+                TimelineControl,
+                LoopControl,
+            };
+            int index = System.Array.IndexOf(controls, current);
+            if (index < 0)
+            {
+                return reverse ? controls[controls.Length - 1] : controls[0];
+            }
+
+            int direction = reverse ? -1 : 1;
+            return controls[(index + direction + controls.Length) % controls.Length];
+        }
+
+        private static void DrawKeyboardFocus(Rect panel)
+        {
+            string focused = GUI.GetNameOfFocusedControl();
+            Rect focusRect;
+            if (focused == AnimationSelectorControl)
+            {
+                focusRect = new Rect(panel.x + 9f, panel.y + 245f, 238f, 34f);
+            }
+            else if (focused == PlayPauseControl)
+            {
+                focusRect = new Rect(panel.x + 9f, panel.y + 279f, 118f, 34f);
+            }
+            else if (focused == ReplayControl)
+            {
+                focusRect = new Rect(panel.x + 129f, panel.y + 279f, 118f, 34f);
+            }
+            else if (focused == TimelineControl)
+            {
+                focusRect = new Rect(panel.x + 9f, panel.y + 334f, 238f, 28f);
+            }
+            else if (focused == LoopControl)
+            {
+                focusRect = new Rect(panel.x + 9f, panel.y + 363f, 238f, 30f);
+            }
+            else
+            {
+                return;
+            }
+
+            Color previous = GUI.color;
+            GUI.color = new Color(0.35f, 0.75f, 1f, 1f);
+            GUI.DrawTexture(new Rect(focusRect.x, focusRect.y, focusRect.width, 2f),
+                Texture2D.whiteTexture);
+            GUI.DrawTexture(new Rect(focusRect.x, focusRect.yMax - 2f, focusRect.width, 2f),
+                Texture2D.whiteTexture);
+            GUI.DrawTexture(new Rect(focusRect.x, focusRect.y, 2f, focusRect.height),
+                Texture2D.whiteTexture);
+            GUI.DrawTexture(new Rect(focusRect.xMax - 2f, focusRect.y, 2f, focusRect.height),
+                Texture2D.whiteTexture);
+            GUI.color = previous;
+        }
+
+        private Rect OverlayRect() => new(
+            12f,
+            12f,
+            256f,
+            animationTransport != null && animationTransport.Available ? 402f : 228f);
 
         private static Rect RestoreControlsRect() => new(12f, 12f, 120f, 32f);
 

@@ -27,7 +27,12 @@ namespace PackageBuilder.UnityWorker.Editor
         public string productRootReference = string.Empty;
         public string sceneReference = string.Empty;
         public string prefabReference = string.Empty;
+        public string validationMode = string.Empty;
         public int rendererCount;
+        public int skinnedRendererCount;
+        public int boneCount;
+        public int animationClipCount;
+        public int animatorCount;
         public int materialCount;
         public int textureCount;
         public UnityCleanReimportFinding[] findings = Array.Empty<UnityCleanReimportFinding>();
@@ -50,6 +55,8 @@ namespace PackageBuilder.UnityWorker.Editor
                 "PACKAGEBUILDER_UNITY_REIMPORT_RESULT");
             var result = new UnityCleanReimportResult
             {
+                validationMode = EnvironmentValue(
+                    "PACKAGEBUILDER_UNITY_REIMPORT_MODE", "overview"),
                 productRootReference = EnvironmentValue(
                     "PACKAGEBUILDER_UNITY_PRODUCT_ROOT", DefaultProductRoot),
                 sceneReference = EnvironmentValue(
@@ -58,7 +65,10 @@ namespace PackageBuilder.UnityWorker.Editor
                     "PACKAGEBUILDER_UNITY_PRODUCT_PREFAB", DefaultPrefab),
             };
             var findings = new List<UnityCleanReimportFinding>();
-
+            if (string.Equals(result.validationMode, "rigged-no-animation", StringComparison.Ordinal))
+            {
+                result.sceneReference = string.Empty;
+            }
             try
             {
                 Validate(result, findings);
@@ -103,6 +113,18 @@ namespace PackageBuilder.UnityWorker.Editor
             UnityCleanReimportResult result,
             List<UnityCleanReimportFinding> findings)
         {
+            if (string.Equals(result.validationMode, "rigged-no-animation", StringComparison.Ordinal))
+            {
+                ValidateRiggedNoAnimation(result, findings);
+                return;
+            }
+
+            if (!string.Equals(result.validationMode, "overview", StringComparison.Ordinal))
+            {
+                findings.Add(Finding("UNITY_REIMPORT_MODE_INVALID", result.validationMode));
+                return;
+            }
+
             if (!AssetDatabase.IsValidFolder(result.productRootReference))
             {
                 findings.Add(Finding("UNITY_REIMPORT_PRODUCT_ROOT_MISSING", result.productRootReference));
@@ -230,6 +252,89 @@ namespace PackageBuilder.UnityWorker.Editor
                 controller.PreviewCamera.targetTexture = previous;
                 renderTexture.Release();
                 UnityEngine.Object.DestroyImmediate(renderTexture);
+            }
+        }
+
+        private static void ValidateRiggedNoAnimation(
+            UnityCleanReimportResult result,
+            List<UnityCleanReimportFinding> findings)
+        {
+            if (!AssetDatabase.IsValidFolder(result.productRootReference))
+            {
+                findings.Add(Finding("UNITY_REIMPORT_PRODUCT_ROOT_MISSING", result.productRootReference));
+                return;
+            }
+
+            if (AssetDatabase.IsValidFolder(result.productRootReference + "/Animations") ||
+                AssetDatabase.IsValidFolder(result.productRootReference + "/Controllers"))
+            {
+                findings.Add(Finding(
+                    "UNITY_REIMPORT_RIG_ANIMATION_FOLDER_PRESENT", result.productRootReference));
+            }
+
+            string[] clipGuids = AssetDatabase.FindAssets(
+                "t:AnimationClip", new[] { result.productRootReference });
+            string[] controllerGuids = AssetDatabase.FindAssets(
+                "t:AnimatorController", new[] { result.productRootReference });
+            result.animationClipCount = clipGuids.Length;
+            if (clipGuids.Length != 0 || controllerGuids.Length != 0)
+            {
+                findings.Add(Finding(
+                    "UNITY_REIMPORT_RIG_ANIMATION_ASSET_PRESENT", result.productRootReference));
+            }
+
+            string[] modelReferences = AssetDatabase.FindAssets(
+                    "t:Model", new[] { result.productRootReference + "/Source" })
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Where(value => value.EndsWith(".fbx", StringComparison.OrdinalIgnoreCase))
+                .ToArray();
+            if (modelReferences.Length != 1)
+            {
+                findings.Add(Finding(
+                    "UNITY_REIMPORT_RIG_SOURCE_COUNT_INVALID", result.productRootReference));
+                return;
+            }
+
+            var importer = AssetImporter.GetAtPath(modelReferences[0]) as ModelImporter;
+            if (importer == null || importer.animationType != ModelImporterAnimationType.Generic ||
+                importer.importAnimation)
+            {
+                findings.Add(Finding("UNITY_REIMPORT_RIG_IMPORT_POLICY_INVALID", modelReferences[0]));
+            }
+
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(result.prefabReference);
+            if (prefab == null)
+            {
+                findings.Add(Finding("UNITY_REIMPORT_PREFAB_MISSING", result.prefabReference));
+                return;
+            }
+
+            result.animatorCount = prefab.GetComponentsInChildren<Animator>(true).Length;
+            result.skinnedRendererCount =
+                prefab.GetComponentsInChildren<SkinnedMeshRenderer>(true).Length;
+            UnitySkinSkeletonReport report = UnitySkinSkeletonValidator.Validate(prefab, 4);
+            result.rendererCount = report.RendererCount;
+            result.boneCount = report.UniqueBoneCount;
+            if (!report.IsValid || result.skinnedRendererCount != 1 || report.RendererCount != 1 ||
+                report.UniqueBoneCount != 2 || result.animatorCount != 0 ||
+                prefab.GetComponentsInChildren<Animation>(true).Length != 0 ||
+                GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(prefab) != 0)
+            {
+                findings.Add(Finding("UNITY_REIMPORT_RIG_PREFAB_INVALID", result.prefabReference));
+            }
+
+            string[] metadataReferences = AssetDatabase.FindAssets(
+                    "t:TextAsset", new[] { result.productRootReference + "/Documentation" })
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Where(value => value.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+                .ToArray();
+            TextAsset metadata = metadataReferences.Length == 1
+                ? AssetDatabase.LoadAssetAtPath<TextAsset>(metadataReferences[0])
+                : null;
+            if (metadata == null || !metadata.text.Contains("\"hasAnimationClips\": false"))
+            {
+                findings.Add(Finding(
+                    "UNITY_REIMPORT_RIG_METADATA_INVALID", result.productRootReference));
             }
         }
 

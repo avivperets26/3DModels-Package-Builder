@@ -30,6 +30,7 @@ The template is versioned at `engine-templates/unity/6000.3` and pins:
 
 - Unity Editor `6000.3.10f1`, revision `e35f0c77bd8e`.
 - Universal Render Pipeline `17.3.0`.
+- Built-in Unity Animation module `1.0.0`, added by PB-0709 for the customer preview Animator.
 
 The source settings were mechanically derived from the official 3D URP template bundled with the
 installed Unity `6000.3.10f1` Editor. The bundled template archive identity observed during the
@@ -47,9 +48,10 @@ audited `package.json` identity was:
 SHA-256 040CDFEC7F05101EEAEC0F097448CEA49681A874FB89FAE5A9F61F3D6408DC4B
 ```
 
-The tracked package manifest deliberately retains only URP as a direct dependency. Optional IDE,
-Collab, navigation, Input System, Timeline, visual-scripting, and tutorial packages from the source
-template are excluded from this minimal worker foundation.
+The tracked package manifest retains URP and Unity's built-in Animation module as its only direct
+dependencies. Animation is required by PB-0709's product-local Animator preview; it is bundled with
+Unity and introduces no paid or hosted dependency. Optional IDE, Collab, navigation, Input System,
+Timeline, visual-scripting, and tutorial packages from the source template remain excluded.
 
 ## Minimal Project Boundary
 
@@ -62,7 +64,8 @@ ProjectSettings/
 ```
 
 `Assets/Settings` contains only the official URP mobile/PC renderer assets, render-pipeline assets,
-default volume profile, global settings, and their metadata. `Packages/manifest.json` pins URP.
+default volume profile, global settings, and their metadata. `Packages/manifest.json` pins URP and
+the built-in Animation module.
 `ProjectSettings` contains the official project settings plus the exact Editor revision.
 
 Removed source-template content includes the sample scene, Readme/tutorial scripts and images,
