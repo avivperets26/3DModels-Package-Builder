@@ -160,7 +160,19 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0713 | 🟡 **PROCESS** | `test/PB-0713-unity-multi-clip` | Unity Fixture Engineering for local work; user for Git gates | 2026-08-11 | Locally validated: automated generation and clean reimport preserve one looping and one non-looping clip, two exact controller states, and sampled motion; user screenshots also confirm the clip settings, default state, and prefab Animator. | User-controlled commit, push, merge, required exact-merge `main` CI, and explicit completion confirmation remain. |
+| PB-0714 | 🟡 **PROCESS** | `test/PB-0714-unity-generic-topologies` | Unity Fixture Engineering for local work; user for Git gates | 2026-08-11 | Locally validated: five repository-generated topology categories preserve Generic/non-Humanoid import, declared roots, exact hierarchy, one-influence skin weights, clips, controllers, prefabs, and sampled deformation through isolated clean reimport; exact multi-root and missing-binding findings also pass. User screenshots confirm the five prefabs, distinct displayed hierarchies, clip metadata, expected animation curves, and controller structure. | User-controlled commit, push, merge, required exact-merge `main` CI, and explicit completion confirmation remain. |
+
+### PB-0713 Completion Evidence
+
+- Final task commit `ccdc155961c683012ef257d238cf64f3b4013287` was published on
+  `test/PB-0713-unity-multi-clip`.
+- [Pull request #85](https://github.com/avivperets26/3DModels-Package-Builder/pull/85) merged the
+  task into `main` as `ee4a151d662dd3d0984318c31d3feb60726c0f51`.
+- Required exact-merge `main` CI completed successfully, and the user explicitly confirmed the
+  push, merge, green required `main` CI, clip loop settings, exact controller states, default state,
+  and prefab Animator on 2026-08-11.
+- No CI, quality, completion, or workflow exception was used. This PB-0714 rollover marks PB-0713
+  `[x]` / 🟢 **DONE**, removes it from Active Work, and adds exactly one Completion Log row.
 
 ### PB-0712 Completion Evidence
 
@@ -1599,6 +1611,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0710 | `test/PB-0710-unity-animation-validation` | `8d4521cd4c428690835a87e2045a4b3dc26e5894` | [#83](https://github.com/avivperets26/3DModels-Package-Builder/pull/83) | 2026-08-10 | Canonical task branch retained for lifecycle identity; implementation was published on PB-0709 with PB-0709/PB-0711 under the approved combined exception and merged as `3b8e7e42ce0b8541483627750c56b6ff249c581b`. Required exact-merge `main` CI succeeded; no CI or quality exception was used, and the user explicitly confirmed completion. |
 | PB-0711 | `test/PB-0711-unity-rigged-e2e` | `8d4521cd4c428690835a87e2045a4b3dc26e5894` | [#83](https://github.com/avivperets26/3DModels-Package-Builder/pull/83) | 2026-08-10 | Canonical task branch retained for lifecycle identity; implementation was published on PB-0709 with PB-0709/PB-0710 under the approved combined exception and merged as `3b8e7e42ce0b8541483627750c56b6ff249c581b`. Required exact-merge `main` CI succeeded; no CI or quality exception was used, and the user explicitly confirmed completion. |
 | PB-0712 | `test/PB-0712-silverwing-unity-e2e` | `ebc9c0ce4def18f10a64efbd2eccb40f44daaa58` | [#84](https://github.com/avivperets26/3DModels-Package-Builder/pull/84) | 2026-08-11 | Merged into `main` as `5073a3aab0fc52afd67522165f0156ecfaeb79ff`; required exact-merge `main` CI succeeded. No CI or quality exception was used; the user explicitly confirmed the push, merge, green required `main` CI, working animation and preview, and zero Unity errors. |
+| PB-0713 | `test/PB-0713-unity-multi-clip` | `ccdc155961c683012ef257d238cf64f3b4013287` | [#85](https://github.com/avivperets26/3DModels-Package-Builder/pull/85) | 2026-08-11 | Merged into `main` as `ee4a151d662dd3d0984318c31d3feb60726c0f51`; required exact-merge `main` CI succeeded. No CI or quality exception was used; the user explicitly confirmed the push, merge, green required `main` CI, mixed loop settings, exact controller states, default state, and prefab Animator. |
 
 ## 5. Milestones
 
@@ -2252,7 +2265,7 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
     immutability, exact Blender structure normalization, synchronized body/string deformation,
     textured overview rendering, exact package export, and isolated clean reimport.
 
-- [ ] **PB-0713 — Add multi-clip animated fixture** — **P1** — 🟡 **PROCESS**
+- [x] **PB-0713 — Add multi-clip animated fixture** — **P1** — 🟢 **DONE**
   - Branch: `test/PB-0713-unity-multi-clip`
   - Depends on: PB-0710
   - Done when: multiple clips with mixed loop settings generate correct controller states and survive clean reimport.
@@ -2260,10 +2273,13 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
     generated fixture, exact mixed-loop clip and controller state inventory, sampled motion, exact
     package export, and passing isolated clean reimport.
 
-- [ ] **PB-0714 — Validate Unity arbitrary Generic rig topology matrix** — **P0**
+- [ ] **PB-0714 — Validate Unity arbitrary Generic rig topology matrix** — **P0** — 🟡 **PROCESS**
   - Branch: `test/PB-0714-unity-generic-topologies`
   - Depends on: PB-0617, PB-0703, PB-0705, PB-0710
   - Done when: reusable redistribution-safe procedural fixtures cover articulated mechanical rigs such as bows and vehicles, quadrupeds with tails, winged creatures, and non-humanoid bipeds with tails; each imports as Generic without a Humanoid mapping, preserves declared roots, hierarchy, skin weights and clips, renders representative deformation, survives clean reimport, and emits stable findings for invalid multi-root or binding data.
+  - Local evidence: `docs/PB-0714_UNITY_GENERIC_TOPOLOGY_EVIDENCE.md` records the reusable
+    engine-neutral procedural matrix, five exact Generic topology cases, stable multi-root and
+    binding findings, sampled deformation, exact package export, and passing clean reimport.
 
 **E07 exit:** M4 is complete.
 

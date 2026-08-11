@@ -2111,6 +2111,15 @@ renderer deformation, and one-shot completion. Exact package export followed by 
 fresh Unity clone verifies that both clips, their mixed loop settings, the two controller states,
 and the animated prefab survive the package boundary.
 
+PB-0714 adds one engine-neutral procedural topology manifest and generated FBX matrix for an
+articulated bow, articulated vehicle, quadruped with tail, winged creature, and non-humanoid biped
+with tail. Each fixture exposes a distinct declared root and parent hierarchy, fully weighted skin,
+one named moving bone, and one non-looping action. Unity consumes the manifest through one shared
+matrix validator before export and after clean reimport; PB-1214 later consumes the same fixture
+definitions for Unreal. Animation motion expectations now accept an explicit moving-bone name and
+safe clip scope, eliminating the former two-bone `Tip` assumption while preserving that default for
+existing callers. Stable negative checks cover multiple declared roots and missing binding targets.
+
 The small Unity transport state mapping intentionally mirrors the PB-0913 state transitions because
 exported customer assemblies cannot reference the repository's .NET 10 Domain assembly. This is a
 documented engine-boundary duplication, owned by Unity Preview Engineering and constrained by the

@@ -16,6 +16,12 @@ namespace PackageBuilder.UnityWorker.Editor
         internal float FramesPerSecond { get; set; }
 
         internal bool Looping { get; set; }
+
+        /// <summary>
+        /// Names the topology-specific bone whose rotation binding and sampled motion are required.
+        /// Existing two-bone fixtures default to Tip when the expectation omits this value.
+        /// </summary>
+        internal string MovingBoneName { get; set; } = "Tip";
     }
 
     /// <summary>Captures deterministic imported animation metadata and sampled-motion evidence.</summary>
@@ -151,20 +157,28 @@ namespace PackageBuilder.UnityWorker.Editor
         internal static UnityAnimationMotionReport Validate(
             string animationFolderReference,
             string animatedPrefabReference,
-            IReadOnlyList<UnityAnimationClipExpectation> expected)
+            IReadOnlyList<UnityAnimationClipExpectation> expected,
+            IReadOnlyList<string> clipAssetReferences = null)
         {
             var report = new UnityAnimationMotionReport();
             var findings = new List<string>();
             if (!AssetDatabase.IsValidFolder(animationFolderReference) || expected == null ||
-                expected.Count == 0 || expected.Any(value => value == null))
+                expected.Count == 0 || expected.Any(value => value == null) ||
+                clipAssetReferences != null &&
+                (clipAssetReferences.Count == 0 ||
+                    clipAssetReferences.Any(value =>
+                        !IsSafeClipReference(animationFolderReference, value)) ||
+                    clipAssetReferences.Distinct(StringComparer.Ordinal).Count() !=
+                        clipAssetReferences.Count))
             {
                 report.Findings = new[] { "UNITY_ANIMATION_VALIDATION_REQUEST_INVALID" };
                 return report;
             }
 
-            AnimationClip[] clips = AssetDatabase.FindAssets("t:AnimationClip",
-                    new[] { animationFolderReference })
-                .Select(AssetDatabase.GUIDToAssetPath)
+            IEnumerable<string> clipReferences = clipAssetReferences ??
+                AssetDatabase.FindAssets("t:AnimationClip", new[] { animationFolderReference })
+                    .Select(AssetDatabase.GUIDToAssetPath);
+            AnimationClip[] clips = clipReferences
                 .Distinct(StringComparer.Ordinal)
                 .Select(AssetDatabase.LoadAssetAtPath<AnimationClip>)
                 .Where(value => value != null)
@@ -199,14 +213,7 @@ namespace PackageBuilder.UnityWorker.Editor
                     findings.Add("UNITY_ANIMATION_LOOP_MISMATCH:" + expectation.Name);
                 }
 
-                EditorCurveBinding[] bindings = AnimationUtility.GetCurveBindings(clip);
-                bool hasBoneRotation = bindings.Any(value =>
-                    !string.IsNullOrEmpty(value.path) && value.path.EndsWith("Tip", StringComparison.Ordinal) &&
-                    value.propertyName.StartsWith("m_LocalRotation", StringComparison.Ordinal));
-                if (bindings.Length == 0 || !hasBoneRotation)
-                {
-                    findings.Add("UNITY_ANIMATION_BINDINGS_MISMATCH:" + expectation.Name);
-                }
+                findings.AddRange(ValidateRotationBinding(clip, expectation.MovingBoneName));
             }
             report.BindingsVerified = !findings.Any(value =>
                 value.StartsWith("UNITY_ANIMATION_BINDINGS_", StringComparison.Ordinal));
@@ -219,10 +226,18 @@ namespace PackageBuilder.UnityWorker.Editor
                 SkinnedMeshRenderer renderer = instance == null
                     ? null
                     : instance.GetComponentInChildren<SkinnedMeshRenderer>(true);
+                AnimationClip motionClip = clips.FirstOrDefault();
+                UnityAnimationClipExpectation motionExpectation = motionClip == null
+                    ? null
+                    : expected.FirstOrDefault(value => value.Name == motionClip.name);
+                string movingBoneName = motionExpectation == null ||
+                    string.IsNullOrWhiteSpace(motionExpectation.MovingBoneName)
+                    ? "Tip"
+                    : motionExpectation.MovingBoneName;
                 Transform movingBone = renderer == null
                     ? null
-                    : renderer.bones.FirstOrDefault(value => value != null && value.name == "Tip");
-                AnimationClip motionClip = clips.FirstOrDefault();
+                    : renderer.bones.FirstOrDefault(value =>
+                        value != null && value.name == movingBoneName);
                 if (animator == null || renderer == null || movingBone == null || motionClip == null)
                 {
                     findings.Add("UNITY_ANIMATION_MOTION_TARGET_MISSING");
@@ -302,6 +317,38 @@ namespace PackageBuilder.UnityWorker.Editor
             report.Findings = findings.OrderBy(value => value, StringComparer.Ordinal).ToArray();
             return report;
         }
+
+        /// <summary>
+        /// Returns one stable finding unless the clip contains a quaternion rotation binding for
+        /// the exact declared moving-bone path segment. It never changes the clip.
+        /// </summary>
+        internal static string[] ValidateRotationBinding(AnimationClip clip, string movingBoneName)
+        {
+            if (clip == null || string.IsNullOrWhiteSpace(movingBoneName))
+            {
+                return new[] { "UNITY_ANIMATION_BINDING_REQUEST_INVALID" };
+            }
+
+            EditorCurveBinding[] bindings = AnimationUtility.GetCurveBindings(clip);
+            bool hasBoneRotation = bindings.Any(value =>
+                IsExactPathSegment(value.path, movingBoneName) &&
+                value.propertyName.StartsWith("m_LocalRotation", StringComparison.Ordinal));
+            return bindings.Length > 0 && hasBoneRotation
+                ? Array.Empty<string>()
+                : new[] { "UNITY_ANIMATION_BINDINGS_MISMATCH:" + clip.name };
+        }
+
+        private static bool IsExactPathSegment(string path, string segment) =>
+            string.Equals(path, segment, StringComparison.Ordinal) ||
+            (!string.IsNullOrEmpty(path) &&
+                path.EndsWith("/" + segment, StringComparison.Ordinal));
+
+        private static bool IsSafeClipReference(string animationFolderReference, string value) =>
+            !string.IsNullOrWhiteSpace(value) &&
+            value.StartsWith(animationFolderReference + "/", StringComparison.Ordinal) &&
+            value.EndsWith(".anim", StringComparison.Ordinal) &&
+            value.IndexOf('\\') < 0 && value.IndexOf(':') < 0 &&
+            value.IndexOf("/../", StringComparison.Ordinal) < 0;
 
         private static void Sample(
             GameObject root,

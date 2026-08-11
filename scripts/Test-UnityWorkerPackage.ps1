@@ -69,6 +69,7 @@ $expectedFiles = @(
     'Editor/UnityRiggedPrefabGenerator.cs',
     'Editor/UnityAnimationClipImporter.cs',
     'Editor/UnityAnimationMotionValidator.cs',
+    'Editor/UnityGenericTopologyMatrixValidator.cs',
     'Editor/UnityAnimatorControllerGenerator.cs',
     'Editor/UnityAnimatedPrefabGenerator.cs',
     'Editor/UnityMeshAssetExtractor.cs',
@@ -80,6 +81,7 @@ $expectedFiles = @(
     'Editor/UnityPackageValidator.cs',
     'Editor/UnityCleanReimportIntegration.cs',
     'Editor/UnityMultiClipIntegration.cs',
+    'Editor/UnityTopologyMatrixIntegration.cs',
     'Editor/UnitySilverwingIntegration.cs'
 ) | Sort-Object
 

@@ -60,6 +60,10 @@ $cleanReimportSource = Get-Content -LiteralPath (Join-Path $editorRoot `
         'UnityCleanReimportIntegration.cs') -Raw -Encoding UTF8
 $multiClipSource = Get-Content -LiteralPath (Join-Path $editorRoot `
         'UnityMultiClipIntegration.cs') -Raw -Encoding UTF8
+$topologyValidatorSource = Get-Content -LiteralPath (Join-Path $editorRoot `
+        'UnityGenericTopologyMatrixValidator.cs') -Raw -Encoding UTF8
+$topologyIntegrationSource = Get-Content -LiteralPath (Join-Path $editorRoot `
+        'UnityTopologyMatrixIntegration.cs') -Raw -Encoding UTF8
 $controllerSource = Get-Content -LiteralPath (Join-Path $repositoryRootPath `
         'engine-templates\unity\6000.3\Assets\PackageBuilder\Preview\PackageBuilderPreviewController.cs') `
     -Raw -Encoding UTF8
@@ -76,6 +80,10 @@ $staticSliceSource = Get-Content -LiteralPath (Join-Path $repositoryRootPath `
         'scripts\Invoke-UnityStaticVerticalSlice.ps1') -Raw -Encoding UTF8
 $multiClipHarnessSource = Get-Content -LiteralPath (Join-Path $repositoryRootPath `
         'scripts\Invoke-UnityMultiClipIntegration.ps1') -Raw -Encoding UTF8
+$topologyGeneratorSource = Get-Content -LiteralPath (Join-Path $repositoryRootPath `
+        'tests\blender\engine\pb0714_generate_topology_matrix.py') -Raw -Encoding UTF8
+$topologyHarnessSource = Get-Content -LiteralPath (Join-Path $repositoryRootPath `
+        'scripts\Invoke-UnityTopologyMatrixIntegration.ps1') -Raw -Encoding UTF8
 $script:PassCount = 0
 $script:FailureCount = 0
 
@@ -684,6 +692,40 @@ Invoke-Check 'Unity multi-clip fixture preserves mixed loops through clean reimp
     }
 }
 
+Invoke-Check 'Unity Generic topology matrix is reusable and topology-neutral' {
+    foreach ($value in @('mechanical-bow', 'mechanical-vehicle', 'quadruped-tail',
+            'winged-creature', 'biped-tail', 'InvalidMultiRoot.fbx',
+            'topology-matrix.txt')) {
+        if (-not $topologyGeneratorSource.Contains($value)) {
+            throw "Missing procedural topology fixture behavior: $value"
+        }
+    }
+    foreach ($value in @('ModelImporterAnimationType.Generic', 'avatars.All(value => !value.isHuman)',
+            'ValidateHierarchy', 'MaximumInfluences == 1', 'MovingBoneName',
+            'UNITY_TOPOLOGY_ROOT_COUNT_INVALID', 'UNITY_ANIMATION_BINDINGS_MISMATCH:InvalidBinding')) {
+        if (-not $topologyValidatorSource.Contains($value)) {
+            throw "Missing topology-neutral Unity validation behavior: $value"
+        }
+    }
+    foreach ($value in @('UnityRigModelImporterPolicy.TryApply',
+            'UnityAnimationClipImporter.TryImportAndExtract',
+            'UnityAnimatedPrefabGenerator.TryCreate',
+            'UnityGenericTopologyMatrixValidator.Validate',
+            'UnityPackageExporter.TryExport')) {
+        if (-not $topologyIntegrationSource.Contains($value)) {
+            throw "Missing topology-matrix integration reuse: $value"
+        }
+    }
+    foreach ($value in @('generic-topology-matrix', 'topologyCaseCount',
+            'topologyNegativeFindingsVerified', 'Invoke-CleanUnityPackageValidation',
+            'PACKAGEBUILDER_UNITY_TOPOLOGY_MATRIX_PASS')) {
+        if (-not $cleanReimportSource.Contains($value) -and
+            -not $topologyHarnessSource.Contains($value)) {
+            throw "Missing topology clean-reimport behavior: $value"
+        }
+    }
+}
+
 Invoke-Check 'Unity product policy sources are deterministic public-safe text' {
     $files = @(
         (Join-Path $editorRoot 'UnityProductFolderGenerator.cs'),
@@ -696,6 +738,7 @@ Invoke-Check 'Unity product policy sources are deterministic public-safe text' {
         (Join-Path $editorRoot 'UnityRiggedPrefabGenerator.cs'),
         (Join-Path $editorRoot 'UnityAnimationClipImporter.cs'),
         (Join-Path $editorRoot 'UnityAnimationMotionValidator.cs'),
+        (Join-Path $editorRoot 'UnityGenericTopologyMatrixValidator.cs'),
         (Join-Path $editorRoot 'UnityPrefabHierarchyUtility.cs'),
         (Join-Path $editorRoot 'UnityAnimatorControllerGenerator.cs'),
         (Join-Path $editorRoot 'UnityAnimatedPrefabGenerator.cs'),
@@ -706,6 +749,11 @@ Invoke-Check 'Unity product policy sources are deterministic public-safe text' {
         (Join-Path $editorRoot 'UnityPackageExporter.cs'),
         (Join-Path $editorRoot 'UnityPackageValidator.cs'),
         (Join-Path $editorRoot 'UnityCleanReimportIntegration.cs'),
+        (Join-Path $editorRoot 'UnityTopologyMatrixIntegration.cs'),
+        (Join-Path $repositoryRootPath `
+            'tests\blender\engine\pb0714_generate_topology_matrix.py'),
+        (Join-Path $repositoryRootPath `
+            'scripts\Invoke-UnityTopologyMatrixIntegration.ps1'),
         (Join-Path $repositoryRootPath `
             'engine-templates\unity\6000.3\Assets\PackageBuilder\Preview\PackageBuilderPreviewController.cs'),
         (Join-Path $repositoryRootPath `
