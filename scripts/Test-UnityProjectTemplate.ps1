@@ -118,6 +118,7 @@ $expectedWorkerPackageFiles = @(
     'Packages/com.packagebuilder.worker/Editor/UnityRiggedPrefabGenerator.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityAnimationClipImporter.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityAnimationMotionValidator.cs',
+    'Packages/com.packagebuilder.worker/Editor/UnityGenericTopologyMatrixValidator.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityAnimatorControllerGenerator.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityAnimatedPrefabGenerator.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityMeshAssetExtractor.cs',
@@ -129,6 +130,7 @@ $expectedWorkerPackageFiles = @(
     'Packages/com.packagebuilder.worker/Editor/UnityPackageValidator.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityCleanReimportIntegration.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityMultiClipIntegration.cs',
+    'Packages/com.packagebuilder.worker/Editor/UnityTopologyMatrixIntegration.cs',
     'Packages/com.packagebuilder.worker/Editor/UnitySilverwingIntegration.cs'
 )
 $expectedFiles = @(

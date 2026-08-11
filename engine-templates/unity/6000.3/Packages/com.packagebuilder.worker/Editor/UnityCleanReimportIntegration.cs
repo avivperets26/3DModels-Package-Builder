@@ -40,6 +40,12 @@ namespace PackageBuilder.UnityWorker.Editor
         public int loopingClipCount;
         public int nonLoopingClipCount;
         public bool animationMotionVerified;
+        public int topologyCaseCount;
+        public bool genericTopologyVerified;
+        public bool topologyHierarchyVerified;
+        public bool topologySkinWeightsVerified;
+        public bool topologyNegativeFindingsVerified;
+        public string[] topologyCategories = Array.Empty<string>();
         public string[] clipNames = Array.Empty<string>();
         public bool synchronizedRendererMotionVerified;
         public UnityCleanReimportFinding[] findings = Array.Empty<UnityCleanReimportFinding>();
@@ -73,7 +79,8 @@ namespace PackageBuilder.UnityWorker.Editor
             };
             var findings = new List<UnityCleanReimportFinding>();
             if (string.Equals(result.validationMode, "rigged-no-animation", StringComparison.Ordinal) ||
-                string.Equals(result.validationMode, "multi-clip-animated", StringComparison.Ordinal))
+                string.Equals(result.validationMode, "multi-clip-animated", StringComparison.Ordinal) ||
+                string.Equals(result.validationMode, "generic-topology-matrix", StringComparison.Ordinal))
             {
                 result.sceneReference = string.Empty;
             }
@@ -129,6 +136,11 @@ namespace PackageBuilder.UnityWorker.Editor
             if (string.Equals(result.validationMode, "multi-clip-animated", StringComparison.Ordinal))
             {
                 ValidateMultiClipAnimated(result, findings);
+                return;
+            }
+            if (string.Equals(result.validationMode, "generic-topology-matrix", StringComparison.Ordinal))
+            {
+                ValidateGenericTopologyMatrix(result, findings);
                 return;
             }
 
@@ -605,6 +617,27 @@ namespace PackageBuilder.UnityWorker.Editor
             {
                 findings.Add(Finding(
                     "UNITY_REIMPORT_MULTI_CLIP_MOTION_INVALID", string.Join(",", motion.Findings)));
+            }
+        }
+
+        private static void ValidateGenericTopologyMatrix(
+            UnityCleanReimportResult result,
+            List<UnityCleanReimportFinding> findings)
+        {
+            UnityGenericTopologyMatrixReport matrix =
+                UnityGenericTopologyMatrixValidator.Validate(result.productRootReference);
+            result.topologyCaseCount = matrix.ValidCaseCount;
+            result.animationClipCount = matrix.ImportedClipCount;
+            result.controllerStateCount = matrix.ControllerStateCount;
+            result.genericTopologyVerified = matrix.GenericImportVerified;
+            result.topologyHierarchyVerified = matrix.HierarchyVerified;
+            result.topologySkinWeightsVerified = matrix.SkinWeightsVerified;
+            result.animationMotionVerified = matrix.MotionVerified;
+            result.topologyNegativeFindingsVerified = matrix.NegativeFindingsVerified;
+            result.topologyCategories = matrix.Categories;
+            foreach (string finding in matrix.Findings)
+            {
+                findings.Add(Finding("UNITY_REIMPORT_TOPOLOGY_MATRIX_INVALID", finding));
             }
         }
 
