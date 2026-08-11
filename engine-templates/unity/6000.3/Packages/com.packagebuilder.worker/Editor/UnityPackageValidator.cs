@@ -133,6 +133,8 @@ namespace PackageBuilder.UnityWorker.Editor
                     ".cs" or ".asmdef" => "Scripts/",
                     ".unity" => "Scenes/",
                     ".prefab" => "Prefabs/",
+                    ".anim" => "Animations/",
+                    ".controller" => "Controllers/",
                     ".mat" => "Materials/",
                     ".asset" => "Meshes/",
                     ".fbx" or ".glb" => "Source/",

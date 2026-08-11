@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using PackageBuilder.Preview;
 using UnityEditor;
+using UnityEditor.Animations;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -35,6 +36,8 @@ namespace PackageBuilder.UnityWorker.Editor
         public int animatorCount;
         public int materialCount;
         public int textureCount;
+        public string[] clipNames = Array.Empty<string>();
+        public bool synchronizedRendererMotionVerified;
         public UnityCleanReimportFinding[] findings = Array.Empty<UnityCleanReimportFinding>();
     }
 
@@ -119,7 +122,10 @@ namespace PackageBuilder.UnityWorker.Editor
                 return;
             }
 
-            if (!string.Equals(result.validationMode, "overview", StringComparison.Ordinal))
+            bool silverwing = string.Equals(
+                result.validationMode, "silverwing-animated", StringComparison.Ordinal);
+            if (!string.Equals(result.validationMode, "overview", StringComparison.Ordinal) &&
+                !silverwing)
             {
                 findings.Add(Finding("UNITY_REIMPORT_MODE_INVALID", result.validationMode));
                 return;
@@ -252,6 +258,131 @@ namespace PackageBuilder.UnityWorker.Editor
                 controller.PreviewCamera.targetTexture = previous;
                 renderTexture.Release();
                 UnityEngine.Object.DestroyImmediate(renderTexture);
+            }
+
+            if (silverwing)
+            {
+                ValidateSilverwingAnimated(result, findings, controller);
+            }
+        }
+
+        private static void ValidateSilverwingAnimated(
+            UnityCleanReimportResult result,
+            List<UnityCleanReimportFinding> findings,
+            PackageBuilderPreviewController preview)
+        {
+            string[] modelReferences = AssetDatabase.FindAssets(
+                    "t:Model", new[] { result.productRootReference + "/Source" })
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Where(value => value.EndsWith(".fbx", StringComparison.OrdinalIgnoreCase))
+                .ToArray();
+            var importer = modelReferences.Length == 1
+                ? AssetImporter.GetAtPath(modelReferences[0]) as ModelImporter
+                : null;
+            if (importer == null || importer.animationType != ModelImporterAnimationType.Generic ||
+                !importer.importAnimation)
+            {
+                findings.Add(Finding(
+                    "UNITY_REIMPORT_SILVERWING_IMPORT_POLICY_INVALID", result.productRootReference));
+            }
+
+            AnimationClip[] clips = AssetDatabase.FindAssets(
+                    "t:AnimationClip", new[] { result.productRootReference + "/Animations" })
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Distinct(StringComparer.Ordinal)
+                .Select(AssetDatabase.LoadAssetAtPath<AnimationClip>)
+                .Where(value => value != null)
+                .OrderBy(value => value.name, StringComparer.Ordinal)
+                .ToArray();
+            result.animationClipCount = clips.Length;
+            result.clipNames = clips.Select(value => value.name).ToArray();
+            AnimationClip shot = clips.Length == 1 ? clips[0] : null;
+            if (shot == null || shot.name != "A_SilverwingTalonbow_Bow_Shot" ||
+                shot.isLooping || Mathf.Abs(shot.frameRate - 30f) > 0.001f)
+            {
+                findings.Add(Finding(
+                    "UNITY_REIMPORT_SILVERWING_CLIP_INVALID", result.productRootReference));
+            }
+
+            AnimatorController[] controllers = AssetDatabase.FindAssets(
+                    "t:AnimatorController", new[] { result.productRootReference + "/Controllers" })
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Distinct(StringComparer.Ordinal)
+                .Select(AssetDatabase.LoadAssetAtPath<AnimatorController>)
+                .Where(value => value != null)
+                .ToArray();
+            if (controllers.Length != 1 || controllers[0].layers.Length != 1 ||
+                controllers[0].layers[0].stateMachine.states.Length != 1 ||
+                controllers[0].layers[0].stateMachine.defaultState == null ||
+                controllers[0].layers[0].stateMachine.defaultState.motion != shot)
+            {
+                findings.Add(Finding(
+                    "UNITY_REIMPORT_SILVERWING_CONTROLLER_INVALID", result.productRootReference));
+            }
+
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(result.prefabReference);
+            if (prefab == null)
+            {
+                findings.Add(Finding("UNITY_REIMPORT_PREFAB_MISSING", result.prefabReference));
+                return;
+            }
+            UnitySkinSkeletonReport skin = UnitySkinSkeletonValidator.Validate(prefab, 4);
+            SkinnedMeshRenderer[] skinnedRenderers = prefab
+                .GetComponentsInChildren<SkinnedMeshRenderer>(true)
+                .OrderBy(value => value.name, StringComparer.Ordinal)
+                .ToArray();
+            result.rendererCount = skin.RendererCount;
+            result.skinnedRendererCount = skinnedRenderers.Length;
+            result.boneCount = skin.UniqueBoneCount;
+            result.animatorCount = prefab.GetComponentsInChildren<Animator>(true).Length;
+            string[] expectedRenderers =
+            {
+                "P_SilverwingTalonbow_Body",
+                "P_SilverwingTalonbow_String",
+            };
+            if (!skin.IsValid || result.rendererCount != 2 || result.skinnedRendererCount != 2 ||
+                result.boneCount != 38 || result.animatorCount != 1 ||
+                !skinnedRenderers.Select(value => value.name)
+                    .SequenceEqual(expectedRenderers, StringComparer.Ordinal))
+            {
+                findings.Add(Finding(
+                    "UNITY_REIMPORT_SILVERWING_PREFAB_INVALID", result.prefabReference));
+            }
+
+            Material material = AssetDatabase.LoadAssetAtPath<Material>(
+                result.productRootReference + "/Materials/M_SilverwingTalonbow_URP.mat");
+            if (material == null || material.GetTexture("_BaseMap") == null ||
+                material.GetTexture("_BumpMap") == null ||
+                material.GetTexture("_MetallicGlossMap") == null ||
+                material.GetTexture("_EmissionMap") == null ||
+                skinnedRenderers.Any(value => value.sharedMaterials.Length == 0 ||
+                    value.sharedMaterials.Any(rendererMaterial => rendererMaterial != material)))
+            {
+                findings.Add(Finding(
+                    "UNITY_REIMPORT_SILVERWING_TEXTURED_MATERIAL_INVALID", result.prefabReference));
+            }
+
+            if (shot != null)
+            {
+                UnitySynchronizedRendererMotionReport motion =
+                    UnityAnimationMotionValidator.ValidateSynchronizedRenderers(
+                        AssetDatabase.GetAssetPath(shot), result.prefabReference, expectedRenderers);
+                result.synchronizedRendererMotionVerified = motion.IsValid;
+                if (!motion.IsValid)
+                {
+                    findings.Add(Finding(
+                        "UNITY_REIMPORT_SILVERWING_SYNCHRONIZED_MOTION_INVALID",
+                        string.Join(",", motion.Findings)));
+                }
+            }
+
+            PackageBuilderAnimationTransport transport = preview.AnimationTransport;
+            if (transport == null || !transport.Available || transport.LoopEnabled ||
+                !transport.ClipNames.SequenceEqual(
+                    new[] { "A_SilverwingTalonbow_Bow_Shot" }, StringComparer.Ordinal))
+            {
+                findings.Add(Finding(
+                    "UNITY_REIMPORT_SILVERWING_TRANSPORT_INVALID", result.sceneReference));
             }
         }
 
