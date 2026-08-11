@@ -128,6 +128,7 @@ $expectedWorkerPackageFiles = @(
     'Packages/com.packagebuilder.worker/Editor/UnityPackageExporter.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityPackageValidator.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityCleanReimportIntegration.cs',
+    'Packages/com.packagebuilder.worker/Editor/UnityMultiClipIntegration.cs',
     'Packages/com.packagebuilder.worker/Editor/UnitySilverwingIntegration.cs'
 )
 $expectedFiles = @(

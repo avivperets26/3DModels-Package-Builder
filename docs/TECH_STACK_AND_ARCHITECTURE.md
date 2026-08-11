@@ -2103,6 +2103,14 @@ the Animator-owned binding root and requires both named skinned renderers to def
 shot time. Source and texture hashes before and after the run prove private-input immutability; only
 the scripts and validation contracts are public repository content.
 
+PB-0713 uses the repository-owned procedural two-bone animated FBX to exercise multiple product
+clips without adding a private fixture. One discovered 30 FPS take is extracted as a non-looping
+`Attack` clip and a looping `BendLoop` clip. The existing controller generator owns state ordering
+and the declared default state; the existing motion validator proves bindings, bone rotation,
+renderer deformation, and one-shot completion. Exact package export followed by validation in a
+fresh Unity clone verifies that both clips, their mixed loop settings, the two controller states,
+and the animated prefab survive the package boundary.
+
 The small Unity transport state mapping intentionally mirrors the PB-0913 state transitions because
 exported customer assemblies cannot reference the repository's .NET 10 Domain assembly. This is a
 documented engine-boundary duplication, owned by Unity Preview Engineering and constrained by the

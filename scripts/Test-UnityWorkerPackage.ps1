@@ -79,6 +79,7 @@ $expectedFiles = @(
     'Editor/UnityPackageExporter.cs',
     'Editor/UnityPackageValidator.cs',
     'Editor/UnityCleanReimportIntegration.cs',
+    'Editor/UnityMultiClipIntegration.cs',
     'Editor/UnitySilverwingIntegration.cs'
 ) | Sort-Object
 

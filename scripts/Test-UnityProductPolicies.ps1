@@ -58,6 +58,8 @@ $packageValidatorSource = Get-Content -LiteralPath (Join-Path $editorRoot 'Unity
     -Raw -Encoding UTF8
 $cleanReimportSource = Get-Content -LiteralPath (Join-Path $editorRoot `
         'UnityCleanReimportIntegration.cs') -Raw -Encoding UTF8
+$multiClipSource = Get-Content -LiteralPath (Join-Path $editorRoot `
+        'UnityMultiClipIntegration.cs') -Raw -Encoding UTF8
 $controllerSource = Get-Content -LiteralPath (Join-Path $repositoryRootPath `
         'engine-templates\unity\6000.3\Assets\PackageBuilder\Preview\PackageBuilderPreviewController.cs') `
     -Raw -Encoding UTF8
@@ -72,6 +74,8 @@ $integrationSource += Get-Content -LiteralPath (Join-Path $repositoryRootPath `
         'scripts\UnityCleanReimport.Common.ps1') -Raw -Encoding UTF8
 $staticSliceSource = Get-Content -LiteralPath (Join-Path $repositoryRootPath `
         'scripts\Invoke-UnityStaticVerticalSlice.ps1') -Raw -Encoding UTF8
+$multiClipHarnessSource = Get-Content -LiteralPath (Join-Path $repositoryRootPath `
+        'scripts\Invoke-UnityMultiClipIntegration.ps1') -Raw -Encoding UTF8
 $script:PassCount = 0
 $script:FailureCount = 0
 
@@ -652,6 +656,30 @@ Invoke-Check 'Unity rigged and animated prefabs share one hierarchy policy' {
     foreach ($value in @('P_Model', 'Reset', 'IsSafeReference', 'IsReset')) {
         if (-not $prefabHierarchySource.Contains($value)) {
             throw "Missing shared prefab hierarchy behavior: $value"
+        }
+    }
+}
+
+Invoke-Check 'Unity multi-clip fixture preserves mixed loops through clean reimport' {
+    foreach ($value in @('A_MultiClipProp_Attack', 'A_MultiClipProp_BendLoop',
+            'LoopTime = false', 'LoopTime = true', 'states.Length == 2',
+            'UnityAnimationMotionValidator.Validate', 'UnityPackageExporter.TryExport')) {
+        if (-not $multiClipSource.Contains($value)) {
+            throw "Missing multi-clip integration behavior: $value"
+        }
+    }
+    foreach ($value in @('multi-clip-animated', 'loopingClipCount',
+            'nonLoopingClipCount', 'controllerStateCount', 'animationMotionVerified',
+            'UNITY_REIMPORT_MULTI_CLIP_CONTROLLER_INVALID')) {
+        if (-not $cleanReimportSource.Contains($value)) {
+            throw "Missing multi-clip clean-reimport behavior: $value"
+        }
+    }
+    foreach ($value in @('pb0701_generate_rig_fbx.py',
+            'Invoke-CleanUnityPackageValidation', 'MultiClipProp.unitypackage',
+            'PACKAGEBUILDER_UNITY_MULTI_CLIP_PASS')) {
+        if (-not $multiClipHarnessSource.Contains($value)) {
+            throw "Missing multi-clip harness behavior: $value"
         }
     }
 }

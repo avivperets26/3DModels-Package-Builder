@@ -36,6 +36,10 @@ namespace PackageBuilder.UnityWorker.Editor
         public int animatorCount;
         public int materialCount;
         public int textureCount;
+        public int controllerStateCount;
+        public int loopingClipCount;
+        public int nonLoopingClipCount;
+        public bool animationMotionVerified;
         public string[] clipNames = Array.Empty<string>();
         public bool synchronizedRendererMotionVerified;
         public UnityCleanReimportFinding[] findings = Array.Empty<UnityCleanReimportFinding>();
@@ -68,7 +72,8 @@ namespace PackageBuilder.UnityWorker.Editor
                     "PACKAGEBUILDER_UNITY_PRODUCT_PREFAB", DefaultPrefab),
             };
             var findings = new List<UnityCleanReimportFinding>();
-            if (string.Equals(result.validationMode, "rigged-no-animation", StringComparison.Ordinal))
+            if (string.Equals(result.validationMode, "rigged-no-animation", StringComparison.Ordinal) ||
+                string.Equals(result.validationMode, "multi-clip-animated", StringComparison.Ordinal))
             {
                 result.sceneReference = string.Empty;
             }
@@ -119,6 +124,11 @@ namespace PackageBuilder.UnityWorker.Editor
             if (string.Equals(result.validationMode, "rigged-no-animation", StringComparison.Ordinal))
             {
                 ValidateRiggedNoAnimation(result, findings);
+                return;
+            }
+            if (string.Equals(result.validationMode, "multi-clip-animated", StringComparison.Ordinal))
+            {
+                ValidateMultiClipAnimated(result, findings);
                 return;
             }
 
@@ -466,6 +476,135 @@ namespace PackageBuilder.UnityWorker.Editor
             {
                 findings.Add(Finding(
                     "UNITY_REIMPORT_RIG_METADATA_INVALID", result.productRootReference));
+            }
+        }
+
+        private static void ValidateMultiClipAnimated(
+            UnityCleanReimportResult result,
+            List<UnityCleanReimportFinding> findings)
+        {
+            if (!AssetDatabase.IsValidFolder(result.productRootReference))
+            {
+                findings.Add(Finding("UNITY_REIMPORT_PRODUCT_ROOT_MISSING", result.productRootReference));
+                return;
+            }
+
+            string[] modelReferences = AssetDatabase.FindAssets(
+                    "t:Model", new[] { result.productRootReference + "/Source" })
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Where(value => value.EndsWith(".fbx", StringComparison.OrdinalIgnoreCase))
+                .ToArray();
+            var importer = modelReferences.Length == 1
+                ? AssetImporter.GetAtPath(modelReferences[0]) as ModelImporter
+                : null;
+            if (importer == null || importer.animationType != ModelImporterAnimationType.Generic ||
+                !importer.importAnimation || importer.clipAnimations.Length != 2 ||
+                importer.clipAnimations.Count(value => value.loopTime) != 1 ||
+                importer.clipAnimations.Count(value => !value.loopTime) != 1)
+            {
+                findings.Add(Finding(
+                    "UNITY_REIMPORT_MULTI_CLIP_IMPORT_POLICY_INVALID", result.productRootReference));
+            }
+
+            AnimationClip[] clips = AssetDatabase.FindAssets(
+                    "t:AnimationClip", new[] { result.productRootReference + "/Animations" })
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Distinct(StringComparer.Ordinal)
+                .Select(AssetDatabase.LoadAssetAtPath<AnimationClip>)
+                .Where(value => value != null)
+                .OrderBy(value => value.name, StringComparer.Ordinal)
+                .ToArray();
+            result.animationClipCount = clips.Length;
+            result.clipNames = clips.Select(value => value.name).ToArray();
+            result.loopingClipCount = clips.Count(value => value.isLooping);
+            result.nonLoopingClipCount = clips.Count(value => !value.isLooping);
+            string[] expectedNames =
+            {
+                "A_MultiClipProp_Attack",
+                "A_MultiClipProp_BendLoop",
+            };
+            if (!result.clipNames.SequenceEqual(expectedNames, StringComparer.Ordinal) ||
+                result.loopingClipCount != 1 || result.nonLoopingClipCount != 1 ||
+                clips.Any(value => Mathf.Abs(value.frameRate - 30f) > 0.001f) ||
+                clips.FirstOrDefault(value => value.name == expectedNames[0])?.isLooping != false ||
+                clips.FirstOrDefault(value => value.name == expectedNames[1])?.isLooping != true)
+            {
+                findings.Add(Finding(
+                    "UNITY_REIMPORT_MULTI_CLIP_INVENTORY_INVALID", result.productRootReference));
+            }
+
+            AnimatorController[] controllers = AssetDatabase.FindAssets(
+                    "t:AnimatorController", new[] { result.productRootReference + "/Controllers" })
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Distinct(StringComparer.Ordinal)
+                .Select(AssetDatabase.LoadAssetAtPath<AnimatorController>)
+                .Where(value => value != null)
+                .ToArray();
+            AnimatorController controller = controllers.Length == 1 ? controllers[0] : null;
+            result.controllerStateCount = controller == null || controller.layers.Length != 1
+                ? 0
+                : controller.layers[0].stateMachine.states.Length;
+            AnimationClip attack = clips.FirstOrDefault(value => value.name == expectedNames[0]);
+            if (controller == null || result.controllerStateCount != 2 ||
+                controller.layers[0].stateMachine.defaultState == null ||
+                controller.layers[0].stateMachine.defaultState.motion != attack ||
+                controller.layers[0].stateMachine.states.Any(value => value.state.motion == null) ||
+                !controller.layers[0].stateMachine.states.Select(value => value.state.motion.name)
+                    .OrderBy(value => value, StringComparer.Ordinal)
+                    .SequenceEqual(expectedNames, StringComparer.Ordinal))
+            {
+                findings.Add(Finding(
+                    "UNITY_REIMPORT_MULTI_CLIP_CONTROLLER_INVALID", result.productRootReference));
+            }
+
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(result.prefabReference);
+            if (prefab == null)
+            {
+                findings.Add(Finding("UNITY_REIMPORT_PREFAB_MISSING", result.prefabReference));
+                return;
+            }
+            UnitySkinSkeletonReport skin = UnitySkinSkeletonValidator.Validate(prefab, 4);
+            Animator[] animators = prefab.GetComponentsInChildren<Animator>(true);
+            result.rendererCount = skin.RendererCount;
+            result.skinnedRendererCount =
+                prefab.GetComponentsInChildren<SkinnedMeshRenderer>(true).Length;
+            result.boneCount = skin.UniqueBoneCount;
+            result.animatorCount = animators.Length;
+            if (!skin.IsValid || result.rendererCount != 1 || result.skinnedRendererCount != 1 ||
+                result.boneCount != 2 || result.animatorCount != 1 ||
+                animators[0].runtimeAnimatorController != controller ||
+                GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(prefab) != 0)
+            {
+                findings.Add(Finding(
+                    "UNITY_REIMPORT_MULTI_CLIP_PREFAB_INVALID", result.prefabReference));
+            }
+
+            UnityAnimationMotionReport motion = UnityAnimationMotionValidator.Validate(
+                result.productRootReference + "/Animations",
+                result.prefabReference,
+                new[]
+                {
+                    new UnityAnimationClipExpectation
+                    {
+                        Name = expectedNames[0],
+                        DurationSeconds = 20f / 30f,
+                        FramesPerSecond = 30f,
+                        Looping = false,
+                    },
+                    new UnityAnimationClipExpectation
+                    {
+                        Name = expectedNames[1],
+                        DurationSeconds = 20f / 30f,
+                        FramesPerSecond = 30f,
+                        Looping = true,
+                    },
+                });
+            result.animationMotionVerified = motion.IsValid && motion.BoneMotionVerified &&
+                motion.RendererMotionVerified && motion.NonLoopingCompletionVerified;
+            if (!result.animationMotionVerified)
+            {
+                findings.Add(Finding(
+                    "UNITY_REIMPORT_MULTI_CLIP_MOTION_INVALID", string.Join(",", motion.Findings)));
             }
         }
 
