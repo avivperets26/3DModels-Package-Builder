@@ -68,6 +68,8 @@ $testSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityProductEdito
     -Raw -Encoding UTF8
 $integrationSource = Get-Content -LiteralPath (Join-Path $repositoryRootPath `
         'scripts\Invoke-UnityProductIntegration.ps1') -Raw -Encoding UTF8
+$integrationSource += Get-Content -LiteralPath (Join-Path $repositoryRootPath `
+        'scripts\UnityCleanReimport.Common.ps1') -Raw -Encoding UTF8
 $staticSliceSource = Get-Content -LiteralPath (Join-Path $repositoryRootPath `
         'scripts\Invoke-UnityStaticVerticalSlice.ps1') -Raw -Encoding UTF8
 $script:PassCount = 0
@@ -340,6 +342,15 @@ Invoke-Check 'Unity package export is exact, dependency-closed, and collision-sa
     if ($packageExporterSource.Contains('ExportPackageOptions.IncludeDependencies') -or
         $packageExporterSource.Contains('ExportPackageOptions.Recurse')) {
         throw 'Unity package export must not use implicit recursive or dependency inclusion.'
+    }
+}
+
+Invoke-Check 'Unity animated package paths are placed in their exact product folders' {
+    foreach ($value in @('".anim" => "Animations/"',
+            '".controller" => "Controllers/"')) {
+        if (-not $packageValidatorSource.Contains($value)) {
+            throw "Missing animated package path policy: $value"
+        }
     }
 }
 

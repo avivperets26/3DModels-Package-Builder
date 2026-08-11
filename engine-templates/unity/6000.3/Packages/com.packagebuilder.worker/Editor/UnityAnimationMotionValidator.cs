@@ -38,12 +38,115 @@ namespace PackageBuilder.UnityWorker.Editor
         internal bool IsValid => Findings.Length == 0;
     }
 
+    /// <summary>Records whether one clip deforms every explicitly named skinned renderer together.</summary>
+    internal sealed class UnitySynchronizedRendererMotionReport
+    {
+        internal string[] RendererNames { get; set; } = Array.Empty<string>();
+
+        internal string[] MovingRendererNames { get; set; } = Array.Empty<string>();
+
+        internal float VerifiedSampleTimeSeconds { get; set; }
+
+        internal string[] Findings { get; set; } = Array.Empty<string>();
+
+        internal bool IsValid => Findings.Length == 0;
+    }
+
     /// <summary>
     /// Verifies imported clip inventory and evaluates animation on a disposable prefab instance.
     /// Sampling never saves or changes source clips, importer settings, controllers, or prefabs.
     /// </summary>
     internal static class UnityAnimationMotionValidator
     {
+        /// <summary>
+        /// Samples one extracted clip without saving it and requires every named skinned renderer
+        /// to deform during the same sampled pose. Renderer names are compared ordinally.
+        /// </summary>
+        internal static UnitySynchronizedRendererMotionReport ValidateSynchronizedRenderers(
+            string animationClipReference,
+            string animatedPrefabReference,
+            IReadOnlyList<string> expectedRendererNames)
+        {
+            var report = new UnitySynchronizedRendererMotionReport();
+            var findings = new List<string>();
+            string[] expected = expectedRendererNames == null
+                ? Array.Empty<string>()
+                : expectedRendererNames.OrderBy(value => value, StringComparer.Ordinal).ToArray();
+            if (expected.Length == 0 || expected.Any(string.IsNullOrWhiteSpace) ||
+                expected.Distinct(StringComparer.Ordinal).Count() != expected.Length)
+            {
+                report.Findings = new[] { "UNITY_ANIMATION_RENDERER_EXPECTATION_INVALID" };
+                return report;
+            }
+
+            AnimationClip clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(animationClipReference);
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(animatedPrefabReference);
+            GameObject instance = prefab == null ? null : UnityEngine.Object.Instantiate(prefab);
+            try
+            {
+                SkinnedMeshRenderer[] renderers = instance == null
+                    ? Array.Empty<SkinnedMeshRenderer>()
+                    : instance.GetComponentsInChildren<SkinnedMeshRenderer>(true)
+                        .OrderBy(value => value.name, StringComparer.Ordinal).ToArray();
+                Animator animator = instance == null
+                    ? null
+                    : instance.GetComponentInChildren<Animator>(true);
+                report.RendererNames = renderers.Select(value => value.name).ToArray();
+                if (clip == null || instance == null || animator == null ||
+                    !report.RendererNames.SequenceEqual(expected, StringComparer.Ordinal))
+                {
+                    findings.Add("UNITY_ANIMATION_RENDERER_INVENTORY_MISMATCH");
+                }
+                else
+                {
+                    Dictionary<string, Vector3[]> start = SampleRenderers(
+                        animator.gameObject, clip, 0f, renderers);
+                    float[] candidates = Enumerable.Range(1, 9)
+                        .Select(index => clip.length * index / 10f).ToArray();
+                    var movingAtAnySample = new HashSet<string>(StringComparer.Ordinal);
+                    foreach (float candidate in candidates)
+                    {
+                        Dictionary<string, Vector3[]> sampled = SampleRenderers(
+                            animator.gameObject, clip, candidate, renderers);
+                        string[] moving = renderers
+                            .Where(value => VerticesMoved(start[value.name], sampled[value.name]))
+                            .Select(value => value.name)
+                            .OrderBy(value => value, StringComparer.Ordinal)
+                            .ToArray();
+                        foreach (string rendererName in moving)
+                        {
+                            movingAtAnySample.Add(rendererName);
+                        }
+                        if (moving.SequenceEqual(expected, StringComparer.Ordinal))
+                        {
+                            report.MovingRendererNames = moving;
+                            report.VerifiedSampleTimeSeconds = candidate;
+                            break;
+                        }
+                    }
+                    if (report.MovingRendererNames.Length == 0)
+                    {
+                        report.MovingRendererNames = movingAtAnySample
+                            .OrderBy(value => value, StringComparer.Ordinal).ToArray();
+                    }
+                    if (!report.MovingRendererNames.SequenceEqual(expected, StringComparer.Ordinal))
+                    {
+                        findings.Add("UNITY_ANIMATION_SYNCHRONIZED_RENDERER_MOTION_MISSING");
+                    }
+                }
+            }
+            finally
+            {
+                if (instance != null)
+                {
+                    UnityEngine.Object.DestroyImmediate(instance);
+                }
+            }
+
+            report.Findings = findings.OrderBy(value => value, StringComparer.Ordinal).ToArray();
+            return report;
+        }
+
         /// <summary>Validates exact metadata, curve bindings, deformation, bone motion, and one-shot completion.</summary>
         internal static UnityAnimationMotionReport Validate(
             string animationFolderReference,
@@ -237,15 +340,62 @@ namespace PackageBuilder.UnityWorker.Editor
                 return false;
             }
 
+            Vector3 minimum = first[0];
+            Vector3 maximum = first[0];
+            for (int index = 1; index < first.Length; index++)
+            {
+                minimum = Vector3.Min(minimum, first[index]);
+                maximum = Vector3.Max(maximum, first[index]);
+            }
+            float toleranceSquared = Mathf.Max(
+                (maximum - minimum).sqrMagnitude * 0.00000001f,
+                0.00000000000001f);
             for (int index = 0; index < first.Length; index++)
             {
-                if ((first[index] - second[index]).sqrMagnitude > 0.000001f)
+                if ((first[index] - second[index]).sqrMagnitude > toleranceSquared)
                 {
                     return true;
                 }
             }
 
             return false;
+        }
+
+        private static Dictionary<string, Vector3[]> SampleRenderers(
+            GameObject root,
+            AnimationClip clip,
+            float time,
+            IReadOnlyList<SkinnedMeshRenderer> renderers)
+        {
+            var sampled = new Dictionary<string, Vector3[]>(StringComparer.Ordinal);
+            AnimationMode.StartAnimationMode();
+            try
+            {
+                AnimationMode.BeginSampling();
+                AnimationMode.SampleAnimationClip(root, clip, time);
+                AnimationMode.EndSampling();
+                foreach (SkinnedMeshRenderer renderer in renderers)
+                {
+                    var mesh = new Mesh();
+                    try
+                    {
+                        renderer.BakeMesh(mesh);
+                        sampled.Add(renderer.name, mesh.vertices);
+                    }
+                    finally
+                    {
+                        UnityEngine.Object.DestroyImmediate(mesh);
+                    }
+                }
+            }
+            finally
+            {
+                if (AnimationMode.InAnimationMode())
+                {
+                    AnimationMode.StopAnimationMode();
+                }
+            }
+            return sampled;
         }
     }
 }

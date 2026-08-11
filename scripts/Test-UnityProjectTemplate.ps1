@@ -127,7 +127,8 @@ $expectedWorkerPackageFiles = @(
     'Packages/com.packagebuilder.worker/Editor/UnityOverviewPlayModeSmokeTest.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityPackageExporter.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityPackageValidator.cs',
-    'Packages/com.packagebuilder.worker/Editor/UnityCleanReimportIntegration.cs'
+    'Packages/com.packagebuilder.worker/Editor/UnityCleanReimportIntegration.cs',
+    'Packages/com.packagebuilder.worker/Editor/UnitySilverwingIntegration.cs'
 )
 $expectedFiles = @(
     $expectedAssetFiles +

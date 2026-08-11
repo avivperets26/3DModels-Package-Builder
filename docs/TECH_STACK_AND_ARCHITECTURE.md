@@ -2093,6 +2093,16 @@ repository-owned Blender generator in no-action mode and the shared clean-packag
 fresh Unity clone proves one valid skinned renderer with two unique bones, no Animator, no clips or
 controllers, and no animation output folders.
 
+PB-0712 keeps the licensed Silverwing source beneath the ignored private-fixture root. A tracked
+Blender preparation script reads that source with automatic Python execution disabled, samples the
+separate bow-flex and string-shot Actions, consolidates both armatures under the declared original
+root, and exports one generated FBX into an ignored retained run without saving the `.blend`. The
+Unity fixture then reuses the Generic-rig, texture, URP material, clip, controller, animated-prefab,
+overview transport, exact-package, and clean-reimport adapters. Scale-relative sampling evaluates
+the Animator-owned binding root and requires both named skinned renderers to deform at the same
+shot time. Source and texture hashes before and after the run prove private-input immutability; only
+the scripts and validation contracts are public repository content.
+
 The small Unity transport state mapping intentionally mirrors the PB-0913 state transitions because
 exported customer assemblies cannot reference the repository's .NET 10 Domain assembly. This is a
 documented engine-boundary duplication, owned by Unity Preview Engineering and constrained by the

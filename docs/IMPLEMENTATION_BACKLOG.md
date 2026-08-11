@@ -6,7 +6,7 @@
 **GitHub visibility:** Public, approved by the user on 2026-07-22
 **Runtime data:** `C:\Dev\PackageBuilder\runtime-data`
 **Planned default branch:** `main`
-**Last reviewed:** 2026-08-10
+**Last reviewed:** 2026-08-11
 
 ## 1. Purpose
 
@@ -160,9 +160,20 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0709 | 🟡 **PROCESS** | `feat/PB-0709-unity-animation-preview` | Unity Preview Engineering for local work; user for Git gates | 2026-08-10 | Shared-contract Unity transport, persisted overview integration, pointer/keyboard controls, source-hash immutability assertions, and real Unity validation passed locally in retained run `artifacts/u/49c161fa`. | Local implementation and validation are complete; task commit/push, merge, exact-merge `main` CI, and explicit user confirmation remain. |
-| PB-0710 | 🟡 **PROCESS** | `test/PB-0710-unity-animation-validation` | Unity Validation Engineering for local work; user for Git gates | 2026-08-10 | Exact two-clip inventory, duration/FPS, bindings, bone motion, skinned-renderer deformation, and non-looping completion passed locally on approved publication branch `feat/PB-0709-unity-animation-preview` in run `artifacts/u/49c161fa`. | Local implementation and validation are complete; combined publication and completion gates remain. |
-| PB-0711 | 🟡 **PROCESS** | `test/PB-0711-unity-rigged-e2e` | Unity Fixture Engineering for local work; user for Git gates | 2026-08-10 | Repository-owned no-action rig FBX generated and exact rig package clean-imported on approved publication branch `feat/PB-0709-unity-animation-preview` in a second fresh project: 1 renderer, 2 bones, 0 clips, 0 Animators, 0 findings in run `artifacts/u/49c161fa`. | Local implementation and validation are complete; combined publication and completion gates remain. |
+| PB-0712 | 🟡 **PROCESS** | `test/PB-0712-silverwing-unity-e2e` | Unity Fixture Engineering for local work; user for Git gates | 2026-08-11 | Private-at-runtime normalization, one Generic rig, exact non-looping `Bow_Shot`, two synchronized skinned renderers, URP textures, overview transport, exact package export, and isolated clean reimport passed locally in retained run `artifacts/u/38e40ad3`; all consumed private inputs remained hash-identical and ignored. The user also confirmed the retained Unity scene works perfectly with no errors on 2026-08-11. | Local automated and manual validation are complete; task commit/push, merge, exact-merge `main` CI, and post-CI user confirmation remain. |
+
+### PB-0709/PB-0710/PB-0711 Completion Evidence
+
+- Final combined task commit `8d4521cd4c428690835a87e2045a4b3dc26e5894` was published on
+  `feat/PB-0709-unity-animation-preview` under the approved combined exception.
+- [Pull request #83](https://github.com/avivperets26/3DModels-Package-Builder/pull/83) merged the
+  tasks into `main` as `3b8e7e42ce0b8541483627750c56b6ff249c581b`.
+- Required exact-merge `main` CI completed successfully for that merge commit, and the user
+  explicitly confirmed the push, merge, green required `main` CI, manual animation controls, and
+  continuation on 2026-08-10.
+- No CI, quality, completion, or workflow exception was used. This PB-0712 rollover marks all three
+  tasks `[x]` / 🟢 **DONE**, removes them from Active Work, and adds exactly one Completion Log row
+  per task.
 
 ### PB-0913 Completion Evidence
 
@@ -194,9 +205,9 @@ feat/PB-0607-unity-urp-material-compiler
 - **Independence retained:** PB-0709, PB-0710, and PB-0711 keep their canonical IDs, documented
   branches, acceptance criteria, tests, evidence, lifecycle states, and eventual Completion Log
   rows.
-- **Completion:** local validation has passed. All three remain `[ ]` / 🟡 **PROCESS** until the
-  combined change is committed and merged, required exact-merge `main` CI succeeds, the user
-  explicitly confirms completion, and rollover is synchronized.
+- **Completion:** the combined change was committed, merged through PR #83, required exact-merge
+  `main` CI succeeded, and the user explicitly confirmed completion. The PB-0712 rollover records
+  all three tasks as `[x]` / 🟢 **DONE** with one Completion Log row each.
 - **No precedent:** this exact user-approved branch-topology exception waives no dependency,
   validation, engine, fixture, quality, security, documentation, CI, or completion gate.
 
@@ -1572,6 +1583,9 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0708 | `feat/PB-0708-unity-animated-prefab` | `1e135e426389460162f938c5e8c7ea0e76aa1156` | [#78](https://github.com/avivperets26/3DModels-Package-Builder/pull/78) | 2026-08-09 | Published on the PB-0706 branch with PB-0706/PB-0707 under the approved combined exception and merged as `997e19f2e1837157e0f977b598f941a50c46ea06`; required exact-merge [main workflow run 31335169320](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31335169320) succeeded. No CI or quality exception was used; the user explicitly confirmed the push, merge, and continuation. |
 | PB-0906 | `feat/PB-0906-preview-specification` | `c4482d70fe967d8033ce970da44fdf6600e5d7f4` | [#81](https://github.com/avivperets26/3DModels-Package-Builder/pull/81) | 2026-08-10 | Merged into `main` as `6b8c8c513e9ce5c4734b05f6b6133934f7fd44dd`; required exact-merge [main workflow run 31380639820](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31380639820) succeeded. No CI or quality exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and continuation. |
 | PB-0913 | `feat/PB-0913-interactive-preview-contract` | `f6b38c22b3c50b6e69d13a32d15d9cc323fcf1fc` | [#82](https://github.com/avivperets26/3DModels-Package-Builder/pull/82) | 2026-08-10 | Merged into `main` as `34f6b06d308dcf5c363999eef5aeb48b80025f14`; required exact-merge [main workflow run 31387407667](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31387407667) succeeded. No CI or quality exception was used; the user explicitly confirmed the push, merge, green required `main` CI, and continuation. |
+| PB-0709 | `feat/PB-0709-unity-animation-preview` | `8d4521cd4c428690835a87e2045a4b3dc26e5894` | [#83](https://github.com/avivperets26/3DModels-Package-Builder/pull/83) | 2026-08-10 | Published with PB-0710/PB-0711 under the approved combined exception and merged as `3b8e7e42ce0b8541483627750c56b6ff249c581b`; required exact-merge `main` CI succeeded. No CI or quality exception was used; the user explicitly confirmed the push, merge, green required `main` CI, visible animation, and all pointer/keyboard controls. |
+| PB-0710 | `test/PB-0710-unity-animation-validation` | `8d4521cd4c428690835a87e2045a4b3dc26e5894` | [#83](https://github.com/avivperets26/3DModels-Package-Builder/pull/83) | 2026-08-10 | Canonical task branch retained for lifecycle identity; implementation was published on PB-0709 with PB-0709/PB-0711 under the approved combined exception and merged as `3b8e7e42ce0b8541483627750c56b6ff249c581b`. Required exact-merge `main` CI succeeded; no CI or quality exception was used, and the user explicitly confirmed completion. |
+| PB-0711 | `test/PB-0711-unity-rigged-e2e` | `8d4521cd4c428690835a87e2045a4b3dc26e5894` | [#83](https://github.com/avivperets26/3DModels-Package-Builder/pull/83) | 2026-08-10 | Canonical task branch retained for lifecycle identity; implementation was published on PB-0709 with PB-0709/PB-0710 under the approved combined exception and merged as `3b8e7e42ce0b8541483627750c56b6ff249c581b`. Required exact-merge `main` CI succeeded; no CI or quality exception was used, and the user explicitly confirmed completion. |
 
 ## 5. Milestones
 
@@ -2199,28 +2213,31 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0611, PB-0703, PB-0707
   - Done when: case 3 prefab contains the correct Animator and controller while preserving all skinned renderers.
 
-- [ ] **PB-0709 — Implement Unity animation preview controls** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0709 — Implement Unity animation preview controls** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0709-unity-animation-preview`
   - Depends on: PB-0619, PB-0707, PB-0913
   - Done when: the overview scene uses the shared animation-transport contract to list/select clips and provide play, pause/resume, replay, timeline scrubbing, loop state, and current-time/duration feedback with pointer and keyboard operation, without modifying packaged source animation.
   - Local evidence: `docs/PB-0709_UNITY_ANIMATION_PREVIEW_EVIDENCE.md` records passing real-engine transport, accessibility-input, scene-reopen, and source-immutability checks.
 
-- [ ] **PB-0710 — Implement animation movement and duration validation** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0710 — Implement animation movement and duration validation** — **P0** — 🟢 **DONE**
   - Branch: `test/PB-0710-unity-animation-validation`
   - Depends on: PB-0708
   - Done when: clip count, names, duration, FPS, bindings, renderer/bone motion, and expected non-looping behavior are verified after import.
   - Local evidence: `docs/PB-0710_UNITY_ANIMATION_VALIDATION_EVIDENCE.md` records passing metadata, binding, sampling, deformation, and completion checks.
 
-- [ ] **PB-0711 — Complete Unity rigged-no-animation fixture** — **P0** — 🟡 **PROCESS**
+- [x] **PB-0711 — Complete Unity rigged-no-animation fixture** — **P0** — 🟢 **DONE**
   - Branch: `test/PB-0711-unity-rigged-e2e`
   - Depends on: PB-0704, PB-0617
   - Done when: case 2 clean-reimports with one correct rig and no animation assets.
   - Local evidence: `docs/PB-0711_UNITY_RIGGED_E2E_EVIDENCE.md` records the redistribution-safe generated fixture and passing isolated clean-reimport result.
 
-- [ ] **PB-0712 — Complete Silverwing Talonbow animated fixture** — **P0**
+- [ ] **PB-0712 — Complete Silverwing Talonbow animated fixture** — **P0** — 🟡 **PROCESS**
   - Branch: `test/PB-0712-silverwing-unity-e2e`
   - Depends on: PB-0709, PB-0710, PB-0617
   - Done when: bow body and string animate together, `Bow_Shot` is present and non-looping, textures render, and clean reimport passes.
+  - Local evidence: `docs/PB-0712_SILVERWING_UNITY_E2E_EVIDENCE.md` records private-source
+    immutability, exact Blender structure normalization, synchronized body/string deformation,
+    textured overview rendering, exact package export, and isolated clean reimport.
 
 - [ ] **PB-0713 — Add multi-clip animated fixture** — **P1**
   - Branch: `test/PB-0713-unity-multi-clip`
