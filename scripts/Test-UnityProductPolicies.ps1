@@ -233,8 +233,8 @@ Invoke-Check 'Unity standalone mesh extraction is transactional, stable, and ded
 
 Invoke-Check 'Unity prefab policy resets hierarchy and verifies mesh and material references' {
     foreach ($value in @('P_Model', '/Prefabs/P_', 'PrefabUtility.InstantiatePrefab',
-            'PrefabUtility.SaveAsPrefabAsset', 'ResetTransform', 'Vector3.zero',
-            'Quaternion.identity', 'Vector3.one', 'ReplaceMeshes', 'HasCompleteMaterials',
+            'PrefabUtility.SaveAsPrefabAsset', 'ResetTransform',
+            'UnityPrefabHierarchyUtility.ResetTransform', 'UnityPrefabHierarchyUtility.IsReset', 'ReplaceMeshes', 'HasCompleteMaterials',
             'UNITY_PREFAB_REFERENCE_INVALID', 'UNITY_PREFAB_ROOT_NAME_VERIFY_FAILED',
             'UNITY_PREFAB_ROOT_TRANSFORM_VERIFY_FAILED', 'UNITY_PREFAB_CHILD_COUNT_VERIFY_FAILED',
             'UNITY_PREFAB_MODEL_NAME_VERIFY_FAILED', 'UNITY_PREFAB_MODEL_TRANSFORM_VERIFY_FAILED',
@@ -726,6 +726,20 @@ Invoke-Check 'Unity Generic topology matrix is reusable and topology-neutral' {
     }
 }
 
+Invoke-Check 'Unity item prefab batches preserve reviewed ownership and reuse single-item generation' {
+    $itemSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityItemPrefabGenerator.cs') -Raw
+    $itemTests = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityItemPrefabIntegration.cs') -Raw
+    foreach ($value in @('ownership.schemaVersion != 1', 'UNITY_ITEM_PREFAB_OWNERSHIP_MISMATCH',
+            'UNITY_ITEM_PREFAB_OUTPUT_COLLISION', 'UnityPrefabGenerator.TryCreate',
+            'UnityPrefabGenerator.IsSafeAssetReference', 'AssetDatabase.DeleteAsset(path)')) {
+        if (-not $itemSource.Contains($value)) { throw "Missing item prefab boundary: $value" }
+    }
+    foreach ($value in @('VerifySaved', 'UNITY_PREFAB_MESH_PLAN_INVALID',
+            'Failed batch retained partial prefab output.', 'PACKAGEBUILDER_UNITY_ITEM_PREFABS_PASS')) {
+        if (-not $itemTests.Contains($value)) { throw "Missing item prefab acceptance coverage: $value" }
+    }
+}
+
 Invoke-Check 'Unity product policy sources are deterministic public-safe text' {
     $files = @(
         (Join-Path $editorRoot 'UnityProductFolderGenerator.cs'),
@@ -744,6 +758,8 @@ Invoke-Check 'Unity product policy sources are deterministic public-safe text' {
         (Join-Path $editorRoot 'UnityAnimatedPrefabGenerator.cs'),
         (Join-Path $editorRoot 'UnityMeshAssetExtractor.cs'),
         (Join-Path $editorRoot 'UnityPrefabGenerator.cs'),
+        (Join-Path $editorRoot 'UnityItemPrefabGenerator.cs'),
+        (Join-Path $editorRoot 'UnityItemPrefabIntegration.cs'),
         (Join-Path $editorRoot 'UnityOverviewScenePipeline.cs'),
         (Join-Path $editorRoot 'UnityOverviewPlayModeSmokeTest.cs'),
         (Join-Path $editorRoot 'UnityPackageExporter.cs'),

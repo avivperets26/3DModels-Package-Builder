@@ -128,6 +128,13 @@ namespace PackageBuilder.UnityWorker.Editor
             UnityCleanReimportResult result,
             List<UnityCleanReimportFinding> findings)
         {
+            if (string.Equals(result.validationMode, "item-prefabs", StringComparison.Ordinal))
+            {
+                result.sceneReference = string.Empty;
+                try { UnityItemPrefabIntegration.VerifySaved(); }
+                catch (InvalidOperationException) { findings.Add(Finding("UNITY_REIMPORT_ITEM_PREFAB_INVALID", result.productRootReference)); }
+                return;
+            }
             if (string.Equals(result.validationMode, "rigged-no-animation", StringComparison.Ordinal))
             {
                 ValidateRiggedNoAnimation(result, findings);

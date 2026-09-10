@@ -123,6 +123,8 @@ $expectedWorkerPackageFiles = @(
     'Packages/com.packagebuilder.worker/Editor/UnityAnimatedPrefabGenerator.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityMeshAssetExtractor.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityPrefabGenerator.cs',
+    'Packages/com.packagebuilder.worker/Editor/UnityItemPrefabGenerator.cs',
+    'Packages/com.packagebuilder.worker/Editor/UnityItemPrefabIntegration.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityProductEditorIntegrationTests.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityOverviewScenePipeline.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityOverviewPlayModeSmokeTest.cs',

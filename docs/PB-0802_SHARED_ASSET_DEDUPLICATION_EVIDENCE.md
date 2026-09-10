@@ -1,6 +1,6 @@
 # PB-0802 — Shared texture and material deduplication
 
-Status: 🟡 **IN PROGRESS**. Implemented and validated locally; review and publication gates remain.
+Current status: 🟢 **DONE**, recorded in PB-0803 after user confirmation. Task commit `b9c17f6b7778335d724349ccdf4cc0709dc77215`, main merge `fad8adf0805d0a4f2784593a0b580906f32304d5`, [successful main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34468230022). The handoff below preserves the historical prepublication record.
 Branch: `feat/PB-0802-shared-asset-deduplication`.
 Base: `d7286bd725fb39519e344059394218da66bcf162`, verified clean and equal to origin/main after
 `git fetch origin`, `git switch main`, and `git pull --ff-only origin main` on 2026-09-10.
