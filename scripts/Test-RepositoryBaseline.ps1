@@ -5,6 +5,7 @@ param(
 )
 
 Set-StrictMode -Version Latest
+. (Join-Path $PSScriptRoot 'TaskBranchPolicy.Common.ps1')
 $ErrorActionPreference = 'Stop'
 
 $script:FailureCount = 0
@@ -643,7 +644,6 @@ Invoke-Check 'Backlog status summary matches canonical task definitions' {
 }
 
 Invoke-Check 'Task branch names and lifecycle markers are valid' {
-    $allowedBranch = '^(chore|docs|feat|fix|test|security|release)/(?<id>PB-\d{4})-[a-z0-9]+(?:-[a-z0-9]+)*$'
     $doneEmoji = [char]::ConvertFromUtf32(0x1F7E2)
     $processEmoji = [char]::ConvertFromUtf32(0x1F7E1)
     $blockedEmoji = [char]::ConvertFromUtf32(0x1F534)
@@ -652,10 +652,20 @@ Invoke-Check 'Task branch names and lifecycle markers are valid' {
     $blockedMarker = $blockedEmoji + ' **BLOCKED**'
     $lifecycleStates = @{}
 
+    foreach ($id in @('PB-0805', 'PB-0806', 'PB-0807')) {
+        if (-not (Test-PackageBuilderTaskBranch $id 'feat/PB-0805-PB-0807-multi-item-flow')) {
+            throw "Approved combined branch rejected for $id."
+        }
+    }
+    if ((Test-PackageBuilderTaskBranch 'PB-0808' 'feat/PB-0805-PB-0807-multi-item-flow') -or
+        (Test-PackageBuilderTaskBranch 'PB-0805' 'feat/PB-0806-other') -or
+        (Test-PackageBuilderTaskBranch 'PB-0805' 'feat/PB-0805-PB-0808-other') -or
+        -not (Test-PackageBuilderTaskBranch 'PB-0808' 'feat/PB-0808-item-preview-selector')) {
+        throw 'Task branch policy did not preserve the narrow exception and ordinary ID checks.'
+    }
     foreach ($task in $tasks) {
         if ($task.Branch.Count -ne 1) { throw "$($task.Id) must have exactly one Branch line." }
-        $branchMatch = [regex]::Match($task.Branch[0], $allowedBranch)
-        if (-not $branchMatch.Success -or $branchMatch.Groups['id'].Value -ne $task.Id) {
+        if (-not (Test-PackageBuilderTaskBranch -TaskId $task.Id -Branch $task.Branch[0])) {
             throw "$($task.Id) has invalid branch '$($task.Branch[0])'."
         }
 

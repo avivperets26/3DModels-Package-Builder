@@ -320,14 +320,26 @@ Invoke-Check 'Unity animation preview maps shared transport semantics to pointer
     }
 }
 
-Invoke-Check 'Unity overview composition saves one intended prefab under the publisher product root' {
-    foreach ($value in @('previewTarget.childCount != 1', 'PrefabUtility.InstantiatePrefab',
-            'product.transform.SetParent(previewTarget, false)', 'S_" + request.AssetId + "_Overview.unity',
-            '/Scripts/', 'AssetDatabase.GetAssetPath(source) == request.ProductPrefabReference',
+Invoke-Check 'Unity overview composition preserves the exact requested prefab inventory under the product root' {
+    foreach ($value in @('previewTarget.childCount != references.Length', 'PrefabUtility.InstantiatePrefab',
+            'products[index].transform.SetParent(previewTarget, false)', 'S_" + request.AssetId + "_Overview.unity',
+            '/Scripts/', 'AssetDatabase.GetAssetPath(source) != references[index]',
             'GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(root) == 0')) {
         if (-not $overviewSource.Contains($value)) {
             throw "Missing overview composition behavior: $value"
         }
+    }
+}
+
+Invoke-Check 'Multi-item adapters reuse shared policies and the dependency-closed exporter' {
+    $attachmentSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnitySetAttachmentValidator.cs') -Raw
+    $layoutSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityMultiItemLayout.cs') -Raw
+    $collectionSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityCollectionPackageFlow.cs') -Raw
+    if (-not $attachmentSource.Contains('AttachmentPolicy.Validate') -or
+        -not $layoutSource.Contains('OverviewLayoutPolicy.TryPlan') -or
+        -not $collectionSource.Contains('UnityPackageExporter.TryExport') -or
+        -not $collectionSource.Contains('UnityPackageValidator.Validate')) {
+        throw 'Multi-item adapters bypass canonical policies or export validation.'
     }
 }
 
@@ -774,6 +786,12 @@ Invoke-Check 'Unity product policy sources are deterministic public-safe text' {
         (Join-Path $editorRoot 'UnityPrefabGenerator.cs'),
         (Join-Path $editorRoot 'UnityItemPrefabGenerator.cs'),
         (Join-Path $editorRoot 'UnityAssembledSetGenerator.cs'),
+        (Join-Path $editorRoot 'Shared/AttachmentPolicy.cs'),
+        (Join-Path $editorRoot 'Shared/OverviewLayoutPolicy.cs'),
+        (Join-Path $editorRoot 'UnitySetAttachmentValidator.cs'),
+        (Join-Path $editorRoot 'UnityCollectionPackageFlow.cs'),
+        (Join-Path $editorRoot 'UnityMultiItemLayout.cs'),
+        (Join-Path $editorRoot 'UnityMultiItemIntegration.cs'),
         (Join-Path $editorRoot 'UnityAssembledSetIntegration.cs'),
         (Join-Path $editorRoot 'UnityItemPrefabIntegration.cs'),
         (Join-Path $editorRoot 'UnityOverviewScenePipeline.cs'),

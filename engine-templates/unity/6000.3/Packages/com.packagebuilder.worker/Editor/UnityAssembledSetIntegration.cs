@@ -1,6 +1,8 @@
 using System;
 using System.IO;
+using System.Collections.Generic;
 using System.Linq;
+using PackageBuilder.MultiItem;
 using UnityEditor;
 using UnityEngine;
 
@@ -21,10 +23,27 @@ namespace PackageBuilder.UnityWorker.Editor
             Directory.CreateDirectory(Root + "/Documentation");
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
             string json = File.ReadAllText(Environment.GetEnvironmentVariable("PACKAGEBUILDER_SET_PLAN")).Trim();
+            string attachments = File.ReadAllText(Environment.GetEnvironmentVariable("PACKAGEBUILDER_ATTACHMENT_PLAN")).Trim();
+            var targets = new Dictionary<string, string> { { "Character", "Assets/PBAttachmentTargets/Target.prefab" } };
+            Directory.CreateDirectory("Assets/PBAttachmentTargets");
+            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+            var target = new GameObject("Target");
+            foreach (string name in new[] { "Socket", "Body", "Bone" }) { new GameObject(name).transform.SetParent(target.transform, false); }
+            target.AddComponent<SkinnedMeshRenderer>().bones = new[] { target.transform.Find("Bone") };
+            PrefabUtility.SaveAsPrefabAsset(target, targets["Character"]);
+            UnityEngine.Object.DestroyImmediate(target);
+            UnitySetPlan set = JsonUtility.FromJson<UnitySetPlan>(json);
+            string attachmentDiagnostic;
+            Require(UnitySetAttachmentValidator.Validate(set, attachments, targets, out attachmentDiagnostic), attachmentDiagnostic);
+            Require(UnitySetAttachmentValidator.Validate(set, attachments.Replace("\"socket\"", "\"bone\"").Replace("\"Socket\"", "\"Bone\""), targets, out attachmentDiagnostic), "Declared skeleton bone rejected.");
+            Require(!UnitySetAttachmentValidator.Validate(set, attachments.Replace("\"socket\"", "\"bone\""), targets, out attachmentDiagnostic), "Non-bone transform accepted as a bone.");
+            Require(!UnitySetAttachmentValidator.Validate(set, attachments.Replace("\"Socket\"", "\"Missing\""), targets, out attachmentDiagnostic), "Missing attachment target accepted.");
             string[] original = Items.Select(File.ReadAllText).ToArray();
             string[] guids = Items.Select(AssetDatabase.AssetPathToGUID).ToArray();
             GameObject prefab;
             string diagnostic;
+            Require(!UnityAssembledSetGenerator.TryCreate(json, Items, Output, Document, out prefab, out diagnostic) &&
+                !File.Exists(Output) && !File.Exists(Document), "Missing required attachments created outputs.");
             Require(!UnityAssembledSetGenerator.TryCreate(json, new[] { Items[0], Items[0] }, Output, Document, out prefab, out diagnostic), "Duplicate/missing item binding accepted.");
             Require(!UnityAssembledSetGenerator.TryCreate(json.Replace("\"schemaVersion\":1", "\"schemaVersion\":2"), Items,
                 Output, Document, out prefab, out diagnostic), "Unknown version accepted.");
@@ -50,10 +69,10 @@ namespace PackageBuilder.UnityWorker.Editor
                 PrefabUtility.SaveAsPrefabAsset(damaged, bad);
             }
             finally { PrefabUtility.UnloadPrefabContents(damaged); }
-            Require(!UnityAssembledSetGenerator.TryCreate(json, new[] { Items[0], bad }, Output, Document, out prefab, out diagnostic) &&
+            Require(!UnityAssembledSetGenerator.TryCreate(json, new[] { Items[0], bad }, Output, Document, out prefab, out diagnostic, attachments, targets) &&
                 diagnostic == "UNITY_SET_ITEM_REFERENCE_INVALID", "Broken input mesh accepted.");
             AssetDatabase.DeleteAsset(Root + "/Bad");
-            Require(UnityAssembledSetGenerator.TryCreate(json, Items.Reverse().ToArray(), Output, Document, out prefab, out diagnostic), diagnostic);
+            Require(UnityAssembledSetGenerator.TryCreate(json, Items.Reverse().ToArray(), Output, Document, out prefab, out diagnostic, attachments, targets), diagnostic);
             VerifySaved();
             string setGuid = AssetDatabase.AssetPathToGUID(Output);
             Require(!UnityAssembledSetGenerator.TryCreate(json, Items, Output, Document, out prefab, out diagnostic) &&
@@ -73,7 +92,9 @@ namespace PackageBuilder.UnityWorker.Editor
             Require(plan.schemaVersion == 1 && plan.members.Length == 2 && plan.members[0].itemId == "Zed" &&
                 plan.members[0].slot == "head" && plan.members[1].itemId == "Alpha" && plan.members[1].slot == "body" &&
                 plan.compatibility.Length == 1 && plan.compatibility[0].key == "Generation" && plan.compatibility[0].value == "One" &&
-                plan.attachmentValidation == "not-performed", "Set declaration/compatibility changed.");
+                plan.attachmentValidation == "validated" && plan.attachments.Length == 2 &&
+                plan.attachments[0].targetId == "Character" && plan.attachments[0].point == "Socket" &&
+                plan.attachments[1].point == "Body", "Set declaration/compatibility changed.");
             Require(UnityAssembledSetGenerator.VerifySaved(AssetDatabase.LoadAssetAtPath<GameObject>(Output), plan, Items),
                 "Saved set order, slots, transforms or references are invalid.");
             Require(AssetDatabase.FindAssets("t:Prefab", new[] { Root }).Length == 1, "Extra assembly output remains.");

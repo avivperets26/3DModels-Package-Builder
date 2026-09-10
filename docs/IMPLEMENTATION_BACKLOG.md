@@ -21,12 +21,12 @@
 | Measure | Tasks |
 | --- | ---: |
 | Total | 264 |
-| ⚪ Backlog | 147 |
-| 🟡 In progress | 1 |
+| ⚪ Backlog | 144 |
+| 🟡 In progress | 3 |
 | 🔴 Blocked | 0 |
-| 🟢 Done | 116 |
-| Remaining (all not done) | 148 |
-| Overall completion | 116 / 264 (43.9%) |
+| 🟢 Done | 117 |
+| Remaining (all not done) | 147 |
+| Overall completion | 117 / 264 (44.3%) |
 <!-- status-summary:end -->
 
 Counts include each canonical PB task definition exactly once, including the optional post-v1 roadmap.
@@ -189,7 +189,10 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0804 | 🟡 **IN PROGRESS** | `feat/PB-0804-unity-assembled-set` | Codex; user for publication | 2026-09-10 | Locally validated: all nine core CI stages and 2,417 tests pass; full Unity assembly, clean item/set import, regression, Play mode and reopen checks pass. Publication, main CI and user confirmation remain. See [evidence](PB-0804_UNITY_ASSEMBLED_SET_EVIDENCE.md). Base `e540ab270eb5f0c1c14c8391890d333631df5235`, freshly fetched and pulled main. | None. |
+| PB-0805 | 🟡 **IN PROGRESS** | `feat/PB-0805-PB-0807-multi-item-flow` | Codex; user for publication | 2026-09-10 | Attachment metadata/target validation implemented and locally validated. Full core CI: 2,428 tests and 9 stages passed; real Unity integration and clean reimport passed. [Evidence](PB-0805_PB-0807_MULTI_ITEM_EVIDENCE.md). Awaiting publication. | None. |
+| PB-0806 | 🟡 **IN PROGRESS** | `feat/PB-0805-PB-0807-multi-item-flow` | Codex; user for publication | 2026-09-10 | Independent collection package flow implemented and locally validated. Full core CI: 2,428 tests and 9 stages passed; real Unity integration and clean reimport passed. [Evidence](PB-0805_PB-0807_MULTI_ITEM_EVIDENCE.md). Awaiting publication. | None. |
+| PB-0807 | 🟡 **IN PROGRESS** | `feat/PB-0805-PB-0807-multi-item-flow` | Codex; user for publication | 2026-09-10 | Deterministic bounds-aware overview layout implemented and locally validated. Full core CI: 2,428 tests and 9 stages passed; real Unity integration and clean reimport passed. [Evidence](PB-0805_PB-0807_MULTI_ITEM_EVIDENCE.md). Awaiting publication. | None. |
+
 
 ### PB-0802 Completion Evidence
 
@@ -1680,6 +1683,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0801 | `feat/PB-0801-multi-item-mapper` | `990a70b23d7fb2c57cea1967eedc777d796f1692` | #91 | 2026-09-10 | Merged as `d7286bd725fb39519e344059394218da66bcf162`; [exact-main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34464190458) passed. User accepted validation, confirmed merge/pull and requested next task/status reconciliation. |
 | PB-0802 | `feat/PB-0802-shared-asset-deduplication` | `b9c17f6b7778335d724349ccdf4cc0709dc77215` | Direct merge | 2026-09-10 | Main merge `fad8adf0805d0a4f2784593a0b580906f32304d5`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34468230022) passed; user confirmed handoff and requested next task. |
 | PB-0803 | `feat/PB-0803-unity-item-prefabs` | `13561806bcf2c2c14680dbceab083b2bf018a9e7` | Direct merge | 2026-09-10 | Main merge `e540ab270eb5f0c1c14c8391890d333631df5235`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34475266254) passed both jobs; user accepted publication and requested PB-0804. |
+| PB-0804 | `feat/PB-0804-unity-assembled-set` | `30e0c5734e5cf96245412b36b31a4db94082718a` | Direct merge | 2026-09-10 | Main `d7f3d1c7a3fc222d26d63c7f40256f1508fafa58`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34482101572) passed; user accepted publication and requested the next scope. |
 
 ## 5. Milestones
 
@@ -2386,23 +2390,23 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0611, PB-0801
   - Done when: every item gets a unique named prefab with correct material and no cross-item missing references.
 
-- [ ] **PB-0804 — Implement assembled item-set prefab** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-0804 — Implement assembled item-set prefab** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0804-unity-assembled-set`
   - Depends on: PB-0803
   - Done when: set items assemble in declared order/slots with reset set root and documented compatibility.
 
-- [ ] **PB-0805 — Implement set attachment metadata and validation** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-0805-set-attachments`
+- [ ] **PB-0805 — Implement set attachment metadata and validation** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `feat/PB-0805-PB-0807-multi-item-flow`
   - Depends on: PB-0804
   - Done when: sockets/bones/body slots are validated against declared targets and missing attachments block applicable builds.
 
-- [ ] **PB-0806 — Implement collection item package flow** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-0806-collection-items`
+- [ ] **PB-0806 — Implement collection item package flow** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `feat/PB-0805-PB-0807-multi-item-flow`
   - Depends on: PB-0802, PB-0803
   - Done when: independent items remain separate, names are unique, and no combined runtime prefab is created unless requested.
 
-- [ ] **PB-0807 — Implement overview layout generator** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-0807-overview-layout`
+- [ ] **PB-0807 — Implement overview layout generator** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `feat/PB-0805-PB-0807-multi-item-flow`
   - Depends on: PB-0612, PB-0803
   - Done when: sets and collections lay out all items using bounds-aware spacing and deterministic order.
 

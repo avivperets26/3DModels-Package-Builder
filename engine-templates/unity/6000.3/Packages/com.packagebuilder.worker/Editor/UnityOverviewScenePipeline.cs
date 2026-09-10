@@ -23,6 +23,11 @@ namespace PackageBuilder.UnityWorker.Editor
 
         public string ProductPrefabReference { get; set; }
 
+        /// <summary>Explicit declaration order for a set or collection; empty retains single-product behavior.</summary>
+        public string[] ItemPrefabReferences { get; set; } = Array.Empty<string>();
+
+        public double ItemGap { get; set; } = 0.25;
+
         public string PreviewControllerScriptReference { get; set; }
 
         public string OutputBackgroundMaterialReference { get; set; }
@@ -315,7 +320,7 @@ namespace PackageBuilder.UnityWorker.Editor
                 return false;
             }
 
-            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(request.ProductPrefabReference);
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(References(request)[0]);
             MonoScript controllerScript = AssetDatabase.LoadAssetAtPath<MonoScript>(
                 request.PreviewControllerScriptReference);
             string templateFolder = UnityOverviewSceneTemplateBuilder.FolderOf(
@@ -347,7 +352,8 @@ namespace PackageBuilder.UnityWorker.Editor
                     root.transform,
                     UnityOverviewSceneTemplateBuilder.PreviewTargetName);
                 var controller = root.GetComponent<PackageBuilderPreviewController>();
-                if (previewTarget == null || previewTarget.childCount != 0 || controller == null)
+                if (previewTarget == null || previewTarget.childCount != 0 || controller == null ||
+                    !UnityOverviewSceneTemplateBuilder.IsReset(root.transform) || !UnityOverviewSceneTemplateBuilder.IsReset(previewTarget))
                 {
                     diagnosticCode = "UNITY_OVERVIEW_COMPOSITION_TEMPLATE_NOT_EMPTY";
                     return false;
@@ -396,22 +402,24 @@ namespace PackageBuilder.UnityWorker.Editor
                         UnityOverviewSceneTemplateBuilder.KeyLightName)?.GetComponent<Light>(),
                     background);
 
-                var product = PrefabUtility.InstantiatePrefab(prefab, scene) as GameObject;
-                if (product == null)
+                string[] references = References(request);
+                var products = new GameObject[references.Length];
+                for (int index = 0; index < references.Length; index++)
                 {
-                    diagnosticCode = "UNITY_OVERVIEW_COMPOSITION_PREFAB_FAILED";
-                    return false;
+                    products[index] = PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath<GameObject>(references[index]), scene) as GameObject;
+                    if (products[index] == null) { diagnosticCode = "UNITY_OVERVIEW_COMPOSITION_PREFAB_FAILED"; return false; }
+                    products[index].transform.SetParent(previewTarget, false);
+                    UnityOverviewSceneTemplateBuilder.Reset(products[index].transform);
                 }
-
-                product.transform.SetParent(previewTarget, false);
-                UnityOverviewSceneTemplateBuilder.Reset(product.transform);
-                Animator[] animators = product.GetComponentsInChildren<Animator>(true);
-                if (animators.Length > 1)
+                if (IsMulti(request) && !UnityMultiItemLayout.Arrange(products, request.ItemGap))
+                { diagnosticCode = "UNITY_OVERVIEW_LAYOUT_INVALID"; return false; }
+                Animator[] animators = previewTarget.GetComponentsInChildren<Animator>(true);
+                if (!IsMulti(request) && animators.Length > 1)
                 {
                     diagnosticCode = "UNITY_OVERVIEW_COMPOSITION_ANIMATOR_COUNT_INVALID";
                     return false;
                 }
-                controller.ConfigureAnimation(animators.Length == 1 ? animators[0] : null);
+                controller.ConfigureAnimation(!IsMulti(request) && animators.Length == 1 ? animators[0] : null);
                 if (!controller.AutoFrame())
                 {
                     diagnosticCode = "UNITY_OVERVIEW_COMPOSITION_BOUNDS_MISSING";
@@ -463,14 +471,24 @@ namespace PackageBuilder.UnityWorker.Editor
             Transform previewTarget = root == null ? null : UnityOverviewSceneTemplateBuilder.FindUniqueChild(
                 root.transform,
                 UnityOverviewSceneTemplateBuilder.PreviewTargetName);
-            if (root == null || previewTarget == null || previewTarget.childCount != 1)
+            string[] references = References(request);
+            if (root == null || previewTarget == null || previewTarget.childCount != references.Length ||
+                !UnityOverviewSceneTemplateBuilder.IsReset(root.transform) || !UnityOverviewSceneTemplateBuilder.IsReset(previewTarget))
             {
                 diagnosticCode = "UNITY_OVERVIEW_COMPOSITION_PRODUCT_COUNT_INVALID";
                 return false;
             }
 
-            Transform product = previewTarget.GetChild(0);
-            GameObject source = PrefabUtility.GetCorrespondingObjectFromSource(product.gameObject);
+            var products = new GameObject[references.Length];
+            for (int index = 0; index < references.Length; index++)
+            {
+                products[index] = previewTarget.GetChild(index).gameObject;
+                GameObject source = PrefabUtility.GetCorrespondingObjectFromSource(products[index]);
+                if (source == null || AssetDatabase.GetAssetPath(source) != references[index] ||
+                    products[index].name != source.name || products[index].transform.localRotation != Quaternion.identity ||
+                    products[index].transform.localScale != Vector3.one)
+                { diagnosticCode = "UNITY_OVERVIEW_COMPOSITION_PRODUCT_INVALID"; return false; }
+            }
             var controller = root.GetComponent<PackageBuilderPreviewController>();
             var transport = root.GetComponent<PackageBuilderAnimationTransport>();
             MonoScript controllerScript = controller == null ? null : MonoScript.FromMonoBehaviour(controller);
@@ -478,9 +496,8 @@ namespace PackageBuilder.UnityWorker.Editor
                 root.transform,
                 UnityOverviewSceneTemplateBuilder.BackgroundName);
             Renderer backgroundRenderer = background == null ? null : background.GetComponent<Renderer>();
-            bool valid = product.name == "P_" + request.AssetId &&
-                UnityOverviewSceneTemplateBuilder.IsReset(product) && source != null &&
-                AssetDatabase.GetAssetPath(source) == request.ProductPrefabReference &&
+            bool valid = (IsMulti(request) ? UnityMultiItemLayout.Arrange(products, request.ItemGap, true) :
+                products[0].name == "P_" + request.AssetId && UnityOverviewSceneTemplateBuilder.IsReset(products[0].transform)) &&
                 controller != null && controller.PreviewTarget == previewTarget &&
                 transport != null && controller.AnimationTransport == transport &&
                 controller.PreviewCamera != null && controller.KeyLight != null &&
@@ -492,11 +509,11 @@ namespace PackageBuilder.UnityWorker.Editor
                 AssetDatabase.GetAssetPath(backgroundRenderer.sharedMaterial.GetTexture("_BaseMap")) ==
                     request.OutputBackgroundTextureReference &&
                 GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(root) == 0;
-            Animator[] animators = product.GetComponentsInChildren<Animator>(true);
-            valid = valid && animators.Length <= 1 &&
+            Animator[] animators = previewTarget.GetComponentsInChildren<Animator>(true);
+            valid = valid && (IsMulti(request) ? !transport.Available : animators.Length <= 1 &&
                 (animators.Length == 0
                     ? !transport.Available
-                    : transport.Available && transport.Animator == animators[0]);
+                    : transport.Available && transport.Animator == animators[0]));
             diagnosticCode = valid ? string.Empty : "UNITY_OVERVIEW_COMPOSITION_VERIFY_FAILED";
             return valid;
         }
@@ -506,16 +523,16 @@ namespace PackageBuilder.UnityWorker.Editor
             if (request == null || !IsAssetId(request.AssetId) ||
                 !UnityOverviewSceneTemplateBuilder.IsSceneReference(request.TemplateSceneReference) ||
                 !UnityOverviewSceneTemplateBuilder.IsSceneReference(request.OutputSceneReference) ||
-                !UnityOverviewSceneTemplateBuilder.IsSafeAssetReference(request.ProductPrefabReference) ||
+                (!IsMulti(request) && !UnityOverviewSceneTemplateBuilder.IsSafeAssetReference(request.ProductPrefabReference)) ||
                 !UnityOverviewSceneTemplateBuilder.IsSafeAssetReference(
                     request.PreviewControllerScriptReference) ||
                 !UnityOverviewSceneTemplateBuilder.IsSafeAssetReference(
                     request.OutputBackgroundMaterialReference) ||
                 !UnityOverviewSceneTemplateBuilder.IsSafeAssetReference(
                     request.OutputBackgroundTextureReference) ||
-                !request.ProductPrefabReference.EndsWith(
+                (!IsMulti(request) && !request.ProductPrefabReference.EndsWith(
                     "/Prefabs/P_" + request.AssetId + ".prefab",
-                    StringComparison.Ordinal) ||
+                    StringComparison.Ordinal)) ||
                 !request.OutputSceneReference.EndsWith(
                     "/Scenes/S_" + request.AssetId + "_Overview.unity",
                     StringComparison.Ordinal) ||
@@ -538,9 +555,17 @@ namespace PackageBuilder.UnityWorker.Editor
                 return false;
             }
 
+            string[] references = References(request);
+            if (references.Length > 10000 || references.Distinct(StringComparer.OrdinalIgnoreCase).Count() != references.Length ||
+                references.Any(path => !UnityPrefabGenerator.IsSafeAssetReference(path) || !path.EndsWith(".prefab", StringComparison.Ordinal) ||
+                    AssetDatabase.LoadAssetAtPath<GameObject>(path) == null)) { return false; }
             return AssetDatabase.IsValidFolder(
                 UnityOverviewSceneTemplateBuilder.FolderOf(request.OutputSceneReference));
         }
+
+        private static bool IsMulti(UnityOverviewSceneCompositionRequest request) => request.ItemPrefabReferences != null && request.ItemPrefabReferences.Length > 0;
+
+        private static string[] References(UnityOverviewSceneCompositionRequest request) => IsMulti(request) ? request.ItemPrefabReferences : new[] { request.ProductPrefabReference };
 
         private static bool IsAssetId(string value)
         {

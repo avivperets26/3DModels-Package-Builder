@@ -36,6 +36,7 @@ namespace PackageBuilder.UnityWorker.Editor
                 TestSkinRiggedPrefabAndAnimationClips();
                 TestOverviewTemplateControllerAndComposition();
                 TestExactPackageExportAndValidation();
+                UnityMultiItemIntegration.Run();
                 Debug.Log("PACKAGEBUILDER_UNITY_PRODUCT_TESTS_PASS");
                 EditorApplication.Exit(0);
             }

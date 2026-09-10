@@ -1,6 +1,6 @@
 # PB-0804 — Assembled Unity item-set prefab
 
-Status: 🟡 **IN PROGRESS**. Branch: `feat/PB-0804-unity-assembled-set`.
+Current status: 🟢 **DONE**, recorded during the PB-0805–PB-0807 rollover after successful main CI and user confirmation. Task `30e0c5734e5cf96245412b36b31a4db94082718a`, main `d7f3d1c7a3fc222d26d63c7f40256f1508fafa58`, [CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34482101572). The following preserves the historical handoff. Branch: `feat/PB-0804-unity-assembled-set`.
 Base: `e540ab270eb5f0c1c14c8391890d333631df5235`, clean and equal to origin/main after
 fetch, main checkout and fast-forward pull on 2026-09-10.
 

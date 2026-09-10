@@ -1436,3 +1436,17 @@ validation is reused and now checks descendant missing scripts and missing mesh 
 Placement is explicitly at the authored/reset origin: logical slots do not imply socket/bone
 placement or verified compatibility. PB-0805 owns those attachment checks. Collections do not
 infer an assembled prefab. See [PB-0804 contract and test evidence](PB-0804_UNITY_ASSEMBLED_SET_EVIDENCE.md).
+
+## Multi-item attachment, collection and layout boundaries (PB-0805–PB-0807)
+
+Slotted set generation now requires explicit target bindings validated against current Unity
+hierarchy paths and skin bone membership. The set document records validated bindings; assembly
+placement remains at the authored origin. Collection export preserves separate named item prefabs
+and delegates to the existing dependency-closed exporter. The overview composer lays out ordered
+set/collection instances by measured bounds and uses the existing studio controller to frame them.
+
+Canonical attachment and layout policies are engine-free C# source in the embedded worker's
+`Editor/Shared`, linked into Application so both targets execute the same implementation despite
+Unity/.NET compiler/runtime differences. Application owns reviewed intent and versioned envelopes;
+Unity owns asset inspection, scene mutation and export. See
+[combined contract, traceability and validation evidence](PB-0805_PB-0807_MULTI_ITEM_EVIDENCE.md).

@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- These CLR-only policies ship inside the Editor package and are compiled from the same source here. -->
+    <Compile Include="..\..\engine-templates\unity\6000.3\Packages\com.packagebuilder.worker\Editor\Shared\*.cs" Link="Items\Shared\%(Filename)%(Extension)" />
     <ProjectReference Include="..\PackageBuilder.Contracts\PackageBuilder.Contracts.csproj" />
     <ProjectReference Include="..\PackageBuilder.Domain\PackageBuilder.Domain.csproj" />
   </ItemGroup>

@@ -5,6 +5,9 @@ description: Apply Package Builder's repository-specific architecture, reuse, do
 
 # Package Builder Engineering
 
+The user-approved PB-0805–PB-0807 combined branch exception is recorded in AGENTS.md.
+Keep all three task identities, statuses and acceptance records distinct within that branch.
+
 Use this skill for implementation, review, refactoring, or roadmap work in the Package Builder
 repository.
 

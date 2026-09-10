@@ -4,6 +4,7 @@ param(
 )
 
 Set-StrictMode -Version Latest
+. (Join-Path $PSScriptRoot 'TaskBranchPolicy.Common.ps1')
 $ErrorActionPreference = 'Stop'
 
 $script:FailureCount = 0
@@ -526,13 +527,11 @@ Invoke-Check 'Markdown and repository-local links are valid for PB-0013 sources'
 
 Invoke-Check 'PB task IDs, dependencies, branches, lifecycle, Active Work, and Completion Log are consistent' {
     $taskLookup = @{}
-    $allowedBranch = '^(chore|docs|feat|fix|test|security|release)/(?<id>PB-\d{4})-[a-z0-9]+(?:-[a-z0-9]+)*$'
     foreach ($task in $tasks) {
         if ($taskLookup.ContainsKey($task.Id)) { throw "Duplicate task ID $($task.Id)." }
         $taskLookup[$task.Id] = $task
         if ($task.Branch.Count -ne 1) { throw "$($task.Id) must have exactly one Branch line." }
-        $branchMatch = [regex]::Match($task.Branch[0], $allowedBranch)
-        if (-not $branchMatch.Success -or $branchMatch.Groups['id'].Value -ne $task.Id) {
+        if (-not (Test-PackageBuilderTaskBranch -TaskId $task.Id -Branch $task.Branch[0])) {
             throw "$($task.Id) has invalid branch '$($task.Branch[0])'."
         }
         if ($task.DependencyText.Count -ne 1) {
