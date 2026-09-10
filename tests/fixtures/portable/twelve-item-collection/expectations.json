@@ -1,0 +1,52 @@
+{
+  "items": [
+    {
+      "id": "Column12",
+      "triangles": 60
+    },
+    {
+      "id": "Column01",
+      "triangles": 16
+    },
+    {
+      "id": "Column10",
+      "triangles": 52
+    },
+    {
+      "id": "Column02",
+      "triangles": 20
+    },
+    {
+      "id": "Column11",
+      "triangles": 56
+    },
+    {
+      "id": "Column03",
+      "triangles": 24
+    },
+    {
+      "id": "Column09",
+      "triangles": 48
+    },
+    {
+      "id": "Column04",
+      "triangles": 28
+    },
+    {
+      "id": "Column08",
+      "triangles": 44
+    },
+    {
+      "id": "Column05",
+      "triangles": 32
+    },
+    {
+      "id": "Column07",
+      "triangles": 40
+    },
+    {
+      "id": "Column06",
+      "triangles": 36
+    }
+  ]
+}

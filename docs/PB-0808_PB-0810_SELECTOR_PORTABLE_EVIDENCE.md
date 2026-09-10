@@ -1,8 +1,9 @@
 # PB-0808–PB-0810 — Item selector, portable inventory and equipment fixture
 
-Current lifecycle: all three tasks remain 🟡 **IN PROGRESS**, unchecked, after successful local
-implementation and validation; publication gates remain. No task commit, push or merge
-has been performed for this scope.
+Current lifecycle: all three tasks are 🟢 **DONE**. Publication and successful main CI were
+verified; the user accepted the handoff and requested PB-0811. Completion was recorded once
+at that branch's start; see [rollover evidence](PB-0811_TWELVE_ITEM_COLLECTION_EVIDENCE.md).
+The local-validation and publication-pending notes below are historical handoff snapshots.
 
 Approved combined branch: `feat/PB-0808-PB-0810-selector-portable-e2e`.
 Base: `ee5108fe3ee66663fad717595cbbc419da3744e0`, verified clean and equal to

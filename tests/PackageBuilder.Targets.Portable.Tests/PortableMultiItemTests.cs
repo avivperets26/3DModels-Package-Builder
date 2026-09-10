@@ -175,9 +175,10 @@ internal sealed class EquipmentArchiveFixture
 {
     private readonly Dictionary<string, byte[]> _bytes = new(StringComparer.Ordinal);
 
-    internal EquipmentArchiveFixture(bool collection = false)
+    internal EquipmentArchiveFixture(bool collection = false, string? fixtureRoot = null)
     {
-        JsonNode manifest = JsonNode.Parse(File.ReadAllText(Path.Combine(FixtureRoot, "manifest.json")))!;
+        string sourceRoot = fixtureRoot ?? FixtureRoot;
+        JsonNode manifest = JsonNode.Parse(File.ReadAllText(Path.Combine(sourceRoot, "manifest.json")))!;
         if (collection)
         {
             manifest["product"]!["case"] = "item-collection";
@@ -186,9 +187,11 @@ internal sealed class EquipmentArchiveFixture
             _ = manifest.AsObject().Remove("itemSet");
         }
         Manifest = Assert.IsType<ProductManifest>(ProductManifestJson.Deserialize(manifest.ToJsonString()).Value);
-        Items = [Model("Helmet"), Model("Armour")];
-        ArtifactStoreRecord texture = Add("Steel", File.ReadAllBytes(Path.Combine(FixtureRoot, "source", "T_SharedSteel_Albedo.png")), "portable-texture");
-        Shared = [new(InternalAssetId.Create("SharedSteel").Value!, PortableCompositionArtifact.Create(texture,
+        string[] ids = [.. (manifest["itemSet"] ?? manifest["itemCollection"])!["items"]!.AsArray().Select(item => item!["id"]!.GetValue<string>())];
+        Items = [.. ids.Select(id => Model(id, sourceRoot))];
+        JsonNode shared = (manifest["itemSet"] ?? manifest["itemCollection"])!["sharedAssets"]![0]!;
+        ArtifactStoreRecord texture = Add("SharedTexture", File.ReadAllBytes(Path.Combine(sourceRoot, shared["source"]!["logicalReference"]!.GetValue<string>())), "portable-texture");
+        Shared = [new(InternalAssetId.Create(shared["id"]!.GetValue<string>()).Value!, PortableCompositionArtifact.Create(texture,
             PortableArtifactPurpose.Texture, TextureRole.Albedo, extension: PortableFileExtension.Png).Value!)];
     }
 
@@ -223,8 +226,8 @@ internal sealed class EquipmentArchiveFixture
         finally { foreach (PortableFbxArchiveSource source in sources) { source.Stream.Dispose(); } }
     }
 
-    private PortableItemArtifact Model(string id) => new(InternalAssetId.Create(id).Value!, PortableCompositionArtifact.Create(
-        Add(id, File.ReadAllBytes(Path.Combine(FixtureRoot, "source", id + ".fbx")), "normalized-fbx"), PortableArtifactPurpose.Fbx).Value!);
+    private PortableItemArtifact Model(string id, string sourceRoot) => new(InternalAssetId.Create(id).Value!, PortableCompositionArtifact.Create(
+        Add(id, File.ReadAllBytes(Path.Combine(sourceRoot, "source", id + ".fbx")), "normalized-fbx"), PortableArtifactPurpose.Fbx).Value!);
 
     private ArtifactStoreRecord Add(string id, byte[] bytes, string role)
     {

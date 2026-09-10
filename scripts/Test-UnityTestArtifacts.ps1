@@ -20,7 +20,10 @@ function Assert-CleanupRejected([scriptblock]$Action) {
 
 try {
     New-Item -ItemType Directory -Path (Join-Path $run 'p/Library'),
-        (Join-Path $run 'equipment-import'), (Join-Path $run 'prepared'), (Join-Path $run 'keep') -Force | Out-Null
+        (Join-Path $run 'equipment-import'), (Join-Path $run 'prepared'), (Join-Path $run 'keep'),
+        (Join-Path $run 'v/Library'), (Join-Path $run 'twelve'), (Join-Path $run 'twelve-import') -Force | Out-Null
+    Set-Content -LiteralPath (Join-Path $run 'twelve/TwelveColumns_FBX.zip') -Value 'disposable'
+    Set-Content -LiteralPath (Join-Path $run 'twelve-import/reimport-result.json') -Value '{"passed":true,"items":12}'
     Set-Content -LiteralPath (Join-Path $run 'p/Library/cache.bin') -Value 'disposable'
     Set-Content -LiteralPath (Join-Path $run 'items.unitypackage') -Value 'disposable'
     Set-Content -LiteralPath (Join-Path $run 'equipment-import/reimport-result.json') -Value '{"passed":true}'
@@ -65,6 +68,34 @@ try {
     finally { Remove-Item Function:/Get-CimInstance }
     $passed++
 
+    # Close only a completed test Editor's matching Hub tree, never other projects or active Editors.
+    $script:stoppedTestHubs = @()
+    $script:hubTestProject = Join-Path $run 'v'
+    function Get-CimInstance {
+        @(
+            [pscustomobject]@{ Name = 'Unity Hub.exe'; ProcessId = 700001; ParentProcessId = 600000; CommandLine = 'Hub "' + $script:hubTestProject + '"' },
+            [pscustomobject]@{ Name = 'Unity Hub.exe'; ProcessId = 700002; ParentProcessId = 700001; CommandLine = 'Hub renderer' },
+            [pscustomobject]@{ Name = 'Unity Hub.exe'; ProcessId = 700003; ParentProcessId = 600000; CommandLine = 'Hub "another-project"' },
+            [pscustomobject]@{ Name = 'Unity Hub.exe'; ProcessId = 700004; ParentProcessId = 500000; CommandLine = 'Hub "' + $script:hubTestProject + '"' }
+        )
+    }
+    function Stop-Process([int]$Id, [switch]$Force, [string]$ErrorAction) { $script:stoppedTestHubs += $Id }
+    try {
+        Stop-CompletedUnityTestHub -RepositoryRoot $repository -ProjectPath $script:hubTestProject -CompletedEditorProcessId 600000
+        Assert-TestArtifactCondition (($script:stoppedTestHubs -join ',') -eq '700002,700001') 'Hub cleanup escaped its completed test process tree.'
+        $script:stoppedTestHubs = @()
+        Stop-CompletedUnityTestHub -RepositoryRoot $repository -ProjectPath $script:hubTestProject -CompletedEditorProcessId 123456
+        Assert-CleanupRejected { Stop-CompletedUnityTestHub -RepositoryRoot $repository -ProjectPath $script:hubTestProject -CompletedEditorProcessId 700001 }
+        Assert-CleanupRejected { Stop-CompletedUnityTestHub -RepositoryRoot $repository -ProjectPath $repository -CompletedEditorProcessId 600000 }
+        $hubLink = Join-Path $run 'h'
+        New-Item -ItemType Junction -Path $hubLink -Target (Join-Path $run 'keep') | Out-Null
+        try { Assert-CleanupRejected { Stop-CompletedUnityTestHub -RepositoryRoot $repository -ProjectPath $hubLink -CompletedEditorProcessId 600000 } }
+        finally { Remove-Item -LiteralPath $hubLink -Force }
+        Assert-TestArtifactCondition ($script:stoppedTestHubs.Count -eq 0) 'Hub cleanup stopped an unrelated or active process.'
+    }
+    finally { Remove-Item Function:/Get-CimInstance; Remove-Item Function:/Stop-Process }
+    $passed++
+
     $caught = ''
     try {
         try { throw 'simulated engine failure' }
@@ -72,12 +103,12 @@ try {
     }
     catch { $caught = $_.Exception.Message }
     Assert-TestArtifactCondition ($caught -eq 'simulated engine failure') 'Cleanup hid the original engine error.'
-    foreach ($payload in @('p', 'items.unitypackage', 'equipment-import', 'prepared')) {
+    foreach ($payload in @('p', 'items.unitypackage', 'equipment-import', 'prepared', 'v', 'twelve', 'twelve-import')) {
         Assert-TestArtifactCondition (-not (Test-Path -LiteralPath (Join-Path $run $payload))) "Payload remains: $payload"
     }
     $passed++
 
-    foreach ($evidence in @('validation.log', 'equipment-portable-reimport.json', 'silverwing-prepare-report.json', 'keep/user.txt')) {
+    foreach ($evidence in @('validation.log', 'equipment-portable-reimport.json', 'silverwing-prepare-report.json', 'keep/user.txt', 'twelve-portable-reimport.json')) {
         Assert-TestArtifactCondition (Test-Path -LiteralPath (Join-Path $run $evidence)) "Lost evidence or unrelated data: $evidence"
     }
     $pointer = Get-Content -LiteralPath (Join-Path $run 'integration-result.json') -Raw | ConvertFrom-Json

@@ -1,0 +1,98 @@
+{
+  "fixtures": [
+    {
+      "passed": true,
+      "sha256": "97daec7f1de3e7f495069d8c193dfa8326a0096229871bb6e274b1ece3188048",
+      "vertexCount": 32,
+      "triangleCount": 60,
+      "fixture": "source/Column12.fbx"
+    },
+    {
+      "passed": true,
+      "sha256": "b1a8b43459860fca478a9bf2c873491e84cf7146a0668319d703172afc47b168",
+      "vertexCount": 10,
+      "triangleCount": 16,
+      "fixture": "source/Column01.fbx"
+    },
+    {
+      "passed": true,
+      "sha256": "c624e39d907a94b7cf4dd671bacf6fe13c1adb7f9559f1274b3c0b8c8646710a",
+      "vertexCount": 28,
+      "triangleCount": 52,
+      "fixture": "source/Column10.fbx"
+    },
+    {
+      "passed": true,
+      "sha256": "5fe821224c2b34b3d2cd40233379a36787d94dbfc01f7f9729c55de2b3246200",
+      "vertexCount": 12,
+      "triangleCount": 20,
+      "fixture": "source/Column02.fbx"
+    },
+    {
+      "passed": true,
+      "sha256": "7cf5a93c021840810754ac9e8adde632b7daa98fba49ade5f6015f22ede3308e",
+      "vertexCount": 30,
+      "triangleCount": 56,
+      "fixture": "source/Column11.fbx"
+    },
+    {
+      "passed": true,
+      "sha256": "d0325409d57b66cbdee08f761f6e9c43d00c58771fb9ae26f291fd25b306e47c",
+      "vertexCount": 14,
+      "triangleCount": 24,
+      "fixture": "source/Column03.fbx"
+    },
+    {
+      "passed": true,
+      "sha256": "369f5a19c2d16f6ac280ab69d9624d2f579930664b16034ba3d8c4166d4a9fb4",
+      "vertexCount": 26,
+      "triangleCount": 48,
+      "fixture": "source/Column09.fbx"
+    },
+    {
+      "passed": true,
+      "sha256": "932bbb3b4ffe5c1d1767be558ab91ad7b46f41d659862bf4a85247ee1b12fb2e",
+      "vertexCount": 16,
+      "triangleCount": 28,
+      "fixture": "source/Column04.fbx"
+    },
+    {
+      "passed": true,
+      "sha256": "618dc7c733ec72dfa3d830cae9903bdb5fb7223cb6dcc60be6dfc2187941e8fe",
+      "vertexCount": 24,
+      "triangleCount": 44,
+      "fixture": "source/Column08.fbx"
+    },
+    {
+      "passed": true,
+      "sha256": "e4cd40dac8398033097759494c744320f92ed8abeaa356f39fd7ad060cccae6c",
+      "vertexCount": 18,
+      "triangleCount": 32,
+      "fixture": "source/Column05.fbx"
+    },
+    {
+      "passed": true,
+      "sha256": "f7ceff473b246f19be0581419d1d7844ddef510d386edd49d2bdc26dd934d084",
+      "vertexCount": 22,
+      "triangleCount": 40,
+      "fixture": "source/Column07.fbx"
+    },
+    {
+      "passed": true,
+      "sha256": "ec6164ed0088c5b7142ea595d64acbf890b80dd063032a278b0f2484b839bc52",
+      "vertexCount": 20,
+      "triangleCount": 36,
+      "fixture": "source/Column06.fbx"
+    },
+    {
+      "passed": true,
+      "sha256": "a364590ec88d7fe3a2753fe2659d7b660ecb7669129368fcfc88cd57a1ee98ff",
+      "width": 2,
+      "height": 2,
+      "fixture": "source/T_SharedStone_Albedo.png"
+    }
+  ],
+  "schemaVersion": 1,
+  "verification": "Actual portable ZIP clean reimport by pb0811_collection_fixture.py; all 12 models resolve the packaged texture.",
+  "blenderVersion": "5.0.0"
+}

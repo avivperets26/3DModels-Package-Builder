@@ -2727,3 +2727,12 @@ README and inventory records to the existing deterministic streaming archive bui
 A single original equipment fixture feeds both portable ZIP and Unity package paths,
 with real Blender and isolated Unity clean-reimport checks. See
 [selector/portable contract and criterion-level evidence](PB-0808_PB-0810_SELECTOR_PORTABLE_EVIDENCE.md).
+
+## Twelve-item collection acceptance (PB-0811)
+
+The original twelve-column fixture uses one reviewed manifest for portable archive and
+Unity collection plans. Distinct geometry and deliberately unsorted declaration order
+exercise item identity, overview placement and selection after clean package import.
+The integration records archive byte/hash inventory, geometry metrics and contained
+shared-texture resolution, then disposes generated packages and temporary projects.
+See [criterion-level tests and validation evidence](PB-0811_TWELVE_ITEM_COLLECTION_EVIDENCE.md).

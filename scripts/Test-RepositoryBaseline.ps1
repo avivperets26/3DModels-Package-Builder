@@ -746,6 +746,19 @@ Invoke-Check 'Tracked and candidate files contain no prohibited content' {
     $prohibitedExtension = '(?i)\.(exe|dll|pdb|msi|msix|appx|zip|7z|rar|nupkg|vsix|fbx|glb|gltf|blend|unitypackage|uasset|umap|pak|pfx|p12|key|dmp)$'
     $approvedBinaryFixtures = @(
         'tests/fixtures/portable/static-vertical-slice/source/StoneArch.fbx',
+        'tests/fixtures/portable/twelve-item-collection/source/Column01.fbx',
+        'tests/fixtures/portable/twelve-item-collection/source/Column02.fbx',
+        'tests/fixtures/portable/twelve-item-collection/source/Column03.fbx',
+        'tests/fixtures/portable/twelve-item-collection/source/Column04.fbx',
+        'tests/fixtures/portable/twelve-item-collection/source/Column05.fbx',
+        'tests/fixtures/portable/twelve-item-collection/source/Column06.fbx',
+        'tests/fixtures/portable/twelve-item-collection/source/Column07.fbx',
+        'tests/fixtures/portable/twelve-item-collection/source/Column08.fbx',
+        'tests/fixtures/portable/twelve-item-collection/source/Column09.fbx',
+        'tests/fixtures/portable/twelve-item-collection/source/Column10.fbx',
+        'tests/fixtures/portable/twelve-item-collection/source/Column11.fbx',
+        'tests/fixtures/portable/twelve-item-collection/source/Column12.fbx',
+        'tests/fixtures/portable/twelve-item-collection/source/T_SharedStone_Albedo.png',
         'tests/fixtures/portable/equipment-set/source/Helmet.fbx',
         'tests/fixtures/portable/equipment-set/source/Armour.fbx',
         'tests/fixtures/portable/equipment-set/source/T_SharedSteel_Albedo.png'

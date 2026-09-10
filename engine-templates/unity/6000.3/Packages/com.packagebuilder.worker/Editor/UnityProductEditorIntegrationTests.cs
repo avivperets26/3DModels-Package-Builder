@@ -38,6 +38,7 @@ namespace PackageBuilder.UnityWorker.Editor
                 TestExactPackageExportAndValidation();
                 UnityMultiItemIntegration.Run();
                 UnityEquipmentSetIntegration.Run();
+                UnityTwelveItemCollectionIntegration.Run();
                 Debug.Log("PACKAGEBUILDER_UNITY_PRODUCT_TESTS_PASS");
                 EditorApplication.Exit(0);
             }
