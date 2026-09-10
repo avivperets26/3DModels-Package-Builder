@@ -38,7 +38,7 @@ public static class PreviewExperienceDefaults
             navigation,
             light,
             new PreviewOverlayPolicy(true, "show-controls"),
-            new PreviewItemSelectionPolicy(true, true),
+            new PreviewItemSelectionPolicy(PackageBuilder.PreviewContract.PreviewSelectionPolicy.InitiallyShowAll, PackageBuilder.PreviewContract.PreviewSelectionPolicy.WrapPreviousNext),
             animation,
             Bindings(),
             accessibility).Value!;

@@ -45,6 +45,14 @@ The canonical release blockers are REL-001 through REL-008 in `docs/QUALITY_AND_
 - **TEST-012 — Deterministic/offline tests:** Tests must be deterministic and must not require internet access unless explicitly classified as network integration tests. Network tests must be isolated from the default offline suite.
 - **TEST-013 — Evidence over percentages:** Passing coverage or mutation percentages alone must never be treated as proof that requirements or acceptance criteria are satisfied.
 
+Test artifact retention follows AGENTS.md's workspace discipline: disposable packages, extracted
+copies and temporary engine projects are cleaned after success or failure; compact logs/reports
+and source fixtures remain. Manual retention needs an explicit purpose and cleanup follow-up.
+This covers completed tasks and future reruns too; consult the [retrospective cleanup audit](TEST_ARTIFACT_CLEANUP.md)
+instead of assuming an old evidence document still promises physical package/project retention.
+`scripts/Test-UnityTestArtifacts.ps1` exercises cleanup boundaries, evidence preservation and failure
+handling for the shared Unity harness cleanup. Intended product releases are outside this cleanup.
+
 ## 4. Performance Requirements
 
 - **PERF-001 — Budgets:** Small, medium, and large approved fixtures must have numeric elapsed-time, peak-memory, peak-disk, and temporary-space budgets for each applicable pipeline stage and complete build.
@@ -187,3 +195,6 @@ Every release candidate must produce a contained, reviewable evidence bundle wit
 - All approved exceptions with expiry and follow-up work.
 
 The release gate must be runnable with the documented free local or self-hosted workflow. Hosted services may mirror the checks but must not be the only way to obtain required evidence.
+
+PB-0808–PB-0810 criterion-level mappings and local evidence are maintained in
+[the selector, portable inventory and equipment fixture evidence](PB-0808_PB-0810_SELECTOR_PORTABLE_EVIDENCE.md).

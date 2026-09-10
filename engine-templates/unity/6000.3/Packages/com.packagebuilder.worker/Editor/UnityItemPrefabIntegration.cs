@@ -119,9 +119,9 @@ namespace PackageBuilder.UnityWorker.Editor
                 "Unexpected combined or partial prefab exists.");
         }
 
-        private static UnityPrefabModelRequest Prepare(string original, string name, string logical, string material)
+        internal static UnityPrefabModelRequest Prepare(string original, string name, string logical, string material, string productRoot = Root)
         {
-            string source = Root + "/Source/" + name + ".fbx";
+            string source = productRoot + "/Source/" + name + ".fbx";
             // Copy only FBX bytes: inherited importer remaps would hide the original material identities.
             File.Copy(original, source);
             AssetDatabase.ImportAsset(source, ImportAssetOptions.ForceSynchronousImport);
@@ -132,12 +132,12 @@ namespace PackageBuilder.UnityWorker.Editor
             Require(UnityStaticModelImporterPolicy.TryApply(source, 1f, true,
                 names.Select(value => new UnityMaterialRemap(value, material)), out diagnostic), diagnostic);
             UnityExtractedMeshSet meshes;
-            Require(UnityMeshAssetExtractor.TryExtract(source, Root + "/Meshes", name, out meshes, out diagnostic), diagnostic);
+            Require(UnityMeshAssetExtractor.TryExtract(source, productRoot + "/Meshes", name, out meshes, out diagnostic), diagnostic);
             return new UnityPrefabModelRequest { LogicalSourceReference = logical, SourceModelReference = source,
                 ExtractedMeshes = meshes, ExpectedMaterialReferences = new[] { material } };
         }
 
-        private static UnityPrefabRequest Item(string id, UnityPrefabModelRequest first, params UnityPrefabModelRequest[] additional)
+        internal static UnityPrefabRequest Item(string id, UnityPrefabModelRequest first, params UnityPrefabModelRequest[] additional)
         {
             return new UnityPrefabRequest { AssetId = id, LogicalSourceReference = first.LogicalSourceReference,
                 SourceModelReference = first.SourceModelReference, ExtractedMeshes = first.ExtractedMeshes,

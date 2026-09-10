@@ -32,6 +32,7 @@ namespace PackageBuilder.Preview
         [SerializeField] private Light keyLight;
         [SerializeField] private Transform studioBackground;
         [SerializeField] private PackageBuilderAnimationTransport animationTransport;
+        [SerializeField] private PackageBuilderItemSelector itemSelector;
         [SerializeField, Min(1.01f)] private float framingPadding = 1.25f;
         [SerializeField] private bool controlsVisible = true;
 
@@ -56,6 +57,16 @@ namespace PackageBuilder.Preview
 
         /// <summary>Gets the optional shared animation-transport adapter for an animated product.</summary>
         public PackageBuilderAnimationTransport AnimationTransport => animationTransport;
+
+        /// <summary>Gets the optional scene-instance item selector.</summary>
+        public PackageBuilderItemSelector ItemSelector => itemSelector;
+
+        /// <summary>Configures multi-item selection in the declared scene-instance order.</summary>
+        public void ConfigureItems(GameObject[] items)
+        {
+            if (itemSelector == null) { itemSelector = gameObject.AddComponent<PackageBuilderItemSelector>(); }
+            itemSelector.Configure(items);
+        }
 
         /// <summary>Assigns the complete scene references used by preview operations.</summary>
         public void Configure(Transform target, Camera camera, Light light, Transform background)
@@ -257,7 +268,7 @@ namespace PackageBuilder.Preview
             bool found = false;
             foreach (Renderer rendererValue in renderers)
             {
-                if (rendererValue == null || !rendererValue.enabled ||
+                if (rendererValue == null || !rendererValue.enabled || !rendererValue.gameObject.activeInHierarchy ||
                     rendererValue.transform == studioBackground)
                 {
                     continue;
@@ -349,6 +360,7 @@ namespace PackageBuilder.Preview
 
             if (currentEvent.type == EventType.ScrollWheel)
             {
+                if (controlsVisible && OverlayRect().Contains(currentEvent.mousePosition)) { return; }
                 Zoom(-currentEvent.delta.y * WheelZoomSpeed);
                 currentEvent.Use();
                 return;
@@ -438,6 +450,10 @@ namespace PackageBuilder.Preview
             }
 
             DrawAnimationControls(panel);
+            if (itemSelector != null)
+            {
+                itemSelector.Draw(new Rect(panel.x + 12f, panel.y + (animationTransport != null && animationTransport.Available ? 402f : 224f), 232f, 190f));
+            }
         }
 
         private void DrawAnimationControls(Rect panel)
@@ -511,7 +527,7 @@ namespace PackageBuilder.Preview
 
         private bool HandleAnimationKeyboardEvent(Event currentEvent)
         {
-            if (animationTransport == null || !animationTransport.Available)
+            if (!controlsVisible || (itemSelector == null && (animationTransport == null || !animationTransport.Available)))
             {
                 return false;
             }
@@ -523,6 +539,9 @@ namespace PackageBuilder.Preview
                 currentEvent.Use();
                 return true;
             }
+
+            if (itemSelector != null && itemSelector.HandleKeyboard(currentEvent, focused)) { return true; }
+            if (animationTransport == null || !animationTransport.Available) { return false; }
 
             if (focused == AnimationSelectorControl &&
                 (currentEvent.keyCode == KeyCode.LeftArrow ||
@@ -579,16 +598,19 @@ namespace PackageBuilder.Preview
             currentEvent.keyCode == KeyCode.Return || currentEvent.keyCode == KeyCode.KeypadEnter ||
             currentEvent.keyCode == KeyCode.Space;
 
-        private static string NextAnimationControl(string current, bool reverse)
+        private string NextAnimationControl(string current, bool reverse)
         {
-            string[] controls =
+            var available = new System.Collections.Generic.List<string>();
+            if (itemSelector != null)
             {
-                AnimationSelectorControl,
-                PlayPauseControl,
-                ReplayControl,
-                TimelineControl,
-                LoopControl,
-            };
+                available.AddRange(new[] { PackageBuilderItemSelector.PreviousControl, PackageBuilderItemSelector.NextControl,
+                    PackageBuilderItemSelector.SelectControl, PackageBuilderItemSelector.AllControl });
+            }
+            if (animationTransport != null && animationTransport.Available)
+            {
+                available.AddRange(new[] { AnimationSelectorControl, PlayPauseControl, ReplayControl, TimelineControl, LoopControl });
+            }
+            string[] controls = available.ToArray();
             int index = System.Array.IndexOf(controls, current);
             if (index < 0)
             {
@@ -645,7 +667,7 @@ namespace PackageBuilder.Preview
             12f,
             12f,
             256f,
-            animationTransport != null && animationTransport.Available ? 402f : 228f);
+            (animationTransport != null && animationTransport.Available ? 402f : 228f) + (itemSelector != null ? 190f : 0f));
 
         private static Rect RestoreControlsRect() => new(12f, 12f, 120f, 32f);
 

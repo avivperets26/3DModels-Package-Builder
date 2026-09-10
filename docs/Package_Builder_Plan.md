@@ -1450,3 +1450,14 @@ Canonical attachment and layout policies are engine-free C# source in the embedd
 Unity/.NET compiler/runtime differences. Application owns reviewed intent and versioned envelopes;
 Unity owns asset inspection, scene mutation and export. See
 [combined contract, traceability and validation evidence](PB-0805_PB-0807_MULTI_ITEM_EVIDENCE.md).
+
+## Item selection and portable equipment packaging (PB-0808–PB-0810)
+
+The item index transition policy is engine-free source linked into Domain and the
+Unity customer preview runtime. Domain retains typed identity and immutable state;
+Unity controls scene-instance visibility and reuses the existing overlay focus cycle.
+Portable set/collection plans bind exact reviewed items, canonical shared artifacts,
+README and inventory records to the existing deterministic streaming archive builder.
+A single original equipment fixture feeds both portable ZIP and Unity package paths,
+with real Blender and isolated Unity clean-reimport checks. See
+[selector/portable contract and criterion-level evidence](PB-0808_PB-0810_SELECTOR_PORTABLE_EVIDENCE.md).

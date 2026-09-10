@@ -7,6 +7,7 @@ description: Apply Package Builder's repository-specific architecture, reuse, do
 
 The user-approved PB-0805–PB-0807 combined branch exception is recorded in AGENTS.md.
 Keep all three task identities, statuses and acceptance records distinct within that branch.
+The same rule applies to the separately approved PB-0808–PB-0810 combined scope in AGENTS.md.
 
 Use this skill for implementation, review, refactoring, or roadmap work in the Package Builder
 repository.
@@ -29,6 +30,13 @@ repository.
    security constraints. Do not narrate self-evident statements.
 7. Add focused tests plus architecture or conformance tests when behavior crosses a boundary.
 8. Run the narrow tests first, then the repository-required validation proportional to the change.
+   Follow AGENTS.md's test-artifact cleanup rule: remove owned generated packages, extractions and
+   temporary engine projects after success or failure, while preserving source fixtures and compact
+   evidence. Prefer the existing `scripts/UnityTestArtifacts.Common.ps1` for Unity `artifacts/u` runs.
+   Record any deliberate manual retention and clean it after inspection; report failed cleanup.
+   This applies retroactively to completed tasks and to every future task/rerun. Check
+   `docs/TEST_ARTIFACT_CLEANUP.md` at startup for retained-run exceptions; update that audit after
+   removing historical outputs without changing DONE statuses or historical validation results.
 9. Synchronize only genuinely affected documentation and lifecycle evidence.
 10. Report the reuse/duplication audit, intentional duplicates, validation evidence, and manual Git
     handoff. Never stage, commit, push, merge, or publish without exact user authorization.

@@ -128,6 +128,12 @@ namespace PackageBuilder.UnityWorker.Editor
             UnityCleanReimportResult result,
             List<UnityCleanReimportFinding> findings)
         {
+            if (result.validationMode == "equipment-set")
+            {
+                try { UnityEquipmentSetIntegration.VerifySaved(); }
+                catch (InvalidOperationException) { findings.Add(Finding("UNITY_REIMPORT_EQUIPMENT_SET_INVALID", result.productRootReference)); }
+                return;
+            }
             if (string.Equals(result.validationMode, "item-prefabs", StringComparison.Ordinal) ||
                 string.Equals(result.validationMode, "item-and-set-prefabs", StringComparison.Ordinal) ||
                 string.Equals(result.validationMode, "collection-overview", StringComparison.Ordinal))
