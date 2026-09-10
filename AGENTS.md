@@ -62,6 +62,14 @@ Lifecycle markers supplement rather than replace task checkboxes, acceptance evi
 
 ## Permanent One-Merge Rollover Workflow
 
+### Approved combined scope: PB-0805 through PB-0807
+
+On 2026-09-10 the user explicitly requested PB-0805, PB-0806 and PB-0807 on one branch.
+Use `feat/PB-0805-PB-0807-multi-item-flow` for this scope. This is a task-specific exception to
+the one-task-per-branch rule, not a permanent replacement. Retain separate acceptance evidence,
+checkboxes, Active Work rows and eventual Completion Log rows for all three tasks. Publication
+and completion gates remain unchanged. Roll PB-0804 completion into this branch once.
+
 ### Start every task branch from freshly synchronized main
 
 Before creating any new implementation branch:

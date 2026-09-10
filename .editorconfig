@@ -199,6 +199,15 @@ generated_code = true
 dotnet_analyzer_diagnostic.severity = none
 trim_trailing_whitespace = false
 
+# Shared Application/Unity source must remain compatible with Unity's C# 9 compiler.
+[engine-templates/unity/6000.3/Packages/com.packagebuilder.worker/Editor/Shared/*.cs]
+csharp_style_namespace_declarations = block_scoped:warning
+dotnet_style_prefer_collection_expression = false
+dotnet_diagnostic.IDE0300.severity = none
+dotnet_diagnostic.IDE0301.severity = none
+dotnet_diagnostic.IDE0302.severity = none
+dotnet_diagnostic.IDE0305.severity = none
+
 # Minified or generated lock artifacts retain their producer's layout.
 [{*.min.js,*.min.css,yarn.lock,pnpm-lock.yaml}]
 indent_size = unset

@@ -178,6 +178,9 @@ $environment = [ordered]@{
     PACKAGEBUILDER_ITEM_OWNERSHIP_PLAN = (Join-Path $repositoryRootPath 'tests\fixtures\manifests\item-prefab-ownership.json')
     PACKAGEBUILDER_SET_PLAN = (Join-Path $repositoryRootPath 'tests\fixtures\manifests\assembled-set-plan.json')
     PACKAGEBUILDER_ITEM_PACKAGE_OUTPUT = (Join-Path $runRoot 'items.unitypackage')
+    PACKAGEBUILDER_ATTACHMENT_PLAN = (Join-Path $repositoryRootPath 'tests/fixtures/manifests/set-attachments.json')
+    PACKAGEBUILDER_COLLECTION_PLAN = (Join-Path $repositoryRootPath 'tests/fixtures/manifests/collection-plan.json')
+    PACKAGEBUILDER_COLLECTION_PACKAGE_OUTPUT = (Join-Path $cloneRoot 'PackageBuilderExports/ExampleCollection.unitypackage')
     PACKAGEBUILDER_UNITYPACKAGE_OUTPUT = $packageOutputPath
     PACKAGEBUILDER_UNITYPACKAGE_MANIFEST = $packageManifestPath
     PACKAGEBUILDER_UNITY_RIG_PACKAGE_OUTPUT = $rigPackageOutputPath
@@ -306,6 +309,23 @@ try {
             'Assets/PBSetTests/Prefabs/P_ExampleSet_Assembled.prefab', 'Assets/PBSetTests/Documentation/SET_ExampleSet.json')
     if (-not $itemReimportResult.passed -or @($itemReimportResult.findings).Count -ne 0) {
         throw 'Item prefab clean reimport validation failed.'
+    }
+
+    $collectionReimportResult = Invoke-CleanUnityPackageValidation `
+        -TemplateRoot $templateRoot -CleanCloneRoot (Join-Path $runRoot 'c') -UnityPath $unityPath `
+        -PackagePath (Join-Path $cloneRoot 'PackageBuilderExports/ExampleCollection.unitypackage') `
+        -ImportLogPath (Join-Path $runRoot 'collection-import.log') `
+        -ValidationLogPath (Join-Path $runRoot 'collection-validation.log') `
+        -ResultPath (Join-Path $runRoot 'collection-reimport.json') `
+        -ProductRootReference 'Assets/PBItemTests' -PrefabReference 'Assets/PBItemTests/Prefabs/P_Alpha.prefab' `
+        -SceneReference 'Assets/PBItemTests/Scenes/S_ExampleCollection_Overview.unity' `
+        -ValidationMode 'collection-overview' -RequiredImportedAssets @(
+            'Assets/PBItemTests/Prefabs/P_Alpha.prefab', 'Assets/PBItemTests/Prefabs/P_Zed.prefab',
+            'Assets/PBItemTests/Scenes/S_ExampleCollection_Overview.unity',
+            'Assets/PBItemTests/Scripts/PackageBuilderPreviewController.cs',
+            'Assets/PBItemTests/Documentation/COLLECTION_ExampleCollection.json')
+    if (-not $collectionReimportResult.passed -or @($collectionReimportResult.findings).Count -ne 0) {
+        throw 'Collection overview clean reimport validation failed.'
     }
 
     $rigCleanReimportResult = Invoke-CleanUnityPackageValidation `
@@ -490,6 +510,9 @@ $resultPointer = [ordered]@{
     assembledSetPrefab = (Join-Path $cloneRoot 'Assets\PBSetTests\Prefabs\P_ExampleSet_Assembled.prefab')
     setDocumentation = (Join-Path $cloneRoot 'Assets\PBSetTests\Documentation\SET_ExampleSet.json')
     itemCleanReimportResult = (Join-Path $runRoot 'item-reimport.json')
+    collectionCleanProject = (Join-Path $runRoot 'c')
+    collectionPackage = (Join-Path $cloneRoot 'PackageBuilderExports/ExampleCollection.unitypackage')
+    collectionCleanReimportResult = (Join-Path $runRoot 'collection-reimport.json')
     itemPrefabs = @('P_Alpha.prefab', 'P_Zed.prefab') | ForEach-Object {
         Join-Path $cloneRoot "Assets\PBItemTests\Prefabs\$_"
     }

@@ -139,7 +139,7 @@ namespace PackageBuilder.UnityWorker.Editor
                     ".asset" => "Meshes/",
                     ".fbx" or ".glb" => "Source/",
                     ".png" or ".jpg" or ".jpeg" or ".tga" or ".tif" or ".tiff" => "Textures/",
-                    ".txt" or ".md" or ".pdf" => "Documentation/",
+                    ".txt" or ".md" or ".pdf" or ".json" => "Documentation/",
                     _ => string.Empty,
                 };
                 if (string.IsNullOrEmpty(expectedFolder) ||

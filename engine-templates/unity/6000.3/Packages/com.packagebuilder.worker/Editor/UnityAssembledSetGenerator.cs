@@ -21,6 +21,7 @@ namespace PackageBuilder.UnityWorker.Editor
         public bool requireUniqueAttachmentSlots;
         public UnitySetMember[] members;
         public UnitySetCompatibility[] compatibility;
+        public PackageBuilder.MultiItem.AttachmentBinding[] attachments;
     }
 
     /// <summary>An ordered item binding with an application-selected logical slot container.</summary>
@@ -46,7 +47,7 @@ namespace PackageBuilder.UnityWorker.Editor
     {
         /// <summary>Creates only new outputs; failures clean owned outputs while preserving input prefabs and dependencies.</summary>
         internal static bool TryCreate(string json, string[] itemReferences, string output, string documentation,
-            out GameObject prefab, out string diagnostic)
+            out GameObject prefab, out string diagnostic, string attachments = null, IDictionary<string, string> targets = null)
         {
             prefab = null;
             diagnostic = "UNITY_SET_PLAN_INVALID";
@@ -65,6 +66,14 @@ namespace PackageBuilder.UnityWorker.Editor
                 return false;
             }
             if (Exists(output) || Exists(documentation)) { diagnostic = "UNITY_SET_OUTPUT_COLLISION"; return false; }
+            if (plan.members.Any(member => member != null && !string.IsNullOrEmpty(member.slot)) || attachments != null)
+            {
+                if (!UnitySetAttachmentValidator.Validate(plan, attachments, targets, out diagnostic)) { return false; }
+                plan.attachmentValidation = "validated";
+                plan.attachments = JsonUtility.FromJson<UnityAttachmentRequest>(attachments).bindings;
+            }
+            string expectedDocument = JsonUtility.ToJson(plan);
+            diagnostic = "UNITY_SET_PLAN_INVALID";
 
             var ids = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             var containers = new HashSet<string>(StringComparer.Ordinal);
@@ -108,12 +117,12 @@ namespace PackageBuilder.UnityWorker.Editor
                 using (var stream = new FileStream(documentation, FileMode.CreateNew, FileAccess.Write))
                 {
                     wroteDocument = true;
-                    byte[] bytes = new UTF8Encoding(false).GetBytes(json);
+                    byte[] bytes = new UTF8Encoding(false).GetBytes(expectedDocument);
                     stream.Write(bytes, 0, bytes.Length);
                 }
                 AssetDatabase.ImportAsset(documentation, ImportAssetOptions.ForceSynchronousImport);
                 var document = AssetDatabase.LoadAssetAtPath<TextAsset>(documentation);
-                if (document == null || document.text != json) { diagnostic = "UNITY_SET_DOCUMENT_VERIFY_FAILED"; return false; }
+                if (document == null || document.text != expectedDocument) { diagnostic = "UNITY_SET_DOCUMENT_VERIFY_FAILED"; return false; }
                 AssetDatabase.SaveAssets();
                 prefab = candidate;
                 diagnostic = string.Empty;

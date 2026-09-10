@@ -1,0 +1,1 @@
+{"schemaVersion":1,"setId":"ExampleSet","members":[{"itemId":"Zed","slot":"head"},{"itemId":"Alpha","slot":"body"}],"bindings":[{"itemId":"Zed","slot":"head","targetId":"Character","kind":"socket","point":"Socket"},{"itemId":"Alpha","slot":"body","targetId":"Character","kind":"body-slot","point":"Body"}]}
