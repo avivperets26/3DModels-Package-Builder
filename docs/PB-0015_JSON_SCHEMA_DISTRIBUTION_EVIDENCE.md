@@ -1,6 +1,16 @@
 # PB-0015 — JSON Schema source distribution evidence
 
-Status: 🟡 **IN PROGRESS** — implemented and validated locally; publication gates remain.
+Current status: 🟢 **DONE**, recorded during the PB-0801 rollover. Task commit
+`bc5937729f114098d11d195d16f471e66df5d1cb` was pushed and merged/pushed to main as
+`599cec4787bff2a0710dc5729dca4e65c85a5c72`;
+[main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34460554825)
+passed. The user accepted local validation, declined optional visual checks and authorized
+publication and continuation on success. No live-service deployment target is configured.
+
+The evidence and handoff below are the historical pre-publication snapshot; its references to
+remaining publication gates and manual commands describe that earlier state.
+
+Original handoff status: 🟡 **IN PROGRESS** — implemented and validated locally; publication gates remain.
 Branch: `chore/PB-0015-json-schema-distribution`.
 
 ## Decision and scope

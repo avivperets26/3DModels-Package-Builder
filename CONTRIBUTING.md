@@ -19,6 +19,14 @@ Package Builder uses branch-sized PB tasks, repository-local tools, evidence-bas
 
 Use lowercase words separated by hyphens after the task ID. Keep the branch independently reviewable and do not mix unrelated cleanup into it. The permitted previous-task rollover at the start of the next task branch is documentation synchronization, not a second implementation task.
 
+Before creating each new task branch, inspect and preserve the current worktree, run `git fetch origin`,
+switch to `main`, and run `git pull --ff-only origin main`. Verify that `git rev-parse HEAD` equals
+`git rev-parse origin/main` and the worktree is clean. Create the documented task branch only from
+that latest main and record its base commit. A failed fetch or ahead/diverged main must be resolved
+before branching; do not discard, silently stash, or carry unrelated changes into the task.
+This routine synchronization is authorized by the standing user instruction in AGENTS.md;
+commits, pushes, task merges and other publication actions retain their existing authorization gates.
+
 ## Allowed Branch Types
 
 - `chore` — repository, dependency, or configuration work.

@@ -21,12 +21,12 @@
 | Measure | Tasks |
 | --- | ---: |
 | Total | 264 |
-| ⚪ Backlog | 151 |
+| ⚪ Backlog | 150 |
 | 🟡 In progress | 2 |
 | 🔴 Blocked | 0 |
-| 🟢 Done | 111 |
-| Remaining (all not done) | 153 |
-| Overall completion | 111 / 264 (42.0%) |
+| 🟢 Done | 112 |
+| Remaining (all not done) | 152 |
+| Overall completion | 112 / 264 (42.4%) |
 <!-- status-summary:end -->
 
 Counts include each canonical PB task definition exactly once, including the optional post-v1 roadmap.
@@ -190,7 +190,14 @@ feat/PB-0607-unity-urp-material-compiler
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
 | PB-0714 | 🟡 **IN PROGRESS** | `test/PB-0714-unity-generic-topologies` | Unity Fixture Engineering for local work; user for Git gates | 2026-08-11 | Locally validated: five repository-generated topology categories preserve Generic/non-Humanoid import, declared roots, exact hierarchy, one-influence skin weights, clips, controllers, prefabs, and sampled deformation through isolated clean reimport; exact multi-root and missing-binding findings also pass. User screenshots confirm the five prefabs, distinct displayed hierarchies, clip metadata, expected animation curves, and controller structure. | Local history on 2026-09-10 contains task commit `07c0b57` and merge `24f42d6` (#86) on `main`. Remote publication, exact-merge `main` CI, and explicit completion-confirmation evidence still need reconciliation before DONE rollover. |
-| PB-0015 | 🟡 **IN PROGRESS** | `chore/PB-0015-json-schema-distribution` | Dependency Maintenance Engineering | 2026-09-10 | Implemented and validated locally: pinned MIT source, 34 baseline checks, 2,329 passing tests, identical clean-build DLLs and CLI publish notices. [Evidence](PB-0015_JSON_SCHEMA_DISTRIBUTION_EVIDENCE.md). | None; staging, commit, push, merge, main CI and user confirmation remain. |
+| PB-0801 | 🟡 **IN PROGRESS** | `feat/PB-0801-multi-item-mapper` | Item Mapping Engineering | 2026-09-10 | Implemented and validated locally: explicit immutable source ownership, deterministic manifest round-trip, review-required ambiguity, 29 focused tests and 2,358 passing core tests. [Evidence](PB-0801_MULTI_ITEM_MAPPING_EVIDENCE.md). User accepted validation and authorized commit/push. | None; main merge, main CI and completion rollover remain. |
+
+### PB-0015 Completion Evidence
+
+- Task commit `bc5937729f114098d11d195d16f471e66df5d1cb` was pushed on `chore/PB-0015-json-schema-distribution` and merged/pushed on main as `599cec4787bff2a0710dc5729dca4e65c85a5c72`.
+- [Exact-main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34460554825) completed successfully on 2026-09-10.
+- The user accepted the validated work, declined optional visual checks, and explicitly authorized commit, push, publication and continuation conditional on completion. Successful main CI satisfied that condition.
+- PB-0801 records this completion once through the approved rollover. No hosted deployment target exists; this was repository publication, not a live-service deployment.
 
 ### PB-0014 Completion Evidence
 
@@ -1651,6 +1658,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0712 | `test/PB-0712-silverwing-unity-e2e` | `ebc9c0ce4def18f10a64efbd2eccb40f44daaa58` | [#84](https://github.com/avivperets26/3DModels-Package-Builder/pull/84) | 2026-08-11 | Merged into `main` as `5073a3aab0fc52afd67522165f0156ecfaeb79ff`; required exact-merge `main` CI succeeded. No CI or quality exception was used; the user explicitly confirmed the push, merge, green required `main` CI, working animation and preview, and zero Unity errors. |
 | PB-0713 | `test/PB-0713-unity-multi-clip` | `ccdc155961c683012ef257d238cf64f3b4013287` | [#85](https://github.com/avivperets26/3DModels-Package-Builder/pull/85) | 2026-08-11 | Merged into `main` as `ee4a151d662dd3d0984318c31d3feb60726c0f51`; required exact-merge `main` CI succeeded. No CI or quality exception was used; the user explicitly confirmed the push, merge, green required `main` CI, mixed loop settings, exact controller states, default state, and prefab Animator. |
 | PB-0014 | `chore/PB-0014-dependency-maintenance` | `362618fe3bd9d24ba1edbf4a614f95525588a255` | Direct merge | 2026-09-10 | Merged and pushed as `804ddee337dc319c02f156630c0410e3fda6281a`; [exact-main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34456760639) passed; user confirmed completion and approved PB-0015. Four updates validated; JSON Schema distribution prerequisite tracked in PB-0015. |
+| PB-0015 | `chore/PB-0015-json-schema-distribution` | `bc5937729f114098d11d195d16f471e66df5d1cb` | Direct merge | 2026-09-10 | Merged/pushed as `599cec4787bff2a0710dc5729dca4e65c85a5c72`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34460554825) passed; user accepted validation and authorized publication/continuation. MIT source distribution, 2,329 tests and publish notices verified. |
 
 ## 5. Milestones
 
@@ -1777,7 +1785,7 @@ flowchart LR
   - Done when: Dependabot PRs #79, #80, #87, #88, and #89 have documented compatibility and licence decisions; accepted updates have synchronized central pins, lockfiles, validator expectations, and dependency notices; locked restore, warning-free Release build, formatting, all core tests, and vulnerability review pass; deferred updates have a concrete reason and follow-up; required publication and completion gates pass.
   - Evidence: `docs/PB-0014_DEPENDENCY_MAINTENANCE_EVIDENCE.md`.
 
-- [ ] **PB-0015 — Establish an unconditional no-cost JSON Schema distribution path** — **P1** — 🟡 **IN PROGRESS**
+- [x] **PB-0015 — Establish an unconditional no-cost JSON Schema distribution path** — **P1** — 🟢 **DONE**
   - Branch: `chore/PB-0015-json-schema-distribution`
   - Owner: Dependency Maintenance Engineering
   - Depends on: PB-0014
@@ -2342,7 +2350,7 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** Related sets and independent collections build consistently across portable and Unity targets, ready for Unreal reuse.
 
-- [ ] **PB-0801 — Implement multi-item source-to-manifest mapper** — **P0** — ⚪ **BACKLOG**
+- [ ] **PB-0801 — Implement multi-item source-to-manifest mapper** — **P0** — 🟡 **IN PROGRESS**
   - Branch: `feat/PB-0801-multi-item-mapper`
   - Depends on: PB-0106, PB-0409
   - Done when: files can be assigned to stable item IDs and ambiguous grouping requires review.

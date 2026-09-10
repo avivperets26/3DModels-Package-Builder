@@ -30,7 +30,8 @@ public sealed class ProductManifest
         ReadOnlyCollection<AnimationDefinition> animations,
         ItemSetDefinition? itemSet,
         ItemCollectionDefinition? itemCollection,
-        MarketplaceProfile? marketplaceProfileReference)
+        MarketplaceProfile? marketplaceProfileReference,
+        ReadOnlyCollection<ItemSourceAssignment> itemSourceAssignments)
     {
         SchemaVersion = CurrentSchemaVersion;
         PublisherProfileReference = publisherProfileReference;
@@ -47,6 +48,7 @@ public sealed class ProductManifest
         ItemSet = itemSet;
         ItemCollection = itemCollection;
         MarketplaceProfileReference = marketplaceProfileReference;
+        ItemSourceAssignments = itemSourceAssignments;
     }
 
     public int SchemaVersion { get; }
@@ -79,6 +81,20 @@ public sealed class ProductManifest
 
     public MarketplaceProfile? MarketplaceProfileReference { get; }
 
+    /// <summary>Gets reviewed file ownership in ordinal item-ID/source order; an empty list denotes an unmapped draft.</summary>
+    public IReadOnlyList<ItemSourceAssignment> ItemSourceAssignments { get; }
+
+    /// <summary>Validates and snapshots reviewed ownership while preserving all other manifest intent.</summary>
+    public ProductManifestValidationResult WithItemSourceAssignments(IEnumerable<ItemSourceAssignment?> assignments)
+    {
+        ArgumentNullException.ThrowIfNull(assignments);
+        return Create(
+            SchemaVersion, PublisherProfileReference, DisplayName, AssetId, FolderName,
+            ProductCase, Version, Targets, SourceAssets, Materials, Rig, Animations,
+            ItemSet, ItemCollection, MarketplaceProfileReference, assignments);
+    }
+
+    /// <summary>Creates immutable intent. Omitted ownership denotes a draft; supplied ownership must be complete and unambiguous.</summary>
     public static ProductManifestValidationResult Create(
         int schemaVersion,
         PublisherRoot? publisherProfileReference,
@@ -94,7 +110,8 @@ public sealed class ProductManifest
         IEnumerable<AnimationDefinition?>? animations,
         ItemSetDefinition? itemSet,
         ItemCollectionDefinition? itemCollection,
-        MarketplaceProfile? marketplaceProfileReference = null)
+        MarketplaceProfile? marketplaceProfileReference = null,
+        IEnumerable<ItemSourceAssignment?>? itemSourceAssignments = null)
     {
         var findings = new List<ValidationFinding>();
         AddRequiredFindings(
@@ -139,6 +156,21 @@ public sealed class ProductManifest
             return ProductManifestValidationResult.Failure(findings);
         }
 
+        ItemSourceAssignment?[] assignmentValues = itemSourceAssignments?.ToArray() ?? [];
+        if (itemSourceAssignments is not null)
+        {
+            findings.AddRange(ItemSourceAssignmentValidator.Validate(
+                assignmentValues, itemSet?.Items ?? itemCollection?.Items, sourceValues));
+            if (findings.Count != 0)
+            {
+                return ProductManifestValidationResult.Failure(findings);
+            }
+        }
+
+        ItemSourceAssignment[] orderedAssignments = [.. assignmentValues.Cast<ItemSourceAssignment>()
+            .OrderBy(value => value.ItemId.Value, StringComparer.Ordinal)
+            .ThenBy(value => value.SourceReference, StringComparer.Ordinal)];
+
         targetValues.Sort(
             (left, right) =>
                 StringComparer.Ordinal.Compare(
@@ -167,7 +199,8 @@ public sealed class ProductManifest
                 animationValues.AsReadOnly(),
                 itemSet,
                 itemCollection,
-                marketplaceProfileReference));
+                marketplaceProfileReference,
+                Array.AsReadOnly(orderedAssignments)));
     }
 
     private static void AddRequiredFindings(
@@ -339,7 +372,8 @@ public sealed class ProductManifest
         }
     }
 
-    private static ValidationFinding Finding(string code, string explanation)
+    /// <summary>Creates the shared release-blocking finding used by manifest boundary validators.</summary>
+    internal static ValidationFinding Finding(string code, string explanation)
     {
         FindingCode findingCode = FindingCode.Create(code).Value!;
         FindingExplanation findingExplanation = FindingExplanation.Create(explanation).Value!;

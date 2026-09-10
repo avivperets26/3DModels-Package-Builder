@@ -2651,3 +2651,13 @@ MIT source commit. Humanizer.Core 3.0.10 is centrally managed and locked. No pub
 binary is permitted in the restore graph. Source hashes and negative guard fixtures run in the
 repository baseline. See [the distribution and update instructions](../third_party/json-everything/README.md)
 and [PB-0015 evidence](PB-0015_JSON_SCHEMA_DISTRIBUTION_EVIDENCE.md).
+
+## Multi-item source mapping (PB-0801)
+
+Item sets and collections use explicit, stable item IDs for file ownership. The application mapper
+adds reviewed `itemSourceAssignments` to the manifest through the shared Domain validator. Every
+model file and item must be mapped; ambiguous model ownership produces blocking review findings.
+Multiple input files may belong to one item, while explicitly shared images remain separate from
+PB-0802 content deduplication. Existing v1 manifests without assignments remain readable as drafts.
+Per-item generators must consume a successfully mapped manifest; filename and mesh counts never
+infer grouping. See [the mapping boundary and validation evidence](PB-0801_MULTI_ITEM_MAPPING_EVIDENCE.md).
