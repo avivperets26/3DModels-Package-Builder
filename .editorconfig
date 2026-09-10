@@ -213,3 +213,7 @@ dotnet_diagnostic.IDE0305.severity = none
 indent_size = unset
 insert_final_newline = unset
 trim_trailing_whitespace = false
+
+# Canonical selection policy is also compiled by Unity C# 9.
+[engine-templates/unity/6000.3/Assets/PackageBuilder/Preview/PreviewSelectionPolicy.cs]
+csharp_style_namespace_declarations = block_scoped:warning

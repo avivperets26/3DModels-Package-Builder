@@ -56,6 +56,10 @@ $expectedAssetFiles = @(
     'Assets/PackageBuilder/Preview/PackageBuilder.Preview.asmdef',
     'Assets/PackageBuilder/Preview/PackageBuilder.Preview.asmdef.meta',
     'Assets/PackageBuilder/Preview/PackageBuilderAnimationTransport.cs',
+    'Assets/PackageBuilder/Preview/PreviewSelectionPolicy.cs',
+    'Assets/PackageBuilder/Preview/PreviewSelectionPolicy.cs.meta',
+    'Assets/PackageBuilder/Preview/PackageBuilderItemSelector.cs',
+    'Assets/PackageBuilder/Preview/PackageBuilderItemSelector.cs.meta',
     'Assets/PackageBuilder/Preview/PackageBuilderAnimationTransport.cs.meta',
     'Assets/PackageBuilder/Preview/PackageBuilderPreviewController.cs',
     'Assets/PackageBuilder/Preview/PackageBuilderPreviewController.cs.meta',
@@ -131,6 +135,8 @@ $expectedWorkerPackageFiles = @(
     'Packages/com.packagebuilder.worker/Editor/UnityCollectionPackageFlow.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityMultiItemLayout.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityMultiItemIntegration.cs',
+    'Packages/com.packagebuilder.worker/Editor/UnitySelectorInteractionTests.cs',
+    'Packages/com.packagebuilder.worker/Editor/UnityEquipmentSetIntegration.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityAssembledSetIntegration.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityItemPrefabIntegration.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityProductEditorIntegrationTests.cs',
@@ -263,7 +269,9 @@ Invoke-Check 'Template contains no sample product, scene, media, or stale refere
         -Recurse -File -Filter '*.cs' | ForEach-Object { Get-RelativeTemplatePath $_.FullName })
     $expectedRuntimeScripts = @(
         'Assets/PackageBuilder/Preview/PackageBuilderAnimationTransport.cs',
-        'Assets/PackageBuilder/Preview/PackageBuilderPreviewController.cs'
+        'Assets/PackageBuilder/Preview/PackageBuilderPreviewController.cs',
+        'Assets/PackageBuilder/Preview/PackageBuilderItemSelector.cs',
+        'Assets/PackageBuilder/Preview/PreviewSelectionPolicy.cs'
     )
     if ($runtimeScripts.Count -ne $expectedRuntimeScripts.Count -or
         @(Compare-Object -ReferenceObject $expectedRuntimeScripts `

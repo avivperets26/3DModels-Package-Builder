@@ -21,12 +21,12 @@
 | Measure | Tasks |
 | --- | ---: |
 | Total | 264 |
-| ⚪ Backlog | 144 |
+| ⚪ Backlog | 141 |
 | 🟡 In progress | 3 |
 | 🔴 Blocked | 0 |
-| 🟢 Done | 117 |
-| Remaining (all not done) | 147 |
-| Overall completion | 117 / 264 (44.3%) |
+| 🟢 Done | 120 |
+| Remaining (all not done) | 144 |
+| Overall completion | 120 / 264 (45.5%) |
 <!-- status-summary:end -->
 
 Counts include each canonical PB task definition exactly once, including the optional post-v1 roadmap.
@@ -187,11 +187,16 @@ feat/PB-0607-unity-urp-material-compiler
 
 ## 3. Active Work
 
+Test-artifact cleanup applies to all past, current and future tasks, including tasks already
+marked DONE. Review [the cleanup audit](TEST_ARTIFACT_CLEANUP.md) at task startup and record
+retained-output cleanup before handoff. Later artifact removal does not change historical test
+results, DONE statuses or Completion Log entries.
+
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0805 | 🟡 **IN PROGRESS** | `feat/PB-0805-PB-0807-multi-item-flow` | Codex; user for publication | 2026-09-10 | Attachment metadata/target validation implemented and locally validated. Full core CI: 2,428 tests and 9 stages passed; real Unity integration and clean reimport passed. [Evidence](PB-0805_PB-0807_MULTI_ITEM_EVIDENCE.md). Awaiting publication. | None. |
-| PB-0806 | 🟡 **IN PROGRESS** | `feat/PB-0805-PB-0807-multi-item-flow` | Codex; user for publication | 2026-09-10 | Independent collection package flow implemented and locally validated. Full core CI: 2,428 tests and 9 stages passed; real Unity integration and clean reimport passed. [Evidence](PB-0805_PB-0807_MULTI_ITEM_EVIDENCE.md). Awaiting publication. | None. |
-| PB-0807 | 🟡 **IN PROGRESS** | `feat/PB-0805-PB-0807-multi-item-flow` | Codex; user for publication | 2026-09-10 | Deterministic bounds-aware overview layout implemented and locally validated. Full core CI: 2,428 tests and 9 stages passed; real Unity integration and clean reimport passed. [Evidence](PB-0805_PB-0807_MULTI_ITEM_EVIDENCE.md). Awaiting publication. | None. |
+| PB-0808 | 🟡 **IN PROGRESS** | `feat/PB-0808-PB-0810-selector-portable-e2e` | Codex; user for publication | 2026-09-10 | Validated locally: core CI 9/9, 2446 tests passed; Unity/Blender exports, clean imports and pointer/keyboard checks passed. Test-artifact cleanup follow-up validated: 8 cleanup checks, 44 Unity policy checks and 35 repository baseline checks passed. Publication gates pending. See `docs/PB-0808_PB-0810_SELECTOR_PORTABLE_EVIDENCE.md`. | None. |
+| PB-0809 | 🟡 **IN PROGRESS** | `feat/PB-0808-PB-0810-selector-portable-e2e` | Codex; user for publication | 2026-09-10 | Validated locally: core CI 9/9, 2446 tests passed; Unity/Blender exports, clean imports and pointer/keyboard checks passed. Test-artifact cleanup follow-up validated: 8 cleanup checks, 44 Unity policy checks and 35 repository baseline checks passed. Publication gates pending. See `docs/PB-0808_PB-0810_SELECTOR_PORTABLE_EVIDENCE.md`. | None. |
+| PB-0810 | 🟡 **IN PROGRESS** | `feat/PB-0808-PB-0810-selector-portable-e2e` | Codex; user for publication | 2026-09-10 | Validated locally: core CI 9/9, 2446 tests passed; Unity/Blender exports, clean imports and pointer/keyboard checks passed. Test-artifact cleanup follow-up validated: 8 cleanup checks, 44 Unity policy checks and 35 repository baseline checks passed. Publication gates pending. See `docs/PB-0808_PB-0810_SELECTOR_PORTABLE_EVIDENCE.md`. | None. |
 
 
 ### PB-0802 Completion Evidence
@@ -1561,6 +1566,10 @@ The detailed implementation and final publication evidence are recorded in `docs
 
 ## 4. Completion Log
 
+Completed tasks are covered by the permanent test-artifact cleanup rule. Their historical
+test/publication evidence remains valid after disposable packages and projects are removed;
+current retention and cleanup receipts are recorded in [the cleanup audit](TEST_ARTIFACT_CLEANUP.md).
+
 During the approved next-task rollover, append exactly one row for the immediately previous task when it is marked `[x]`. The row must record its final task commit, merge into `main`, successful `main` CI or approved exception, explicit user confirmation, and completion date.
 
 | Task | Branch | Final commit | Integration | Completed | Notes |
@@ -1684,6 +1693,9 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0802 | `feat/PB-0802-shared-asset-deduplication` | `b9c17f6b7778335d724349ccdf4cc0709dc77215` | Direct merge | 2026-09-10 | Main merge `fad8adf0805d0a4f2784593a0b580906f32304d5`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34468230022) passed; user confirmed handoff and requested next task. |
 | PB-0803 | `feat/PB-0803-unity-item-prefabs` | `13561806bcf2c2c14680dbceab083b2bf018a9e7` | Direct merge | 2026-09-10 | Main merge `e540ab270eb5f0c1c14c8391890d333631df5235`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34475266254) passed both jobs; user accepted publication and requested PB-0804. |
 | PB-0804 | `feat/PB-0804-unity-assembled-set` | `30e0c5734e5cf96245412b36b31a4db94082718a` | Direct merge | 2026-09-10 | Main `d7f3d1c7a3fc222d26d63c7f40256f1508fafa58`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34482101572) passed; user accepted publication and requested the next scope. |
+| PB-0805 | `feat/PB-0805-PB-0807-multi-item-flow` | `88cba0209176fce4a4f84d4307a9a171c3a2c80f` | Direct merge | 2026-09-10 | Main `ee5108fe3ee66663fad717595cbbc419da3744e0`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34487441758) passed both jobs; user accepted publication and requested this next combined scope. |
+| PB-0806 | `feat/PB-0805-PB-0807-multi-item-flow` | `88cba0209176fce4a4f84d4307a9a171c3a2c80f` | Direct merge | 2026-09-10 | Main `ee5108fe3ee66663fad717595cbbc419da3744e0`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34487441758) passed both jobs; user accepted publication and requested this next combined scope. |
+| PB-0807 | `feat/PB-0805-PB-0807-multi-item-flow` | `88cba0209176fce4a4f84d4307a9a171c3a2c80f` | Direct merge | 2026-09-10 | Main `ee5108fe3ee66663fad717595cbbc419da3744e0`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34487441758) passed both jobs; user accepted publication and requested this next combined scope. |
 
 ## 5. Milestones
 
@@ -2395,33 +2407,33 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0803
   - Done when: set items assemble in declared order/slots with reset set root and documented compatibility.
 
-- [ ] **PB-0805 — Implement set attachment metadata and validation** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-0805 — Implement set attachment metadata and validation** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0805-PB-0807-multi-item-flow`
   - Depends on: PB-0804
   - Done when: sockets/bones/body slots are validated against declared targets and missing attachments block applicable builds.
 
-- [ ] **PB-0806 — Implement collection item package flow** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-0806 — Implement collection item package flow** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0805-PB-0807-multi-item-flow`
   - Depends on: PB-0802, PB-0803
   - Done when: independent items remain separate, names are unique, and no combined runtime prefab is created unless requested.
 
-- [ ] **PB-0807 — Implement overview layout generator** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-0807 — Implement overview layout generator** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0805-PB-0807-multi-item-flow`
   - Depends on: PB-0612, PB-0803
   - Done when: sets and collections lay out all items using bounds-aware spacing and deterministic order.
 
-- [ ] **PB-0808 — Implement preview item visibility selector** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-0808-item-preview-selector`
+- [ ] **PB-0808 — Implement preview item visibility selector** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `feat/PB-0808-PB-0810-selector-portable-e2e`
   - Depends on: PB-0619, PB-0807, PB-0913
   - Done when: Previous, Next, direct selection, current item name/index, and all-items overview use the shared selector contract; exactly the selected item can be shown without modifying prefab assets; and pointer/keyboard tests cover bounds, wrap policy, empty/single-item states, and deterministic order.
 
-- [ ] **PB-0809 — Implement set/collection portable archives and inventories** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-0809-multi-item-portable-output`
+- [ ] **PB-0809 — Implement set/collection portable archives and inventories** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `feat/PB-0808-PB-0810-selector-portable-e2e`
   - Depends on: PB-0506, PB-0801, PB-0802
   - Done when: each item, shared asset, README, and inventory table appears once with correct names.
 
-- [ ] **PB-0810 — Complete set fixture end-to-end** — **P0** — ⚪ **BACKLOG**
-  - Branch: `test/PB-0810-item-set-e2e`
+- [ ] **PB-0810 — Complete set fixture end-to-end** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `feat/PB-0808-PB-0810-selector-portable-e2e`
   - Depends on: PB-0804, PB-0805, PB-0808, PB-0809
   - Done when: one equipment-set fixture passes portable and Unity package/reimport tests.
 

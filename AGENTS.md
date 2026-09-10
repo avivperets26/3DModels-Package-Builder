@@ -70,6 +70,15 @@ the one-task-per-branch rule, not a permanent replacement. Retain separate accep
 checkboxes, Active Work rows and eventual Completion Log rows for all three tasks. Publication
 and completion gates remain unchanged. Roll PB-0804 completion into this branch once.
 
+### Approved combined scope: PB-0808 through PB-0810
+
+On 2026-09-10 the user explicitly requested PB-0808, PB-0809 and PB-0810 together.
+Use `feat/PB-0808-PB-0810-selector-portable-e2e`; implement the dependent PB-0810
+after PB-0808/PB-0809 validation within this branch. This narrow exception permits
+those dependencies to be implemented together before their one combined publication.
+Keep separate acceptance evidence, Active Work and eventual Completion Log entries.
+Roll PB-0805–PB-0807 completion into this branch once; all publication gates remain.
+
 ### Start every task branch from freshly synchronized main
 
 Before creating any new implementation branch:
@@ -168,6 +177,26 @@ These rules are mandatory acceptance requirements. Follow [the detailed quality 
 
 - All Package Builder files and project-owned state must remain beneath `C:\Dev\PackageBuilder`; never use `C:\Dev\PackageBuilderData` or another scattered location.
 - Downloads, local tools, logs, caches, runtime data, temporary files, fixtures, generated packages, reports, and other artifacts must be organized beneath the project root and excluded from Git where required by `.gitignore`.
+- Delete disposable test packages, extracted copies and temporary engine projects after validation,
+  including failed attempts. Use `finally`/disposal so routine failures do not accumulate garbage.
+- This standing rule applies to every past, current and future PB task, including completed tasks
+  and reruns of their tests. At task start, review recorded retained runs/cleanup failures; before
+  handoff, clean owned leftovers that no longer have an active inspection purpose. Existing user
+  authorization covers removal of verified disposable test output, not source assets or releases.
+- Keep historical completion evidence intact. Record later artifact removal in the cleanup audit
+  and mark old package/project paths as historical; do not reopen DONE tasks solely for cleanup,
+  rewrite their test results, or claim historical manual-inspection files still exist after removal.
+  See `docs/TEST_ARTIFACT_CLEANUP.md` for the retrospective audit and remaining exceptions.
+- Preserve source/golden fixtures, user assets, intended releases, shared tools/caches and compact
+  validation logs/reports. Resolve deletion paths inside the owned test run and reject reparse-point
+  escapes. Never sweep all ZIP/package files across the repository.
+- Retain generated test output only for a concrete manual inspection, with its path and cleanup
+  follow-up recorded; remove it after inspection. Report cleanup failures or interrupted runs and
+  finish their cleanup once the owning engine exits. Never claim cleanup succeeded without checking.
+- Unity product, multi-clip, topology and Silverwing harnesses clean their `artifacts/u/<id>` payloads
+  by default through `scripts/UnityTestArtifacts.Common.ps1`. `-KeepArtifacts` retains a successful
+  run for inspection; use `Remove-UnityTestArtifacts` afterwards. Other/manual harnesses must also
+  have their disposable outputs removed before handoff under this standing user instruction.
 
 ### 9. Visual Studio Code
 

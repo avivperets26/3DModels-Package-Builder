@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using PackageBuilder.Domain.Naming;
+using PackageBuilder.PreviewContract;
 
 namespace PackageBuilder.Domain.Preview;
 
@@ -64,7 +65,7 @@ public sealed class PreviewItemSelectionState
             new PreviewItemSelectionState(
                 new ReadOnlyCollection<InternalAssetId>(present),
                 mode,
-                mode == PreviewItemSelectionMode.SelectedItem ? 0 : null));
+                PreviewSelectionPolicy.InitialIndex(present.Length, policy.InitiallyShowAll) is int initial && initial >= 0 ? initial : null));
     }
 
     /// <summary>Selects the previous item, applying the contract's explicit wrap policy.</summary>
@@ -104,9 +105,7 @@ public sealed class PreviewItemSelectionState
             return this;
         }
 
-        int origin = SelectedIndex ?? (delta > 0 ? -1 : Items.Count);
-        int target = origin + delta;
-        target = policy.WrapPreviousNext ? (target % Items.Count + Items.Count) % Items.Count : Math.Clamp(target, 0, Items.Count - 1);
+        int target = PreviewSelectionPolicy.Move(Items.Count, SelectedIndex ?? -1, delta, policy.WrapPreviousNext);
 
         return new PreviewItemSelectionState(Items, PreviewItemSelectionMode.SelectedItem, target);
     }

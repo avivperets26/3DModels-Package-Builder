@@ -652,6 +652,14 @@ Invoke-Check 'Task branch names and lifecycle markers are valid' {
     $blockedMarker = $blockedEmoji + ' **BLOCKED**'
     $lifecycleStates = @{}
 
+    foreach ($id in @('PB-0808', 'PB-0809', 'PB-0810')) {
+        if (-not (Test-PackageBuilderTaskBranch $id 'feat/PB-0808-PB-0810-selector-portable-e2e')) {
+            throw "Approved selector/portable scope rejected: $id"
+        }
+    }
+    if (Test-PackageBuilderTaskBranch 'PB-0811' 'feat/PB-0808-PB-0810-selector-portable-e2e') {
+        throw 'The selector/portable scope exception expanded to PB-0811.'
+    }
     foreach ($id in @('PB-0805', 'PB-0806', 'PB-0807')) {
         if (-not (Test-PackageBuilderTaskBranch $id 'feat/PB-0805-PB-0807-multi-item-flow')) {
             throw "Approved combined branch rejected for $id."
@@ -737,7 +745,10 @@ Invoke-Check 'Tracked and candidate files contain no prohibited content' {
     $generatedPath = '(^|/)(bin|obj|\.vs|Library|Temp|UserSettings|Intermediate|Saved|DerivedDataCache|__pycache__)(/|$)'
     $prohibitedExtension = '(?i)\.(exe|dll|pdb|msi|msix|appx|zip|7z|rar|nupkg|vsix|fbx|glb|gltf|blend|unitypackage|uasset|umap|pak|pfx|p12|key|dmp)$'
     $approvedBinaryFixtures = @(
-        'tests/fixtures/portable/static-vertical-slice/source/StoneArch.fbx'
+        'tests/fixtures/portable/static-vertical-slice/source/StoneArch.fbx',
+        'tests/fixtures/portable/equipment-set/source/Helmet.fbx',
+        'tests/fixtures/portable/equipment-set/source/Armour.fbx',
+        'tests/fixtures/portable/equipment-set/source/T_SharedSteel_Albedo.png'
     )
     $badPaths = @($candidatePaths | Where-Object {
         ($_ -match $runtimePath -or $_ -match $generatedPath -or $_ -match $prohibitedExtension) -and
@@ -758,8 +769,14 @@ Invoke-Check 'Tracked and candidate files contain no prohibited content' {
         }
         $fixtureEvidence = Get-Content -LiteralPath $evidencePath -Raw -Encoding UTF8 | ConvertFrom-Json
         $actualFixtureHash = (Get-FileHash -LiteralPath $fixturePath -Algorithm SHA256).Hash.ToLowerInvariant()
-        if ([string]$fixtureEvidence.sha256 -cne $actualFixtureHash -or
-            [string]$fixtureEvidence.fixture -cne 'source/StoneArch.fbx' -or
+        $expectedFixtureReference = 'source/' + (Split-Path $fixturePath -Leaf)
+        if ($fixtureEvidence.PSObject.Properties.Name -contains 'fixtures') {
+            $matchingEvidence = @($fixtureEvidence.fixtures | Where-Object { $_.fixture -ceq $expectedFixtureReference })
+            if ($matchingEvidence.Count -ne 1) { throw "Fixture requires exactly one matching evidence row: $fixture" }
+            $fixtureEvidence = $matchingEvidence[0]
+        }
+        if (-not $fixtureEvidence.passed -or [string]$fixtureEvidence.sha256 -cne $actualFixtureHash -or
+            [string]$fixtureEvidence.fixture -cne $expectedFixtureReference -or
             (Get-Content -LiteralPath $licensePath -Raw -Encoding UTF8) -notmatch 'CC0-1\.0') {
             throw "Approved binary fixture identity or licence evidence is invalid: $fixture"
         }
@@ -876,6 +893,11 @@ Invoke-Check 'Core CI configuration validator supports standalone Windows PowerS
         $capturedOutput = $validatorOutput -join [Environment]::NewLine
         throw "Standalone core-CI validator failed with exit code ${validatorExitCode}. Captured output:`n$capturedOutput"
     }
+}
+
+Invoke-Check 'Unity test artifacts clean safely and preserve evidence' {
+    & (Join-Path $script:RepositoryRoot 'scripts/Test-UnityTestArtifacts.ps1') `
+        -RepositoryRoot $script:RepositoryRoot
 }
 
 Invoke-Check 'git diff --check passes for working tree and index' {

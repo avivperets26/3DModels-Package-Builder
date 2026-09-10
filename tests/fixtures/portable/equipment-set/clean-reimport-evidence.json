@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "blenderVersion": "5.0.0",
+  "verification": "Actual portable archive clean reimport by tests/blender/engine/pb0810_equipment_fixture.py",
+  "fixtures": [
+    {
+      "fixture": "source/Helmet.fbx",
+      "sha256": "d7fc6697c693cfd6229bb3330708258c5beaf712b84fd1b245bbd68143bcce7c",
+      "meshCount": 1,
+      "vertexCount": 62,
+      "passed": true
+    },
+    {
+      "fixture": "source/Armour.fbx",
+      "sha256": "b32e264e2f5c12954d936e7f746ec0b5a4cb22444d9e68b1314c2dbb421331d8",
+      "meshCount": 1,
+      "vertexCount": 8,
+      "passed": true
+    },
+    {
+      "fixture": "source/T_SharedSteel_Albedo.png",
+      "sha256": "a364590ec88d7fe3a2753fe2659d7b660ecb7669129368fcfc88cd57a1ee98ff",
+      "width": 2,
+      "height": 2,
+      "passed": true
+    }
+  ]
+}

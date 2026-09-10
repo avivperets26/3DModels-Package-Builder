@@ -420,6 +420,11 @@ namespace PackageBuilder.UnityWorker.Editor
                     return false;
                 }
                 controller.ConfigureAnimation(!IsMulti(request) && animators.Length == 1 ? animators[0] : null);
+                if (IsMulti(request))
+                {
+                    controller.ConfigureItems(Enumerable.Range(0, previewTarget.childCount)
+                        .Select(index => previewTarget.GetChild(index).gameObject).ToArray());
+                }
                 if (!controller.AutoFrame())
                 {
                     diagnosticCode = "UNITY_OVERVIEW_COMPOSITION_BOUNDS_MISSING";

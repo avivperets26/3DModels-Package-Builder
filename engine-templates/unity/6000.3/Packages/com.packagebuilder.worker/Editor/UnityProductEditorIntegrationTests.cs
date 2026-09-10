@@ -37,6 +37,7 @@ namespace PackageBuilder.UnityWorker.Editor
                 TestOverviewTemplateControllerAndComposition();
                 TestExactPackageExportAndValidation();
                 UnityMultiItemIntegration.Run();
+                UnityEquipmentSetIntegration.Run();
                 Debug.Log("PACKAGEBUILDER_UNITY_PRODUCT_TESTS_PASS");
                 EditorApplication.Exit(0);
             }

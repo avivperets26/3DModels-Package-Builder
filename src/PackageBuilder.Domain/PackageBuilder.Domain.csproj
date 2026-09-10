@@ -4,4 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Include="..\..\engine-templates\unity\6000.3\Assets\PackageBuilder\Preview\PreviewSelectionPolicy.cs" Link="Preview\Shared\PreviewSelectionPolicy.cs" />
+  </ItemGroup>
 </Project>

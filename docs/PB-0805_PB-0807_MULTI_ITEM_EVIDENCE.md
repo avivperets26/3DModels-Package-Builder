@@ -1,7 +1,6 @@
 # PB-0805–PB-0807 — Attachments, collection export and overview layout
 
-Status: 🟡 **IN PROGRESS**, all three tasks implemented and validated locally. Publication and main CI
-have not occurred for this scope. Branch: `feat/PB-0805-PB-0807-multi-item-flow`.
+Current status: 🟢 **DONE** for PB-0805, PB-0806 and PB-0807. Recorded during the PB-0808–PB-0810 rollover after task commit `88cba0209176fce4a4f84d4307a9a171c3a2c80f`, main merge `ee5108fe3ee66663fad717595cbbc419da3744e0`, [successful main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34487441758), and user acceptance/request for the next scope. The following preserves the historical handoff. Branch: `feat/PB-0805-PB-0807-multi-item-flow`.
 Base: `d7f3d1c7a3fc222d26d63c7f40256f1508fafa58`, verified clean and equal to freshly fetched/pulled
 origin/main before branch creation. The user explicitly approved all three tasks in one branch
 on 2026-09-10; AGENTS.md records this narrow exception. Each task retains its own acceptance and status.

@@ -11,6 +11,19 @@ public static class PortableTargetValidator
     private static readonly FindingSourceComponent _source =
         FindingSourceComponent.Create("portable-target-validator").Value!;
 
+    /// <summary>Checks exact archive identity, inventory and metadata for single or multi-item folder plans.</summary>
+    public static async Task<PortableTargetValidationReport> ValidateArchiveAsync(
+        PortableFolderLayout layout,
+        PortableFbxArchiveReceipt? receipt,
+        Stream? stream,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(layout);
+        var findings = new List<ValidationFinding>();
+        await ValidateArchiveAsync(layout, receipt, stream, findings, cancellationToken).ConfigureAwait(false);
+        return new PortableTargetValidationReport(findings);
+    }
+
     /// <summary>Validates archive bytes, assets, textures, README, names, references, and reimports.</summary>
     public static async Task<PortableTargetValidationReport> ValidateAsync(
         PortableFolderLayout? layout,
