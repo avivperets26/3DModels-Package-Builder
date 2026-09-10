@@ -198,3 +198,7 @@ The release gate must be runnable with the documented free local or self-hosted 
 
 PB-0808–PB-0810 criterion-level mappings and local evidence are maintained in
 [the selector, portable inventory and equipment fixture evidence](PB-0808_PB-0810_SELECTOR_PORTABLE_EVIDENCE.md).
+
+PB-0811's criterion-level mapping for TEST-004/TEST-005, package inventory, actual portable/Unity
+reimport, selection and disposable-artifact cleanup is maintained in
+[the twelve-item collection evidence](PB-0811_TWELVE_ITEM_COLLECTION_EVIDENCE.md).

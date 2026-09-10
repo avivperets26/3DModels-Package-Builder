@@ -48,6 +48,7 @@ namespace PackageBuilder.UnityWorker.Editor
         public string[] topologyCategories = Array.Empty<string>();
         public string[] clipNames = Array.Empty<string>();
         public bool synchronizedRendererMotionVerified;
+        public UnityCollectionItemMetric[] collectionItems = Array.Empty<UnityCollectionItemMetric>();
         public UnityCleanReimportFinding[] findings = Array.Empty<UnityCleanReimportFinding>();
     }
 
@@ -128,6 +129,16 @@ namespace PackageBuilder.UnityWorker.Editor
             UnityCleanReimportResult result,
             List<UnityCleanReimportFinding> findings)
         {
+            if (result.validationMode == "twelve-item-collection")
+            {
+                try { result.collectionItems = UnityTwelveItemCollectionIntegration.VerifySaved(); }
+                catch (InvalidOperationException exception)
+                {
+                    Debug.LogError(exception.Message);
+                    findings.Add(Finding("UNITY_REIMPORT_TWELVE_COLLECTION_INVALID", result.productRootReference));
+                }
+                return;
+            }
             if (result.validationMode == "equipment-set")
             {
                 try { UnityEquipmentSetIntegration.VerifySaved(); }

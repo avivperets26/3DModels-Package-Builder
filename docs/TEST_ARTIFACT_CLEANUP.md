@@ -76,3 +76,23 @@ The existing [scope handoff](PB-0808_PB-0810_SELECTOR_PORTABLE_EVIDENCE.md) cont
 file list, suggested commit and manual publication commands. This follow-up reuses the cleanup
 helper; the legacy operation is a one-time, explicitly reviewed artifact manifest rather than a
 broader production deletion API.
+
+## PB-0811 validation cleanup — 2026-09-10
+
+Run `artifacts/u/76b6d8fc` passed the twelve-item portable/Unity collection and the full
+product integration harness. Its `cleanup-result.json` records 11,184,592,470 bytes
+of disposable output removed (11.18 GB summed file lengths). No directories or generated
+packages remain in the run; compact reports, inventories, logs and measurements remain.
+The source/golden fixture is retained under `tests/fixtures/portable/twelve-item-collection`.
+
+The selector UI's test-launched Hub tree was identified by its exited Editor parent and
+exact project path, then closed before deletion. The product harness now automates that
+specific cleanup through `Stop-CompletedUnityTestHub`. Nine tests cover lifecycle cleanup,
+evidence preservation and protection of unrelated/active processes and reparse points.
+
+The earlier cleanup scope was published as task commit
+`4beaa9507205e1937895152415c42ccc6eeecc06`, main merge
+`55c4a0213ec20b347bf319804448d9e14a27ad48`, with successful main CI. Its publication-pending
+notes above are historical. PB-0808–PB-0810 completion was recorded at this branch's start;
+PB-0811 remains IN PROGRESS pending publication. See its
+[evidence and handoff](PB-0811_TWELVE_ITEM_COLLECTION_EVIDENCE.md).

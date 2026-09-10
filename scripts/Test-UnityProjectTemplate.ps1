@@ -137,6 +137,7 @@ $expectedWorkerPackageFiles = @(
     'Packages/com.packagebuilder.worker/Editor/UnityMultiItemIntegration.cs',
     'Packages/com.packagebuilder.worker/Editor/UnitySelectorInteractionTests.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityEquipmentSetIntegration.cs',
+    'Packages/com.packagebuilder.worker/Editor/UnityTwelveItemCollectionIntegration.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityAssembledSetIntegration.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityItemPrefabIntegration.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityProductEditorIntegrationTests.cs',

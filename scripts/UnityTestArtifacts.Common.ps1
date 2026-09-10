@@ -1,3 +1,46 @@
+function Stop-CompletedUnityTestHub {
+    <# .SYNOPSIS
+    Closes only Hub descendants launched for a contained test project by an exited Editor.
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)][string]$RepositoryRoot,
+        [Parameter(Mandatory)][string]$ProjectPath,
+        [Parameter(Mandatory)][ValidateRange(1, 2147483647)][int]$CompletedEditorProcessId
+    )
+    $repository = [IO.Path]::GetFullPath($RepositoryRoot).TrimEnd([char[]]'\/')
+    $project = [IO.Path]::GetFullPath($ProjectPath).TrimEnd([char[]]'\/')
+    $run = Split-Path $project -Parent
+    if ((Split-Path $run -Parent) -ne (Join-Path $repository 'artifacts/u') -or
+        (Split-Path $run -Leaf) -cnotmatch '^[0-9a-f]{8}$' -or
+        (Split-Path $project -Leaf) -cnotmatch '^[a-z]$') { throw 'Hub cleanup requires a contained test project.' }
+    $ancestor = $project
+    while ($ancestor) {
+        if ((Test-Path -LiteralPath $ancestor) -and
+            ((Get-Item -LiteralPath $ancestor -Force).Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+            throw 'Hub cleanup cannot follow a reparse point.'
+        }
+        $ancestor = Split-Path $ancestor -Parent
+    }
+    $processes = @(Get-CimInstance Win32_Process)
+    if (@($processes | Where-Object ProcessId -EQ $CompletedEditorProcessId).Count) {
+        throw 'The owning Editor must exit before test Hub cleanup.'
+    }
+    $hubs = @($processes | Where-Object {
+        $_.Name -eq 'Unity Hub.exe' -and $_.ParentProcessId -eq $CompletedEditorProcessId -and
+        $_.CommandLine -and $_.CommandLine.Contains('"' + $project + '"')
+    })
+    $owned = @($hubs | ForEach-Object ProcessId)
+    do {
+        $children = @($processes | Where-Object {
+            $_.Name -eq 'Unity Hub.exe' -and $_.ParentProcessId -in $owned -and $_.ProcessId -notin $owned
+        } | ForEach-Object ProcessId)
+        $owned += $children
+    } while ($children.Count)
+    [array]::Reverse($owned)
+    foreach ($processId in $owned) { Stop-Process -Id $processId -Force -ErrorAction Stop }
+}
+
 # Removes only the known disposable outputs of an isolated artifacts/u/<run-id> integration.
 # Logs, inventories, result pointers and copied diagnostic reports stay at the run root.
 function Remove-UnityTestArtifacts {
@@ -36,7 +79,7 @@ function Remove-UnityTestArtifacts {
         }
     }
 
-    $payloadNames = @('p', 'r', 'g', 'i', 'c', 'e', 'm', 't', 's', 'prepared',
+    $payloadNames = @('p', 'r', 'g', 'i', 'c', 'e', 'm', 't', 's', 'v', 'twelve', 'twelve-import', 'prepared',
         'unitypackage-extracted', 'silverwing-unitypackage-extracted', 'equipment',
         'equipment-import', 'equipment-import-contained', 'items.unitypackage')
     $targets = @()
@@ -64,7 +107,7 @@ function Remove-UnityTestArtifacts {
     }
 
     foreach ($name in @('cleanup-result.json', 'integration-result.json', 'equipment-portable-reimport.json',
-            'equipment-contained-reimport.json', 'silverwing-prepare-report.json')) {
+            'equipment-contained-reimport.json', 'twelve-portable-reimport.json', 'silverwing-prepare-report.json')) {
         $destination = Join-Path $run $name
         if ((Test-Path -LiteralPath $destination) -and
             ((Get-Item -LiteralPath $destination -Force).Attributes -band [IO.FileAttributes]::ReparsePoint)) {
@@ -72,6 +115,7 @@ function Remove-UnityTestArtifacts {
         }
     }
     foreach ($report in @(
+            @('twelve-import/reimport-result.json', 'twelve-portable-reimport.json'),
             @('equipment-import/reimport-result.json', 'equipment-portable-reimport.json'),
             @('equipment-import-contained/reimport-result.json', 'equipment-contained-reimport.json'),
             @('prepared/silverwing-prepare-report.json', 'silverwing-prepare-report.json'))) {

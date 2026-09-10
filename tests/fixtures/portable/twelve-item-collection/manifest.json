@@ -1,0 +1,291 @@
+{
+  "schemaVersion": 1,
+  "publisherProfileReference": "ExamplePublisher",
+  "product": {
+    "case": "item-collection",
+    "folderName": "TwelveColumns",
+    "assetId": "TwelveColumns",
+    "version": "1.0.0",
+    "displayName": "Twelve Columns"
+  },
+  "targets": [
+    "portable",
+    "unity"
+  ],
+  "sourceAssets": [
+    {
+      "logicalReference": "source/Column12.fbx",
+      "kind": "fbx"
+    },
+    {
+      "logicalReference": "source/Column01.fbx",
+      "kind": "fbx"
+    },
+    {
+      "logicalReference": "source/Column10.fbx",
+      "kind": "fbx"
+    },
+    {
+      "logicalReference": "source/Column02.fbx",
+      "kind": "fbx"
+    },
+    {
+      "logicalReference": "source/Column11.fbx",
+      "kind": "fbx"
+    },
+    {
+      "logicalReference": "source/Column03.fbx",
+      "kind": "fbx"
+    },
+    {
+      "logicalReference": "source/Column09.fbx",
+      "kind": "fbx"
+    },
+    {
+      "logicalReference": "source/Column04.fbx",
+      "kind": "fbx"
+    },
+    {
+      "logicalReference": "source/Column08.fbx",
+      "kind": "fbx"
+    },
+    {
+      "logicalReference": "source/Column05.fbx",
+      "kind": "fbx"
+    },
+    {
+      "logicalReference": "source/Column07.fbx",
+      "kind": "fbx"
+    },
+    {
+      "logicalReference": "source/Column06.fbx",
+      "kind": "fbx"
+    },
+    {
+      "logicalReference": "source/T_SharedStone_Albedo.png",
+      "kind": "image"
+    }
+  ],
+  "materials": [],
+  "animations": [],
+  "itemSourceAssignments": [
+    {
+      "itemId": "Column12",
+      "sourceReference": "source/Column12.fbx"
+    },
+    {
+      "itemId": "Column12",
+      "sourceReference": "source/T_SharedStone_Albedo.png"
+    },
+    {
+      "itemId": "Column01",
+      "sourceReference": "source/Column01.fbx"
+    },
+    {
+      "itemId": "Column01",
+      "sourceReference": "source/T_SharedStone_Albedo.png"
+    },
+    {
+      "itemId": "Column10",
+      "sourceReference": "source/Column10.fbx"
+    },
+    {
+      "itemId": "Column10",
+      "sourceReference": "source/T_SharedStone_Albedo.png"
+    },
+    {
+      "itemId": "Column02",
+      "sourceReference": "source/Column02.fbx"
+    },
+    {
+      "itemId": "Column02",
+      "sourceReference": "source/T_SharedStone_Albedo.png"
+    },
+    {
+      "itemId": "Column11",
+      "sourceReference": "source/Column11.fbx"
+    },
+    {
+      "itemId": "Column11",
+      "sourceReference": "source/T_SharedStone_Albedo.png"
+    },
+    {
+      "itemId": "Column03",
+      "sourceReference": "source/Column03.fbx"
+    },
+    {
+      "itemId": "Column03",
+      "sourceReference": "source/T_SharedStone_Albedo.png"
+    },
+    {
+      "itemId": "Column09",
+      "sourceReference": "source/Column09.fbx"
+    },
+    {
+      "itemId": "Column09",
+      "sourceReference": "source/T_SharedStone_Albedo.png"
+    },
+    {
+      "itemId": "Column04",
+      "sourceReference": "source/Column04.fbx"
+    },
+    {
+      "itemId": "Column04",
+      "sourceReference": "source/T_SharedStone_Albedo.png"
+    },
+    {
+      "itemId": "Column08",
+      "sourceReference": "source/Column08.fbx"
+    },
+    {
+      "itemId": "Column08",
+      "sourceReference": "source/T_SharedStone_Albedo.png"
+    },
+    {
+      "itemId": "Column05",
+      "sourceReference": "source/Column05.fbx"
+    },
+    {
+      "itemId": "Column05",
+      "sourceReference": "source/T_SharedStone_Albedo.png"
+    },
+    {
+      "itemId": "Column07",
+      "sourceReference": "source/Column07.fbx"
+    },
+    {
+      "itemId": "Column07",
+      "sourceReference": "source/T_SharedStone_Albedo.png"
+    },
+    {
+      "itemId": "Column06",
+      "sourceReference": "source/Column06.fbx"
+    },
+    {
+      "itemId": "Column06",
+      "sourceReference": "source/T_SharedStone_Albedo.png"
+    }
+  ],
+  "itemCollection": {
+    "items": [
+      {
+        "sharedAssetReferences": [
+          "SharedStone"
+        ],
+        "id": "Column12",
+        "categories": [
+          "column"
+        ]
+      },
+      {
+        "sharedAssetReferences": [
+          "SharedStone"
+        ],
+        "id": "Column01",
+        "categories": [
+          "column"
+        ]
+      },
+      {
+        "sharedAssetReferences": [
+          "SharedStone"
+        ],
+        "id": "Column10",
+        "categories": [
+          "column"
+        ]
+      },
+      {
+        "sharedAssetReferences": [
+          "SharedStone"
+        ],
+        "id": "Column02",
+        "categories": [
+          "column"
+        ]
+      },
+      {
+        "sharedAssetReferences": [
+          "SharedStone"
+        ],
+        "id": "Column11",
+        "categories": [
+          "column"
+        ]
+      },
+      {
+        "sharedAssetReferences": [
+          "SharedStone"
+        ],
+        "id": "Column03",
+        "categories": [
+          "column"
+        ]
+      },
+      {
+        "sharedAssetReferences": [
+          "SharedStone"
+        ],
+        "id": "Column09",
+        "categories": [
+          "column"
+        ]
+      },
+      {
+        "sharedAssetReferences": [
+          "SharedStone"
+        ],
+        "id": "Column04",
+        "categories": [
+          "column"
+        ]
+      },
+      {
+        "sharedAssetReferences": [
+          "SharedStone"
+        ],
+        "id": "Column08",
+        "categories": [
+          "column"
+        ]
+      },
+      {
+        "sharedAssetReferences": [
+          "SharedStone"
+        ],
+        "id": "Column05",
+        "categories": [
+          "column"
+        ]
+      },
+      {
+        "sharedAssetReferences": [
+          "SharedStone"
+        ],
+        "id": "Column07",
+        "categories": [
+          "column"
+        ]
+      },
+      {
+        "sharedAssetReferences": [
+          "SharedStone"
+        ],
+        "id": "Column06",
+        "categories": [
+          "column"
+        ]
+      }
+    ],
+    "sharedAssets": [
+      {
+        "id": "SharedStone",
+        "source": {
+          "logicalReference": "source/T_SharedStone_Albedo.png",
+          "kind": "image"
+        }
+      }
+    ],
+    "relationships": []
+  }
+}

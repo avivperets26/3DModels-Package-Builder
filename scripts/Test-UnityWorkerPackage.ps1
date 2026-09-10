@@ -84,6 +84,7 @@ $expectedFiles = @(
     'Editor/UnityMultiItemIntegration.cs',
     'Editor/UnitySelectorInteractionTests.cs',
     'Editor/UnityEquipmentSetIntegration.cs',
+    'Editor/UnityTwelveItemCollectionIntegration.cs',
     'Editor/UnityAssembledSetIntegration.cs',
     'Editor/UnityItemPrefabIntegration.cs',
     'Editor/UnityProductEditorIntegrationTests.cs',

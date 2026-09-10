@@ -188,6 +188,10 @@ try {
         PACKAGEBUILDER_ITEM_PACKAGE_OUTPUT = (Join-Path $runRoot 'items.unitypackage')
         PACKAGEBUILDER_ATTACHMENT_PLAN = (Join-Path $repositoryRootPath 'tests/fixtures/manifests/set-attachments.json')
         PACKAGEBUILDER_EQUIPMENT_OUTPUT = (Join-Path $runRoot 'equipment')
+        PACKAGEBUILDER_TWELVE_OUTPUT = (Join-Path $runRoot 'twelve')
+        PACKAGEBUILDER_TWELVE_SOURCE = (Join-Path $repositoryRootPath 'tests/fixtures/portable/twelve-item-collection/source')
+        PACKAGEBUILDER_TWELVE_ASSETS = (Join-Path $runRoot 'twelve-package-assets.txt')
+        PACKAGEBUILDER_SELECTOR_SCENE = 'Assets/PBTwelveTests/Scenes/S_TwelveColumns_Overview.unity'
         PACKAGEBUILDER_EQUIPMENT_SOURCE = (Join-Path $repositoryRootPath 'tests/fixtures/portable/equipment-set/source')
         PACKAGEBUILDER_COLLECTION_PLAN = (Join-Path $repositoryRootPath 'tests/fixtures/manifests/collection-plan.json')
         PACKAGEBUILDER_COLLECTION_PACKAGE_OUTPUT = (Join-Path $cloneRoot 'PackageBuilderExports/ExampleCollection.unitypackage')
@@ -223,6 +227,23 @@ try {
             throw 'Equipment ZIP clean Blender reimport failed; inspect equipment-blender logs.'
         }
         Copy-Item -LiteralPath $equipmentPortableResult -Destination (Join-Path $runRoot 'equipment-portable-reimport.json')
+
+        dotnet test (Join-Path $repositoryRootPath 'tests/PackageBuilder.Targets.Portable.Tests/PackageBuilder.Targets.Portable.Tests.csproj') --no-restore --filter 'FullyQualifiedName~CollectionEndToEndTests' -v minimal
+        if ($LASTEXITCODE -ne 0) { throw 'Twelve-item portable archive/application plan generation failed.' }
+        $twelveBlender = Start-Process -FilePath $blenderPath -ArgumentList @(
+            '--background', '--factory-startup', '--python-exit-code', '1', '--python',
+            (Join-Path $repositoryRootPath 'tests/blender/engine/pb0811_collection_fixture.py'), '--', 'verify',
+            (Join-Path $runRoot 'twelve/TwelveColumns_FBX.zip'), (Join-Path $runRoot 'twelve-import'),
+            (Join-Path $repositoryRootPath 'tests/fixtures/portable/twelve-item-collection/expectations.json')) `
+            -PassThru -WindowStyle Hidden -RedirectStandardOutput (Join-Path $runRoot 'twelve-blender.log') `
+            -RedirectStandardError (Join-Path $runRoot 'twelve-blender-error.log')
+        if (-not $twelveBlender.WaitForExit(120000)) { $twelveBlender.Kill(); $twelveBlender.WaitForExit(); throw 'Collection Blender verification timed out.' }
+        $twelvePortableResult = Join-Path $runRoot 'twelve-import/reimport-result.json'
+        if ($twelveBlender.ExitCode -ne 0 -or -not (Test-Path -LiteralPath $twelvePortableResult) -or
+            -not (Get-Content -LiteralPath $twelvePortableResult -Raw | ConvertFrom-Json).passed) {
+            throw 'Twelve-item ZIP clean Blender reimport failed.'
+        }
+        Copy-Item -LiteralPath $twelvePortableResult -Destination (Join-Path $runRoot 'twelve-portable-reimport.json')
 
         $arguments = @(
             '-batchmode',
@@ -371,13 +392,60 @@ try {
             throw 'Equipment set clean Unity package reimport failed.'
         }
 
-        # IMGUI input requires the Editor event loop; do not send clicks synchronously during asset generation.
+        $twelveArchiveReport = Join-Path $runRoot 'twelve-archive-verification.json'
+        $twelveArchiveCheck = Start-Process -FilePath $blenderPath -ArgumentList @(
+            '--background', '--factory-startup', '--python-exit-code', '1', '--python',
+            (Join-Path $repositoryRootPath 'tests/blender/engine/pb0811_collection_fixture.py'), '--', 'verify-unity',
+            (Join-Path $cloneRoot 'PackageBuilderExports/TwelveColumns.unitypackage'),
+            (Join-Path $runRoot 'twelve-package-assets.txt'), $twelveArchiveReport) `
+            -PassThru -WindowStyle Hidden -RedirectStandardOutput (Join-Path $runRoot 'twelve-archive-check.log') `
+            -RedirectStandardError (Join-Path $runRoot 'twelve-archive-check-error.log')
+        if (-not $twelveArchiveCheck.WaitForExit(120000)) { $twelveArchiveCheck.Kill(); $twelveArchiveCheck.WaitForExit(); throw 'Collection archive check timed out.' }
+        if ($twelveArchiveCheck.ExitCode -ne 0 -or -not (Test-Path -LiteralPath $twelveArchiveReport) -or
+            -not (Get-Content -LiteralPath $twelveArchiveReport -Raw | ConvertFrom-Json).passed) {
+            throw 'Twelve-item Unity archive inventory differs from its export plan.'
+        }
+        $twelveReimportResult = Invoke-CleanUnityPackageValidation `
+            -TemplateRoot $templateRoot -CleanCloneRoot (Join-Path $runRoot 'v') -UnityPath $unityPath `
+            -PackagePath (Join-Path $cloneRoot 'PackageBuilderExports/TwelveColumns.unitypackage') `
+            -ImportLogPath (Join-Path $runRoot 'twelve-import.log') `
+            -ValidationLogPath (Join-Path $runRoot 'twelve-validation.log') `
+            -ResultPath (Join-Path $runRoot 'twelve-reimport.json') `
+            -ProductRootReference 'Assets/PBTwelveTests' -PrefabReference 'Assets/PBTwelveTests/Prefabs/P_Column12.prefab' `
+            -SceneReference 'Assets/PBTwelveTests/Scenes/S_TwelveColumns_Overview.unity' `
+            -ValidationMode 'twelve-item-collection' -RequiredImportedAssets @(
+                'Assets/PBTwelveTests/Prefabs/P_Column01.prefab', 'Assets/PBTwelveTests/Prefabs/P_Column12.prefab',
+                'Assets/PBTwelveTests/Scripts/PackageBuilderItemSelector.cs',
+                'Assets/PBTwelveTests/Documentation/COLLECTION_TwelveColumns.json')
+        if (-not $twelveReimportResult.passed -or @($twelveReimportResult.findings).Count -ne 0 -or
+            @($twelveReimportResult.collectionItems).Count -ne 12 -or
+            @($twelveReimportResult.collectionItems.prefabGuid | Sort-Object -Unique).Count -ne 12) {
+            throw 'Twelve-item collection clean Unity import failed.'
+        }
+        # Compare independently measured engine results in Unity's Y-up axis convention.
+        $portableItems = (Get-Content -LiteralPath (Join-Path $runRoot 'twelve-portable-reimport.json') -Raw | ConvertFrom-Json).items
+        foreach ($item in $twelveReimportResult.collectionItems) {
+            $portableItem = @($portableItems | Where-Object id -CEQ $item.itemId)
+            if ($portableItem.Count -ne 1 -or $portableItem[0].triangles -ne $item.triangles -or
+                $portableItem[0].materials -ne $item.materials -or $portableItem[0].textures -ne $item.textures) {
+                throw "Collection per-item metrics differ between targets: $($item.itemId)"
+            }
+            foreach ($axis in @('x', 'y', 'z')) {
+                if ([Math]::Abs($portableItem[0].dimensions.$axis - $item.dimensions.$axis) -gt 0.0001) {
+                    throw "Collection dimensions differ between targets: $($item.itemId), $axis"
+                }
+            }
+        }
+
+        # IMGUI input requires the Editor event loop; exercise the twelve-item picker after clean import.
         $selectorUiLog = Join-Path $runRoot 'selector-ui.log'
         $selectorUiProcess = Start-Process -FilePath $unityPath -ArgumentList @(
-            '-projectPath', (Join-Path $runRoot 'e'),
+            '-projectPath', (Join-Path $runRoot 'v'),
             '-executeMethod', 'PackageBuilder.UnityWorker.Editor.UnitySelectorInteractionTests.Run',
             '-logFile', $selectorUiLog) -PassThru -WindowStyle Hidden
         $selectorUiProcess.WaitForExit()
+        Stop-CompletedUnityTestHub -RepositoryRoot $repositoryRootPath `
+            -ProjectPath (Join-Path $runRoot 'v') -CompletedEditorProcessId $selectorUiProcess.Id
         $selectorUiText = Get-Content -LiteralPath $selectorUiLog -Raw
         if ($selectorUiProcess.ExitCode -ne 0 -or -not $selectorUiText.Contains('PACKAGEBUILDER_SELECTOR_UI_PASS') -or
             $selectorUiText.Contains('PACKAGEBUILDER_SELECTOR_UI_FAIL')) {
@@ -575,6 +643,9 @@ try {
         equipmentUnityPackage = (Join-Path $cloneRoot 'PackageBuilderExports/EquipmentSet.unitypackage')
         equipmentUnityReimportResult = (Join-Path $runRoot 'equipment-reimport.json')
         collectionCleanProject = (Join-Path $runRoot 'c')
+        twelveCleanProject = (Join-Path $runRoot 'v')
+        twelveCleanReimportResult = (Join-Path $runRoot 'twelve-reimport.json')
+        twelvePortableReimportResult = (Join-Path $runRoot 'twelve-portable-reimport.json')
         collectionPackage = (Join-Path $cloneRoot 'PackageBuilderExports/ExampleCollection.unitypackage')
         collectionCleanReimportResult = (Join-Path $runRoot 'collection-reimport.json')
         itemPrefabs = @('P_Alpha.prefab', 'P_Zed.prefab') | ForEach-Object {

@@ -21,7 +21,8 @@ namespace PackageBuilder.UnityWorker.Editor
         /// <summary>Starts a bounded asynchronous UI test; Unity exits only after all input effects have been observed.</summary>
         public static void Run()
         {
-            var scene = EditorSceneManager.OpenScene("Assets/PBEquipmentTests/Scenes/S_EquipmentSet_Overview.unity", OpenSceneMode.Single);
+            string scenePath = Environment.GetEnvironmentVariable("PACKAGEBUILDER_SELECTOR_SCENE") ?? "Assets/PBEquipmentTests/Scenes/S_EquipmentSet_Overview.unity";
+            var scene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Single);
             var window = CreateInstance<UnitySelectorInteractionTests>();
             window.controller = scene.GetRootGameObjects().Single(root => root.name == "PackageBuilderOverview").GetComponent<PackageBuilderPreviewController>();
             window.selector = window.controller.ItemSelector;
@@ -62,6 +63,16 @@ namespace PackageBuilder.UnityWorker.Editor
                         controller.SetControlsVisible(false); Key(KeyCode.Home); break;
                     case 9:
                         Require(selector.SelectedIndex == selector.Count - 1, "Hidden controls consumed a selection command.");
+                        if (selector.Count <= 3) { Finish(true, string.Empty); break; }
+                        controller.RestoreControls(); selector.ShowAll(); Click(60, 82); break;
+                    case 10:
+                        SendEvent(new Event { type = EventType.ScrollWheel, mousePosition = new Vector2(100, 150), delta = new Vector2(0, 100) }); break;
+                    case 11: Click(60, 180); break;
+                    case 12:
+                        Require(selector.SelectedIndex == selector.Count - 1, "Pointer scrolled last-item selection failed.");
+                        Click(180, 82); break;
+                    case 13:
+                        Require(selector.SelectedIndex == -1, "Pointer overview after scrolling failed.");
                         Finish(true, string.Empty); break;
                 }
             }
