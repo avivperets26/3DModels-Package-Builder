@@ -162,6 +162,13 @@
           "JsonPointer.Net": "[7.0.2, )"
         }
       },
+      "packagebuilder.application": {
+        "type": "Project",
+        "dependencies": {
+          "PackageBuilder.Contracts": "[1.0.0, )",
+          "PackageBuilder.Domain": "[1.0.0, )"
+        }
+      },
       "packagebuilder.contracts": {
         "type": "Project",
         "dependencies": {

@@ -1,6 +1,8 @@
 # PB-0801 — Multi-item source-to-manifest mapping
 
-Status: 🟡 **IN PROGRESS** — implemented and validated locally; publication gates remain.
+Current status: 🟢 **DONE**, reconciled in PB-0802 on 2026-09-10 after user acceptance, PR #91 merge `d7286bd725fb39519e344059394218da66bcf162` and [successful exact-main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34464190458). Task commit: `990a70b23d7fb2c57cea1967eedc777d796f1692`. The handoff below is the historical prepublication record.
+
+Historical prepublication status: 🟡 **IN PROGRESS** — implemented and validated locally; publication gates remained.
 Branch: `feat/PB-0801-multi-item-mapper`.
 Starting main commit: `599cec4787bff2a0710dc5729dca4e65c85a5c72`. A fresh origin fetch confirmed
 local main, origin/main and this branch's base all match. The user's permanent request to fetch,

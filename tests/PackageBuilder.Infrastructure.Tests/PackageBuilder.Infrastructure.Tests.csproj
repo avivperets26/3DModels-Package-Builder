@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\PackageBuilder.Application\PackageBuilder.Application.csproj" />
     <ProjectReference Include="..\..\src\PackageBuilder.Infrastructure\PackageBuilder.Infrastructure.csproj" />
   </ItemGroup>
 

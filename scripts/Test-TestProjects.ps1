@@ -44,6 +44,11 @@ $script:ProjectSpecifications = @(
         Path = 'tests/PackageBuilder.Infrastructure.Tests/PackageBuilder.Infrastructure.Tests.csproj'
         ProductionProject = 'src/PackageBuilder.Infrastructure/PackageBuilder.Infrastructure.csproj'
         ProductionAssembly = 'PackageBuilder.Infrastructure'
+        # PB-0802 verifies real hash receipts through the application reuse planner.
+        ApprovedProjectReferences = @(
+            'src/PackageBuilder.Application/PackageBuilder.Application.csproj',
+            'src/PackageBuilder.Infrastructure/PackageBuilder.Infrastructure.csproj'
+        )
     },
     [pscustomobject]@{
         Name = 'PackageBuilder.Contract.Tests'

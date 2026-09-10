@@ -4,7 +4,8 @@
 
 - Task: PB-0714 - Validate Unity arbitrary Generic rig topology matrix.
 - Branch: `test/PB-0714-unity-generic-topologies`.
-- Status: `[ ]` / PROCESS; implemented and validated locally, with publication gates remaining.
+- Status: `[x]` / 🟢 **DONE**; historical completion reconciled on 2026-09-10 at user request in PB-0802.
+- Published task `07c0b57c18423403a54ff437b5874d4d0e5d2e31`, PR #86 merge `24f42d6d2cee7fb3e3e101bdbfa860a73b09934a`, and [successful exact-main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31502886537) verified through GitHub. The evidence below records the original local validation, not a new run.
 - Started: 2026-08-11.
 
 ## Reusable Procedural Matrix
