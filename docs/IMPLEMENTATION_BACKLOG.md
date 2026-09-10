@@ -21,12 +21,12 @@
 | Measure | Tasks |
 | --- | ---: |
 | Total | 264 |
-| ⚪ Backlog | 152 |
+| ⚪ Backlog | 151 |
 | 🟡 In progress | 2 |
 | 🔴 Blocked | 0 |
-| 🟢 Done | 110 |
-| Remaining (all not done) | 154 |
-| Overall completion | 110 / 264 (41.7%) |
+| 🟢 Done | 111 |
+| Remaining (all not done) | 153 |
+| Overall completion | 111 / 264 (42.0%) |
 <!-- status-summary:end -->
 
 Counts include each canonical PB task definition exactly once, including the optional post-v1 roadmap.
@@ -190,7 +190,15 @@ feat/PB-0607-unity-urp-material-compiler
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
 | PB-0714 | 🟡 **IN PROGRESS** | `test/PB-0714-unity-generic-topologies` | Unity Fixture Engineering for local work; user for Git gates | 2026-08-11 | Locally validated: five repository-generated topology categories preserve Generic/non-Humanoid import, declared roots, exact hierarchy, one-influence skin weights, clips, controllers, prefabs, and sampled deformation through isolated clean reimport; exact multi-root and missing-binding findings also pass. User screenshots confirm the five prefabs, distinct displayed hierarchies, clip metadata, expected animation curves, and controller structure. | Local history on 2026-09-10 contains task commit `07c0b57` and merge `24f42d6` (#86) on `main`. Remote publication, exact-merge `main` CI, and explicit completion-confirmation evidence still need reconciliation before DONE rollover. |
-| PB-0014 | 🟡 **IN PROGRESS** | `chore/PB-0014-dependency-maintenance` | Dependency Maintenance Engineering | 2026-09-10 | Four updates locally validated: 2,320 tests pass, warning-free Release build, locked restore, formatting/lint, package signatures, and NuGet vulnerability audit. JSON Schema update deferred to PB-0015. | Publication, exact-main CI, and explicit completion confirmation are recorded through the normal Git and rollover workflow. |
+| PB-0015 | 🟡 **IN PROGRESS** | `chore/PB-0015-json-schema-distribution` | Dependency Maintenance Engineering | 2026-09-10 | Implemented and validated locally: pinned MIT source, 34 baseline checks, 2,329 passing tests, identical clean-build DLLs and CLI publish notices. [Evidence](PB-0015_JSON_SCHEMA_DISTRIBUTION_EVIDENCE.md). | None; staging, commit, push, merge, main CI and user confirmation remain. |
+
+### PB-0014 Completion Evidence
+
+- Task commit `362618fe3bd9d24ba1edbf4a614f95525588a255` was pushed on `chore/PB-0014-dependency-maintenance`.
+- Direct merge `804ddee337dc319c02f156630c0410e3fda6281a` was pushed to `main`.
+- [Exact-merge main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34456760639) succeeded. Branch CI was not required or claimed.
+- The user confirmed completion after the successful handoff and approved starting PB-0015 on 2026-09-10.
+- This PB-0015 rollover marks PB-0014 DONE and records one Completion Log row; no workflow exception was used.
 
 ### PB-0713 Completion Evidence
 
@@ -1642,6 +1650,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0711 | `test/PB-0711-unity-rigged-e2e` | `8d4521cd4c428690835a87e2045a4b3dc26e5894` | [#83](https://github.com/avivperets26/3DModels-Package-Builder/pull/83) | 2026-08-10 | Canonical task branch retained for lifecycle identity; implementation was published on PB-0709 with PB-0709/PB-0710 under the approved combined exception and merged as `3b8e7e42ce0b8541483627750c56b6ff249c581b`. Required exact-merge `main` CI succeeded; no CI or quality exception was used, and the user explicitly confirmed completion. |
 | PB-0712 | `test/PB-0712-silverwing-unity-e2e` | `ebc9c0ce4def18f10a64efbd2eccb40f44daaa58` | [#84](https://github.com/avivperets26/3DModels-Package-Builder/pull/84) | 2026-08-11 | Merged into `main` as `5073a3aab0fc52afd67522165f0156ecfaeb79ff`; required exact-merge `main` CI succeeded. No CI or quality exception was used; the user explicitly confirmed the push, merge, green required `main` CI, working animation and preview, and zero Unity errors. |
 | PB-0713 | `test/PB-0713-unity-multi-clip` | `ccdc155961c683012ef257d238cf64f3b4013287` | [#85](https://github.com/avivperets26/3DModels-Package-Builder/pull/85) | 2026-08-11 | Merged into `main` as `ee4a151d662dd3d0984318c31d3feb60726c0f51`; required exact-merge `main` CI succeeded. No CI or quality exception was used; the user explicitly confirmed the push, merge, green required `main` CI, mixed loop settings, exact controller states, default state, and prefab Animator. |
+| PB-0014 | `chore/PB-0014-dependency-maintenance` | `362618fe3bd9d24ba1edbf4a614f95525588a255` | Direct merge | 2026-09-10 | Merged and pushed as `804ddee337dc319c02f156630c0410e3fda6281a`; [exact-main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34456760639) passed; user confirmed completion and approved PB-0015. Four updates validated; JSON Schema distribution prerequisite tracked in PB-0015. |
 
 ## 5. Milestones
 
@@ -1761,14 +1770,14 @@ flowchart LR
   - Depends on: none
   - Done when: `AGENTS.md`, the product plan, architecture, backlog, and `docs/QUALITY_AND_RELEASE_GATES.md` agree on the 68 stable UX, testing, performance, security, installation, engineering, and release requirements; every requirement group maps to an owned E18 task with a dependency and measurable `Done when` condition; release-blocking rules and required coverage thresholds are identical across documents; Markdown, requirement-ID, task-ID, dependency-reference, branch-format, changed-file-scope, and cross-document consistency tests pass; and no application implementation is included.
 
-- [ ] **PB-0014 — Review and validate the September 2026 dependency updates** — **P1** — 🟡 **IN PROGRESS**
+- [x] **PB-0014 — Review and validate the September 2026 dependency updates** — **P1** — 🟢 **DONE**
   - Branch: `chore/PB-0014-dependency-maintenance`
   - Owner: Dependency Maintenance Engineering
   - Depends on: PB-0006, PB-0009, PB-0011
   - Done when: Dependabot PRs #79, #80, #87, #88, and #89 have documented compatibility and licence decisions; accepted updates have synchronized central pins, lockfiles, validator expectations, and dependency notices; locked restore, warning-free Release build, formatting, all core tests, and vulnerability review pass; deferred updates have a concrete reason and follow-up; required publication and completion gates pass.
   - Evidence: `docs/PB-0014_DEPENDENCY_MAINTENANCE_EVIDENCE.md`.
 
-- [ ] **PB-0015 — Establish an unconditional no-cost JSON Schema distribution path** — **P1** — ⚪ **BACKLOG**
+- [ ] **PB-0015 — Establish an unconditional no-cost JSON Schema distribution path** — **P1** — 🟡 **IN PROGRESS**
   - Branch: `chore/PB-0015-json-schema-distribution`
   - Owner: Dependency Maintenance Engineering
   - Depends on: PB-0014

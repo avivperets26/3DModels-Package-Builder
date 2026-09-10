@@ -307,6 +307,7 @@ try {
                 -Arguments @(
                     'format',
                     $solutionPath,
+                    '--exclude', 'third_party',
                     '--no-restore',
                     '--verify-no-changes',
                     '--severity',

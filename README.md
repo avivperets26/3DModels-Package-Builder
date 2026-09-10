@@ -88,7 +88,7 @@ dotnet build .\PackageBuilder.sln --configuration Release --no-restore
 ### Formatting Verification
 
 ```powershell
-dotnet format .\PackageBuilder.sln --no-restore --verify-no-changes --severity info --verbosity minimal
+dotnet format .\PackageBuilder.sln --exclude third_party --no-restore --verify-no-changes --severity info --verbosity minimal
 & .\scripts\Test-Formatting.ps1
 ```
 
@@ -148,3 +148,11 @@ C:\Dev\PackageBuilder\
 - [Quality and release gates](docs/QUALITY_AND_RELEASE_GATES.md)
 
 GitHub issues use the repository's stable Markdown templates. Pull requests remain optional, and Dependabot update pull requests are proposals that require user review and manual merge. The [GitHub governance evidence](docs/PB-0011_GITHUB_GOVERNANCE_EVIDENCE.md) records the current official-documentation basis, configuration limits, and validation results.
+
+## JSON validation source builds
+
+The normal solution restore/build also builds three pinned MIT source projects beneath
+`third_party/json-everything`; no JSON publisher binary package or paid subscription is required.
+Keep the `ThirdPartyNotices/json-everything` folder in application publish output. Vendor source
+is hash-verified and excluded from application formatting. See [build, deployment and update
+instructions](third_party/json-everything/README.md). Run the complete core pipeline before handoff.

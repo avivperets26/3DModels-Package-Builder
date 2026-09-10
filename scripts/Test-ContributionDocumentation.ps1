@@ -417,7 +417,7 @@ Invoke-Check 'Documented commands are exact and reference real repository files'
         '& .\scripts\Test-RepositoryBaseline.ps1 -RequireTrackedFiles',
         'dotnet restore .\PackageBuilder.sln --locked-mode',
         'dotnet build .\PackageBuilder.sln --configuration Release --no-restore',
-        'dotnet format .\PackageBuilder.sln --no-restore --verify-no-changes --severity info --verbosity minimal',
+        'dotnet format .\PackageBuilder.sln --exclude third_party --no-restore --verify-no-changes --severity info --verbosity minimal',
         '& .\scripts\Test-Formatting.ps1',
         '& .\scripts\Test-BaselineUnitTests.ps1 -VerifyNoSourceChanges',
         '& .\scripts\Invoke-CoreCi.ps1'

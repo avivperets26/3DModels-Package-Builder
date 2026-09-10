@@ -11,6 +11,9 @@ $script:PassCount = 0
 $script:RepositoryRoot = [System.IO.Path]::GetFullPath($RepositoryRoot).TrimEnd([char[]]'\/')
 
 $script:ExpectedProjects = @(
+    'third_party/json-everything/Json.More/Json.More.csproj',
+    'third_party/json-everything/JsonPointer.Net/JsonPointer.Net.csproj',
+    'third_party/json-everything/JsonSchema.Net/JsonSchema.Net.csproj',
     'src/PackageBuilder.App.Wpf/PackageBuilder.App.Wpf.csproj',
     'src/PackageBuilder.Application/PackageBuilder.Application.csproj',
     'src/PackageBuilder.Cli/PackageBuilder.Cli.csproj',
@@ -34,7 +37,7 @@ $script:ExpectedProjects = @(
 $script:ExpectedPackageVersions = @{
     'coverlet.collector' = '10.0.1'
     'CommunityToolkit.Mvvm' = '8.4.2'
-    'JsonSchema.Net' = '9.3.0'
+    'Humanizer.Core' = '3.0.10'
     'Microsoft.Data.Sqlite' = '10.0.11'
     'Microsoft.Extensions.Hosting' = '10.0.11'
     'SQLitePCLRaw.lib.e_sqlite3' = '3.53.3'
@@ -55,7 +58,7 @@ $script:ApprovedProductionPackages = @{
         'CommunityToolkit.Mvvm',
         'Microsoft.Extensions.Hosting'
     )
-    'src/PackageBuilder.Contracts/PackageBuilder.Contracts.csproj' = @('JsonSchema.Net')
+    'third_party/json-everything/JsonPointer.Net/JsonPointer.Net.csproj' = @('Humanizer.Core')
     'src/PackageBuilder.Infrastructure/PackageBuilder.Infrastructure.csproj' = @(
         'Microsoft.Data.Sqlite',
         'SQLitePCLRaw.lib.e_sqlite3'
@@ -175,7 +178,7 @@ if (-not (Test-Path -LiteralPath $script:RepositoryRoot -PathType Container)) {
     throw "Repository root does not exist: $script:RepositoryRoot"
 }
 
-Invoke-Check 'Required central configuration and exact 18-project inventory exist' {
+Invoke-Check 'Required central configuration and exact 21-project inventory exist' {
     $requiredFiles = @(
         'global.json',
         'Directory.Build.props',
@@ -191,7 +194,7 @@ Invoke-Check 'Required central configuration and exact 18-project inventory exis
     }
 
     $actualProjects = @(
-        foreach ($directory in @('src', 'tests')) {
+        foreach ($directory in @('src', 'tests', 'third_party')) {
             Get-ChildItem -LiteralPath (Join-Path $script:RepositoryRoot $directory) -Recurse -File -Filter '*.csproj' |
                 Where-Object { $_.FullName -notmatch '[\\/](bin|obj)[\\/]' } |
                 ForEach-Object { Get-RepositoryRelativePath $_.FullName }
@@ -201,7 +204,7 @@ Invoke-Check 'Required central configuration and exact 18-project inventory exis
     $differences = @(Compare-Object -ReferenceObject ($script:ExpectedProjects | Sort-Object) -DifferenceObject $actualProjects)
     if ($differences.Count -gt 0) {
         $details = @($differences | ForEach-Object { "$($_.SideIndicator) $($_.InputObject)" })
-        throw "Project inventory differs from the approved 17 projects: $($details -join '; ')"
+        throw "Project inventory differs from the approved 21 projects: $($details -join '; ')"
     }
 }
 
@@ -578,7 +581,7 @@ Invoke-Check 'Every project has a consistent deterministic NuGet lock file witho
     }
 
     $allLocks = @(
-        foreach ($directory in @('src', 'tests')) {
+        foreach ($directory in @('src', 'tests', 'third_party')) {
             Get-ChildItem -LiteralPath (Join-Path $script:RepositoryRoot $directory) -Recurse -File -Filter 'packages.lock.json' |
                 Where-Object { $_.FullName -notmatch '[\\/](bin|obj)[\\/]' }
         }

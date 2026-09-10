@@ -159,7 +159,7 @@ Set-Location C:\Dev\PackageBuilder
 & .\scripts\Test-RepositoryBaseline.ps1 -RequireTrackedFiles
 dotnet restore .\PackageBuilder.sln --locked-mode
 dotnet build .\PackageBuilder.sln --configuration Release --no-restore
-dotnet format .\PackageBuilder.sln --no-restore --verify-no-changes --severity info --verbosity minimal
+dotnet format .\PackageBuilder.sln --exclude third_party --no-restore --verify-no-changes --severity info --verbosity minimal
 & .\scripts\Test-Formatting.ps1
 & .\scripts\Test-BaselineUnitTests.ps1 -VerifyNoSourceChanges
 & .\scripts\Invoke-CoreCi.ps1
@@ -176,3 +176,11 @@ Before handoff, also inspect `git diff --check`, the changed-file scope, Markdow
 - Before implementation, mark the selected task IN PROGRESS and add its Active Work entry. Keep locally validated work IN PROGRESS until the existing Git, main CI, user-confirmation, and rollover gates pass.
 - Run `& .\scripts\Update-BacklogStatus.ps1 -Write` after changes, then `& .\scripts\Update-BacklogStatus.ps1` before handoff. The repository baseline checks the summary too.
 - Report DONE, IN PROGRESS, BLOCKED, BACKLOG, and remaining counts from the generated summary. Count each canonical PB definition once; label any historical completion imports explicitly.
+
+## JSON validation source builds
+
+The normal solution restore/build also builds three pinned MIT source projects beneath
+`third_party/json-everything`; no JSON publisher binary package or paid subscription is required.
+Keep the `ThirdPartyNotices/json-everything` folder in application publish output. Vendor source
+is hash-verified and excluded from application formatting. See [build, deployment and update
+instructions](third_party/json-everything/README.md). Run the complete core pipeline before handoff.

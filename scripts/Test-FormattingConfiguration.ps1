@@ -140,7 +140,8 @@ Invoke-Check '.gitattributes defines one non-conflicting LF normalization policy
     )
     $requiredPolicy = '* text=auto eol=lf'
 
-    if ($effectiveLines.Count -ne 1 -or $effectiveLines[0] -cne $requiredPolicy) {
+    $vendorPolicy = 'third_party/json-everything/upstream/** whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab'
+    if ($effectiveLines.Count -ne 2 -or $effectiveLines[0] -cne $requiredPolicy -or $effectiveLines[1] -cne $vendorPolicy) {
         $encountered = if ($effectiveLines.Count -eq 0) {
             '<none>'
         }
@@ -148,8 +149,8 @@ Invoke-Check '.gitattributes defines one non-conflicting LF normalization policy
             $effectiveLines -join ', '
         }
         throw (
-            '.gitattributes must contain exactly one effective rule, ' +
-            "'$requiredPolicy', with no conflicting or unrelated line-ending rules. " +
+            '.gitattributes must contain exactly the shared LF policy and the pinned-source whitespace exception, ' +
+            "'$requiredPolicy' and '$vendorPolicy', with no conflicting or unrelated line-ending rules. " +
             "Found $($effectiveLines.Count): $encountered"
         )
     }
