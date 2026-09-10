@@ -1385,3 +1385,13 @@ A signed-in STUDIO AVIV customer can upload an approved 3D source set, review de
 - The local free path remains fully documented and available even if the hosted service is disabled, at capacity, or commercially withdrawn.
 
 The implementation tasks and dependencies are tracked in E19 of `docs/IMPLEMENTATION_BACKLOG.md`. The integration contract for the separate website project is `docs/STUDIO_AVIV_HOSTED_CONVERTER_HANDOFF.md`.
+
+## Multi-item source mapping (PB-0801)
+
+Item sets and collections use explicit, stable item IDs for file ownership. The application mapper
+adds reviewed `itemSourceAssignments` to the manifest through the shared Domain validator. Every
+model file and item must be mapped; ambiguous model ownership produces blocking review findings.
+Multiple input files may belong to one item, while explicitly shared images remain separate from
+PB-0802 content deduplication. Existing v1 manifests without assignments remain readable as drafts.
+Per-item generators must consume a successfully mapped manifest; filename and mesh counts never
+infer grouping. See [the mapping boundary and validation evidence](PB-0801_MULTI_ITEM_MAPPING_EVIDENCE.md).

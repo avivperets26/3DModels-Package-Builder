@@ -62,6 +62,23 @@ Lifecycle markers supplement rather than replace task checkboxes, acceptance evi
 
 ## Permanent One-Merge Rollover Workflow
 
+### Start every task branch from freshly synchronized main
+
+Before creating any new implementation branch:
+
+1. Inspect the current branch and worktree; preserve all unrelated or uncommitted work.
+2. Run `git fetch origin`. If fetching fails, do not create the branch from stale remote information.
+3. Switch to `main`, then run `git pull --ff-only origin main`.
+4. Verify that `git rev-parse HEAD` and `git rev-parse origin/main` are identical and that the worktree is clean.
+5. Only then create the task's documented branch from that verified latest `main`, and record its starting commit in the task evidence.
+
+If main is ahead, diverged, or cannot be checked out safely, resolve that condition before branching;
+never reset, discard, silently stash, or carry unrelated work into the new task. This standing user
+instruction authorizes routine fetch, checkout and fast-forward main synchronization for requested
+work. It does not authorize task merges, commits, pushes or other publication actions.
+
+### Publish and roll over
+
 1. Each implementation task has one publication cycle: commit the task branch, push it, and merge it into `main` once.
 2. Never return to an already merged task branch solely for completion bookkeeping.
 3. A direct merge is allowed and requires neither branch CI nor a pull request.

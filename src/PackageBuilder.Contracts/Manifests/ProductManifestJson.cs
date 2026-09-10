@@ -189,6 +189,21 @@ public static class ProductManifestJson
                 WriteItemGroup(writer, manifest.ItemCollection);
             }
 
+            if (manifest.ItemSourceAssignments.Count > 0)
+            {
+                writer.WritePropertyName("itemSourceAssignments");
+                writer.WriteStartArray();
+                foreach (ItemSourceAssignment assignment in manifest.ItemSourceAssignments)
+                {
+                    writer.WriteStartObject();
+                    writer.WriteString("itemId", assignment.ItemId.Value);
+                    writer.WriteString("sourceReference", assignment.SourceReference);
+                    writer.WriteEndObject();
+                }
+
+                writer.WriteEndArray();
+            }
+
             if (manifest.MarketplaceProfileReference is not null)
             {
                 writer.WritePropertyName("marketplaceProfileReference");
@@ -308,6 +323,16 @@ public static class ProductManifestJson
             root.TryGetProperty("itemCollection", out JsonElement collectionElement)
                 ? ParseItemCollection(collectionElement, context)
                 : null;
+        ItemSourceAssignment?[]? assignments = null;
+        if (root.TryGetProperty("itemSourceAssignments", out JsonElement assignmentsElement))
+        {
+            assignments = [.. assignmentsElement.EnumerateArray().Select(element =>
+            {
+                InternalAssetId? itemId = Value(InternalAssetId.Create(S(element, "itemId")), context);
+                return itemId is null ? null : new ItemSourceAssignment(itemId, S(element, "sourceReference"));
+            })];
+        }
+
         MarketplaceProfile? marketplace =
             root.TryGetProperty("marketplaceProfileReference", out JsonElement marketElement)
                 ? ParseMarketplace(marketElement, context)
@@ -332,7 +357,8 @@ public static class ProductManifestJson
             animations,
             itemSet,
             itemCollection,
-            marketplace);
+            marketplace,
+            assignments);
         if (!result.IsValid)
         {
             context.Add(result.Findings);

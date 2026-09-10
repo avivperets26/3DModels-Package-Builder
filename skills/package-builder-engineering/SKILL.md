@@ -13,6 +13,9 @@ repository.
 1. Read `/AGENTS.md` completely, then read the affected plan, architecture, backlog, and quality
    sections before changing files.
 2. Confirm the current branch, working-tree state, active PB task, dependencies, and rollover state.
+   Before creating a task branch, follow AGENTS.md's fresh-main sequence: fetch origin, switch to
+   main, pull with `--ff-only`, verify clean main equals origin/main, then branch and record the base SHA.
+   A failed fetch, ahead/diverged main, or unrelated dirty work must be resolved without discarding work.
 3. Search for existing types, functions, policies, validators, state machines, fixtures, and test
    vectors before adding behavior.
 4. Put canonical rules in the documented Domain, Contracts, or Application boundary. Keep WPF,
