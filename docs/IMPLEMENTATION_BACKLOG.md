@@ -21,12 +21,12 @@
 | Measure | Tasks |
 | --- | ---: |
 | Total | 264 |
-| ⚪ Backlog | 148 |
+| ⚪ Backlog | 147 |
 | 🟡 In progress | 1 |
 | 🔴 Blocked | 0 |
-| 🟢 Done | 115 |
-| Remaining (all not done) | 149 |
-| Overall completion | 115 / 264 (43.6%) |
+| 🟢 Done | 116 |
+| Remaining (all not done) | 148 |
+| Overall completion | 116 / 264 (43.9%) |
 <!-- status-summary:end -->
 
 Counts include each canonical PB task definition exactly once, including the optional post-v1 roadmap.
@@ -189,7 +189,7 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0803 | 🟡 **IN PROGRESS** | `feat/PB-0803-unity-item-prefabs` | Codex; user for publication | 2026-09-10 | Locally validated: 2,410 .NET tests and all nine core CI stages pass; 42 Unity policy checks and full real Unity generation/clean reimport pass. Publication, main CI and user confirmation remain. See [evidence](PB-0803_UNITY_ITEM_PREFAB_EVIDENCE.md). Base `fad8adf0805d0a4f2784593a0b580906f32304d5`, synchronized before branching. | None. |
+| PB-0804 | 🟡 **IN PROGRESS** | `feat/PB-0804-unity-assembled-set` | Codex; user for publication | 2026-09-10 | Locally validated: all nine core CI stages and 2,417 tests pass; full Unity assembly, clean item/set import, regression, Play mode and reopen checks pass. Publication, main CI and user confirmation remain. See [evidence](PB-0804_UNITY_ASSEMBLED_SET_EVIDENCE.md). Base `e540ab270eb5f0c1c14c8391890d333631df5235`, freshly fetched and pulled main. | None. |
 
 ### PB-0802 Completion Evidence
 
@@ -1679,6 +1679,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0714 | `test/PB-0714-unity-generic-topologies` | `07c0b57c18423403a54ff437b5874d4d0e5d2e31` | #86 | 2026-09-10 | Historical completion reconciled at user request: merged as `24f42d6d2cee7fb3e3e101bdbfa860a73b09934a`; [exact-main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31502886537) succeeded. Existing engine and visual acceptance evidence retained. |
 | PB-0801 | `feat/PB-0801-multi-item-mapper` | `990a70b23d7fb2c57cea1967eedc777d796f1692` | #91 | 2026-09-10 | Merged as `d7286bd725fb39519e344059394218da66bcf162`; [exact-main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34464190458) passed. User accepted validation, confirmed merge/pull and requested next task/status reconciliation. |
 | PB-0802 | `feat/PB-0802-shared-asset-deduplication` | `b9c17f6b7778335d724349ccdf4cc0709dc77215` | Direct merge | 2026-09-10 | Main merge `fad8adf0805d0a4f2784593a0b580906f32304d5`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34468230022) passed; user confirmed handoff and requested next task. |
+| PB-0803 | `feat/PB-0803-unity-item-prefabs` | `13561806bcf2c2c14680dbceab083b2bf018a9e7` | Direct merge | 2026-09-10 | Main merge `e540ab270eb5f0c1c14c8391890d333631df5235`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34475266254) passed both jobs; user accepted publication and requested PB-0804. |
 
 ## 5. Milestones
 
@@ -2380,12 +2381,12 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0204, PB-0801
   - Done when: truly identical textures/material inputs are reused while merely similar assets remain separate.
 
-- [ ] **PB-0803 — Implement individual item prefab generator** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-0803 — Implement individual item prefab generator** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0803-unity-item-prefabs`
   - Depends on: PB-0611, PB-0801
   - Done when: every item gets a unique named prefab with correct material and no cross-item missing references.
 
-- [ ] **PB-0804 — Implement assembled item-set prefab** — **P0** — ⚪ **BACKLOG**
+- [ ] **PB-0804 — Implement assembled item-set prefab** — **P0** — 🟡 **IN PROGRESS**
   - Branch: `feat/PB-0804-unity-assembled-set`
   - Depends on: PB-0803
   - Done when: set items assemble in declared order/slots with reset set root and documented compatibility.

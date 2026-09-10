@@ -1423,3 +1423,16 @@ This static item-generation boundary does not infer rig metadata or complete set
 attachments or production collection packaging. Those remain PB-0804 through PB-0806. See
 [PB-0803 acceptance and validation evidence](PB-0803_UNITY_ITEM_PREFAB_EVIDENCE.md) for the exact
 contract, shared test vector, clean reimport checks and publication state.
+
+## Assembled Unity item sets (PB-0804)
+
+`AssembledSetPlan` requires explicit validated assembly rules and uses the set's declared item
+order. Unity nests the already generated item prefabs beneath reset logical-slot containers in
+`P_<setId>_Assembled.prefab`, retaining their independent mesh/material dependencies. A matching
+`SET_<setId>.json` document preserves ordered membership, slots and compatibility declarations.
+Existing outputs and incomplete/broken item bindings are rejected. Shared loaded-hierarchy
+validation is reused and now checks descendant missing scripts and missing mesh references.
+
+Placement is explicitly at the authored/reset origin: logical slots do not imply socket/bone
+placement or verified compatibility. PB-0805 owns those attachment checks. Collections do not
+infer an assembled prefab. See [PB-0804 contract and test evidence](PB-0804_UNITY_ASSEMBLED_SET_EVIDENCE.md).

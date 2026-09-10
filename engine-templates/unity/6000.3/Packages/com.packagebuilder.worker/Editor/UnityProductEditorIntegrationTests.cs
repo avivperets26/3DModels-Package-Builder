@@ -59,6 +59,7 @@ namespace PackageBuilder.UnityWorker.Editor
                     StringComparison.Ordinal))
                 {
                     AssetDatabase.DeleteAsset(UnityItemPrefabIntegration.Root);
+                    AssetDatabase.DeleteAsset(UnityAssembledSetIntegration.Root);
                     AssetDatabase.DeleteAsset(FolderTestRoot);
                     AssetDatabase.DeleteAsset(TextureTestRoot);
                     AssetDatabase.DeleteAsset(MaterialTestRoot);
