@@ -1,22 +1,30 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Globalization;
 using UnityEditor;
 using UnityEngine;
 
 namespace PackageBuilder.UnityWorker.Editor
 {
     /// <summary>Defines the validated inputs required to create one static customer prefab.</summary>
-    internal sealed class UnityPrefabRequest
+    internal class UnityPrefabModelRequest
     {
-        internal string AssetId { get; set; }
+        internal string LogicalSourceReference { get; set; }
 
         internal string SourceModelReference { get; set; }
-
-        internal string OutputAssetReference { get; set; }
 
         internal UnityExtractedMeshSet ExtractedMeshes { get; set; }
 
         internal string[] ExpectedMaterialReferences { get; set; }
+    }
+
+    /// <summary>One reviewed item, with optional additional normalized model files.</summary>
+    internal sealed class UnityPrefabRequest : UnityPrefabModelRequest
+    {
+        internal string AssetId { get; set; }
+        internal string OutputAssetReference { get; set; }
+        internal UnityPrefabModelRequest[] AdditionalModels { get; set; }
     }
 
     /// <summary>Creates the reset product-root/P_Model hierarchy and verifies all saved references.</summary>
@@ -36,37 +44,52 @@ namespace PackageBuilder.UnityWorker.Editor
                 return false;
             }
 
-            var modelAsset = AssetDatabase.LoadAssetAtPath<GameObject>(request.SourceModelReference);
-            if (modelAsset == null)
+            UnityPrefabModelRequest[] models = GetModels(request);
+            foreach (UnityPrefabModelRequest modelRequest in models)
             {
-                diagnosticCode = "UNITY_PREFAB_MODEL_MISSING";
-                return false;
+                HashSet<string> materials;
+                if (modelRequest == null || !TryValidate(ForModel(request, modelRequest), out materials, out diagnosticCode) ||
+                    AssetDatabase.LoadAssetAtPath<GameObject>(modelRequest.SourceModelReference) == null)
+                {
+                    return false;
+                }
             }
 
             GameObject productRoot = null;
             try
             {
-                // Unity identifies a prefab's main GameObject by the asset filename. Use that
-                // canonical identity before saving so memory and clean reimport agree.
                 productRoot = new GameObject("P_" + request.AssetId);
-                GameObject modelInstance = PrefabUtility.InstantiatePrefab(modelAsset) as GameObject;
-                if (modelInstance == null)
+                GameObject modelContainer = null;
+                if (models.Length > 1)
                 {
-                    diagnosticCode = "UNITY_PREFAB_MODEL_INSTANTIATION_FAILED";
-                    return false;
+                    modelContainer = new GameObject("P_Model");
+                    modelContainer.transform.SetParent(productRoot.transform, false);
+                    ResetTransform(modelContainer.transform);
                 }
 
-                modelInstance.name = "P_Model";
-                modelInstance.transform.SetParent(productRoot.transform, false);
+                for (int index = 0; index < models.Length; index++)
+                {
+                    UnityPrefabModelRequest part = models[index];
+                    var modelAsset = AssetDatabase.LoadAssetAtPath<GameObject>(part.SourceModelReference);
+                    GameObject modelInstance = PrefabUtility.InstantiatePrefab(modelAsset) as GameObject;
+                    if (modelInstance == null)
+                    {
+                        diagnosticCode = "UNITY_PREFAB_MODEL_INSTANTIATION_FAILED";
+                        return false;
+                    }
+
+                    modelInstance.name = models.Length == 1 ? "P_Model" : "P_Part" + (index + 1).ToString("D3", CultureInfo.InvariantCulture);
+                    modelInstance.transform.SetParent((modelContainer ?? productRoot).transform, false);
+                    ResetTransform(modelInstance.transform);
+                    if (!ReplaceMeshes(modelInstance, part.ExtractedMeshes) ||
+                        !HasCompleteMaterials(modelInstance, new HashSet<string>(part.ExpectedMaterialReferences, StringComparer.Ordinal)))
+                    {
+                        diagnosticCode = "UNITY_PREFAB_REFERENCE_INVALID";
+                        return false;
+                    }
+                }
+
                 ResetTransform(productRoot.transform);
-                ResetTransform(modelInstance.transform);
-
-                if (!ReplaceMeshes(modelInstance, request.ExtractedMeshes) ||
-                    !HasCompleteMaterials(modelInstance, expectedMaterials))
-                {
-                    diagnosticCode = "UNITY_PREFAB_REFERENCE_INVALID";
-                    return false;
-                }
 
                 bool success;
                 PrefabUtility.SaveAsPrefabAsset(productRoot, request.OutputAssetReference, out success);
@@ -160,6 +183,7 @@ namespace PackageBuilder.UnityWorker.Editor
             foreach (UnityMeshAssetBinding binding in request.ExtractedMeshes.Bindings)
             {
                 if (binding == null || binding.SourceMesh == null || binding.ExtractedMesh == null ||
+                    AssetDatabase.GetAssetPath(binding.SourceMesh) != request.SourceModelReference ||
                     !IsSafeAssetReference(binding.OutputAssetReference) ||
                     binding.OutputAssetReference.IndexOf("/Meshes/MS_", StringComparison.Ordinal) < 0 ||
                     !binding.OutputAssetReference.EndsWith(".asset", StringComparison.Ordinal) ||
@@ -291,45 +315,73 @@ namespace PackageBuilder.UnityWorker.Editor
                 return false;
             }
 
-            if (!HasCompleteMaterials(model.gameObject, expectedMaterials))
+            UnityPrefabModelRequest[] models = GetModels(request);
+            if (models.Length > 1 && model.childCount != models.Length)
+            {
+                diagnosticCode = "UNITY_PREFAB_CHILD_COUNT_VERIFY_FAILED";
+                return false;
+            }
+
+            for (int index = 0; index < models.Length; index++)
+            {
+                Transform part = models.Length == 1 ? model : model.GetChild(index);
+                if (models.Length > 1 && (part.name != "P_Part" + (index + 1).ToString("D3", CultureInfo.InvariantCulture) || !IsReset(part)))
+                {
+                    diagnosticCode = "UNITY_PREFAB_MODEL_TRANSFORM_VERIFY_FAILED";
+                    return false;
+                }
+
+                if (!VerifyModelReferences(part.gameObject, models[index], out diagnosticCode))
+                {
+                    return false;
+                }
+            }
+
+            diagnosticCode = string.Empty;
+            return true;
+        }
+
+        private static bool VerifyModelReferences(GameObject model, UnityPrefabModelRequest request, out string diagnosticCode)
+        {
+            if (!HasCompleteMaterials(model, new HashSet<string>(request.ExpectedMaterialReferences, StringComparer.Ordinal)))
             {
                 diagnosticCode = "UNITY_PREFAB_MATERIAL_VERIFY_FAILED";
                 return false;
             }
 
-            if (GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(prefabAsset) != 0)
+            if (model.GetComponentsInChildren<Transform>(true).Any(child =>
+                GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(child.gameObject) != 0))
             {
                 diagnosticCode = "UNITY_PREFAB_MISSING_SCRIPT_VERIFY_FAILED";
                 return false;
             }
 
-            int meshReferenceCount = 0;
-            foreach (MeshFilter filter in model.GetComponentsInChildren<MeshFilter>(true))
+            Mesh[] meshes = model.GetComponentsInChildren<MeshFilter>(true).Select(filter => filter.sharedMesh)
+                .Concat(model.GetComponentsInChildren<SkinnedMeshRenderer>(true).Select(renderer => renderer.sharedMesh)).ToArray();
+            if (meshes.Length == 0 || meshes.Any(mesh => !IsExpectedMesh(mesh, request.ExtractedMeshes)))
             {
-                if (!IsExpectedMesh(filter.sharedMesh, request.ExtractedMeshes))
-                {
-                    diagnosticCode = "UNITY_PREFAB_MESH_VERIFY_FAILED";
-                    return false;
-                }
-
-                meshReferenceCount++;
+                diagnosticCode = "UNITY_PREFAB_MESH_VERIFY_FAILED";
+                return false;
             }
 
-            foreach (SkinnedMeshRenderer renderer in model.GetComponentsInChildren<SkinnedMeshRenderer>(true))
+            diagnosticCode = string.Empty;
+            return true;
+        }
+
+        /// <summary>Returns the primary source followed by the caller's reviewed additional source order.</summary>
+        internal static UnityPrefabModelRequest[] GetModels(UnityPrefabRequest request)
+        {
+            return new UnityPrefabModelRequest[] { request }.Concat(request.AdditionalModels ?? Array.Empty<UnityPrefabModelRequest>()).ToArray();
+        }
+
+        private static UnityPrefabRequest ForModel(UnityPrefabRequest item, UnityPrefabModelRequest model)
+        {
+            return new UnityPrefabRequest
             {
-                if (!IsExpectedMesh(renderer.sharedMesh, request.ExtractedMeshes))
-                {
-                    diagnosticCode = "UNITY_PREFAB_MESH_VERIFY_FAILED";
-                    return false;
-                }
-
-                meshReferenceCount++;
-            }
-
-            diagnosticCode = meshReferenceCount > 0
-                ? string.Empty
-                : "UNITY_PREFAB_MESH_VERIFY_FAILED";
-            return meshReferenceCount > 0;
+                AssetId = item.AssetId, OutputAssetReference = item.OutputAssetReference,
+                SourceModelReference = model.SourceModelReference, ExtractedMeshes = model.ExtractedMeshes,
+                ExpectedMaterialReferences = model.ExpectedMaterialReferences,
+            };
         }
 
         private static bool IsExpectedMesh(Mesh mesh, UnityExtractedMeshSet extractedMeshes)
@@ -351,25 +403,18 @@ namespace PackageBuilder.UnityWorker.Editor
             return false;
         }
 
-        private static void ResetTransform(Transform value)
-        {
-            value.localPosition = Vector3.zero;
-            value.localRotation = Quaternion.identity;
-            value.localScale = Vector3.one;
-        }
+        private static void ResetTransform(Transform value) => UnityPrefabHierarchyUtility.ResetTransform(value);
 
-        private static bool IsReset(Transform value)
-        {
-            return value.localPosition == Vector3.zero && value.localRotation == Quaternion.identity &&
-                value.localScale == Vector3.one;
-        }
+        private static bool IsReset(Transform value) => UnityPrefabHierarchyUtility.IsReset(value);
 
-        private static bool IsSafeAssetReference(string value)
+        /// <summary>Checks canonical project-relative references before filesystem or AssetDatabase access.</summary>
+        internal static bool IsSafeAssetReference(string value)
         {
             return !string.IsNullOrEmpty(value) && value.StartsWith("Assets/", StringComparison.Ordinal) &&
                 value.IndexOf('\\') < 0 && value.IndexOf(':') < 0 &&
                 value.IndexOf("/../", StringComparison.Ordinal) < 0 &&
                 value.IndexOf("/./", StringComparison.Ordinal) < 0 &&
+                value.IndexOf("//", StringComparison.Ordinal) < 0 &&
                 !value.EndsWith("/", StringComparison.Ordinal);
         }
 

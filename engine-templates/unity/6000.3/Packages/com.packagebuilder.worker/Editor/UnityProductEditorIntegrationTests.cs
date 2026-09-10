@@ -31,6 +31,7 @@ namespace PackageBuilder.UnityWorker.Editor
                 TestMetallicSmoothnessPacking();
                 TestUrpLitMaterialCompilation();
                 TestStaticModelImportMeshExtractionAndPrefab();
+                UnityItemPrefabIntegration.Run(ModelSourceReference);
                 TestGenericAndHumanoidRigImporterPolicies();
                 TestSkinRiggedPrefabAndAnimationClips();
                 TestOverviewTemplateControllerAndComposition();
@@ -57,6 +58,7 @@ namespace PackageBuilder.UnityWorker.Editor
                     "1",
                     StringComparison.Ordinal))
                 {
+                    AssetDatabase.DeleteAsset(UnityItemPrefabIntegration.Root);
                     AssetDatabase.DeleteAsset(FolderTestRoot);
                     AssetDatabase.DeleteAsset(TextureTestRoot);
                     AssetDatabase.DeleteAsset(MaterialTestRoot);

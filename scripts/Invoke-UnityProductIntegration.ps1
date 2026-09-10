@@ -175,6 +175,8 @@ $environment = [ordered]@{
     UPM_CACHE_PATH = $upmCacheRoot
     UPM_CONFIG_PATH = $upmConfigRoot
     PACKAGEBUILDER_RETAIN_UNITY_TEST_ASSETS = '1'
+    PACKAGEBUILDER_ITEM_OWNERSHIP_PLAN = (Join-Path $repositoryRootPath 'tests\fixtures\manifests\item-prefab-ownership.json')
+    PACKAGEBUILDER_ITEM_PACKAGE_OUTPUT = (Join-Path $runRoot 'items.unitypackage')
     PACKAGEBUILDER_UNITYPACKAGE_OUTPUT = $packageOutputPath
     PACKAGEBUILDER_UNITYPACKAGE_MANIFEST = $packageManifestPath
     PACKAGEBUILDER_UNITY_RIG_PACKAGE_OUTPUT = $rigPackageOutputPath
@@ -287,6 +289,19 @@ try {
         $cleanReimportResult.rendererCount -lt 1 -or $cleanReimportResult.materialCount -lt 1 -or
         $cleanReimportResult.textureCount -lt 1 -or @($cleanReimportResult.findings).Count -ne 0) {
         throw 'Unity clean package reimport returned an invalid or failing structured result.'
+    }
+
+    $itemReimportResult = Invoke-CleanUnityPackageValidation `
+        -TemplateRoot $templateRoot -CleanCloneRoot (Join-Path $runRoot 'i') -UnityPath $unityPath `
+        -PackagePath (Join-Path $runRoot 'items.unitypackage') `
+        -ImportLogPath (Join-Path $runRoot 'item-import.log') `
+        -ValidationLogPath (Join-Path $runRoot 'item-validation.log') `
+        -ResultPath (Join-Path $runRoot 'item-reimport.json') `
+        -ProductRootReference 'Assets/PBItemTests' -PrefabReference 'Assets/PBItemTests/Prefabs/P_Alpha.prefab' `
+        -ValidationMode 'item-prefabs' -AddTemplatePreviewForValidation -RequiredImportedAssets @(
+            'Assets/PBItemTests/Prefabs/P_Alpha.prefab', 'Assets/PBItemTests/Prefabs/P_Zed.prefab')
+    if (-not $itemReimportResult.passed -or @($itemReimportResult.findings).Count -ne 0) {
+        throw 'Item prefab clean reimport validation failed.'
     }
 
     $rigCleanReimportResult = Invoke-CleanUnityPackageValidation `
@@ -463,6 +478,12 @@ $resultPointer = [ordered]@{
     runRoot = $runRoot
     project = $cloneRoot
     cleanProject = $cleanCloneRoot
+    itemCleanProject = (Join-Path $runRoot 'i')
+    itemPackage = (Join-Path $runRoot 'items.unitypackage')
+    itemCleanReimportResult = (Join-Path $runRoot 'item-reimport.json')
+    itemPrefabs = @('P_Alpha.prefab', 'P_Zed.prefab') | ForEach-Object {
+        Join-Path $cloneRoot "Assets\PBItemTests\Prefabs\$_"
+    }
     rigCleanProject = $rigCleanCloneRoot
     package = $packageOutputPath
     packageManifest = $packageManifestPath

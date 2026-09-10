@@ -21,12 +21,12 @@
 | Measure | Tasks |
 | --- | ---: |
 | Total | 264 |
-| ⚪ Backlog | 149 |
+| ⚪ Backlog | 148 |
 | 🟡 In progress | 1 |
 | 🔴 Blocked | 0 |
-| 🟢 Done | 114 |
-| Remaining (all not done) | 150 |
-| Overall completion | 114 / 264 (43.2%) |
+| 🟢 Done | 115 |
+| Remaining (all not done) | 149 |
+| Overall completion | 115 / 264 (43.6%) |
 <!-- status-summary:end -->
 
 Counts include each canonical PB task definition exactly once, including the optional post-v1 roadmap.
@@ -189,7 +189,13 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0802 | 🟡 **IN PROGRESS** | `feat/PB-0802-shared-asset-deduplication` | Codex; user for publication | 2026-09-10 | Implemented deterministic texture/material reuse using existing content identities and canonical material equality; 45 application acceptance tests and 2 physical hash integration tests passed. Full core CI passed: 2,405 tests, 34 repository checks, warning-free Release build and formatting. User accepted validation and authorized commit, push and merge; publication/main CI gates remain. [Evidence](PB-0802_SHARED_ASSET_DEDUPLICATION_EVIDENCE.md). Base `d7286bd725fb39519e344059394218da66bcf162`, verified clean after fetch and fast-forward pull. | None. |
+| PB-0803 | 🟡 **IN PROGRESS** | `feat/PB-0803-unity-item-prefabs` | Codex; user for publication | 2026-09-10 | Locally validated: 2,410 .NET tests and all nine core CI stages pass; 42 Unity policy checks and full real Unity generation/clean reimport pass. Publication, main CI and user confirmation remain. See [evidence](PB-0803_UNITY_ITEM_PREFAB_EVIDENCE.md). Base `fad8adf0805d0a4f2784593a0b580906f32304d5`, synchronized before branching. | None. |
+
+### PB-0802 Completion Evidence
+
+- Task `b9c17f6b7778335d724349ccdf4cc0709dc77215` was pushed and merged/pushed on main as `fad8adf0805d0a4f2784593a0b580906f32304d5`.
+- [Exact-main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34468230022) passed both required jobs, reverified before this branch.
+- The user accepted the successful publication handoff and explicitly requested PB-0803. This records the approved completion rollover once.
 
 ### PB-0801 Completion Evidence
 
@@ -1672,6 +1678,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0015 | `chore/PB-0015-json-schema-distribution` | `bc5937729f114098d11d195d16f471e66df5d1cb` | Direct merge | 2026-09-10 | Merged/pushed as `599cec4787bff2a0710dc5729dca4e65c85a5c72`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34460554825) passed; user accepted validation and authorized publication/continuation. MIT source distribution, 2,329 tests and publish notices verified. |
 | PB-0714 | `test/PB-0714-unity-generic-topologies` | `07c0b57c18423403a54ff437b5874d4d0e5d2e31` | #86 | 2026-09-10 | Historical completion reconciled at user request: merged as `24f42d6d2cee7fb3e3e101bdbfa860a73b09934a`; [exact-main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31502886537) succeeded. Existing engine and visual acceptance evidence retained. |
 | PB-0801 | `feat/PB-0801-multi-item-mapper` | `990a70b23d7fb2c57cea1967eedc777d796f1692` | #91 | 2026-09-10 | Merged as `d7286bd725fb39519e344059394218da66bcf162`; [exact-main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34464190458) passed. User accepted validation, confirmed merge/pull and requested next task/status reconciliation. |
+| PB-0802 | `feat/PB-0802-shared-asset-deduplication` | `b9c17f6b7778335d724349ccdf4cc0709dc77215` | Direct merge | 2026-09-10 | Main merge `fad8adf0805d0a4f2784593a0b580906f32304d5`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34468230022) passed; user confirmed handoff and requested next task. |
 
 ## 5. Milestones
 
@@ -2368,12 +2375,12 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0106, PB-0409
   - Done when: files can be assigned to stable item IDs and ambiguous grouping requires review.
 
-- [ ] **PB-0802 — Implement content-hash and semantic asset deduplication** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-0802 — Implement content-hash and semantic asset deduplication** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0802-shared-asset-deduplication`
   - Depends on: PB-0204, PB-0801
   - Done when: truly identical textures/material inputs are reused while merely similar assets remain separate.
 
-- [ ] **PB-0803 — Implement individual item prefab generator** — **P0** — ⚪ **BACKLOG**
+- [ ] **PB-0803 — Implement individual item prefab generator** — **P0** — 🟡 **IN PROGRESS**
   - Branch: `feat/PB-0803-unity-item-prefabs`
   - Depends on: PB-0611, PB-0801
   - Done when: every item gets a unique named prefab with correct material and no cross-item missing references.

@@ -2675,3 +2675,17 @@ The plan retains its input identities and direct aliases for future PB-0803/PB-0
 emit canonical assets once. It applies to immutable snapshots and must be recomputed after input
 changes. It does not merge model files, infer interpretation for bare shared images, or change
 existing single-item engine output. See [the reuse contract, test matrix and status evidence](PB-0802_SHARED_ASSET_DEDUPLICATION_EVIDENCE.md).
+
+## Individual Unity item prefabs (PB-0803)
+
+The Application `ItemPrefabPlan` turns reviewed set/collection ownership into deterministic,
+separate prefab intents and retains the shared-asset reuse plan. A versioned ownership envelope
+is checked by the Unity adapter against prepared normalized FBXs, extracted meshes and canonical
+material bindings. The existing prefab generator supports several model files per item beneath
+`P_Model`, verifies saved references and preserves single-model output. Batch failures remove
+only newly generated prefabs; existing outputs are never overwritten.
+
+This static item-generation boundary does not infer rig metadata or complete set assembly,
+attachments or production collection packaging. Those remain PB-0804 through PB-0806. See
+[PB-0803 acceptance and validation evidence](PB-0803_UNITY_ITEM_PREFAB_EVIDENCE.md) for the exact
+contract, shared test vector, clean reimport checks and publication state.
