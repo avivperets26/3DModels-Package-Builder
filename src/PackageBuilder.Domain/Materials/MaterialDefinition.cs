@@ -72,6 +72,11 @@ public sealed class MaterialDefinition : IEquatable<MaterialDefinition>
     /// <summary>Gets texture assignments in stable canonical texture-role order.</summary>
     public IReadOnlyList<TextureAssignment> TextureAssignments { get; }
 
+    /// <summary>Revalidates replacement texture references while preserving every material parameter.</summary>
+    public MaterialDefinitionValidationResult WithTextureAssignments(IEnumerable<TextureAssignment?> assignments) =>
+        Create(MetallicFactor, RoughnessFactor, NormalScale, Emission, AmbientOcclusionStrength,
+            HeightScale, Opacity, SurfaceMode, AlphaCutoff, UvTransform, IsDoubleSided, assignments);
+
     /// <summary>Validates and creates a renderer-independent material definition.</summary>
     public static MaterialDefinitionValidationResult Create(
         double metallicFactor,

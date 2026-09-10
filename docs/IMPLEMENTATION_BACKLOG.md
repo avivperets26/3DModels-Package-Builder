@@ -21,12 +21,12 @@
 | Measure | Tasks |
 | --- | ---: |
 | Total | 264 |
-| ⚪ Backlog | 150 |
-| 🟡 In progress | 2 |
+| ⚪ Backlog | 149 |
+| 🟡 In progress | 1 |
 | 🔴 Blocked | 0 |
-| 🟢 Done | 112 |
-| Remaining (all not done) | 152 |
-| Overall completion | 112 / 264 (42.4%) |
+| 🟢 Done | 114 |
+| Remaining (all not done) | 150 |
+| Overall completion | 114 / 264 (43.2%) |
 <!-- status-summary:end -->
 
 Counts include each canonical PB task definition exactly once, including the optional post-v1 roadmap.
@@ -189,8 +189,19 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0714 | 🟡 **IN PROGRESS** | `test/PB-0714-unity-generic-topologies` | Unity Fixture Engineering for local work; user for Git gates | 2026-08-11 | Locally validated: five repository-generated topology categories preserve Generic/non-Humanoid import, declared roots, exact hierarchy, one-influence skin weights, clips, controllers, prefabs, and sampled deformation through isolated clean reimport; exact multi-root and missing-binding findings also pass. User screenshots confirm the five prefabs, distinct displayed hierarchies, clip metadata, expected animation curves, and controller structure. | Local history on 2026-09-10 contains task commit `07c0b57` and merge `24f42d6` (#86) on `main`. Remote publication, exact-merge `main` CI, and explicit completion-confirmation evidence still need reconciliation before DONE rollover. |
-| PB-0801 | 🟡 **IN PROGRESS** | `feat/PB-0801-multi-item-mapper` | Item Mapping Engineering | 2026-09-10 | Implemented and validated locally: explicit immutable source ownership, deterministic manifest round-trip, review-required ambiguity, 29 focused tests and 2,358 passing core tests. [Evidence](PB-0801_MULTI_ITEM_MAPPING_EVIDENCE.md). User accepted validation and authorized commit/push. | None; main merge, main CI and completion rollover remain. |
+| PB-0802 | 🟡 **IN PROGRESS** | `feat/PB-0802-shared-asset-deduplication` | Codex; user for publication | 2026-09-10 | Implemented deterministic texture/material reuse using existing content identities and canonical material equality; 45 application acceptance tests and 2 physical hash integration tests passed. Full core CI passed: 2,405 tests, 34 repository checks, warning-free Release build and formatting. User accepted validation and authorized commit, push and merge; publication/main CI gates remain. [Evidence](PB-0802_SHARED_ASSET_DEDUPLICATION_EVIDENCE.md). Base `d7286bd725fb39519e344059394218da66bcf162`, verified clean after fetch and fast-forward pull. | None. |
+
+### PB-0801 Completion Evidence
+
+- Task `990a70b23d7fb2c57cea1967eedc777d796f1692` was published and merged through PR #91 as `d7286bd725fb39519e344059394218da66bcf162`.
+- [Exact-main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34464190458) succeeded on 2026-09-10.
+- The user accepted validation, authorized publication, confirmed the merge/pull, and requested PB-0802 plus completion-status reconciliation. Recorded once during this rollover after CI success; no completion-only publication.
+
+### PB-0714 reconciled completion evidence
+
+- Historical task commit `07c0b57c18423403a54ff437b5874d4d0e5d2e31` was published and merged by PR #86 as `24f42d6d2cee7fb3e3e101bdbfa860a73b09934a`.
+- [Exact-main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31502886537) succeeded; both SHAs and the successful result were verified through GitHub on 2026-09-10.
+- Existing local engine evidence and user visual acceptance are retained in [PB-0714 evidence](PB-0714_UNITY_GENERIC_TOPOLOGY_EVIDENCE.md). The user authorized reconciling the two in-progress entries and proceeding with PB-0802 on 2026-09-10. This records the overdue historical completion in the new branch; it does not claim a new engine run.
 
 ### PB-0015 Completion Evidence
 
@@ -1659,6 +1670,8 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0713 | `test/PB-0713-unity-multi-clip` | `ccdc155961c683012ef257d238cf64f3b4013287` | [#85](https://github.com/avivperets26/3DModels-Package-Builder/pull/85) | 2026-08-11 | Merged into `main` as `ee4a151d662dd3d0984318c31d3feb60726c0f51`; required exact-merge `main` CI succeeded. No CI or quality exception was used; the user explicitly confirmed the push, merge, green required `main` CI, mixed loop settings, exact controller states, default state, and prefab Animator. |
 | PB-0014 | `chore/PB-0014-dependency-maintenance` | `362618fe3bd9d24ba1edbf4a614f95525588a255` | Direct merge | 2026-09-10 | Merged and pushed as `804ddee337dc319c02f156630c0410e3fda6281a`; [exact-main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34456760639) passed; user confirmed completion and approved PB-0015. Four updates validated; JSON Schema distribution prerequisite tracked in PB-0015. |
 | PB-0015 | `chore/PB-0015-json-schema-distribution` | `bc5937729f114098d11d195d16f471e66df5d1cb` | Direct merge | 2026-09-10 | Merged/pushed as `599cec4787bff2a0710dc5729dca4e65c85a5c72`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34460554825) passed; user accepted validation and authorized publication/continuation. MIT source distribution, 2,329 tests and publish notices verified. |
+| PB-0714 | `test/PB-0714-unity-generic-topologies` | `07c0b57c18423403a54ff437b5874d4d0e5d2e31` | #86 | 2026-09-10 | Historical completion reconciled at user request: merged as `24f42d6d2cee7fb3e3e101bdbfa860a73b09934a`; [exact-main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/31502886537) succeeded. Existing engine and visual acceptance evidence retained. |
+| PB-0801 | `feat/PB-0801-multi-item-mapper` | `990a70b23d7fb2c57cea1967eedc777d796f1692` | #91 | 2026-09-10 | Merged as `d7286bd725fb39519e344059394218da66bcf162`; [exact-main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34464190458) passed. User accepted validation, confirmed merge/pull and requested next task/status reconciliation. |
 
 ## 5. Milestones
 
@@ -2334,7 +2347,7 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
     generated fixture, exact mixed-loop clip and controller state inventory, sampled motion, exact
     package export, and passing isolated clean reimport.
 
-- [ ] **PB-0714 — Validate Unity arbitrary Generic rig topology matrix** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-0714 — Validate Unity arbitrary Generic rig topology matrix** — **P0** — 🟢 **DONE**
   - Branch: `test/PB-0714-unity-generic-topologies`
   - Depends on: PB-0617, PB-0703, PB-0705, PB-0710
   - Done when: reusable redistribution-safe procedural fixtures cover articulated mechanical rigs such as bows and vehicles, quadrupeds with tails, winged creatures, and non-humanoid bipeds with tails; each imports as Generic without a Humanoid mapping, preserves declared roots, hierarchy, skin weights and clips, renders representative deformation, survives clean reimport, and emits stable findings for invalid multi-root or binding data.
@@ -2350,12 +2363,12 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** Related sets and independent collections build consistently across portable and Unity targets, ready for Unreal reuse.
 
-- [ ] **PB-0801 — Implement multi-item source-to-manifest mapper** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-0801 — Implement multi-item source-to-manifest mapper** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-0801-multi-item-mapper`
   - Depends on: PB-0106, PB-0409
   - Done when: files can be assigned to stable item IDs and ambiguous grouping requires review.
 
-- [ ] **PB-0802 — Implement content-hash and semantic asset deduplication** — **P0** — ⚪ **BACKLOG**
+- [ ] **PB-0802 — Implement content-hash and semantic asset deduplication** — **P0** — 🟡 **IN PROGRESS**
   - Branch: `feat/PB-0802-shared-asset-deduplication`
   - Depends on: PB-0204, PB-0801
   - Done when: truly identical textures/material inputs are reused while merely similar assets remain separate.

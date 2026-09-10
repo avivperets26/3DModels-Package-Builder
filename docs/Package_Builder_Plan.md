@@ -1395,3 +1395,17 @@ Multiple input files may belong to one item, while explicitly shared images rema
 PB-0802 content deduplication. Existing v1 manifests without assignments remain readable as drafts.
 Per-item generators must consume a successfully mapped manifest; filename and mesh counts never
 infer grouping. See [the mapping boundary and validation evidence](PB-0801_MULTI_ITEM_MAPPING_EVIDENCE.md).
+
+## Shared texture and material reuse (PB-0802)
+
+Reviewed multi-item manifests can produce an immutable `SharedAssetReusePlan`. The application
+planner combines PB-0204 SHA-256/length identities with texture role, colour space and resolved
+normal orientation, then reuses canonical Domain material equality after texture normalization.
+Ordinal source references and material IDs determine representatives. Original item identities,
+source ownership and manifest intent remain unchanged. Missing or contradictory identity inputs
+and unresolved Auto normal orientation produce blocking findings, never partial output.
+
+The plan retains its input identities and direct aliases for future PB-0803/PB-0806 generators to
+emit canonical assets once. It applies to immutable snapshots and must be recomputed after input
+changes. It does not merge model files, infer interpretation for bare shared images, or change
+existing single-item engine output. See [the reuse contract, test matrix and status evidence](PB-0802_SHARED_ASSET_DEDUPLICATION_EVIDENCE.md).
