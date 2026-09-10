@@ -20,13 +20,13 @@
 <!-- status-summary:start -->
 | Measure | Tasks |
 | --- | ---: |
-| Total | 262 |
-| ⚪ Backlog | 151 |
-| 🟡 In progress | 1 |
+| Total | 264 |
+| ⚪ Backlog | 152 |
+| 🟡 In progress | 2 |
 | 🔴 Blocked | 0 |
 | 🟢 Done | 110 |
-| Remaining (all not done) | 152 |
-| Overall completion | 110 / 262 (42.0%) |
+| Remaining (all not done) | 154 |
+| Overall completion | 110 / 264 (41.7%) |
 <!-- status-summary:end -->
 
 Counts include each canonical PB task definition exactly once, including the optional post-v1 roadmap.
@@ -190,6 +190,7 @@ feat/PB-0607-unity-urp-material-compiler
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
 | PB-0714 | 🟡 **IN PROGRESS** | `test/PB-0714-unity-generic-topologies` | Unity Fixture Engineering for local work; user for Git gates | 2026-08-11 | Locally validated: five repository-generated topology categories preserve Generic/non-Humanoid import, declared roots, exact hierarchy, one-influence skin weights, clips, controllers, prefabs, and sampled deformation through isolated clean reimport; exact multi-root and missing-binding findings also pass. User screenshots confirm the five prefabs, distinct displayed hierarchies, clip metadata, expected animation curves, and controller structure. | Local history on 2026-09-10 contains task commit `07c0b57` and merge `24f42d6` (#86) on `main`. Remote publication, exact-merge `main` CI, and explicit completion-confirmation evidence still need reconciliation before DONE rollover. |
+| PB-0014 | 🟡 **IN PROGRESS** | `chore/PB-0014-dependency-maintenance` | Dependency Maintenance Engineering | 2026-09-10 | Four updates locally validated: 2,320 tests pass, warning-free Release build, locked restore, formatting/lint, package signatures, and NuGet vulnerability audit. JSON Schema update deferred to PB-0015. | Publication, exact-main CI, and explicit completion confirmation are recorded through the normal Git and rollover workflow. |
 
 ### PB-0713 Completion Evidence
 
@@ -1760,7 +1761,21 @@ flowchart LR
   - Depends on: none
   - Done when: `AGENTS.md`, the product plan, architecture, backlog, and `docs/QUALITY_AND_RELEASE_GATES.md` agree on the 68 stable UX, testing, performance, security, installation, engineering, and release requirements; every requirement group maps to an owned E18 task with a dependency and measurable `Done when` condition; release-blocking rules and required coverage thresholds are identical across documents; Markdown, requirement-ID, task-ID, dependency-reference, branch-format, changed-file-scope, and cross-document consistency tests pass; and no application implementation is included.
 
-**E00 exit:** M0 is complete because PB-0001 through PB-0013 are complete.
+- [ ] **PB-0014 — Review and validate the September 2026 dependency updates** — **P1** — 🟡 **IN PROGRESS**
+  - Branch: `chore/PB-0014-dependency-maintenance`
+  - Owner: Dependency Maintenance Engineering
+  - Depends on: PB-0006, PB-0009, PB-0011
+  - Done when: Dependabot PRs #79, #80, #87, #88, and #89 have documented compatibility and licence decisions; accepted updates have synchronized central pins, lockfiles, validator expectations, and dependency notices; locked restore, warning-free Release build, formatting, all core tests, and vulnerability review pass; deferred updates have a concrete reason and follow-up; required publication and completion gates pass.
+  - Evidence: `docs/PB-0014_DEPENDENCY_MAINTENANCE_EVIDENCE.md`.
+
+- [ ] **PB-0015 — Establish an unconditional no-cost JSON Schema distribution path** — **P1** — ⚪ **BACKLOG**
+  - Branch: `chore/PB-0015-json-schema-distribution`
+  - Owner: Dependency Maintenance Engineering
+  - Depends on: PB-0014
+  - Done when: JsonSchema.Net and its transitive binary terms are reviewed; a reproducible MIT-source build or compatible permissive alternative provides the required no-subscription workflow without assuming revenue eligibility; schema conformance, offline validation, locked restore, notices, and deployment instructions are validated before promoting the deferred JSON Schema update.
+  - Reason: PB-0014 found that the existing JsonSchema.Net 9.3.0 binary already carries conditional maintenance-fee terms; PR #79 remains deferred until this distribution prerequisite is resolved.
+
+**E00 exit:** M0 is complete because PB-0001 through PB-0013 are complete. PB-0014 is subsequent dependency maintenance and does not reopen the foundation milestone.
 
 ---
 
