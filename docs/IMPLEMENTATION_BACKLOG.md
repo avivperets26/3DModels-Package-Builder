@@ -6,7 +6,34 @@
 **GitHub visibility:** Public, approved by the user on 2026-07-22
 **Runtime data:** `C:\Dev\PackageBuilder\runtime-data`
 **Planned default branch:** `main`
-**Last reviewed:** 2026-08-11
+**Last reviewed:** 2026-09-10
+
+## Status legend
+
+- `⚪ BACKLOG` — approved/known work that has not started.
+- `🟡 IN PROGRESS` — actively being implemented or progressing through completion gates.
+- `🔴 BLOCKED` — cannot proceed because of a concrete unresolved dependency recorded in Active Work.
+- `🟢 DONE` — implemented, validated, documented, and through the repository's Git, main CI, user-confirmation, and rollover gates. Historical imports must be explicitly identified.
+
+## Status summary
+
+<!-- status-summary:start -->
+| Measure | Tasks |
+| --- | ---: |
+| Total | 262 |
+| ⚪ Backlog | 151 |
+| 🟡 In progress | 1 |
+| 🔴 Blocked | 0 |
+| 🟢 Done | 110 |
+| Remaining (all not done) | 152 |
+| Overall completion | 110 / 262 (42.0%) |
+<!-- status-summary:end -->
+
+Counts include each canonical PB task definition exactly once, including the optional post-v1 roadmap.
+Remaining means all tasks not DONE; completion measures task count, not effort.
+Historical evidence and repeated IDs in dependencies, Active Work, and the Completion Log are not counted.
+During the approved one-merge rollover, a confirmed task remains IN PROGRESS in these recorded totals
+until its completion is synchronized at the beginning of the next task branch.
 
 ## 1. Purpose
 
@@ -54,10 +81,12 @@ Every case supports a configurable publisher root such as `AvivPeretsFBX`; no pu
 
 ### Status Markers
 
+- ⚪ **BACKLOG** — known work that has not started; keep its checkbox unchecked.
+
 - `[ ]` — not complete.
 - `[x]` — complete and verified.
 - 🟢 **DONE** — every acceptance, test, Git/GitHub, and user-confirmation gate has passed; the marker, `[x]`, Active Work removal, and Completion Log row are recorded during the approved next-task rollover.
-- 🟡 **PROCESS** — work is active, progressing through publication gates, or awaiting approved next-task rollover synchronization; the task stays `[ ]`.
+- 🟡 **IN PROGRESS** — work is active, progressing through publication gates, or awaiting approved next-task rollover synchronization; the task stays `[ ]`.
 - 🔴 **BLOCKED** — a specific unresolved condition prevents meaningful progress; record that blocker and keep the task `[ ]`.
 - Lifecycle markers supplement the `[ ]` and `[x]` checkboxes; do not invent additional checkbox symbols or treat a marker as completion evidence.
 
@@ -160,7 +189,7 @@ feat/PB-0607-unity-urp-material-compiler
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0714 | 🟡 **PROCESS** | `test/PB-0714-unity-generic-topologies` | Unity Fixture Engineering for local work; user for Git gates | 2026-08-11 | Locally validated: five repository-generated topology categories preserve Generic/non-Humanoid import, declared roots, exact hierarchy, one-influence skin weights, clips, controllers, prefabs, and sampled deformation through isolated clean reimport; exact multi-root and missing-binding findings also pass. User screenshots confirm the five prefabs, distinct displayed hierarchies, clip metadata, expected animation curves, and controller structure. | User-controlled commit, push, merge, required exact-merge `main` CI, and explicit completion confirmation remain. |
+| PB-0714 | 🟡 **IN PROGRESS** | `test/PB-0714-unity-generic-topologies` | Unity Fixture Engineering for local work; user for Git gates | 2026-08-11 | Locally validated: five repository-generated topology categories preserve Generic/non-Humanoid import, declared roots, exact hierarchy, one-influence skin weights, clips, controllers, prefabs, and sampled deformation through isolated clean reimport; exact multi-root and missing-binding findings also pass. User screenshots confirm the five prefabs, distinct displayed hierarchies, clip metadata, expected animation curves, and controller structure. | Local history on 2026-09-10 contains task commit `07c0b57` and merge `24f42d6` (#86) on `main`. Remote publication, exact-merge `main` CI, and explicit completion-confirmation evidence still need reconciliation before DONE rollover. |
 
 ### PB-0713 Completion Evidence
 
@@ -336,7 +365,7 @@ feat/PB-0607-unity-urp-material-compiler
 - **PB-0913 boundary:** PB-0619 implements the earlier Unity runtime behavior and its local contract
   surface. PB-0913 now owns the engine-neutral serialized contract and cross-engine test vectors;
   PB-0709/PB-0808 and the documented Unreal tasks own adapter conformance.
-- **Completion:** all three remain `[ ]` / 🟡 **PROCESS** until validation passes, the combined
+- **Completion:** all three remain `[ ]` / 🟡 **IN PROGRESS** until validation passes, the combined
   change is committed and merged, required `main` CI succeeds, the user explicitly confirms it,
   and rollover is synchronized.
 - **No precedent:** the exception changes branch topology only; it waives no dependency, test,
@@ -355,7 +384,7 @@ feat/PB-0607-unity-urp-material-compiler
   implementation and publication cycle.
 - **Independence retained:** both tasks keep their canonical IDs, branches, acceptance boundaries,
   evidence documents, lifecycle states, and eventual Completion Log rows.
-- **Completion:** both remain `[ ]` / 🟡 **PROCESS** until this combined change is committed,
+- **Completion:** both remain `[ ]` / 🟡 **IN PROGRESS** until this combined change is committed,
   pushed, merged into and pushed on `main`, required `main` CI succeeds, the user explicitly
   confirms completion, and rollover is synchronized on the next task branch.
 - **No precedent:** this branch-topology exception waives no test, engine, quality, CI, security,
@@ -405,7 +434,7 @@ feat/PB-0607-unity-urp-material-compiler
   PB-0613; the user requested one implementation and publication cycle.
 - **Independence retained:** all three tasks keep their canonical IDs, branches, acceptance
   boundaries, evidence documents, lifecycle states, and eventual Completion Log rows.
-- **Completion:** all three remain `[ ]` / 🟡 **PROCESS** until the combined change is committed,
+- **Completion:** all three remain `[ ]` / 🟡 **IN PROGRESS** until the combined change is committed,
   pushed, merged into and pushed on `main`, required `main` CI succeeds, the user explicitly
   confirms completion, and rollover is synchronized on the next task branch.
 - **No precedent:** this branch-topology exception waives no test, engine, quality, CI, security,
@@ -577,7 +606,7 @@ feat/PB-0607-unity-urp-material-compiler
 - **Independence retained:** PB-0602, PB-0603, and PB-0604 retain their canonical task IDs,
   branches, acceptance boundaries, evidence documents, lifecycle states, and eventual Completion
   Log rows.
-- **Completion:** all three remain `[ ]` / 🟡 **PROCESS** until the combined change is merged,
+- **Completion:** all three remain `[ ]` / 🟡 **IN PROGRESS** until the combined change is merged,
   required `main` CI succeeds, the user explicitly confirms completion, and rollover is
   synchronized on the next task branch.
 - **No precedent:** this exact branch-topology exception creates no precedent and does not waive a
@@ -620,7 +649,7 @@ feat/PB-0607-unity-urp-material-compiler
   work cycle.
 - **Independence retained:** each task keeps its canonical branch, acceptance boundary, production
   API, focused evidence, lifecycle state, and eventual Completion Log row.
-- **Completion:** both remain `[ ]` / 🟡 **PROCESS** until the combined change is merged, required
+- **Completion:** both remain `[ ]` / 🟡 **IN PROGRESS** until the combined change is merged, required
   `main` CI succeeds, the user explicitly confirms completion, and rollover is synchronized.
 - **No precedent:** this exact exception does not weaken the normal one-task-per-branch rule.
 
@@ -663,7 +692,7 @@ feat/PB-0607-unity-urp-material-compiler
   one branch and one publication cycle.
 - **Independence retained:** each task keeps its canonical branch, acceptance boundary, production
   API, focused evidence, lifecycle state, and eventual Completion Log row.
-- **Completion:** both remain `[ ]` / 🟡 **PROCESS** until the combined change is merged, required
+- **Completion:** both remain `[ ]` / 🟡 **IN PROGRESS** until the combined change is merged, required
   `main` CI succeeds, the user explicitly confirms completion, and rollover is synchronized.
 - **No precedent:** this exact exception does not weaken the normal one-task-per-branch rule.
 
@@ -691,7 +720,7 @@ feat/PB-0607-unity-urp-material-compiler
 - **Independence retained:** each task keeps its canonical branch identifier, acceptance mapping,
   production boundary, focused tests, evidence document, lifecycle state, and eventual Completion
   Log row. The shared branch does not merge their task identities.
-- **Completion:** PB-0501 and PB-0502 remain `[ ]` / 🟡 **PROCESS** until the combined change is
+- **Completion:** PB-0501 and PB-0502 remain `[ ]` / 🟡 **IN PROGRESS** until the combined change is
   committed, pushed, merged into and pushed on `main`, required `main` CI succeeds, the user
   explicitly confirms completion, and their state is synchronized during the next-task rollover.
 - **No precedent:** this exception applies only to this exact two-task cycle and does not weaken
@@ -1673,7 +1702,7 @@ flowchart LR
 - [x] **PB-0002 — Initialize the local Git repository and `main` branch** — **P0** — 🟢 **DONE**
   - Branch: `chore/PB-0002-initialize-repository`
   - Depends on: PB-0001
-  - Done when: the minimal PB-0001 bootstrap repository is normalized onto `main`; required planning and validation files are tracked; ignored single-root runtime directories, prohibited binaries, generated engine assets, secrets, and personal paths are absent from the repository; local history contains the verified PB-0001 baseline commit; and the reusable repository-baseline script passes locally and in a minimal SHA-pinned GitHub Actions workflow on pull requests and pushes to `main` using a free Windows GitHub-hosted runner. This bootstrap workflow validates repository/documentation structure, governance, diffs, and reachable history only; PB-0009 remains the owner of full restore, build, format, test, and application CI, while later tasks own coverage and supply-chain gates. PB-0002 remained `[ ]` and 🟡 **PROCESS** until its commit, push, GitHub workflow, merge, and explicit user-confirmation gates passed.
+  - Done when: the minimal PB-0001 bootstrap repository is normalized onto `main`; required planning and validation files are tracked; ignored single-root runtime directories, prohibited binaries, generated engine assets, secrets, and personal paths are absent from the repository; local history contains the verified PB-0001 baseline commit; and the reusable repository-baseline script passes locally and in a minimal SHA-pinned GitHub Actions workflow on pull requests and pushes to `main` using a free Windows GitHub-hosted runner. This bootstrap workflow validates repository/documentation structure, governance, diffs, and reachable history only; PB-0009 remains the owner of full restore, build, format, test, and application CI, while later tasks own coverage and supply-chain gates. PB-0002 remained `[ ]` and 🟡 **IN PROGRESS** until its commit, push, GitHub workflow, merge, and explicit user-confirmation gates passed.
 
 - [x] **PB-0003 — Establish the approved public GitHub repository and push `main`** — **P0** — 🟢 **DONE**
   - Branch: `chore/PB-0003-github-remote`
@@ -1878,12 +1907,12 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0203, PB-0206, PB-0208, PB-0211, PB-0212
   - Done when: a fake-worker job completes the full state machine, resumes after restart, and never promotes a failed job.
 
-- [ ] **PB-0214 — Implement deterministic cache keys and cache storage** — **P1**
+- [ ] **PB-0214 — Implement deterministic cache keys and cache storage** — **P1** — ⚪ **BACKLOG**
   - Branch: `feat/PB-0214-build-cache`
   - Depends on: PB-0204, PB-0205, PB-0213
   - Done when: cache keys include sources, manifest, worker, engine, target, and marketplace profile versions and incompatible outputs cannot be reused.
 
-- [ ] **PB-0215 — Implement disk-space, quota, and concurrency guards** — **P1**
+- [ ] **PB-0215 — Implement disk-space, quota, and concurrency guards** — **P1** — ⚪ **BACKLOG**
   - Branch: `feat/PB-0215-resource-guards`
   - Depends on: PB-0213
   - Done when: preflight blocks insufficient space, concurrency respects configured engine limits, and cache cleanup never deletes promoted releases.
@@ -2273,7 +2302,7 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
     generated fixture, exact mixed-loop clip and controller state inventory, sampled motion, exact
     package export, and passing isolated clean reimport.
 
-- [ ] **PB-0714 — Validate Unity arbitrary Generic rig topology matrix** — **P0** — 🟡 **PROCESS**
+- [ ] **PB-0714 — Validate Unity arbitrary Generic rig topology matrix** — **P0** — 🟡 **IN PROGRESS**
   - Branch: `test/PB-0714-unity-generic-topologies`
   - Depends on: PB-0617, PB-0703, PB-0705, PB-0710
   - Done when: reusable redistribution-safe procedural fixtures cover articulated mechanical rigs such as bows and vehicles, quadrupeds with tails, winged creatures, and non-humanoid bipeds with tails; each imports as Generic without a Humanoid mapping, preserves declared roots, hierarchy, skin weights and clips, renders representative deformation, survives clean reimport, and emits stable findings for invalid multi-root or binding data.
@@ -2289,57 +2318,57 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** Related sets and independent collections build consistently across portable and Unity targets, ready for Unreal reuse.
 
-- [ ] **PB-0801 — Implement multi-item source-to-manifest mapper** — **P0**
+- [ ] **PB-0801 — Implement multi-item source-to-manifest mapper** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-0801-multi-item-mapper`
   - Depends on: PB-0106, PB-0409
   - Done when: files can be assigned to stable item IDs and ambiguous grouping requires review.
 
-- [ ] **PB-0802 — Implement content-hash and semantic asset deduplication** — **P0**
+- [ ] **PB-0802 — Implement content-hash and semantic asset deduplication** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-0802-shared-asset-deduplication`
   - Depends on: PB-0204, PB-0801
   - Done when: truly identical textures/material inputs are reused while merely similar assets remain separate.
 
-- [ ] **PB-0803 — Implement individual item prefab generator** — **P0**
+- [ ] **PB-0803 — Implement individual item prefab generator** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-0803-unity-item-prefabs`
   - Depends on: PB-0611, PB-0801
   - Done when: every item gets a unique named prefab with correct material and no cross-item missing references.
 
-- [ ] **PB-0804 — Implement assembled item-set prefab** — **P0**
+- [ ] **PB-0804 — Implement assembled item-set prefab** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-0804-unity-assembled-set`
   - Depends on: PB-0803
   - Done when: set items assemble in declared order/slots with reset set root and documented compatibility.
 
-- [ ] **PB-0805 — Implement set attachment metadata and validation** — **P0**
+- [ ] **PB-0805 — Implement set attachment metadata and validation** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-0805-set-attachments`
   - Depends on: PB-0804
   - Done when: sockets/bones/body slots are validated against declared targets and missing attachments block applicable builds.
 
-- [ ] **PB-0806 — Implement collection item package flow** — **P0**
+- [ ] **PB-0806 — Implement collection item package flow** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-0806-collection-items`
   - Depends on: PB-0802, PB-0803
   - Done when: independent items remain separate, names are unique, and no combined runtime prefab is created unless requested.
 
-- [ ] **PB-0807 — Implement overview layout generator** — **P0**
+- [ ] **PB-0807 — Implement overview layout generator** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-0807-overview-layout`
   - Depends on: PB-0612, PB-0803
   - Done when: sets and collections lay out all items using bounds-aware spacing and deterministic order.
 
-- [ ] **PB-0808 — Implement preview item visibility selector** — **P0**
+- [ ] **PB-0808 — Implement preview item visibility selector** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-0808-item-preview-selector`
   - Depends on: PB-0619, PB-0807, PB-0913
   - Done when: Previous, Next, direct selection, current item name/index, and all-items overview use the shared selector contract; exactly the selected item can be shown without modifying prefab assets; and pointer/keyboard tests cover bounds, wrap policy, empty/single-item states, and deterministic order.
 
-- [ ] **PB-0809 — Implement set/collection portable archives and inventories** — **P0**
+- [ ] **PB-0809 — Implement set/collection portable archives and inventories** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-0809-multi-item-portable-output`
   - Depends on: PB-0506, PB-0801, PB-0802
   - Done when: each item, shared asset, README, and inventory table appears once with correct names.
 
-- [ ] **PB-0810 — Complete set fixture end-to-end** — **P0**
+- [ ] **PB-0810 — Complete set fixture end-to-end** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-0810-item-set-e2e`
   - Depends on: PB-0804, PB-0805, PB-0808, PB-0809
   - Done when: one equipment-set fixture passes portable and Unity package/reimport tests.
 
-- [ ] **PB-0811 — Complete twelve-item collection fixture end-to-end** — **P0**
+- [ ] **PB-0811 — Complete twelve-item collection fixture end-to-end** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-0811-item-collection-e2e`
   - Depends on: PB-0806 through PB-0809
   - Done when: all twelve items have unique prefabs, overview placement, selector behavior, inventory metrics, and clean package imports.
@@ -2352,27 +2381,27 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** Every case receives accurate UTF-8 documentation, professional previews, and actionable reports.
 
-- [ ] **PB-0901 — Select and integrate typed documentation template engine** — **P0**
+- [ ] **PB-0901 — Select and integrate typed documentation template engine** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-0901-document-template-engine`
   - Depends on: PB-0102 through PB-0107
   - Done when: a permissively licensed template engine renders typed UTF-8 content without unsafe arbitrary code execution; decision is recorded in an ADR.
 
-- [ ] **PB-0902 — Implement publisher-profile resolver** — **P0**
+- [ ] **PB-0902 — Implement publisher-profile resolver** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-0902-publisher-profiles`
   - Depends on: PB-0111, PB-0901
   - Done when: root name, branding, support, copyright, AI disclosure, and defaults resolve with no hardcoded `AvivPeretsFBX` dependency.
 
-- [ ] **PB-0903 — Implement shared README sections and technical metrics** — **P0**
+- [ ] **PB-0903 — Implement shared README sections and technical metrics** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-0903-readme-shared-sections`
   - Depends on: PB-0405, PB-0406, PB-0901
   - Done when: contents, formats, versions, dimensions, triangle/material/texture counts, scale, axes, dependencies, usage, and support render accurately.
 
-- [ ] **PB-0904 — Implement five case-specific README variants** — **P0**
+- [ ] **PB-0904 — Implement five case-specific README variants** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-0904-readme-case-variants`
   - Depends on: PB-0903, PB-0105, PB-0106
   - Done when: static, rigged, animated, set, and collection docs include only applicable sections and no stale product claims.
 
-- [ ] **PB-0905 — Implement animation and inventory table generators** — **P0**
+- [ ] **PB-0905 — Implement animation and inventory table generators** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-0905-doc-tables`
   - Depends on: PB-0408, PB-0801, PB-0904
   - Done when: animation frames/duration/FPS/loop/root motion and item dimensions/triangles/materials are generated from measured data.
@@ -2382,32 +2411,32 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0102, PB-0106
   - Done when: hero, orthographic, detail, animation pose, set overview, collection overview, background, lighting, and visibility are typed and validated.
 
-- [ ] **PB-0907 — Implement Unity still-image capture worker** — **P0**
+- [ ] **PB-0907 — Implement Unity still-image capture worker** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-0907-unity-image-capture`
   - Depends on: PB-0614, PB-0906
   - Done when: 1920×1080 hero/front/back/left/right images render deterministically with final materials and no editor overlays.
 
-- [ ] **PB-0908 — Implement bounds, framing, exposure, and empty-image checks** — **P0**
+- [ ] **PB-0908 — Implement bounds, framing, exposure, and empty-image checks** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-0908-preview-validation`
   - Depends on: PB-0907
   - Done when: clipped, empty, tiny, overexposed, underexposed, missing-material, helper-visible, and excessive-margin images generate findings.
 
-- [ ] **PB-0909 — Implement media optimization and Fab image-size enforcement** — **P0**
+- [ ] **PB-0909 — Implement media optimization and Fab image-size enforcement** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-0909-media-optimization`
   - Depends on: PB-0907, PB-0908
   - Done when: JPEG/PNG remain 1920×1080, individual images stay below configured limits, total gallery limits validate, and visual quality is tested.
 
-- [ ] **PB-0910 — Implement JSON validation report** — **P0**
+- [ ] **PB-0910 — Implement JSON validation report** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-0910-json-validation-report`
   - Depends on: PB-0109, PB-0213
   - Done when: job, versions, artifacts, hashes, metrics, findings, and final status serialize through a stable schema.
 
-- [ ] **PB-0911 — Implement human-readable HTML validation report** — **P0**
+- [ ] **PB-0911 — Implement human-readable HTML validation report** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-0911-html-validation-report`
   - Depends on: PB-0910
   - Done when: report summarizes pass/fail, previews, artifacts, versions, blocking findings, warnings, and suggested actions without exposing private source data.
 
-- [ ] **PB-0912 — Implement support bundle generator** — **P1**
+- [ ] **PB-0912 — Implement support bundle generator** — **P1** — ⚪ **BACKLOG**
   - Branch: `feat/PB-0912-support-bundle`
   - Depends on: PB-0212, PB-0910
   - Done when: logs/manifests/versions/reports can be bundled while source models, textures, credentials, and personal paths are excluded or redacted.
@@ -2417,7 +2446,7 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0906
   - Done when: a versioned engine-neutral typed contract and ADR define bounded orbit/zoom/reset actions, pointer and keyboard bindings, the approved dark-studio background and lighting tokens, light-direction controls, overlay visibility, item Previous/Next/direct/all states, animation list/play/pause/replay/scrub/loop states, accessibility labels/focus semantics, deterministic serialization, validation, and shared test vectors without Unity, Unreal, WPF, or renderer dependencies.
 
-- [ ] **PB-0914 — Validate cross-engine interactive preview UX and visual parity** — **P0**
+- [ ] **PB-0914 — Validate cross-engine interactive preview UX and visual parity** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-0914-interactive-preview-parity`
   - Depends on: PB-0619, PB-0709, PB-0808, PB-1116, PB-1205, PB-1208
   - Done when: static, animated, set, and collection fixtures prove equivalent Unity/Unreal actions and state transitions; pointer and keyboard controls, focus, reset, resolution/UI-scale behavior, overlay hiding, clean Play/PIE execution, and minimal packaged dependencies pass; and reference-based perceptual checks confirm the approved near-black/bright-centre studio presentation and useful lighting without requiring pixel-identical engine output.
@@ -2430,52 +2459,52 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** Validated target artifacts are packaged and checked against versioned current Fab requirements.
 
-- [ ] **PB-1001 — Create versioned Fab requirements profile** — **P0**
+- [ ] **PB-1001 — Create versioned Fab requirements profile** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1001-fab-requirements-profile`
   - Depends on: PB-0111, PB-0305
   - Done when: current official asset, Unity, Unreal, archive, media, documentation, and effective-date rules are represented with source links.
 
-- [ ] **PB-1002 — Implement Fab requirements-profile loader and updater** — **P0**
+- [ ] **PB-1002 — Implement Fab requirements-profile loader and updater** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1002-fab-profile-updates`
   - Depends on: PB-1001, PB-0307
   - Done when: cached/current/candidate profiles can be compared, tested, approved, and pinned to builds.
 
-- [ ] **PB-1003 — Implement Fab required-target resolver** — **P0**
+- [ ] **PB-1003 — Implement Fab required-target resolver** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1003-fab-target-resolution`
   - Depends on: PB-0102, PB-1001
   - Done when: selected listing configuration resolves required/optional portable, Unity, Unreal, GLB, documentation, and media outputs.
 
-- [ ] **PB-1004 — Implement Fab portable/additional-files validator** — **P0**
+- [ ] **PB-1004 — Implement Fab portable/additional-files validator** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1004-fab-portable-validator`
   - Depends on: PB-0506, PB-1001
   - Done when: accepted formats, archive structure, file limits, relevance, and naming generate blocking findings.
 
-- [ ] **PB-1005 — Implement Fab Unity package validator** — **P0**
+- [ ] **PB-1005 — Implement Fab Unity package validator** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1005-fab-unity-validator`
   - Depends on: PB-0617, PB-1001
   - Done when: root organization, dependencies, duplicate/redundant files, demo scene, docs, paths, errors, and package content are checked.
 
-- [ ] **PB-1006 — Implement Fab Unreal project validator** — **P0**
+- [ ] **PB-1006 — Implement Fab Unreal project validator** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1006-fab-unreal-validator`
   - Depends on: PB-1001; E11 implementation
   - Done when: one project, matching Pack directory, overview map, cleaned redirectors, no unused/generated directories, docs, naming, and logs are checked.
 
-- [ ] **PB-1007 — Implement Fab media-gallery validator** — **P0**
+- [ ] **PB-1007 — Implement Fab media-gallery validator** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1007-fab-media-validator`
   - Depends on: PB-0909, PB-1001
   - Done when: dimensions, format, per-image size, total size, required thumbnail/gallery presence, and relevant views validate.
 
-- [ ] **PB-1008 — Implement Fab listing metadata and manual-upload checklist** — **P0**
+- [ ] **PB-1008 — Implement Fab listing metadata and manual-upload checklist** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1008-fab-listing-checklist`
   - Depends on: PB-0904, PB-1001
   - Done when: title, description inputs, categories, formats, engine versions, dependencies, AI disclosure, media, and manual submission steps produce a reviewable checklist.
 
-- [ ] **PB-1009 — Implement final Fab release composer** — **P0**
+- [ ] **PB-1009 — Implement final Fab release composer** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1009-fab-release-composer`
   - Depends on: PB-1003 through PB-1008
   - Done when: versioned Fab output contains only requested validated deliverables and records the exact requirements profile.
 
-- [ ] **PB-1010 — Complete Fab portable-and-Unity release fixture** — **P0**
+- [ ] **PB-1010 — Complete Fab portable-and-Unity release fixture** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1010-fab-unity-release-e2e`
   - Depends on: PB-0618, PB-0909, PB-0911, PB-1009
   - Done when: a static product produces a complete Fab-ready portable/Unity/media/docs release with no blocking findings.
@@ -2488,82 +2517,82 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** A static normalized product becomes a clean Unreal project, material, overview map, preview, and Fab-valid ZIP.
 
-- [ ] **PB-1101 — Install and verify the latest approved stable Unreal Engine** — **P0**
+- [ ] **PB-1101 — Install and verify the latest approved stable Unreal Engine** — **P0** — ⚪ **BACKLOG**
   - Branch: `chore/PB-1101-install-unreal`
   - Depends on: PB-0304 through PB-0307
   - Done when: newest candidate production release is installed, detected, smoke-tested, and recorded as approved or rejected with evidence.
 
-- [ ] **PB-1102 — Create versioned Unreal project template** — **P0**
+- [ ] **PB-1102 — Create versioned Unreal project template** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1102-unreal-template`
   - Depends on: PB-1101
   - Done when: minimal project enables only required plugins, contains one generated Pack root, and excludes caches/generated folders.
 
-- [ ] **PB-1103 — Create Unreal worker plugin and Python entrypoint** — **P0**
+- [ ] **PB-1103 — Create Unreal worker plugin and Python entrypoint** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1103-unreal-worker-shell`
   - Depends on: PB-0112, PB-1102
   - Done when: Unreal reads requests, emits progress, writes results, saves assets, and exits through command-line execution.
 
-- [ ] **PB-1104 — Implement Unreal template cloning and exclusive execution** — **P0**
+- [ ] **PB-1104 — Implement Unreal template cloning and exclusive execution** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1104-unreal-job-clone`
   - Depends on: PB-0208, PB-1102, PB-1103
   - Done when: each job uses an isolated project clone and concurrent writers cannot target one clone.
 
-- [ ] **PB-1105 — Implement Unreal content folder and naming generator** — **P0**
+- [ ] **PB-1105 — Implement Unreal content folder and naming generator** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1105-unreal-folders-names`
   - Depends on: PB-0101, PB-1103
   - Done when: project/Pack name, Meshes, Materials, Textures, Maps, Documentation, and optional folders follow the target profile.
 
-- [ ] **PB-1106 — Implement Unreal texture import policies** — **P0**
+- [ ] **PB-1106 — Implement Unreal texture import policies** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1106-unreal-textures`
   - Depends on: PB-0104, PB-1105
   - Done when: sRGB/data/normal settings, compression, alpha, normal orientation, and references are deterministic.
 
-- [ ] **PB-1107 — Implement Unreal ORM packing** — **P0**
+- [ ] **PB-1107 — Implement Unreal ORM packing** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1107-unreal-orm-packing`
   - Depends on: PB-1106
   - Done when: AO or white is red, Roughness is green, Metallic is blue, and pixel tests verify the generated map.
 
-- [ ] **PB-1108 — Implement Unreal material compiler** — **P0**
+- [ ] **PB-1108 — Implement Unreal material compiler** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1108-unreal-materials`
   - Depends on: PB-1106, PB-1107
   - Done when: Base, Normal, ORM, Emission, opacity/cutout, two-sided, and material instances render correctly.
 
-- [ ] **PB-1109 — Implement static mesh import and collision policy** — **P0**
+- [ ] **PB-1109 — Implement static mesh import and collision policy** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1109-unreal-static-mesh`
   - Depends on: PB-0415, PB-1105, PB-1108
   - Done when: `SM_` assets import at correct scale/orientation with intended materials, LOD settings, normals/tangents, and explicit collision behavior.
 
-- [ ] **PB-1110 — Implement Unreal overview map generator** — **P0**
+- [ ] **PB-1110 — Implement Unreal overview map generator** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1110-unreal-overview-map`
   - Depends on: PB-1109
   - Done when: required map contains lighting, floor/background, camera, product actor, labels where appropriate, and no previous/unused assets.
 
-- [ ] **PB-1111 — Implement Unreal preview still rendering** — **P0**
+- [ ] **PB-1111 — Implement Unreal preview still rendering** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1111-unreal-preview-rendering`
   - Depends on: PB-0906, PB-1110
   - Done when: requested 1920×1080 views render from final Unreal materials and pass the shared media validator.
 
-- [ ] **PB-1112 — Implement redirector, unused-asset, map, and log validation** — **P0**
+- [ ] **PB-1112 — Implement redirector, unused-asset, map, and log validation** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1112-unreal-validation`
   - Depends on: PB-1110
   - Done when: redirectors are fixed, unused assets detected, map loads, required lighting state validates, and package-caused errors/warnings block release.
 
-- [ ] **PB-1113 — Implement clean Unreal project ZIP** — **P0**
+- [ ] **PB-1113 — Implement clean Unreal project ZIP** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1113-unreal-project-zip`
   - Depends on: PB-0202, PB-1112
   - Done when: one project is zipped without Saved, Intermediate, DerivedDataCache, Binaries, unrelated plugins, or absolute paths.
 
-- [ ] **PB-1114 — Implement Unreal clean extraction and reopen test** — **P0**
+- [ ] **PB-1114 — Implement Unreal clean extraction and reopen test** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1114-unreal-clean-reopen`
   - Depends on: PB-1113
   - Done when: clean extraction opens through command line, assets load, overview map validates, and structured results return.
 
-- [ ] **PB-1115 — Complete Unreal static vertical slice** — **P0**
+- [ ] **PB-1115 — Complete Unreal static vertical slice** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1115-unreal-static-e2e`
   - Depends on: PB-0213, PB-0507, PB-1111, PB-1114, PB-1116, PB-1006
   - Done when: static source produces portable, Unity, Unreal, media, docs, and Fab release outputs with clean reimport/reopen.
 
-- [ ] **PB-1116 — Implement Unreal interactive dark-studio preview shell** — **P0**
+- [ ] **PB-1116 — Implement Unreal interactive dark-studio preview shell** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1116-unreal-interactive-preview`
   - Depends on: PB-0913, PB-1110
   - Done when: the packaged overview map implements the shared contract with left-drag bounded yaw/pitch orbit, mouse-wheel distance zoom, keyboard/reset equivalents, the approved seamless horizon-free near-black background with soft brighter centre, adjustable/resettable key-light direction through a minimal accessible UMG overlay, hideable controls for capture, and tests proving unchanged product transforms, clean PIE execution, and no unnecessary editor/plugin runtime dependency.
@@ -2576,72 +2605,72 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** Unreal supports the remaining four cases with correct skeletal and overview behavior.
 
-- [ ] **PB-1201 — Implement Unreal skeletal mesh import policy** — **P0**
+- [ ] **PB-1201 — Implement Unreal skeletal mesh import policy** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1201-unreal-skeletal-import`
   - Depends on: PB-0407, PB-1108
   - Done when: `SK_` mesh and `SKEL_` skeleton import with correct root, weights, bind pose, materials, scale, and orientation.
 
-- [ ] **PB-1202 — Implement Unreal skeleton and skin validator** — **P0**
+- [ ] **PB-1202 — Implement Unreal skeleton and skin validator** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1202-unreal-skeleton-validator`
   - Depends on: PB-1201
   - Done when: bones, hierarchy, influences, root, bindpose, missing weights, and unexpected extra skeletons generate findings.
 
-- [ ] **PB-1203 — Implement Unreal rigged-no-animation flow** — **P0**
+- [ ] **PB-1203 — Implement Unreal rigged-no-animation flow** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1203-unreal-rigged-no-animation`
   - Depends on: PB-1202
   - Done when: case 2 produces skeletal assets and overview actor without empty Animation Sequences or Animation Blueprints.
 
-- [ ] **PB-1204 — Implement Unreal Animation Sequence import** — **P0**
+- [ ] **PB-1204 — Implement Unreal Animation Sequence import** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1204-unreal-animation-sequences`
   - Depends on: PB-0408, PB-1201
   - Done when: named clips import with correct skeleton, range, FPS, transforms, root-motion metadata, and no duplicate sequences.
 
-- [ ] **PB-1205 — Implement Unreal animation preview controller** — **P0**
+- [ ] **PB-1205 — Implement Unreal animation preview controller** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1205-unreal-animation-preview`
   - Depends on: PB-0913, PB-1116, PB-1204
   - Done when: the overview map uses the shared animation-transport contract to list/select sequences and provide play, pause/resume, replay, timeline scrubbing, loop state, and current-time/duration feedback through minimal Blueprint/UMG logic without shipping unnecessary editor or worker code.
 
-- [ ] **PB-1206 — Implement Unreal animation motion validator** — **P0**
+- [ ] **PB-1206 — Implement Unreal animation motion validator** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1206-unreal-animation-validation`
   - Depends on: PB-1204
   - Done when: clip count, duration, frame rate, skeleton binding, motion, and expected root-motion behavior validate after import.
 
-- [ ] **PB-1207 — Implement Unreal set actor/Blueprint generation** — **P0**
+- [ ] **PB-1207 — Implement Unreal set actor/Blueprint generation** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1207-unreal-item-set`
   - Depends on: PB-0804, PB-0805, PB-1105
   - Done when: individual assets and assembled set actor honor declared attachment/visibility behavior.
 
-- [ ] **PB-1208 — Implement Unreal collection overview and selector** — **P0**
+- [ ] **PB-1208 — Implement Unreal collection overview and selector** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1208-unreal-item-collection`
   - Depends on: PB-0806 through PB-0808, PB-0913, PB-1116
   - Done when: all collection items lay out deterministically and the shared selector exposes Previous, Next, direct selection, current item name/index, and all-items overview with pointer/keyboard operation and safe empty/single-item behavior.
 
-- [ ] **PB-1209 — Complete Unreal rigged-no-animation fixture** — **P0**
+- [ ] **PB-1209 — Complete Unreal rigged-no-animation fixture** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1209-unreal-rigged-e2e`
   - Depends on: PB-1203, PB-1114
   - Done when: case 2 survives clean reopen with one valid skeleton and no animation assets.
 
-- [ ] **PB-1210 — Complete Silverwing Talonbow Unreal fixture** — **P0**
+- [ ] **PB-1210 — Complete Silverwing Talonbow Unreal fixture** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1210-silverwing-unreal-e2e`
   - Depends on: PB-1205, PB-1206, PB-1114
   - Done when: bow and string deformation, `Bow_Shot`, materials, overview preview, and clean reopen all pass.
 
-- [ ] **PB-1211 — Complete Unreal item-set fixture** — **P0**
+- [ ] **PB-1211 — Complete Unreal item-set fixture** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1211-unreal-set-e2e`
   - Depends on: PB-1207, PB-1114
   - Done when: individual and assembled set assets plus overview map validate.
 
-- [ ] **PB-1212 — Complete Unreal collection fixture** — **P0**
+- [ ] **PB-1212 — Complete Unreal collection fixture** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1212-unreal-collection-e2e`
   - Depends on: PB-1208, PB-1114
   - Done when: all twelve example items, shared assets, overview map, selector, and reports validate.
 
-- [ ] **PB-1213 — Complete full Fab Unreal release fixture** — **P0**
+- [ ] **PB-1213 — Complete full Fab Unreal release fixture** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1213-fab-unreal-release-e2e`
   - Depends on: PB-1006, PB-1115, PB-1209 through PB-1212
   - Done when: all five cases produce Unreal ZIPs that pass current Fab requirements and clean reopen.
 
-- [ ] **PB-1214 — Validate Unreal arbitrary skeletal rig topology matrix** — **P0**
+- [ ] **PB-1214 — Validate Unreal arbitrary skeletal rig topology matrix** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1214-unreal-skeletal-topologies`
   - Depends on: PB-0714, PB-1114, PB-1202, PB-1204, PB-1206
   - Done when: Unreal reuses the approved topology matrix for articulated mechanical rigs, quadrupeds with tails, winged creatures, and non-humanoid bipeds with tails; skeletal meshes, skeletons and Animation Sequences preserve declared roots, hierarchy, skin weights and representative deformation, clean reopen passes, and no Humanoid-only assumption exists.
@@ -2659,77 +2688,77 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0005, PB-0213
   - Done when: application starts, composes services, navigates modules, handles fatal startup errors, and has view-model tests.
 
-- [ ] **PB-1302 — Implement first-run environment and tool audit** — **P0**
+- [ ] **PB-1302 — Implement first-run environment and tool audit** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1302-first-run-audit`
   - Depends on: PB-0302 through PB-0304, PB-1301
   - Done when: UI reports .NET/app, Blender, Unity, Unreal, every contained project root, missing prerequisites, no-cost setup options, and actionable setup links; any path outside `C:\Dev\PackageBuilder` is blocking.
 
-- [ ] **PB-1303 — Implement publisher-profile manager** — **P0**
+- [ ] **PB-1303 — Implement publisher-profile manager** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1303-publisher-profile-ui`
   - Depends on: PB-0902, PB-1301
   - Done when: create/edit/validate/import/export profiles and preview root names/document fields without exposing secrets.
 
-- [ ] **PB-1304 — Implement new-product wizard and naming preview** — **P0**
+- [ ] **PB-1304 — Implement new-product wizard and naming preview** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1304-product-wizard`
   - Depends on: PB-0101, PB-0110, PB-1301
   - Done when: display name, asset ID, folder name, case, publisher, targets, and marketplace generate a valid draft manifest.
 
-- [ ] **PB-1305 — Implement source picker and inspection workflow** — **P0**
+- [ ] **PB-1305 — Implement source picker and inspection workflow** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1305-source-inspection-ui`
   - Depends on: PB-0409, PB-1304
   - Done when: folder/ZIP/FBX/GLB selection runs safe preflight and displays files, metrics, detected case, and blocking findings.
 
-- [ ] **PB-1306 — Implement material and texture review screen** — **P0**
+- [ ] **PB-1306 — Implement material and texture review screen** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1306-material-review-ui`
   - Depends on: PB-0406, PB-0413, PB-1305
   - Done when: users can confirm/override roles, colour spaces, normal convention, surface type, double-sided, and generated packing preview.
 
-- [ ] **PB-1307 — Implement rig and animation review screen** — **P0**
+- [ ] **PB-1307 — Implement rig and animation review screen** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1307-rig-animation-review-ui`
   - Depends on: PB-0407, PB-0408, PB-1305
   - Done when: skeleton summary, clip renaming, ranges, FPS, loop, root motion, and warnings are editable and validated.
 
-- [ ] **PB-1308 — Implement set and collection editor** — **P0**
+- [ ] **PB-1308 — Implement set and collection editor** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1308-item-editor-ui`
   - Depends on: PB-0801, PB-1305
   - Done when: item mapping, order, category, shared assets, set slots, and overview choices produce a valid manifest.
 
-- [ ] **PB-1309 — Implement target, marketplace, and engine-version selection screen** — **P0**
+- [ ] **PB-1309 — Implement target, marketplace, and engine-version selection screen** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1309-target-version-ui`
   - Depends on: PB-0306 through PB-0309, PB-1003, PB-1304
   - Done when: Latest Approved Stable is default, exact versions and missing tools are visible, and incompatible choices are blocked.
 
-- [ ] **PB-1310 — Implement build queue and progress dashboard** — **P0**
+- [ ] **PB-1310 — Implement build queue and progress dashboard** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1310-build-dashboard`
   - Depends on: PB-0209, PB-0213, PB-1301
   - Done when: queued/running/waiting/failed/completed states, step progress, elapsed time, artifacts, and correlation ID update safely.
 
-- [ ] **PB-1311 — Implement logs, findings, and validation report viewer** — **P0**
+- [ ] **PB-1311 — Implement logs, findings, and validation report viewer** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1311-validation-viewer`
   - Depends on: PB-0911, PB-1310
   - Done when: filterable findings, blocking explanations, related paths, suggestions, and report opening are available.
 
-- [ ] **PB-1312 — Implement preview review and approval screen** — **P0**
+- [ ] **PB-1312 — Implement preview review and approval screen** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1312-preview-review-ui`
   - Depends on: PB-0907 through PB-0909, PB-0913, PB-1310
   - Done when: users compare views, approve/reject, configure and preview the shared dark-studio, lighting, item-selection, and animation-presentation options, and rerender before final packaging through the accessible desktop design system without duplicating engine interaction logic.
 
-- [ ] **PB-1313 — Implement build history and artifact browser** — **P0**
+- [ ] **PB-1313 — Implement build history and artifact browser** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1313-build-history-ui`
   - Depends on: PB-0211, PB-0206, PB-1301
   - Done when: products, versions, jobs, status, exact tool versions, outputs, reports, and logs can be inspected.
 
-- [ ] **PB-1314 — Implement cancellation, retry, and resume UI** — **P0**
+- [ ] **PB-1314 — Implement cancellation, retry, and resume UI** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1314-job-controls-ui`
   - Depends on: PB-0208, PB-0213, PB-1310
   - Done when: operations respect retry safety, show consequences, and never label partial output successful.
 
-- [ ] **PB-1315 — Implement settings, paths, concurrency, and update preferences** — **P1**
+- [ ] **PB-1315 — Implement settings, paths, concurrency, and update preferences** — **P1** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1315-settings-ui`
   - Depends on: PB-0201, PB-0215, PB-0309, PB-1301
   - Done when: contained data/tool subpaths, quotas, concurrency, offline mode, update schedule, and preview defaults persist; settings cannot authorize project state or tools outside the single project root.
 
-- [ ] **PB-1316 — Add WPF accessibility and failure-state review** — **P1**
+- [ ] **PB-1316 — Add WPF accessibility and failure-state review** — **P1** — ⚪ **BACKLOG**
   - Branch: `test/PB-1316-wpf-accessibility`
   - Depends on: PB-1301 through PB-1315
   - Done when: keyboard navigation, labels, scaling, high contrast, long paths, offline state, missing engines, cancellation, and failure recovery are tested.
@@ -2742,37 +2771,37 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** The same application services can run locally or in CI without the desktop UI.
 
-- [ ] **PB-1401 — Create CLI root, help, configuration, and exit-code policy** — **P0**
+- [ ] **PB-1401 — Create CLI root, help, configuration, and exit-code policy** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1401-cli-shell`
   - Depends on: PB-0005, PB-0201
   - Done when: help, version, contained config discovery, human/JSON output modes, and documented stable exit codes work from Visual Studio Code and PowerShell without a paid IDE.
 
-- [ ] **PB-1402 — Implement `inspect` and `validate-manifest` commands** — **P0**
+- [ ] **PB-1402 — Implement `inspect` and `validate-manifest` commands** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1402-cli-inspect`
   - Depends on: PB-0110, PB-0409, PB-1401
   - Done when: source inspection and manifest validation produce readable and machine-readable results.
 
-- [ ] **PB-1403 — Implement `build` command** — **P0**
+- [ ] **PB-1403 — Implement `build` command** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1403-cli-build`
   - Depends on: PB-0213, PB-1401
   - Done when: manifest, target/marketplace/version overrides, output, wait/no-wait, and final status drive the same orchestrator as WPF.
 
-- [ ] **PB-1404 — Implement job `status`, `cancel`, `retry`, and `resume` commands** — **P0**
+- [ ] **PB-1404 — Implement job `status`, `cancel`, `retry`, and `resume` commands** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1404-cli-job-controls`
   - Depends on: PB-0213, PB-1401
   - Done when: commands honor state/retry rules and return stable JSON for automation.
 
-- [ ] **PB-1405 — Implement `engines list/check-updates/test-candidate` commands** — **P0**
+- [ ] **PB-1405 — Implement `engines list/check-updates/test-candidate` commands** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1405-cli-engine-commands`
   - Depends on: PB-0309, PB-0310, PB-1401
   - Done when: installed/approved/candidate states and promotion tests are operable without UI.
 
-- [ ] **PB-1406 — Implement batch queue command** — **P1**
+- [ ] **PB-1406 — Implement batch queue command** — **P1** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1406-cli-batch-queue`
   - Depends on: PB-1403, PB-1404, PB-0215
   - Done when: multiple manifests queue deterministically, respect resource limits, and summarize each result without stopping unrelated jobs.
 
-- [ ] **PB-1407 — Add CLI documentation and end-to-end tests** — **P0**
+- [ ] **PB-1407 — Add CLI documentation and end-to-end tests** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1407-cli-e2e`
   - Depends on: PB-1402 through PB-1406
   - Done when: common static, animated, failed, cancelled, resumed, and batch examples are documented and tested.
@@ -2785,67 +2814,67 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** Malformed assets, crashes, long paths, and resource pressure cannot corrupt sources or releases.
 
-- [ ] **PB-1501 — Add ZIP path traversal and reparse-point security suite** — **P0**
+- [ ] **PB-1501 — Add ZIP path traversal and reparse-point security suite** — **P0** — ⚪ **BACKLOG**
   - Branch: `security/PB-1501-archive-security-tests`
   - Depends on: PB-0202
   - Done when: malicious archives cannot write outside a job or escape through links/reparse points.
 
-- [ ] **PB-1502 — Add archive bomb, nesting, file-count, and size-limit suite** — **P0**
+- [ ] **PB-1502 — Add archive bomb, nesting, file-count, and size-limit suite** — **P0** — ⚪ **BACKLOG**
   - Branch: `security/PB-1502-archive-quota-tests`
   - Depends on: PB-0202, PB-0215
   - Done when: unreasonable expansion, depth, count, and size fail before exhausting disk/memory.
 
-- [ ] **PB-1503 — Add command/path injection security suite** — **P0**
+- [ ] **PB-1503 — Add command/path injection security suite** — **P0** — ⚪ **BACKLOG**
   - Branch: `security/PB-1503-process-injection-tests`
   - Depends on: PB-0207
   - Done when: spaces, quotes, Unicode, shell metacharacters, and hostile filenames remain literal process arguments.
 
-- [ ] **PB-1504 — Add unexpected executable/script scanner** — **P0**
+- [ ] **PB-1504 — Add unexpected executable/script scanner** — **P0** — ⚪ **BACKLOG**
   - Branch: `security/PB-1504-unexpected-content-scan`
   - Depends on: PB-0203
   - Done when: source and final outputs identify executable/script content not allowed by manifest/target policy and never execute input scripts.
 
-- [ ] **PB-1505 — Add secret and absolute-local-path scanner** — **P0**
+- [ ] **PB-1505 — Add secret and absolute-local-path scanner** — **P0** — ⚪ **BACKLOG**
   - Branch: `security/PB-1505-secret-path-scan`
   - Depends on: PB-0205
   - Done when: common credentials, tokens, user paths, system temp paths, sibling paths, and unintended references outside `C:\Dev\PackageBuilder` block release or are explicitly disclosed where output policy permits.
 
-- [ ] **PB-1506 — Add destructive-target containment tests** — **P0**
+- [ ] **PB-1506 — Add destructive-target containment tests** — **P0** — ⚪ **BACKLOG**
   - Branch: `security/PB-1506-filesystem-containment`
   - Depends on: PB-0201, PB-0206
   - Done when: delete/move/replace operations refuse drive roots, home, the project root itself, source, unresolved/reparse paths, and any target outside the exact contained job/build subroot.
 
-- [ ] **PB-1507 — Add crash and restart recovery suite** — **P0**
+- [ ] **PB-1507 — Add crash and restart recovery suite** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1507-crash-recovery`
   - Depends on: PB-0208, PB-0213
   - Done when: application, Blender, Unity, and Unreal termination at each step leaves sources/releases safe and resumes or fails clearly.
 
-- [ ] **PB-1508 — Add cancellation cleanup suite** — **P0**
+- [ ] **PB-1508 — Add cancellation cleanup suite** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1508-cancellation-cleanup`
   - Depends on: PB-0208, PB-0213
   - Done when: cancellation stops child processes, releases locks, preserves logs, records state, and never promotes output.
 
-- [ ] **PB-1509 — Add long-path and Unicode filename suite** — **P0**
+- [ ] **PB-1509 — Add long-path and Unicode filename suite** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1509-path-compatibility`
   - Depends on: PB-0201, PB-0101
   - Done when: supported paths work and marketplace/engine path-length violations fail with actionable messages.
 
-- [ ] **PB-1510 — Add corrupt/missing/ambiguous source suite** — **P0**
+- [ ] **PB-1510 — Add corrupt/missing/ambiguous source suite** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1510-bad-source-suite`
   - Depends on: PB-0409, PB-0418
   - Done when: corrupt FBX/GLB/images, missing maps, duplicate names, ambiguous roles, and mismatched rig cases do not produce false successful builds.
 
-- [ ] **PB-1511 — Add large-model streaming and performance benchmark** — **P1**
+- [ ] **PB-1511 — Add large-model streaming and performance benchmark** — **P1** — ⚪ **BACKLOG**
   - Branch: `test/PB-1511-large-model-benchmark`
   - Depends on: PB-0204, PB-0215, target vertical slices
   - Done when: agreed large-file fixture records time, peak memory, disk usage, and regressions without full-file memory loading in .NET.
 
-- [ ] **PB-1512 — Add concurrency and resource-pressure suite** — **P1**
+- [ ] **PB-1512 — Add concurrency and resource-pressure suite** — **P1** — ⚪ **BACKLOG**
   - Branch: `test/PB-1512-concurrency-stress`
   - Depends on: PB-0215, PB-1507, PB-1508
   - Done when: parallel lightweight jobs and serialized engine writers remain correct under configured CPU/memory/disk pressure.
 
-- [ ] **PB-1513 — Implement cache eviction and integrity verification** — **P1**
+- [ ] **PB-1513 — Implement cache eviction and integrity verification** — **P1** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1513-cache-maintenance`
   - Depends on: PB-0214, PB-0215
   - Done when: quota eviction verifies hashes, respects active leases, retains promoted releases, and recovers from missing/corrupt cache entries.
@@ -2858,72 +2887,72 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** Repeatable golden fixtures and automated pipelines protect releases and new engine versions.
 
-- [ ] **PB-1601 — Create and license the static golden fixture** — **P0**
+- [ ] **PB-1601 — Create and license the static golden fixture** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1601-static-fixture`
   - Depends on: PB-0004
   - Done when: small static model, textures, manifest, expected metrics, reference media, and licence/provenance are committed appropriately.
 
-- [ ] **PB-1602 — Create and license the rigged-no-animation fixture** — **P0**
+- [ ] **PB-1602 — Create and license the rigged-no-animation fixture** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1602-rigged-fixture`
   - Depends on: PB-1601
   - Done when: small skinned model, manifest, expected skeleton/weight metrics, and licence/provenance exist.
 
-- [ ] **PB-1603 — Create and license the animated fixture** — **P0**
+- [ ] **PB-1603 — Create and license the animated fixture** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1603-animated-fixture`
   - Depends on: PB-1602
   - Done when: small rigged model with one loop and one one-shot clip plus expected motion metrics exists; Silverwing can remain an additional private fixture.
 
-- [ ] **PB-1604 — Create and license item-set fixture** — **P0**
+- [ ] **PB-1604 — Create and license item-set fixture** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1604-set-fixture`
   - Depends on: PB-1601
   - Done when: related items, shared assets, assembled manifest, expected inventory, and provenance exist.
 
-- [ ] **PB-1605 — Create and license twelve-item collection fixture** — **P0**
+- [ ] **PB-1605 — Create and license twelve-item collection fixture** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1605-collection-fixture`
   - Depends on: PB-1601
   - Done when: twelve small independent items, shared/unique assets, expected inventory, and provenance exist.
 
-- [ ] **PB-1606 — Establish approved visual-regression baselines** — **P1**
+- [ ] **PB-1606 — Establish approved visual-regression baselines** — **P1** — ⚪ **BACKLOG**
   - Branch: `test/PB-1606-visual-baselines`
   - Depends on: PB-0907, PB-1111, PB-1601 through PB-1605
   - Done when: Unity and Unreal reference renders, tolerance rules, review procedure, and intentional-baseline update process exist.
 
-- [ ] **PB-1607 — Configure self-hosted Windows engine test runner** — **P0**
+- [ ] **PB-1607 — Configure self-hosted Windows engine test runner** — **P0** — ⚪ **BACKLOG**
   - Branch: `chore/PB-1607-engine-test-runner`
   - Depends on: PB-0302 through PB-0304, PB-1101
   - Done when: a no-cost secure labelled runner executes contained Blender, Unity, and Unreal smoke workflows without committing licences, credentials, or caches and without requiring a paid hosted-runner plan.
 
-- [ ] **PB-1608 — Add engine integration CI matrix** — **P0**
+- [ ] **PB-1608 — Add engine integration CI matrix** — **P0** — ⚪ **BACKLOG**
   - Branch: `chore/PB-1608-engine-ci-matrix`
   - Depends on: PB-1601 through PB-1607
   - Done when: approved Blender/Unity/Unreal families run applicable fixture tests and publish reports without publishing marketplace releases.
 
-- [ ] **PB-1609 — Add candidate engine promotion workflow** — **P0**
+- [ ] **PB-1609 — Add candidate engine promotion workflow** — **P0** — ⚪ **BACKLOG**
   - Branch: `chore/PB-1609-engine-promotion-ci`
   - Depends on: PB-0310, PB-1608
   - Done when: new stable candidates run all five fixtures and visual checks, then update Approved Latest only after success and review.
 
-- [ ] **PB-1610 — Add marketplace-profile promotion workflow** — **P1**
+- [ ] **PB-1610 — Add marketplace-profile promotion workflow** — **P1** — ⚪ **BACKLOG**
   - Branch: `chore/PB-1610-marketplace-profile-ci`
   - Depends on: PB-1002, PB-1608
   - Done when: new Fab requirements profiles run structure/media/doc fixtures and require approval before becoming default.
 
-- [ ] **PB-1611 — Add dependency, licence, vulnerability, and secret checks** — **P1**
+- [ ] **PB-1611 — Add dependency, licence, vulnerability, and secret checks** — **P1** — ⚪ **BACKLOG**
   - Branch: `security/PB-1611-supply-chain-ci`
   - Depends on: PB-0009, PB-0011
   - Done when: pull requests report vulnerable packages, disallowed licences, leaked secrets, and unexpected large files.
 
-- [ ] **PB-1612 — Select installer/update technology and record ADR** — **P1**
+- [ ] **PB-1612 — Select installer/update technology and record ADR** — **P1** — ⚪ **BACKLOG**
   - Branch: `docs/PB-1612-installer-adr`
   - Depends on: PB-1316
   - Done when: no-cost MSIX versus permissively licensed Velopack evaluation covers signing, updates, rollback, prerequisites, single-root install scope, and data preservation without introducing a paid build service.
 
-- [ ] **PB-1613 — Implement signed developer installer** — **P1**
+- [ ] **PB-1613 — Implement signed developer installer** — **P1** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1613-windows-installer`
   - Depends on: PB-1612
   - Done when: clean Windows install/uninstall preserves contained project data, discovers no-cost prerequisites, launches correctly, and contains no engines or private assets; signing may use an operator-supplied certificate but local development/testing cannot require purchasing one.
 
-- [ ] **PB-1614 — Create operator, troubleshooting, and recovery documentation** — **P1**
+- [ ] **PB-1614 — Create operator, troubleshooting, and recovery documentation** — **P1** — ⚪ **BACKLOG**
   - Branch: `docs/PB-1614-operator-guide`
   - Depends on: PB-1316, PB-1407, PB-1513
   - Done when: setup, profiles, manifests, builds, failures, updates, backups, support bundles, and recovery are documented with current screenshots.
@@ -2938,97 +2967,97 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 E18 appears before E17 in execution order because the quality gate was added after the existing permanent epic IDs were assigned; the IDs are not renumbered or reused.
 
-- [ ] **PB-1801 — Create criterion-level requirements-to-tests traceability** — **P0**
+- [ ] **PB-1801 — Create criterion-level requirements-to-tests traceability** — **P0** — ⚪ **BACKLOG**
   - Branch: `docs/PB-1801-requirements-traceability`
   - Owner: Quality Engineering
   - Depends on: PB-0010, PB-0012, PB-0013
   - Done when: every normative requirement in the product plan, architecture, `QUALITY_AND_RELEASE_GATES.md`, and every PB `Done when` clause has a stable row containing source, owner, at least one concrete test ID, fixture, evidence path, and status; approved supplementary verification is recorded separately and cannot replace a test; an offline validator rejects duplicate IDs, missing mappings, stale evidence, and unknown tests; and the same validation runs from Visual Studio Code.
 
-- [ ] **PB-1802 — Define the accessible desktop design system and guided workflow** — **P0**
+- [ ] **PB-1802 — Define the accessible desktop design system and guided workflow** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1802-desktop-design-system`
   - Owner: Desktop UX
   - Depends on: PB-1301, PB-1304, PB-1309
   - Done when: versioned tokens and reusable WPF patterns define typography, spacing, colour, high contrast, focus, validation, progress, destructive actions, loading/empty/error states, and accessible names; setup-through-results screens use consistent patterns, sensible defaults, and progressive disclosure; and component and workflow tests demonstrate the documented behavior.
 
-- [ ] **PB-1803 — Validate accessibility, critical UI automation, and first-time usability** — **P0**
+- [ ] **PB-1803 — Validate accessibility, critical UI automation, and first-time usability** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1803-accessibility-usability`
   - Owner: Accessibility and UX Research
   - Depends on: PB-1316, PB-1802
   - Done when: approved critical setup, inspect, configure, dry-run, build, cancel, diagnose, retry, and results-review journeys pass deterministic keyboard-only and UI Automation tests for accessible names, roles, focus order, visible focus, high contrast, and 200% text scaling; at least five representative first-time users complete the approved scenarios; observed completion, error, assistance, and severity results meet user-approved numeric criteria; and every unresolved finding has a PB task.
 
-- [ ] **PB-1804 — Implement and test dry-run, progress, actionable errors, and safe recovery UX** — **P0**
+- [ ] **PB-1804 — Implement and test dry-run, progress, actionable errors, and safe recovery UX** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1804-dry-run-recovery-ux`
   - Owner: Application and Desktop UX
   - Depends on: PB-0208, PB-0213, PB-1310, PB-1311, PB-1314
   - Done when: dry run reports canonical inputs, names, paths, actions, outputs, warnings, and resource estimates while before/after hashes prove zero target/source writes; running jobs expose stage, measurable progress, elapsed time, and cancellation; errors identify the failed step/asset/consequence/fix without a primary raw stack trace; reviewed user input survives tested failures; and cancel, retry, and resume tests prove source safety and accurate repeated-work disclosure.
 
-- [ ] **PB-1805 — Complete the deterministic offline test portfolio and fixture matrix** — **P0**
+- [ ] **PB-1805 — Complete the deterministic offline test portfolio and fixture matrix** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1805-complete-test-portfolio`
   - Owner: Quality Engineering
   - Depends on: PB-0811, PB-1213, PB-1407, PB-1501 through PB-1512, PB-1601 through PB-1605
   - Done when: unit, contract, integration, end-to-end, UI, regression, installer, upgrade, and failure-recovery suites are classified and mapped; static, rigged, animated, set, and collection fixtures pass every applicable portable/Unity/Unreal cell; corrupt, incomplete, malicious, unusually large, nested, long-path, Unicode, and resource-pressure cases run; network tests are isolated explicitly; and two clean default offline runs produce equivalent logical results.
 
-- [ ] **PB-1806 — Enforce line and branch coverage thresholds and exclusions** — **P0**
+- [ ] **PB-1806 — Enforce line and branch coverage thresholds and exclusions** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1806-coverage-gates`
   - Owner: Quality Engineering
   - Depends on: PB-0009, PB-1801, PB-1805
   - Done when: pinned no-cost tooling reports and trends line/branch coverage; the gate fails below 90% line or 85% branch overall and below 100% branch for security validation, path handling, naming, manifest validation, or package-integrity code; every exclusion is listed with technical justification and explicit user approval; and threshold tests prove each failure mode blocks the gate locally and in CI.
 
-- [ ] **PB-1807 — Add mutation testing for critical validation and security code** — **P0**
+- [ ] **PB-1807 — Add mutation testing for critical validation and security code** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1807-critical-mutation-testing`
   - Owner: Security and Quality Engineering
   - Depends on: PB-1805, PB-1806
   - Done when: pinned no-cost mutation tooling covers the approved critical components; an initial baseline and numeric component thresholds are explicitly user-approved; deterministic reports identify killed, survived, timeout, and no-coverage mutants; no high-risk mutant survives without documented user approval and follow-up; and tests prove an under-threshold result blocks release.
 
-- [ ] **PB-1808 — Approve performance budgets, repeatable benchmarks, and build resource metrics** — **P0**
+- [ ] **PB-1808 — Approve performance budgets, repeatable benchmarks, and build resource metrics** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1808-performance-budgets`
   - Owner: Performance Engineering
   - Depends on: PB-0910, PB-1511, PB-1512, PB-1601 through PB-1605
   - Done when: versioned small, medium, and large fixtures have user-approved numeric elapsed-time, peak-memory, peak-project-disk, and temporary-space budgets by applicable stage/target; benchmarks record fixture hashes, machine profile, exact tool versions, warm-up, at least five measured samples, variance, and regression thresholds; every build report records stage/total duration, peak process memory, peak contained project-disk and temporary-space use, and bytes read/written; and over-budget regression tests fail the gate.
 
-- [ ] **PB-1809 — Prove streaming, bounded concurrency, cache correctness, and minimal copying** — **P0**
+- [ ] **PB-1809 — Prove streaming, bounded concurrency, cache correctness, and minimal copying** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1809-resource-efficiency`
   - Owner: Infrastructure and Performance Engineering
   - Depends on: PB-0203, PB-0204, PB-0208, PB-0214, PB-0215, PB-1808
   - Done when: large-file/archive tests demonstrate bounded-memory streaming; tests prove end-to-end `CancellationToken` propagation through .NET operations and equivalent worker-process cancellation; concurrency-limit, idle/total-timeout, and cleanup tests pass under resource pressure; cache identity, invalidation, version compatibility, concurrency, and corruption recovery are proven; copy/byte metrics identify FBX, GLB, texture, archive, and engine-project transfers; and any full-memory or duplicate-copy exception has measured justification and explicit user approval.
 
-- [ ] **PB-1810 — Maintain the threat model and malicious-input security suite** — **P0**
+- [ ] **PB-1810 — Maintain the threat model and malicious-input security suite** — **P0** — ⚪ **BACKLOG**
   - Branch: `security/PB-1810-threat-model-input-security`
   - Owner: Security Engineering
   - Depends on: PB-1501 through PB-1510
   - Done when: a versioned threat model covers archives, models, textures, scripts/executables, engine projects, plugins, downloads, external tools, generated packages, and trust boundaries; each threat maps to a control and test; archive preflight validates compressed/extracted size, expansion ratio, count, nesting, extension, duplicate/canonical destination, and containment; and traversal, ZIP bomb, reparse/symlink escape, injection, executable/script, corrupt, incomplete, and collision suites pass without executing imported content.
 
-- [ ] **PB-1811 — Harden external processes, secrets, downloads, diagnostics, and network consent** — **P0**
+- [ ] **PB-1811 — Harden external processes, secrets, downloads, diagnostics, and network consent** — **P0** — ⚪ **BACKLOG**
   - Branch: `security/PB-1811-process-secrets-privacy`
   - Owner: Security and Infrastructure Engineering
   - Depends on: PB-0001, PB-0207, PB-0208, PB-0212, PB-0305, PB-0912, PB-1503 through PB-1505
   - Done when: external tools run with explicit literal arguments, least practical privilege, contained isolated working/temp/cache/log paths, bounded timeouts, cancellation, and cleanup; source/log/manifest/fixture/diagnostic/package scans contain no token, credential, or private key; redaction tests cover secrets and sensitive paths; official downloads verify pinned checksums/signatures where available; outbound communication is deny-by-default and consent-tested; and the application and default tests operate offline.
 
-- [ ] **PB-1812 — Enforce warning-free builds, supply-chain evidence, and vulnerability procedures** — **P0**
+- [ ] **PB-1812 — Enforce warning-free builds, supply-chain evidence, and vulnerability procedures** — **P0** — ⚪ **BACKLOG**
   - Branch: `security/PB-1812-supply-chain-quality`
   - Owner: Security and Build Engineering
   - Depends on: PB-0006, PB-0011, PB-1611
   - Done when: direct and transitive dependency versions are recorded as far as each ecosystem permits; production/release compiler and approved analyzer warnings fail the build; a machine-readable release SBOM is generated; pinned no-cost dependency-vulnerability, secret, static-analysis, and licence checks run locally and in CI; no critical/high vulnerability lacks a time-bounded explicit user exception; and documented private reporting, severity, response, update, emergency-patch, and disclosure procedures pass review exercises.
 
-- [ ] **PB-1813 — Validate installation, prerequisites, diagnostics, and lifecycle safety** — **P0**
+- [ ] **PB-1813 — Validate installation, prerequisites, diagnostics, and lifecycle safety** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1813-installation-lifecycle`
   - Owner: Distribution and UX Engineering
   - Depends on: PB-0912, PB-1302, PB-1612, PB-1613, PB-1614
   - Done when: a simple installer and technically practical portable option are provided or the portable exception has evidence and user approval; unnecessary elevation is absent and each required elevation is explained/tested; .NET/Blender/Unity/Unreal/modules/disk/permissions/root checks pass; engines/licences are never installed/accepted silently; guided first run and repair work; fresh install, repair, upgrade, downgrade prevention, interruption, uninstall, and retained-user-data tests pass; an in-app redacted diagnostic report exports; and all required workflows work beneath the single root with free tooling and Visual Studio Code.
 
-- [ ] **PB-1814 — Enforce engineering-quality architecture and evidence review** — **P0**
+- [ ] **PB-1814 — Enforce engineering-quality architecture and evidence review** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1814-engineering-quality-gates`
   - Owner: Architecture and Build Engineering
   - Depends on: PB-0006, PB-0011, PB-0012, PB-1801
   - Done when: nullable references, deterministic/CI builds, strict supported analyzers, and warnings-as-errors are verified for production projects; architecture tests reject domain dependencies on WPF, Blender, Unity, Unreal, persistence/filesystem implementations, or marketplaces; contract tests cover typed/versioned contracts, composition-root dependency injection, and explicit expected-error results; required ADR topics are present; review templates cover correctness, mapped tests, UX/accessibility, performance, security, containment, licences, and docs; and an evidence audit rejects unsupported “best practice,” “secure,” “fast,” or “production ready” claims.
 
-- [ ] **PB-1815 — Implement the fail-closed release-gate evaluator and evidence bundle** — **P0**
+- [ ] **PB-1815 — Implement the fail-closed release-gate evaluator and evidence bundle** — **P0** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1815-release-gate-evidence`
   - Owner: Release and Quality Engineering
   - Depends on: PB-1608, PB-1611, PB-1613, PB-1801 through PB-1814, PB-1816
   - Done when: one documented free local/self-hosted command validates evidence schema, commit/tool identity, freshness, traceability, required tests/engine fixtures, coverage, mutation, vulnerabilities, performance budgets, accessibility, installer lifecycle, package integrity, and clean import/reopen; automated negative tests prove every REL-001 through REL-008 condition blocks release; exceptions record requirement, risk, scope, explicit user approval, expiry, and follow-up; the evidence bundle is complete and reviewable; and the evaluator cannot commit, push, merge, tag, create a pull request, publish, or release automatically.
 
-- [ ] **PB-1816 — Enforce reuse, duplication, and separation-of-concerns quality gates** — **P0**
+- [ ] **PB-1816 — Enforce reuse, duplication, and separation-of-concerns quality gates** — **P0** — ⚪ **BACKLOG**
   - Branch: `test/PB-1816-reuse-duplication-gates`
   - Owner: Architecture and Build Engineering
   - Depends on: PB-1814
@@ -3042,52 +3071,52 @@ E18 appears before E17 in execution order because the quality gate was added aft
 
 **Goal:** Prove the complete system works for all five cases and release it reproducibly.
 
-- [ ] **PB-1701 — Run full static-product release acceptance** — **P0**
+- [ ] **PB-1701 — Run full static-product release acceptance** — **P0** — ⚪ **BACKLOG**
   - Branch: `release/PB-1701-static-acceptance`
   - Depends on: PB-1010, PB-1115, PB-1316, PB-1407, PB-1510, PB-1608, PB-1815
   - Done when: WPF and CLI both build portable, Unity, Unreal, Fab, media, docs, reports, clean reimports, and identical logical results.
 
-- [ ] **PB-1702 — Run full rigged-no-animation release acceptance** — **P0**
+- [ ] **PB-1702 — Run full rigged-no-animation release acceptance** — **P0** — ⚪ **BACKLOG**
   - Branch: `release/PB-1702-rigged-acceptance`
   - Depends on: PB-0711, PB-0714, PB-1209, PB-1214, PB-1701
   - Done when: all targets contain valid rigs and no unintended animation/controller assets.
 
-- [ ] **PB-1703 — Run full animated-product release acceptance** — **P0**
+- [ ] **PB-1703 — Run full animated-product release acceptance** — **P0** — ⚪ **BACKLOG**
   - Branch: `release/PB-1703-animated-acceptance`
   - Depends on: PB-0712, PB-0714, PB-1210, PB-1214, PB-1701
   - Done when: one-shot and loop fixtures plus Silverwing preserve rigs, motion, materials, previews, and documentation in all targets.
 
-- [ ] **PB-1704 — Run full item-set release acceptance** — **P0**
+- [ ] **PB-1704 — Run full item-set release acceptance** — **P0** — ⚪ **BACKLOG**
   - Branch: `release/PB-1704-set-acceptance`
   - Depends on: PB-0810, PB-1211, PB-1701
   - Done when: individual and assembled assets, attachments, overview presentations, inventory, media, and packages validate.
 
-- [ ] **PB-1705 — Run full item-collection release acceptance** — **P0**
+- [ ] **PB-1705 — Run full item-collection release acceptance** — **P0** — ⚪ **BACKLOG**
   - Branch: `release/PB-1705-collection-acceptance`
   - Depends on: PB-0811, PB-1212, PB-1701
   - Done when: twelve-item collection has unique outputs, correct deduplication, selectors, overview media, inventory, and packages.
 
-- [ ] **PB-1706 — Run latest-engine and Last Known Good release acceptance** — **P0**
+- [ ] **PB-1706 — Run latest-engine and Last Known Good release acceptance** — **P0** — ⚪ **BACKLOG**
   - Branch: `release/PB-1706-version-policy-acceptance`
   - Depends on: PB-1609, PB-1701 through PB-1705
   - Done when: newest stable candidates promote after pass, rejected candidates fall back safely, and every release records exact versions.
 
-- [ ] **PB-1707 — Run clean-machine installer and first-run acceptance** — **P1**
+- [ ] **PB-1707 — Run clean-machine installer and first-run acceptance** — **P1** — ⚪ **BACKLOG**
   - Branch: `release/PB-1707-clean-machine-acceptance`
   - Depends on: PB-1613, PB-1614, PB-1701 through PB-1706
   - Done when: a clean Windows machine can install, configure data roots, discover engines, build a fixture, view results, and uninstall safely.
 
-- [ ] **PB-1708 — Finalize version, changelog, licence, and release notes** — **P0**
+- [ ] **PB-1708 — Finalize version, changelog, licence, and release notes** — **P0** — ⚪ **BACKLOG**
   - Branch: `release/PB-1708-v1-release-metadata`
   - Depends on: PB-1701 through PB-1707
   - Done when: version is consistent, changelog lists capabilities/known limits, licence choice is approved, dependencies/versions are disclosed, and docs contain no stale claims.
 
-- [ ] **PB-1709 — Create signed version 1 release and Git tag** — **P0**
+- [ ] **PB-1709 — Create signed version 1 release and Git tag** — **P0** — ⚪ **BACKLOG**
   - Branch: `release/PB-1709-v1-release`
   - Depends on: PB-1708
   - Done when: CI is green, installer and checksums are produced, Git tag is pushed, GitHub release is created, and artifacts match the release commit.
 
-- [ ] **PB-1710 — Perform post-release restore and reproducibility drill** — **P1**
+- [ ] **PB-1710 — Perform post-release restore and reproducibility drill** — **P1** — ⚪ **BACKLOG**
   - Branch: `test/PB-1710-release-reproducibility`
   - Depends on: PB-1709
   - Done when: repository plus documented prerequisites rebuild the release, sample jobs reproduce logically equivalent outputs, and recovery procedure is verified.
@@ -3108,68 +3137,68 @@ E18 appears before E17 in execution order because the quality gate was added aft
   - Depends on: PB-0012, PB-0112
   - Done when: the browser, Next.js application, Package Builder API, durable queue, object storage, and isolated engine-worker trust boundaries are approved; the free local path remains supported; Blender, Unity, and Unreal licensing and unattended-worker assumptions are reviewed with authoritative evidence; data residency, retention, deletion, abuse, quota, and cost controls are explicit; the STUDIO AVIV handoff is current; and no document claims that a hosted converter already exists.
 
-- [ ] **PB-1902 — Define hosted API, identity, tenancy, and authorization contracts** — **P2**
+- [ ] **PB-1902 — Define hosted API, identity, tenancy, and authorization contracts** — **P2** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1902-hosted-api-contracts`
   - Owner: Contracts, Application, and Security Engineering
   - Depends on: PB-0108, PB-0109, PB-0112, PB-1901
   - Done when: versioned OpenAPI and event contracts cover job creation, manifest review, upload authorization, progress, findings, cancellation, retry, artifacts, deletion, and expiry; every operation enforces authenticated tenant ownership and idempotency; untrusted client fields cannot select executable paths or worker commands; and compatibility, authorization, hostile-input, and cross-tenant negative tests pass.
 
-- [ ] **PB-1903 — Implement direct resumable upload, quarantine, and object-storage abstraction** — **P2**
+- [ ] **PB-1903 — Implement direct resumable upload, quarantine, and object-storage abstraction** — **P2** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1903-hosted-upload-storage`
   - Owner: Infrastructure and Security Engineering
   - Depends on: PB-0202, PB-0203, PB-0204, PB-1501, PB-1502, PB-1902
   - Done when: large model/archive/texture uploads go directly to configured storage using short-lived scoped authorization; resumable integrity checks, canonical keys, content limits, quarantine, malware/content scanning hooks, deduplication boundaries, tenant isolation, expiry, deletion, and storage-provider substitution are tested; and neither the browser nor Next.js application filesystem becomes the asset store.
 
-- [ ] **PB-1904 — Implement durable hosted queue, leases, idempotency, retry, and cancellation** — **P2**
+- [ ] **PB-1904 — Implement durable hosted queue, leases, idempotency, retry, and cancellation** — **P2** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1904-hosted-job-queue`
   - Owner: Application and Infrastructure Engineering
   - Depends on: PB-0208, PB-0209, PB-0213, PB-0215, PB-1404, PB-1902
   - Done when: durable jobs survive API and worker restarts; leases prevent duplicate writers; idempotency prevents duplicate paid work; cancellation, bounded retry, dead-letter handling, progress replay, worker capability routing, quotas, and fair concurrency are deterministic; and terminal artifacts are promoted only after validation.
 
-- [ ] **PB-1905 — Implement isolated hosted Blender worker pool** — **P2**
+- [ ] **PB-1905 — Implement isolated hosted Blender worker pool** — **P2** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1905-hosted-blender-workers`
   - Owner: Blender Worker and Security Engineering
   - Depends on: PB-0418, PB-1503, PB-1504, PB-1505, PB-1506, PB-1507, PB-1508, PB-1903, PB-1904
   - Done when: each job runs in a disposable restricted workspace with pinned Blender and worker versions, no implicit network access, bounded CPU/memory/disk/time, safe process termination, source immutability, structured progress/findings, clean promotion, and hostile/corrupt isolation tests; and worker images can be reproduced from reviewed inputs.
 
-- [ ] **PB-1906 — Establish licensed isolated Unity hosted worker pool** — **P2**
+- [ ] **PB-1906 — Establish licensed isolated Unity hosted worker pool** — **P2** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1906-hosted-unity-workers`
   - Owner: Unity Worker, Legal, and Infrastructure Engineering
   - Depends on: PB-0618, PB-0714, PB-1608, PB-1901, PB-1904
   - Done when: authoritative Unity terms and activation requirements are approved for the deployment model; dedicated Windows workers use pinned approved editor/modules, isolated clones, bounded resources, licence-safe activation, deterministic cleanup, and structured results; and no Unity conversion is exposed when compliant worker capacity is unavailable.
 
-- [ ] **PB-1907 — Establish licensed isolated Unreal hosted worker pool** — **P2**
+- [ ] **PB-1907 — Establish licensed isolated Unreal hosted worker pool** — **P2** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1907-hosted-unreal-workers`
   - Owner: Unreal Worker, Legal, and Infrastructure Engineering
   - Depends on: PB-1115, PB-1214, PB-1608, PB-1901, PB-1904
   - Done when: authoritative Unreal terms and redistribution/automation requirements are approved for the deployment model; dedicated Windows workers use pinned approved engine versions, isolated clones, bounded resources, deterministic cleanup, and structured results; and no Unreal conversion is exposed when compliant worker capacity is unavailable.
 
-- [ ] **PB-1908 — Implement signed artifact delivery, retention, deletion, quota, and cost controls** — **P2**
+- [ ] **PB-1908 — Implement signed artifact delivery, retention, deletion, quota, and cost controls** — **P2** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1908-hosted-artifact-delivery`
   - Owner: Infrastructure, Security, and Operations Engineering
   - Depends on: PB-1902, PB-1903, PB-1904
   - Done when: completed artifacts use short-lived tenant-scoped downloads; hashes, sizes, content types, expiry, retention, deletion, audit, per-user limits, rate limits, concurrency, estimated/actual resource cost, and denial behavior are visible and tested; expired or deleted objects cannot be recovered through stale URLs; and no paid service is mandatory for local use.
 
-- [ ] **PB-1909 — Implement STUDIO AVIV Next.js converter experience and typed client** — **P2**
+- [ ] **PB-1909 — Implement STUDIO AVIV Next.js converter experience and typed client** — **P2** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1909-studio-aviv-web-converter`
   - Owner: STUDIO AVIV Web and UX Engineering
   - Delivery repository: STUDIO AVIV website; this PB task tracks the cross-repository contract and acceptance evidence.
   - Depends on: PB-1902, PB-1908
   - Done when: the responsive accessible converter page supports sign-in, direct/resumable upload, target selection, case detection and manifest review, explicit terms/privacy consent, progress, findings, cancel/retry, signed downloads, deletion, expiry, and actionable failure states; large files never traverse a Next.js server action or persistent application filesystem; a feature flag and mock adapter support UI work before backend launch; and browser/API contract tests prevent unsupported capability claims.
 
-- [ ] **PB-1910 — Implement optional user-operated local Package Builder agent** — **P2**
+- [ ] **PB-1910 — Implement optional user-operated local Package Builder agent** — **P2** — ⚪ **BACKLOG**
   - Branch: `feat/PB-1910-local-conversion-agent`
   - Owner: Application, Desktop, and Security Engineering
   - Depends on: PB-1407, PB-1902, PB-1904
   - Done when: an explicitly enrolled local agent can claim only the authenticated user's jobs, download scoped inputs, run already installed local engines, upload validated outputs, rotate/revoke credentials, report capability/version/health, and recover safely; the website cannot issue arbitrary commands or paths; and users can choose the lower-hosting-cost agent path without weakening local privacy or source safety.
 
-- [ ] **PB-1911 — Add hosted observability, privacy, abuse controls, and operational runbooks** — **P2**
+- [ ] **PB-1911 — Add hosted observability, privacy, abuse controls, and operational runbooks** — **P2** — ⚪ **BACKLOG**
   - Branch: `test/PB-1911-hosted-operations-security`
   - Owner: Security, Reliability, and Operations Engineering
   - Depends on: PB-1810, PB-1811, PB-1812, PB-1903, PB-1904, PB-1905, PB-1908
   - Done when: redacted metrics, traces, logs, alerts, audit events, worker health, queue age, capacity, cost, abuse detection, incident response, backup/restore, deletion verification, data-subject handling, vulnerability response, and engine outage/degradation runbooks are tested without recording model contents, credentials, signed URLs, or private paths; every enabled worker tier is covered, and Unity/Unreal operational coverage becomes mandatory before those tiers are exposed.
 
-- [ ] **PB-1912 — Complete hosted end-to-end, security, load, licensing, and launch acceptance** — **P2**
+- [ ] **PB-1912 — Complete hosted end-to-end, security, load, licensing, and launch acceptance** — **P2** — ⚪ **BACKLOG**
   - Branch: `release/PB-1912-hosted-conversion-acceptance`
   - Owner: Release, Security, Legal, UX, and Quality Engineering
   - Depends on: PB-1905, PB-1908, PB-1909, PB-1911
@@ -3206,10 +3235,15 @@ The system is considered working only when all of the following are true:
 
 ## 8. Backlog Maintenance Rules
 
+- At every task start, finish, block, unblock, addition/removal, and rollover, synchronize the canonical task marker and checkbox, Active Work, and applicable completion evidence in the same change.
+- Every canonical task header must have exactly one of ⚪ **BACKLOG**, 🟡 **IN PROGRESS**, 🔴 **BLOCKED**, or 🟢 **DONE**. Historical PROCESS wording means IN PROGRESS and is not an extra status.
+- Recalculate with `& .\scripts\Update-BacklogStatus.ps1 -Write`, then verify with `& .\scripts\Update-BacklogStatus.ps1`. Never hand-edit totals or count repeated task references.
+- Starting work requires IN PROGRESS and an Active Work entry before implementation; local completion preserves IN PROGRESS until existing completion and rollover gates pass. BLOCKED requires a concrete reason and the action needed to unblock it.
+
 - Keep IDs permanent; never reuse a removed ID.
 - Add new tasks to the relevant epic and update dependencies.
 - When a task changes scope materially, document it in task evidence and, when used, the pull request; split remaining work into new tasks.
-- Keep the current task `[ ]` / 🟡 **PROCESS** in its own implementation branch. After successful `main` CI and user confirmation, synchronize `[x]`, 🟢 **DONE**, Active Work removal, and the single Completion Log row at the beginning of the next task branch.
+- Keep the current task `[ ]` / 🟡 **IN PROGRESS** in its own implementation branch. After successful `main` CI and user confirmation, synchronize `[x]`, 🟢 **DONE**, Active Work removal, and the single Completion Log row at the beginning of the next task branch.
 - Never return to an already merged task branch or create a dedicated completion-only publication cycle; the final project task or milestone may use one final documentation-only synchronization when no successor exists.
 - Keep the Completion Log chronological.
 - Review official engine and marketplace requirements when promoting new versions.

@@ -55,10 +55,10 @@ The approved GitHub repository is [https://github.com/avivperets26/3DModels-Pack
 ## PB Task Lifecycle Markers
 
 - 🟢 **DONE** — Every documented acceptance criterion and required test has passed, required Git and GitHub gates have evidence, and the user has confirmed completion. The task checkbox may be marked `[x]` and the Completion Log may be updated only in this state.
-- 🟡 **PROCESS** — Work is active, locally implemented, locally validated, pushed, under review, or otherwise progressing, but one or more completion gates remain. The task checkbox stays `[ ]`.
+- 🟡 **IN PROGRESS** — Work is active, locally implemented, locally validated, pushed, under review, or otherwise progressing, but one or more completion gates remain. The task checkbox stays `[ ]`.
 - 🔴 **BLOCKED** — Work cannot make meaningful progress because a specific unresolved dependency, decision, permission, external state, or repeated failure prevents continuation. Record the exact blocker and keep the task checkbox `[ ]`.
 
-Lifecycle markers supplement rather than replace task checkboxes, acceptance evidence, the Completion Log, or the user's exclusive authority over Git and completion confirmation. During the approved rollover interval, a task may be logically complete after successful `main` CI and user confirmation while its repository checkbox and marker remain `[ ]` / 🟡 **PROCESS** until the beginning of the next task branch.
+Lifecycle markers supplement rather than replace task checkboxes, acceptance evidence, the Completion Log, or the user's exclusive authority over Git and completion confirmation. During the approved rollover interval, a task may be logically complete after successful `main` CI and user confirmation while its repository checkbox and marker remain `[ ]` / 🟡 **IN PROGRESS** until the beginning of the next task branch.
 
 ## Permanent One-Merge Rollover Workflow
 
@@ -173,7 +173,7 @@ These rules are mandatory acceptance requirements. Follow [the detailed quality 
 - Update the blocker whenever circumstances change; never leave a resolved blocker as the reported state.
 - Treat `implemented locally`, `validated locally`, `pushed`, `CI passed`, `merged`, and `complete` as distinct lifecycle states.
 - Never describe locally implemented or locally validated work as fully complete.
-- Keep the current task checkbox unchecked and its marker at 🟡 **PROCESS** or 🔴 **BLOCKED** throughout its own task branch and one merge.
+- Keep the current task checkbox unchecked and its marker at 🟡 **IN PROGRESS** or 🔴 **BLOCKED** throughout its own task branch and one merge.
 - Successful `main` CI plus explicit user confirmation makes the task logically complete, but its repository status is synchronized only at the beginning of the next task branch.
 - During that rollover synchronization, update the prior task to `[x]` / 🟢 **DONE**, remove it from Active Work, and add exactly one Completion Log row with its task commit, merge, `main` CI, and user-confirmation evidence.
 - Do not return to the merged task branch or create a completion-only publication cycle for this synchronization.
@@ -222,3 +222,11 @@ Every task handoff must report:
 - Documentation synchronization never authorizes Codex to stage, commit, push, merge, create a pull request, create a tag, publish a release, or change GitHub settings.
 - The user performs all Git and remote operations unless the user explicitly authorizes Codex to perform one exact action.
 - Codex records a Git-related lifecycle state only after receiving direct evidence or explicit confirmation from the user.
+
+## Backlog status accounting
+
+- Follow the Status legend and Backlog Maintenance Rules in `docs/IMPLEMENTATION_BACKLOG.md`.
+- At each start, finish, block, unblock, task addition/removal, and rollover, synchronize the canonical task header, checkbox, Active Work, and applicable completion evidence.
+- Before implementation, mark the selected task IN PROGRESS and add its Active Work entry. Keep locally validated work IN PROGRESS until the existing Git, main CI, user-confirmation, and rollover gates pass.
+- Run `& .\scripts\Update-BacklogStatus.ps1 -Write` after changes, then `& .\scripts\Update-BacklogStatus.ps1` before handoff. The repository baseline checks the summary too.
+- Report DONE, IN PROGRESS, BLOCKED, BACKLOG, and remaining counts from the generated summary. Count each canonical PB definition once; label any historical completion imports explicitly.

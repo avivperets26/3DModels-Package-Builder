@@ -638,13 +638,17 @@ Invoke-Check 'PB dependencies are valid and acyclic' {
     }
 }
 
+Invoke-Check 'Backlog status summary matches canonical task definitions' {
+    & (Join-Path $script:RepositoryRoot 'scripts/Update-BacklogStatus.ps1') -RepositoryRoot $script:RepositoryRoot
+}
+
 Invoke-Check 'Task branch names and lifecycle markers are valid' {
     $allowedBranch = '^(chore|docs|feat|fix|test|security|release)/(?<id>PB-\d{4})-[a-z0-9]+(?:-[a-z0-9]+)*$'
     $doneEmoji = [char]::ConvertFromUtf32(0x1F7E2)
     $processEmoji = [char]::ConvertFromUtf32(0x1F7E1)
     $blockedEmoji = [char]::ConvertFromUtf32(0x1F534)
     $doneMarker = $doneEmoji + ' **DONE**'
-    $processMarker = $processEmoji + ' **PROCESS**'
+    $processMarker = $processEmoji + ' **IN PROGRESS**'
     $blockedMarker = $blockedEmoji + ' **BLOCKED**'
     $lifecycleStates = @{}
 
@@ -657,10 +661,10 @@ Invoke-Check 'Task branch names and lifecycle markers are valid' {
 
         $state = $null
         if ($task.Header.Contains($doneMarker)) { $state = 'DONE' }
-        if ($task.Header.Contains($processMarker)) { if ($null -ne $state) { throw "$($task.Id) has multiple lifecycle markers." }; $state = 'PROCESS' }
+        if ($task.Header.Contains($processMarker)) { if ($null -ne $state) { throw "$($task.Id) has multiple lifecycle markers." }; $state = 'IN PROGRESS' }
         if ($task.Header.Contains($blockedMarker)) { if ($null -ne $state) { throw "$($task.Id) has multiple lifecycle markers." }; $state = 'BLOCKED' }
         $hasLifecycleToken = $task.Header.Contains($doneEmoji) -or $task.Header.Contains($processEmoji) -or
-            $task.Header.Contains($blockedEmoji) -or $task.Header -match '\*\*(DONE|PROCESS|BLOCKED)\*\*'
+            $task.Header.Contains($blockedEmoji) -or $task.Header -match '\*\*(DONE|IN PROGRESS|BLOCKED)\*\*'
         if ($hasLifecycleToken -and $null -eq $state) { throw "$($task.Id) has an invalid lifecycle marker." }
         if ($task.Checked -and $state -ne 'DONE') { throw "$($task.Id) is checked but is not DONE." }
         if (-not $task.Checked -and $state -eq 'DONE') { throw "$($task.Id) is DONE but is not checked." }
@@ -678,15 +682,15 @@ Invoke-Check 'Task branch names and lifecycle markers are valid' {
         $activeIds += $id
         $task = @($tasks | Where-Object Id -eq $id)
         if ($task.Count -ne 1) { throw "Active Work contains unknown task $id." }
-        $statusMatch = [regex]::Match($row.Groups['status'].Value, '\*\*(?<state>PROCESS|BLOCKED)\*\*')
+        $statusMatch = [regex]::Match($row.Groups['status'].Value, '\*\*(?<state>IN PROGRESS|BLOCKED)\*\*')
         if (-not $statusMatch.Success) { throw "Active Work task $id has an invalid status." }
-        if ($lifecycleStates[$id] -notin @('PROCESS', 'BLOCKED') -or
+        if ($lifecycleStates[$id] -notin @('IN PROGRESS', 'BLOCKED') -or
             $lifecycleStates[$id] -ne $statusMatch.Groups['state'].Value) {
             throw "Active Work status for $id does not match its task marker."
         }
         if ($row.Groups['branch'].Value -ne $task[0].Branch[0]) { throw "Active Work branch for $id does not match its task definition." }
     }
-    $expectedActive = @($tasks | Where-Object { $lifecycleStates[$_.Id] -in @('PROCESS', 'BLOCKED') } | ForEach-Object Id)
+    $expectedActive = @($tasks | Where-Object { $lifecycleStates[$_.Id] -in @('IN PROGRESS', 'BLOCKED') } | ForEach-Object Id)
     $missingActive = @($expectedActive | Where-Object { $_ -notin $activeIds })
     $unexpectedActive = @($activeIds | Where-Object { $_ -notin $expectedActive })
     $duplicateActive = @($activeIds | Group-Object | Where-Object Count -gt 1 | ForEach-Object Name)

@@ -344,7 +344,7 @@ Invoke-Check 'Branch types and lifecycle markers agree with AGENTS and the backl
     Assert-EquivalentSets $approvedTypes $contributingTypes 'CONTRIBUTING branch types'
 
     $doneMarker = [char]::ConvertFromUtf32(0x1F7E2) + ' **DONE**'
-    $processMarker = [char]::ConvertFromUtf32(0x1F7E1) + ' **PROCESS**'
+    $processMarker = [char]::ConvertFromUtf32(0x1F7E1) + ' **IN PROGRESS**'
     $blockedMarker = [char]::ConvertFromUtf32(0x1F534) + ' **BLOCKED**'
     foreach ($marker in @($doneMarker, $processMarker, $blockedMarker)) {
         foreach ($document in @(
@@ -359,7 +359,7 @@ Invoke-Check 'Branch types and lifecycle markers agree with AGENTS and the backl
     }
 
     Assert-Matches $contributing 'DONE.*acceptance criterion.*required automated test.*Git and GitHub gate.*main.*CI gate.*explicit user confirmation' 'DONE lifecycle meaning'
-    Assert-Matches $contributing 'PROCESS.*work is active.*task stays `\[ \]`' 'PROCESS lifecycle meaning'
+    Assert-Matches $contributing 'IN PROGRESS.*work is active.*task stays `\[ \]`' 'IN PROGRESS lifecycle meaning'
     Assert-Matches $contributing 'BLOCKED.*specific unresolved dependency, decision, permission, external state, or repeated failure.*keep the task `\[ \]`' 'BLOCKED lifecycle meaning'
 }
 

@@ -32,7 +32,7 @@ Use lowercase words separated by hyphens after the task ID. Keep the branch inde
 ## Lifecycle Markers
 
 - 🟢 **DONE** — every documented acceptance criterion, required automated test, Git and GitHub gate, required `main` CI gate, and explicit user confirmation has passed. The task is checked `[x]` only during the approved rollover.
-- 🟡 **PROCESS** — work is active, locally implemented, locally validated, pushed, under review, or awaiting another completion gate. The task stays `[ ]`.
+- 🟡 **IN PROGRESS** — work is active, locally implemented, locally validated, pushed, under review, or awaiting another completion gate. The task stays `[ ]`.
 - 🔴 **BLOCKED** — a specific unresolved dependency, decision, permission, external state, or repeated failure prevents meaningful progress. Record the exact blocker and keep the task `[ ]`.
 
 Locally implemented and locally validated are intermediate states, not completion.
@@ -51,7 +51,7 @@ The publication sequence is:
 6. Wait for successful required `main` CI.
 7. Receive explicit user confirmation of the commit, push, merge, required `main` CI, and completion.
 
-After step 7, the task is logically complete but remains `[ ]` / 🟡 **PROCESS** in its already merged repository state. At the beginning of the next task branch:
+After step 7, the task is logically complete but remains `[ ]` / 🟡 **IN PROGRESS** in its already merged repository state. At the beginning of the next task branch:
 
 1. Mark the immediately previous confirmed task `[x]` / 🟢 **DONE**.
 2. Remove it from Active Work.
@@ -87,7 +87,7 @@ Read-only commands such as `git status`, `git diff`, `git log`, and `git branch 
 
 Documentation is part of implementation. In the same PB task, update every document materially affected by changes to behavior, architecture, configuration, dependencies, approved versions, UX, security, performance, installation, packaging, folders, or workflow.
 
-Keep the active task `[ ]` / 🟡 **PROCESS** or 🔴 **BLOCKED** on its own branch and do not add it to the Completion Log. Record tests, evidence, unresolved decisions, and the real current blocker. If no documentation changes are needed, the handoff must say `Documentation impact: none` and explain why.
+Keep the active task `[ ]` / 🟡 **IN PROGRESS** or 🔴 **BLOCKED** on its own branch and do not add it to the Completion Log. Record tests, evidence, unresolved decisions, and the real current blocker. If no documentation changes are needed, the handoff must say `Documentation impact: none` and explain why.
 
 ## Commit Messages
 
@@ -168,3 +168,11 @@ dotnet format .\PackageBuilder.sln --no-restore --verify-no-changes --severity i
 `Invoke-CoreCi.ps1` is the authoritative complete local core pipeline. The preceding commands expose each setup, documentation, repository, restore, build, formatting, and test entry point for focused diagnosis. Run additional task-specific tests required by the active PB acceptance criteria.
 
 Before handoff, also inspect `git diff --check`, the changed-file scope, Markdown links, PowerShell parsing, secrets and personal paths, prohibited files, task/dependency state, Active Work, and the Completion Log. Report exact results rather than inferring success.
+
+## Backlog status accounting
+
+- Follow the Status legend and Backlog Maintenance Rules in `docs/IMPLEMENTATION_BACKLOG.md`.
+- At each start, finish, block, unblock, task addition/removal, and rollover, synchronize the canonical task header, checkbox, Active Work, and applicable completion evidence.
+- Before implementation, mark the selected task IN PROGRESS and add its Active Work entry. Keep locally validated work IN PROGRESS until the existing Git, main CI, user-confirmation, and rollover gates pass.
+- Run `& .\scripts\Update-BacklogStatus.ps1 -Write` after changes, then `& .\scripts\Update-BacklogStatus.ps1` before handoff. The repository baseline checks the summary too.
+- Report DONE, IN PROGRESS, BLOCKED, BACKLOG, and remaining counts from the generated summary. Count each canonical PB definition once; label any historical completion imports explicitly.
