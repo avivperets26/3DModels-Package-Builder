@@ -99,6 +99,30 @@ function Invoke-Check {
 
 $projectSpecifications = @(
     [pscustomobject]@{
+        Name = 'Json.More'
+        Path = 'third_party/json-everything/Json.More/Json.More.csproj'
+        Framework = 'net10.0'
+        Kind = 'ClassLibrary'
+        Namespace = 'Json.More'
+        References = @()
+    },
+    [pscustomobject]@{
+        Name = 'JsonPointer.Net'
+        Path = 'third_party/json-everything/JsonPointer.Net/JsonPointer.Net.csproj'
+        Framework = 'net10.0'
+        Kind = 'ClassLibrary'
+        Namespace = 'Json.Pointer'
+        References = @('Json.More')
+    },
+    [pscustomobject]@{
+        Name = 'JsonSchema.Net'
+        Path = 'third_party/json-everything/JsonSchema.Net/JsonSchema.Net.csproj'
+        Framework = 'net10.0'
+        Kind = 'ClassLibrary'
+        Namespace = 'Json.Schema'
+        References = @('JsonPointer.Net')
+    },
+    [pscustomobject]@{
         Name = 'PackageBuilder.Domain'
         Path = 'src/PackageBuilder.Domain/PackageBuilder.Domain.csproj'
         Framework = 'net10.0'
@@ -110,7 +134,7 @@ $projectSpecifications = @(
         Path = 'src/PackageBuilder.Contracts/PackageBuilder.Contracts.csproj'
         Framework = 'net10.0'
         Kind = 'ClassLibrary'
-        References = @('PackageBuilder.Domain')
+        References = @('PackageBuilder.Domain', 'JsonSchema.Net')
     },
     [pscustomobject]@{
         Name = 'PackageBuilder.Application'
@@ -266,7 +290,7 @@ Invoke-Check 'Required solution and project inventory is exact' {
 
     $expectedPaths = @($projectSpecifications | ForEach-Object { $_.Path } | Sort-Object)
     $actualPaths = @(
-        foreach ($directory in @('src', 'tests')) {
+        foreach ($directory in @('src', 'tests', 'third_party')) {
             $fullDirectory = Join-Path $script:RepositoryRoot $directory
             if (Test-Path -LiteralPath $fullDirectory -PathType Container) {
                 Get-ChildItem -LiteralPath $fullDirectory -Recurse -File -Filter '*.csproj' |
@@ -354,7 +378,8 @@ Invoke-Check 'Target frameworks, project types, assembly names, and root namespa
         if ($effectiveAssemblyName -cne $specification.Name) {
             throw "$($specification.Name) has inconsistent assembly name '$effectiveAssemblyName'."
         }
-        if ($effectiveRootNamespace -cne $specification.Name) {
+        $expectedNamespace = if ($specification.PSObject.Properties.Name -contains 'Namespace') { $specification.Namespace } else { $specification.Name }
+        if ($effectiveRootNamespace -cne $expectedNamespace) {
             throw "$($specification.Name) has inconsistent root namespace '$effectiveRootNamespace'."
         }
 

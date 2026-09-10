@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>JsonPointer.Net</AssemblyName>
+    <RootNamespace>Json.Pointer</RootNamespace>
+    <Version>7.0.2</Version>
+    <AssemblyVersion>7.0.0.0</AssemblyVersion>
+    <InformationalVersion>7.0.2+PackageBuilder.MIT.399f198431f65cf6896fe6038f833ef6d0b27a39</InformationalVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../upstream/src/JsonPointer/**/*.cs" />
+    <ProjectReference Include="../Json.More/Json.More.csproj" />
+    <PackageReference Include="Humanizer.Core" />
+  </ItemGroup>
+</Project>

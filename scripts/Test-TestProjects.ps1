@@ -21,7 +21,7 @@ $script:ExpectedPackages = [ordered]@{
 }
 $script:ExpectedProductionPackages = [ordered]@{
     'CommunityToolkit.Mvvm' = '8.4.2'
-    'JsonSchema.Net' = '9.3.0'
+    'Humanizer.Core' = '3.0.10'
     'Microsoft.Data.Sqlite' = '10.0.11'
     'Microsoft.Extensions.Hosting' = '10.0.11'
     'SQLitePCLRaw.lib.e_sqlite3' = '3.53.3'

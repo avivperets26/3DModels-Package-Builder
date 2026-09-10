@@ -74,7 +74,7 @@ As of this document's review date, .NET 10 is the current LTS line, Unity 6.3 is
 | CLI | `System.CommandLine` | Scriptable builds and CI without duplicating application logic |
 | Hosting/DI | `Microsoft.Extensions.Hosting` and dependency injection | Consistent configuration, logging, lifetime, and service composition |
 | Serialization | `System.Text.Json` | Built into .NET, fast, source-generation support |
-| Schema validation | JsonSchema.Net 9.3.0 (MIT source; binary OSMFEULA; PB-0015 distribution review) | Pinned offline Draft 2020-12 validation of manifests and worker contracts |
+| Schema validation | JsonSchema.Net 9.4.0 (independently compiled MIT source; pinned commit) | Pinned offline Draft 2020-12 validation of manifests and worker contracts |
 | Logging | Dependency-free `System.Text.Json` JSON Lines sink | Deterministic redacted application/per-job logs without an additional runtime package or external service |
 | Persistence | SQLite through `Microsoft.Data.Sqlite` 10.0.11 with patched `SQLitePCLRaw.lib.e_sqlite3` 3.53.3 | Pinned local build history without a server or vulnerable native 2.1.11 runtime |
 | Image processing | SkiaSharp | Resize, inspect, and compress preview media with a permissive ecosystem |
@@ -354,7 +354,7 @@ PB-0110 adds the first versioned product-manifest boundary:
   cross-references, and returns PB-0109 blocking `ValidationFinding` values for semantic
   contradictions.
 - `PackageBuilder.Contracts.Manifests.ProductManifestJson` embeds the approved schema, validates
-  offline with pinned JsonSchema.Net 9.3.0, rejects duplicate JSON properties, limits input to
+  offline with JsonSchema.Net 9.4.0 compiled from pinned MIT source, rejects duplicate JSON properties, limits input to
   1 MiB and nesting to 64 levels, returns structured expected failures, and serializes in one
   stable canonical property and collection order.
 - Valid and invalid fixtures are retained beneath `tests/fixtures/manifests`. Golden contract
@@ -2641,3 +2641,13 @@ flowchart LR
 E19 must extend the existing threat model to cover authentication, tenant isolation, direct/resumable uploads, signed URLs, quarantine, storage keys, queue poisoning, lease theft, replay/idempotency, worker escape, denial of service, cost exhaustion, data residency, deletion, and incident response. Structured telemetry is redacted by default. Full hosted end-to-end, hostile-input, authorization, load, accessibility, recovery, deletion, and licensing acceptance is required before public enablement.
 
 The cross-repository interface and website responsibilities are defined in [the STUDIO AVIV hosted converter handoff](STUDIO_AVIV_HOSTED_CONVERTER_HANDOFF.md).
+
+## JSON validator source distribution (PB-0015)
+
+The solution contains 18 Package Builder application/test projects and three isolated third-party
+source projects. Contracts references JsonSchema.Net, which references JsonPointer.Net, which
+references Json.More; the domain remains independent. All three are compiled from the same pinned
+MIT source commit. Humanizer.Core 3.0.10 is centrally managed and locked. No publisher JSON NuGet
+binary is permitted in the restore graph. Source hashes and negative guard fixtures run in the
+repository baseline. See [the distribution and update instructions](../third_party/json-everything/README.md)
+and [PB-0015 evidence](PB-0015_JSON_SCHEMA_DISTRIBUTION_EVIDENCE.md).

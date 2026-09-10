@@ -826,6 +826,11 @@ Invoke-Check 'Unity static import, mesh, prefab, texture, and URP policies are d
     & $validatorPath -RepositoryRoot $script:RepositoryRoot
 }
 
+Invoke-Check 'JSON Schema distribution uses verified MIT source and excludes publisher binaries' {
+    & (Join-Path $script:RepositoryRoot 'scripts/Test-JsonSchemaDistribution.ps1') -RepositoryRoot $script:RepositoryRoot
+    & (Join-Path $script:RepositoryRoot 'scripts/Test-JsonSchemaDistributionGuards.ps1') -RepositoryRoot $script:RepositoryRoot
+}
+
 Invoke-Check 'Core CI configuration preserves and extends the repository baseline' {
     $validatorPath = Join-Path $script:RepositoryRoot 'scripts\Test-CoreCiConfiguration.ps1'
     if (-not (Test-Path -LiteralPath $validatorPath -PathType Leaf)) {
