@@ -6,7 +6,7 @@
 **GitHub repository:** [https://github.com/avivperets26/3DModels-Package-Builder](https://github.com/avivperets26/3DModels-Package-Builder)
 **GitHub visibility:** Public, approved by the user on 2026-07-22
 **Runtime data:** `C:\Dev\PackageBuilder\runtime-data`
-**Last reviewed:** 2026-08-05
+**Last reviewed:** 2026-09-10
 
 ## 1. Purpose
 
@@ -74,9 +74,9 @@ As of this document's review date, .NET 10 is the current LTS line, Unity 6.3 is
 | CLI | `System.CommandLine` | Scriptable builds and CI without duplicating application logic |
 | Hosting/DI | `Microsoft.Extensions.Hosting` and dependency injection | Consistent configuration, logging, lifetime, and service composition |
 | Serialization | `System.Text.Json` | Built into .NET, fast, source-generation support |
-| Schema validation | JsonSchema.Net 9.3.0 (MIT) | Pinned offline Draft 2020-12 validation of manifests and worker contracts |
+| Schema validation | JsonSchema.Net 9.3.0 (MIT source; binary OSMFEULA; PB-0015 distribution review) | Pinned offline Draft 2020-12 validation of manifests and worker contracts |
 | Logging | Dependency-free `System.Text.Json` JSON Lines sink | Deterministic redacted application/per-job logs without an additional runtime package or external service |
-| Persistence | SQLite through `Microsoft.Data.Sqlite` 10.0.10 with patched `SQLitePCLRaw.lib.e_sqlite3` 2.1.12 | Pinned local build history without a server or vulnerable native 2.1.11 runtime |
+| Persistence | SQLite through `Microsoft.Data.Sqlite` 10.0.11 with patched `SQLitePCLRaw.lib.e_sqlite3` 3.53.3 | Pinned local build history without a server or vulnerable native 2.1.11 runtime |
 | Image processing | SkiaSharp | Resize, inspect, and compress preview media with a permissive ecosystem |
 | Archives | `System.IO.Compression.ZipArchive` | Built-in deterministic ZIP construction |
 | Cryptographic hashes | `System.Security.Cryptography` SHA-256 | Artifact identity, cache keys, and duplicate detection |
