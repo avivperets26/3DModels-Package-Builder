@@ -176,6 +176,7 @@ $environment = [ordered]@{
     UPM_CONFIG_PATH = $upmConfigRoot
     PACKAGEBUILDER_RETAIN_UNITY_TEST_ASSETS = '1'
     PACKAGEBUILDER_ITEM_OWNERSHIP_PLAN = (Join-Path $repositoryRootPath 'tests\fixtures\manifests\item-prefab-ownership.json')
+    PACKAGEBUILDER_SET_PLAN = (Join-Path $repositoryRootPath 'tests\fixtures\manifests\assembled-set-plan.json')
     PACKAGEBUILDER_ITEM_PACKAGE_OUTPUT = (Join-Path $runRoot 'items.unitypackage')
     PACKAGEBUILDER_UNITYPACKAGE_OUTPUT = $packageOutputPath
     PACKAGEBUILDER_UNITYPACKAGE_MANIFEST = $packageManifestPath
@@ -200,7 +201,9 @@ try {
         '-executeMethod', 'PackageBuilder.UnityWorker.Editor.UnityProductEditorIntegrationTests.Run',
         '-logFile', $logPath
     )
-    $process = Start-Process -FilePath $unityPath -ArgumentList $arguments -Wait -PassThru -NoNewWindow
+    # Wait for the Editor itself, not its persistent compiler-server descendants.
+    $process = Start-Process -FilePath $unityPath -ArgumentList $arguments -PassThru -WindowStyle Hidden
+    $process.WaitForExit()
 
     $log = if (Test-Path -LiteralPath $logPath) {
         Get-Content -LiteralPath $logPath -Raw -Encoding UTF8
@@ -298,8 +301,9 @@ try {
         -ValidationLogPath (Join-Path $runRoot 'item-validation.log') `
         -ResultPath (Join-Path $runRoot 'item-reimport.json') `
         -ProductRootReference 'Assets/PBItemTests' -PrefabReference 'Assets/PBItemTests/Prefabs/P_Alpha.prefab' `
-        -ValidationMode 'item-prefabs' -AddTemplatePreviewForValidation -RequiredImportedAssets @(
-            'Assets/PBItemTests/Prefabs/P_Alpha.prefab', 'Assets/PBItemTests/Prefabs/P_Zed.prefab')
+        -ValidationMode 'item-and-set-prefabs' -AddTemplatePreviewForValidation -RequiredImportedAssets @(
+            'Assets/PBItemTests/Prefabs/P_Alpha.prefab', 'Assets/PBItemTests/Prefabs/P_Zed.prefab',
+            'Assets/PBSetTests/Prefabs/P_ExampleSet_Assembled.prefab', 'Assets/PBSetTests/Documentation/SET_ExampleSet.json')
     if (-not $itemReimportResult.passed -or @($itemReimportResult.findings).Count -ne 0) {
         throw 'Item prefab clean reimport validation failed.'
     }
@@ -337,7 +341,8 @@ try {
         '-logFile', $playModeLogPath
     )
     $playModeProcess = Start-Process -FilePath $unityPath -ArgumentList $playModeArguments `
-        -Wait -PassThru -NoNewWindow
+        -PassThru -WindowStyle Hidden
+    $playModeProcess.WaitForExit()
     $playModeLog = if (Test-Path -LiteralPath $playModeLogPath) {
         Get-Content -LiteralPath $playModeLogPath -Raw -Encoding UTF8
     }
@@ -393,7 +398,8 @@ try {
         '-logFile', $reopenLogPath
     )
     $reopenProcess = Start-Process -FilePath $unityPath -ArgumentList $reopenArguments `
-        -Wait -PassThru -NoNewWindow
+        -PassThru -WindowStyle Hidden
+    $reopenProcess.WaitForExit()
     if ($reopenProcess.ExitCode -ne 0) {
         $firstReopenLog = if (Test-Path -LiteralPath $reopenLogPath) {
             Get-Content -LiteralPath $reopenLogPath -Raw -Encoding UTF8
@@ -418,7 +424,8 @@ try {
                 '-logFile', $reopenLogPath
             )
             $reopenProcess = Start-Process -FilePath $unityPath -ArgumentList $reopenArguments `
-                -Wait -PassThru -NoNewWindow
+                -PassThru -WindowStyle Hidden
+            $reopenProcess.WaitForExit()
         }
     }
 }
@@ -480,6 +487,8 @@ $resultPointer = [ordered]@{
     cleanProject = $cleanCloneRoot
     itemCleanProject = (Join-Path $runRoot 'i')
     itemPackage = (Join-Path $runRoot 'items.unitypackage')
+    assembledSetPrefab = (Join-Path $cloneRoot 'Assets\PBSetTests\Prefabs\P_ExampleSet_Assembled.prefab')
+    setDocumentation = (Join-Path $cloneRoot 'Assets\PBSetTests\Documentation\SET_ExampleSet.json')
     itemCleanReimportResult = (Join-Path $runRoot 'item-reimport.json')
     itemPrefabs = @('P_Alpha.prefab', 'P_Zed.prefab') | ForEach-Object {
         Join-Path $cloneRoot "Assets\PBItemTests\Prefabs\$_"

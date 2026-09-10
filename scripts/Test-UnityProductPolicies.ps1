@@ -740,6 +740,20 @@ Invoke-Check 'Unity item prefab batches preserve reviewed ownership and reuse si
     }
 }
 
+Invoke-Check 'Unity assembled sets retain ordered nested items and compatibility documentation' {
+    $setSource = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityAssembledSetGenerator.cs') -Raw
+    $setTests = Get-Content -LiteralPath (Join-Path $editorRoot 'UnityAssembledSetIntegration.cs') -Raw
+    foreach ($value in @('UnityPackageValidator.ValidateGameObject', 'UnityPrefabHierarchyUtility.ResetTransform',
+            'PrefabUtility.GetCorrespondingObjectFromSource', 'FileMode.CreateNew', 'UNITY_SET_OUTPUT_COLLISION',
+            'UNITY_SET_ITEM_REFERENCE_INVALID', 'VerifySaved')) {
+        if (-not $setSource.Contains($value)) { throw "Missing assembly behavior: $value" }
+    }
+    foreach ($value in @('SequenceEqual', 'Unknown version accepted.', 'Traversal output accepted.',
+            'Broken input mesh accepted.', 'PACKAGEBUILDER_UNITY_ASSEMBLED_SET_PASS')) {
+        if (-not $setTests.Contains($value)) { throw "Missing assembly acceptance coverage: $value" }
+    }
+}
+
 Invoke-Check 'Unity product policy sources are deterministic public-safe text' {
     $files = @(
         (Join-Path $editorRoot 'UnityProductFolderGenerator.cs'),
@@ -759,6 +773,8 @@ Invoke-Check 'Unity product policy sources are deterministic public-safe text' {
         (Join-Path $editorRoot 'UnityMeshAssetExtractor.cs'),
         (Join-Path $editorRoot 'UnityPrefabGenerator.cs'),
         (Join-Path $editorRoot 'UnityItemPrefabGenerator.cs'),
+        (Join-Path $editorRoot 'UnityAssembledSetGenerator.cs'),
+        (Join-Path $editorRoot 'UnityAssembledSetIntegration.cs'),
         (Join-Path $editorRoot 'UnityItemPrefabIntegration.cs'),
         (Join-Path $editorRoot 'UnityOverviewScenePipeline.cs'),
         (Join-Path $editorRoot 'UnityOverviewPlayModeSmokeTest.cs'),

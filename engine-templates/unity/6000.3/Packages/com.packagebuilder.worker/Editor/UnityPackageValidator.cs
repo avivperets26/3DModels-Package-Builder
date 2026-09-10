@@ -245,7 +245,8 @@ namespace PackageBuilder.UnityWorker.Editor
             }
         }
 
-        private static void ValidateGameObject(GameObject root, string assetReference,
+        /// <summary>Checks loaded hierarchy references without mutating assets; also used before set composition.</summary>
+        internal static void ValidateGameObject(GameObject root, string assetReference,
             ICollection<UnityPackageValidationFinding> findings)
         {
             if (root == null)
@@ -254,7 +255,8 @@ namespace PackageBuilder.UnityWorker.Editor
                 return;
             }
 
-            if (GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(root) > 0)
+            if (root.GetComponentsInChildren<Transform>(true).Any(child =>
+                GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(child.gameObject) > 0))
             {
                 Add(findings, "UNITY_VALIDATION_MISSING_SCRIPT", assetReference);
             }
@@ -265,6 +267,12 @@ namespace PackageBuilder.UnityWorker.Editor
                 {
                     Add(findings, "UNITY_VALIDATION_MISSING_MATERIAL", assetReference);
                 }
+            }
+
+            if (root.GetComponentsInChildren<MeshFilter>(true).Any(filter => filter.sharedMesh == null) ||
+                root.GetComponentsInChildren<SkinnedMeshRenderer>(true).Any(renderer => renderer.sharedMesh == null))
+            {
+                Add(findings, "UNITY_VALIDATION_MISSING_MESH", assetReference);
             }
         }
 

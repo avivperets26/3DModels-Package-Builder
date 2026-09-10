@@ -47,7 +47,8 @@ function Invoke-CleanUnityPackageValidation {
         '-importPackage', $PackagePath, '-logFile', $ImportLogPath
     )
     $cleanImportProcess = Start-Process -FilePath $UnityPath `
-        -ArgumentList $cleanImportArguments -Wait -PassThru -NoNewWindow
+        -ArgumentList $cleanImportArguments -PassThru -WindowStyle Hidden
+    $cleanImportProcess.WaitForExit()
     $cleanImportLog = if (Test-Path -LiteralPath $ImportLogPath) {
         Get-Content -LiteralPath $ImportLogPath -Raw -Encoding UTF8
     }
@@ -95,7 +96,8 @@ function Invoke-CleanUnityPackageValidation {
         '-logFile', $ValidationLogPath
     )
     $cleanValidationProcess = Start-Process -FilePath $UnityPath `
-        -ArgumentList $cleanValidationArguments -Wait -PassThru -NoNewWindow
+        -ArgumentList $cleanValidationArguments -PassThru -WindowStyle Hidden
+    $cleanValidationProcess.WaitForExit()
     $cleanValidationLog = if (Test-Path -LiteralPath $ValidationLogPath) {
         Get-Content -LiteralPath $ValidationLogPath -Raw -Encoding UTF8
     }

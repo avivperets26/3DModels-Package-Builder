@@ -72,9 +72,10 @@ namespace PackageBuilder.UnityWorker.Editor
             Require(firstGuid == AssetDatabase.AssetPathToGUID(alpha.OutputAssetReference), "Collision changed an existing asset.");
             VerifySaved();
 
+            UnityAssembledSetIntegration.Run();
             string package = Environment.GetEnvironmentVariable("PACKAGEBUILDER_ITEM_PACKAGE_OUTPUT");
             Require(!string.IsNullOrEmpty(package), "Missing item package output.");
-            string[] assets = AssetDatabase.FindAssets(string.Empty, new[] { Root }).Select(AssetDatabase.GUIDToAssetPath)
+            string[] assets = AssetDatabase.FindAssets(string.Empty, new[] { Root, UnityAssembledSetIntegration.Root }).Select(AssetDatabase.GUIDToAssetPath)
                 .Where(path => !AssetDatabase.IsValidFolder(path)).OrderBy(path => path, StringComparer.Ordinal).ToArray();
             AssetDatabase.ExportPackage(assets, package, ExportPackageOptions.Default);
             Require(File.Exists(package), "Item package was not exported.");

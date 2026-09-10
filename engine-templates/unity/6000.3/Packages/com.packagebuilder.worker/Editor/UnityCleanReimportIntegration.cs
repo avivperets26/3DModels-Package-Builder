@@ -128,10 +128,15 @@ namespace PackageBuilder.UnityWorker.Editor
             UnityCleanReimportResult result,
             List<UnityCleanReimportFinding> findings)
         {
-            if (string.Equals(result.validationMode, "item-prefabs", StringComparison.Ordinal))
+            if (string.Equals(result.validationMode, "item-prefabs", StringComparison.Ordinal) ||
+                string.Equals(result.validationMode, "item-and-set-prefabs", StringComparison.Ordinal))
             {
                 result.sceneReference = string.Empty;
-                try { UnityItemPrefabIntegration.VerifySaved(); }
+                try
+                {
+                    UnityItemPrefabIntegration.VerifySaved();
+                    if (result.validationMode == "item-and-set-prefabs") { UnityAssembledSetIntegration.VerifySaved(); }
+                }
                 catch (InvalidOperationException) { findings.Add(Finding("UNITY_REIMPORT_ITEM_PREFAB_INVALID", result.productRootReference)); }
                 return;
             }
