@@ -179,3 +179,5 @@ Run the dependency-free permanent quality-baseline validator with either support
 ```
 
 The repository baseline also invokes the quality validator in-process and through standalone Windows PowerShell 5.1.
+
+- [PB-0908–PB-0910 image validation, optimization and JSON report evidence](PB-0908_PB-0910_MEDIA_REPORTS_EVIDENCE.md)

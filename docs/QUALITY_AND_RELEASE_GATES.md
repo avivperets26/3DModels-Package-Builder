@@ -211,3 +211,9 @@ five real Unity renders, repeated hashes, state restoration and disposable-outpu
 [the documentation/capture evidence](PB-0904_PB-0905_PB-0907_DOCS_CAPTURE_EVIDENCE.md).
 The GPU test uses `scripts/Invoke-UnityStillImageCaptureIntegration.ps1` with the approved local
 Unity Editor; it is separate from engine-independent CI. No unrun engine check counts as passed.
+
+PB-0908–PB-0910 map image defects, evidence integrity, exclusive image/gallery limits, decoded
+visual quality and stable JSON report semantics to the unit and GPU integration checks in
+[the media/report evidence](PB-0908_PB-0910_MEDIA_REPORTS_EVIDENCE.md). PERF-007 fields are explicit
+in the report; unmeasured values are null rather than fabricated zeroes. Performance-budget
+instrumentation and broad fixture benchmarking remain under PB-1808.

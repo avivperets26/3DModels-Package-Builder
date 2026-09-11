@@ -113,3 +113,15 @@ The harness deleted its cloned Unity project and all full-size generated images 
 remain. The contact sheet was visually inspected. No test package was created; the original FBX
 fixture and tracked engine template were preserved. The new harness reuses the permanent cleanup
 helper, including test-owned Hub cleanup, for both success and failure.
+
+## PB-0908–PB-0910 media validation cleanup — 2026-09-11
+
+The initial coverage capture run artifacts/u/a5e9fed2 removed its 1,607,850,000-byte cloned
+project in finally. The connected capture → image checks → optimization → JSON report run
+artifacts/u/23fd84f7 passed all five views and removed its 1,607,060,407-byte clone, including
+all original/coverage PNGs and engine caches. Cleanup receipts report cleaned; both project
+paths were verified absent. Only logs, receipts, a contact sheet, the connected report and TRX
+remain. The contact sheet was visually inspected. Optimized images exist only in test memory.
+No package archives or new persistent source/golden assets were created; the original fixture
+and engine template remain preserved. The harness now optionally runs the full media pipeline
+before its existing finally cleanup, including when that pipeline fails.

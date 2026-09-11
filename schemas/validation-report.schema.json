@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.packagebuilder.dev/validation-report/v1",
+  "title": "Package Builder cross-target validation report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "jobId", "versions", "jobState", "finalStatus", "artifacts", "resources", "metrics", "findings"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "jobId": { "$ref": "#/$defs/identity" },
+    "versions": { "$ref": "https://schemas.packagebuilder.dev/build-lock/v1" },
+    "jobState": { "enum": ["queued", "preflight", "inspecting", "awaiting-review", "normalizing", "building-targets", "rendering-previews", "validating", "packaging-marketplace", "clean-reimport", "completed", "failed", "cancelled"] },
+    "finalStatus": { "enum": ["passed", "failed", "cancelled", "incomplete"] },
+    "artifacts": { "type": "array", "maxItems": 1024, "items": { "$ref": "#/$defs/artifact" } },
+    "resources": { "$ref": "#/$defs/resources" },
+    "metrics": { "type": "array", "maxItems": 4096, "items": { "$ref": "#/$defs/metric" } },
+    "findings": { "type": "array", "maxItems": 1024, "items": { "$ref": "#/$defs/finding" } }
+  },
+  "$defs": {
+    "identity": { "type": "string", "maxLength": 128, "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$" },
+    "token": { "type": "string", "maxLength": 128, "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "count": { "type": "integer", "minimum": 0, "maximum": 9223372036854775807 },
+    "nullableCount": { "anyOf": [{ "$ref": "#/$defs/count" }, { "type": "null" }] },
+    "measurement": { "type": "number", "minimum": 0, "maximum": 1.7976931348623157e308 },
+    "artifact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "role", "sha256", "sizeBytes"],
+      "properties": {
+        "id": { "$ref": "#/$defs/identity" }, "role": { "$ref": "#/$defs/token" },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "sizeBytes": { "$ref": "#/$defs/count" }
+      }
+    },
+    "resources": {
+      "type": "object", "additionalProperties": false,
+      "required": ["totalDurationSeconds", "stages", "peakProcessMemoryBytes", "peakOwnedDiskBytes", "peakTemporaryBytes", "bytesRead", "bytesWritten"],
+      "properties": {
+        "totalDurationSeconds": { "$ref": "#/$defs/measurement" },
+        "stages": {
+          "type": "array", "maxItems": 64,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["stage", "durationSeconds"],
+            "properties": { "stage": { "$ref": "#/$defs/token" }, "durationSeconds": { "$ref": "#/$defs/measurement" } }
+          }
+        },
+        "peakProcessMemoryBytes": { "$ref": "#/$defs/nullableCount" },
+        "peakOwnedDiskBytes": { "$ref": "#/$defs/nullableCount" },
+        "peakTemporaryBytes": { "$ref": "#/$defs/nullableCount" },
+        "bytesRead": { "$ref": "#/$defs/nullableCount" },
+        "bytesWritten": { "$ref": "#/$defs/nullableCount" }
+      }
+    },
+    "metric": {
+      "type": "object", "additionalProperties": false, "required": ["name", "unit", "value"],
+      "properties": {
+        "name": { "$ref": "#/$defs/token" }, "unit": { "enum": ["seconds", "bytes", "count", "ratio", "meters"] },
+        "value": { "$ref": "#/$defs/measurement" }, "artifactId": { "$ref": "#/$defs/identity" }
+      }
+    },
+    "finding": {
+      "$comment": "PB-0109 finding layout; semantic validation also reuses ValidationFindingJson.",
+      "type": "object", "additionalProperties": false,
+      "required": ["code", "severity", "explanation", "source", "blocksRelease"],
+      "properties": {
+        "code": { "type": "string", "maxLength": 128, "pattern": "^[A-Z][A-Z0-9]*(?:_[A-Z][A-Z0-9]*)*$" },
+        "severity": { "enum": ["info", "warning", "error", "fatal"] },
+        "explanation": { "type": "string", "minLength": 1, "maxLength": 8192 },
+        "source": { "$ref": "#/$defs/identity" },
+        "relatedArtifactId": { "$ref": "#/$defs/identity" },
+        "suggestedAction": { "type": "string", "minLength": 1, "maxLength": 8192 },
+        "blocksRelease": { "type": "boolean" }
+      }
+    }
+  }
+}

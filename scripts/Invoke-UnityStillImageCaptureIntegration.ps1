@@ -1,5 +1,5 @@
 [CmdletBinding()]
-param([string]$RepositoryRoot = (Join-Path $PSScriptRoot '..'))
+param([string]$RepositoryRoot = (Join-Path $PSScriptRoot '..'), [switch]$ValidateMediaPipeline)
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $repository = [IO.Path]::GetFullPath($RepositoryRoot).TrimEnd([char[]]'\/')
@@ -36,6 +36,17 @@ try {
     }
     if ($process.ExitCode -ne 0 -or -not (Test-Path -LiteralPath "$run/capture-receipts.json")) {
         throw "Unity capture failed; inspect $run/capture.log"
+    }
+    if ($ValidateMediaPipeline) {
+        $oldEnvironment['PB_CAPTURE_TEST_PROJECT'] = [Environment]::GetEnvironmentVariable('PB_CAPTURE_TEST_PROJECT', 'Process')
+        $env:PB_CAPTURE_TEST_PROJECT = $project
+        & (Join-Path $repository 'tools/dotnet/10.0.302/dotnet.exe') test `
+            (Join-Path $repository 'tests/PackageBuilder.App.Wpf.Tests/PackageBuilder.App.Wpf.Tests.csproj') `
+            -c Release --no-build --no-restore --filter 'FullyQualifiedName~RealGalleryMeetsFabLimitsAndMeasuredQuality' `
+            --logger 'trx;LogFileName=media-pipeline.trx' --results-directory $run
+        if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath "$run/media-validation-report.json")) {
+            throw "Media validation/optimization/report integration failed; evidence $run"
+        }
     }
     Write-Host "PASS: five views and repeat/negative checks; evidence $run"
 }

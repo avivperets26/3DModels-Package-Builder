@@ -14,6 +14,8 @@ The separately approved PB-0904/PB-0905/PB-0907 scope uses `codex/PB-0904-PB-090
 Use this skill for implementation, review, refactoring, or roadmap work in the Package Builder
 repository.
 
+The approved PB-0908–PB-0910 combined scope uses `codex/PB-0908-PB-0910-media-reports`.
+
 ## Required workflow
 
 1. Read `/AGENTS.md` completely, then read the affected plan, architecture, backlog, and quality

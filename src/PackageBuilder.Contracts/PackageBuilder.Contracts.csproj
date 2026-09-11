@@ -13,6 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="..\..\schemas\validation-report.schema.json"
+                      Link="Schemas\validation-report.schema.json"
+                      LogicalName="PackageBuilder.Contracts.Schemas.validation-report.schema.json" />
     <EmbeddedResource Include="..\..\schemas\product-manifest.schema.json"
                       Link="Schemas\product-manifest.schema.json"
                       LogicalName="PackageBuilder.Contracts.Schemas.product-manifest.schema.json" />

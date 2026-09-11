@@ -6,8 +6,12 @@ The user approved all three tasks on `codex/PB-0904-PB-0905-PB-0907-docs-capture
 Fresh-main checks (fetch, main checkout, fast-forward pull, clean equality) preceded branch
 creation at `a7b242bce35285f65d4f83dfffdc6879b1b93b9d`. PR #93/main CI succeeded and the user
 confirmed its merge, so PB-0901–PB-0903 were rolled to DONE exactly once in this branch.
-These three new tasks remain IN PROGRESS until publication and completion gates pass.
-Counts: 264 total, 127 DONE, 3 IN PROGRESS, 0 BLOCKED, 134 BACKLOG, 137 remaining (48.1%).
+Publication and rollover verified 2026-09-11: task commit
+`48ebe012729225aa8c6cadc757b016deaf52a885` was directly merged into main as
+`3d7b564614474283548b49a50d5961f09e6e4efb`. Both jobs in
+[main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34584179848)
+succeeded. User acceptance and the start of PB-0908–PB-0910 authorized the one-time DONE rollover
+on that next branch. Historical validation below remains unchanged.
 
 ## Acceptance and tests
 
