@@ -103,3 +103,13 @@ The new documentation scope uses in-memory template/archive tests and disposed s
 workspaces. No disposable product packages or engine projects were retained. All 9 cleanup checks
 passed as part of the 35-check repository baseline. Earlier publication-pending statements are
 historical; source fixtures, intended releases and compact evidence remain preserved.
+
+## PB-0907 still-image validation cleanup — 2026-09-11
+
+Run `artifacts/u/83092df2` passed real five-view capture, repeated PNG hashes, final-material
+pixel checks, helper exclusion, collision/traversal rejection and failure-state restoration.
+The harness deleted its cloned Unity project and all full-size generated images in `finally`:
+1,606,341,896 bytes removed. Only the log, receipt JSON, cleanup JSON and a 2400×270 contact sheet
+remain. The contact sheet was visually inspected. No test package was created; the original FBX
+fixture and tracked engine template were preserved. The new harness reuses the permanent cleanup
+helper, including test-owned Hub cleanup, for both success and failure.

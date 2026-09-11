@@ -80,7 +80,7 @@ public sealed class ReadmeBuildData
             : DocumentationResult<ReadmeBuildData>.Success(new(target, fileArray, measurements, engine, dependencyArray, instructions));
     }
 
-    private static bool ValidMeasurements(ReadmeMeasurements value) =>
+    internal static bool ValidMeasurements(ReadmeMeasurements value) =>
         double.IsFinite(value.Width) && value.Width >= 0 && double.IsFinite(value.Height) && value.Height >= 0 &&
         double.IsFinite(value.Depth) && value.Depth >= 0 && Math.Max(value.Width, Math.Max(value.Height, value.Depth)) > 0 &&
         value.Triangles > 0 && value.Materials >= 0 && value.Textures >= 0 &&

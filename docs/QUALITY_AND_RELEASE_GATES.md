@@ -205,3 +205,9 @@ reimport, selection and disposable-artifact cleanup is maintained in
 
 PB-0901–PB-0903 map template safety, UTF-8, profile resolution, accurate supplied metrics and
 portable document composition to focused tests in [the documentation evidence](PB-0901_PB-0903_DOCUMENTATION_EVIDENCE.md).
+
+PB-0904/PB-0905/PB-0907 map case applicability, measured table accuracy, safe UTF-8/Markdown,
+five real Unity renders, repeated hashes, state restoration and disposable-output cleanup to
+[the documentation/capture evidence](PB-0904_PB-0905_PB-0907_DOCS_CAPTURE_EVIDENCE.md).
+The GPU test uses `scripts/Invoke-UnityStillImageCaptureIntegration.ps1` with the approved local
+Unity Editor; it is separate from engine-independent CI. No unrun engine check counts as passed.

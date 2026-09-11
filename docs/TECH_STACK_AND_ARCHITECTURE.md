@@ -2746,3 +2746,19 @@ Application common rendering and shared publisher prose. Only explicit primitive
 embedded template; no caller template, CLR object, loader or built-in function is exposed.
 The user approved these three dependent tasks on one branch, with separate lifecycle evidence.
 See [the scope evidence](PB-0901_PB-0903_DOCUMENTATION_EVIDENCE.md) for API compatibility and limits.
+
+## Case documentation and Unity still capture (PB-0904/PB-0905/PB-0907)
+
+Application extends the embedded template with factual case sections and escaped Markdown tables.
+Measured item geometry and inspected `AnimationDefinition` values are explicit inputs: complete,
+unique identity coverage is required and planned clip frames never substitute for inspected data.
+The existing portable request API remains compatible; its measured overload uses this shared path.
+
+The Editor-only `UnityStillImageCapture` consumes the composed overview controller and current
+settled product pose. URP single-camera render requests produce one perspective hero and four
+orthographic PNGs; no desktop screenshots or editor overlays enter the output. It restores studio
+and visibility state in `finally`, releases GPU resources, rejects output collisions and reparse
+ancestors, and removes its own partial output on failure. It creates no customer runtime dependency.
+The pinned Unity CLR cannot reference the net10 Domain assembly. FOV, padding and ordered roles
+therefore have a cross-boundary conformance check; engine-specific AABB projection remains here.
+See [acceptance, limitations and handoff](PB-0904_PB-0905_PB-0907_DOCS_CAPTURE_EVIDENCE.md).

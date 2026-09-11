@@ -31,13 +31,20 @@ internal static class DocumentationTemplateEngine
     });
 
     internal static DocumentationResult<ReadmeDocument> Render(string title, IReadOnlyList<string> identity,
-        IReadOnlyList<(string Heading, string[] Lines)> sections, CancellationToken cancellationToken)
+        IReadOnlyList<(string Heading, string[] Lines)> sections, IReadOnlyList<ReadmeTable> tables,
+        CancellationToken cancellationToken)
     {
         if (cancellationToken.IsCancellationRequested)
         { return Failure("DOC_CANCELLED"); }
         var globals = new ScriptObject
         {
             ["title"] = DocumentationText.Escape(title),
+            ["tables"] = new ScriptArray(tables.Select(table => new ScriptObject
+            {
+                ["heading"] = DocumentationText.Escape(table.Heading),
+                ["headers"] = new ScriptArray(table.Headers.Select(DocumentationText.Escape)),
+                ["rows"] = new ScriptArray(table.Rows.Select(row => new ScriptArray(row.Select(DocumentationText.Escape)))),
+            })),
             ["identity"] = new ScriptArray(identity.Select(DocumentationText.Escape)),
             ["sections"] = new ScriptArray(sections.Select(section => new ScriptObject
             {
@@ -51,7 +58,7 @@ internal static class DocumentationTemplateEngine
             StrictVariables = true,
             EnableRelaxedMemberAccess = false,
             EnableRelaxedIndexerAccess = false,
-            LoopLimit = 4096,
+            LoopLimit = 32768,
             RecursiveLimit = 8,
             LimitToString = 8 * 1024 * 1024,
             CancellationToken = cancellationToken,

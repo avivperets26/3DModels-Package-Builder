@@ -5,3 +5,10 @@
 ## {{ section.heading }}
 {{ for line in section.lines }}- {{ line }}
 {{ end }}{{ end }}
+{{ for table in tables }}
+## {{ table.heading }}
+
+| {{ for cell in table.headers }}{{ cell }} | {{ end }}
+| {{ for cell in table.headers }}--- | {{ end }}
+{{ for row in table.rows }}| {{ for cell in row }}{{ cell }} | {{ end }}
+{{ end }}{{ end }}

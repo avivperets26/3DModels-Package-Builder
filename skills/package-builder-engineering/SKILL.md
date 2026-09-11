@@ -9,6 +9,7 @@ The user-approved PB-0805–PB-0807 combined branch exception is recorded in AGE
 Keep all three task identities, statuses and acceptance records distinct within that branch.
 The same rule applies to the separately approved PB-0808–PB-0810 combined scope in AGENTS.md.
 The separately approved PB-0901–PB-0903 scope uses `codex/PB-0901-PB-0903-documentation`.
+The separately approved PB-0904/PB-0905/PB-0907 scope uses `codex/PB-0904-PB-0905-PB-0907-docs-capture`.
 
 Use this skill for implementation, review, refactoring, or roadmap work in the Package Builder
 repository.
