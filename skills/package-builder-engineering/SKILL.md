@@ -18,6 +18,8 @@ The approved PB-0908–PB-0910 combined scope uses `codex/PB-0908-PB-0910-media-
 
 ## Required workflow
 
+The approved PB-0911/PB-0912 combined scope uses `codex/PB-0911-PB-0912-reports-support`.
+
 1. Read `/AGENTS.md` completely, then read the affected plan, architecture, backlog, and quality
    sections before changing files.
 2. Confirm the current branch, working-tree state, active PB task, dependencies, and rollover state.

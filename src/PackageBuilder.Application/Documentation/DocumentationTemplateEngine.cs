@@ -1,7 +1,6 @@
 using System.Text;
 using Scriban;
 using Scriban.Runtime;
-using Scriban.Syntax;
 
 namespace PackageBuilder.Application.Documentation;
 
@@ -52,28 +51,8 @@ internal static class DocumentationTemplateEngine
                 ["lines"] = new ScriptArray(section.Lines.Select(DocumentationText.Escape)),
             })),
         };
-        // All collections and fields are bounded before projection; the cap also prevents silent truncation.
-        var context = new TemplateContext([])
-        {
-            StrictVariables = true,
-            EnableRelaxedMemberAccess = false,
-            EnableRelaxedIndexerAccess = false,
-            LoopLimit = 32768,
-            RecursiveLimit = 8,
-            LimitToString = 8 * 1024 * 1024,
-            CancellationToken = cancellationToken,
-        };
-        context.PushGlobal(globals);
-        try
-        {
-            string text = _template.Value.Render(context).TrimEnd('\n') + "\n";
-            return text.Length >= context.LimitToString - 4
-                ? Failure("DOC_OUTPUT_LIMIT")
-                : DocumentationResult<ReadmeDocument>.Success(new(text));
-        }
-        catch (ScriptAbortException) { return Failure("DOC_CANCELLED"); }
-        catch (ScriptRuntimeException) { return Failure("DOC_TEMPLATE_FAILURE"); }
-        catch (EncoderFallbackException) { return Failure("DOC_TEXT_INVALID"); }
+        DocumentationResult<string> result = ReviewedTemplateRenderer.Render(_template.Value, globals, 8 * 1024 * 1024, cancellationToken);
+        return result.IsSuccess ? DocumentationResult<ReadmeDocument>.Success(new(result.Value!)) : Failure(result.Error!);
     }
 
     private static DocumentationResult<ReadmeDocument> Failure(string code) => DocumentationResult<ReadmeDocument>.Failure(code);

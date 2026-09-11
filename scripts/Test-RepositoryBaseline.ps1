@@ -652,6 +652,16 @@ Invoke-Check 'Task branch names and lifecycle markers are valid' {
     $blockedMarker = $blockedEmoji + ' **BLOCKED**'
     $lifecycleStates = @{}
 
+    foreach ($id in @('PB-0911', 'PB-0912')) {
+        if (-not (Test-PackageBuilderTaskBranch $id 'codex/PB-0911-PB-0912-reports-support')) {
+            throw "Approved HTML/support scope rejected: $id"
+        }
+    }
+    if ((Test-PackageBuilderTaskBranch 'PB-0910' 'codex/PB-0911-PB-0912-reports-support') -or
+        (Test-PackageBuilderTaskBranch 'PB-0911' 'codex/PB-0911-PB-0913-reports-support')) {
+        throw 'The HTML/support exception expanded beyond its approved scope.'
+    }
+
     foreach ($id in @('PB-0908', 'PB-0909', 'PB-0910')) {
         if (-not (Test-PackageBuilderTaskBranch $id 'codex/PB-0908-PB-0910-media-reports')) {
             throw "Approved media/report scope rejected: $id"

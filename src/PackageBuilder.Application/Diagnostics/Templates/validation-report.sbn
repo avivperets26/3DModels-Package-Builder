@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data:; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Validation report — {{ job }}</title>
+<style>
+:root{color-scheme:light;font-family:system-ui,Segoe UI,sans-serif;color:#172d36;background:#f3f6f5}
+*{box-sizing:border-box}body{margin:0}main{max-width:1120px;margin:auto;padding:48px 24px 72px}
+a{color:#075c72}a:focus-visible{outline:3px solid #b44c00;outline-offset:4px}.skip{position:absolute;top:-80px}.skip:focus{top:8px}
+.eyebrow{font-weight:700;letter-spacing:.12em;font-size:.75rem;text-transform:uppercase;color:#45636c}h1{font-size:clamp(2rem,5vw,3rem);letter-spacing:-.04em;margin:12px 0}h2{font-size:1.35rem;margin-top:0}p{line-height:1.6}.muted{color:#48626b}
+.hero{border-bottom:1px solid #ccd8d5;padding-bottom:24px}.status{display:inline-block;border:1px solid;padding:7px 14px;border-radius:20px;font-weight:700}.passed{color:#145b3a;background:#e4f3e8}.failed{color:#842c23;background:#fdece9}.cancelled,.incomplete{color:#654900;background:#fff5d5}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0}.stat,section{background:white;border:1px solid #d5dfdc;border-radius:12px;padding:24px}.stat strong{display:block;font-size:1.9rem;margin-top:6px}section{margin-top:20px}
+.images{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}figure{margin:0;min-width:0}img{display:block;width:100%;height:auto;border-radius:8px;background:#152028}figcaption{padding-top:10px;font-weight:600}
+.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:.9rem}th,td{text-align:left;padding:12px 10px;border-bottom:1px solid #e0e7e4;vertical-align:top;overflow-wrap:anywhere}th{color:#39565f;background:#f1f6f4}td:last-child{font-family:ui-monospace,monospace}
+.finding{border-top:1px solid #d8e2de;padding:20px 0}.finding:first-of-type{border-top:0}.finding h3{margin:0 0 8px;font-size:1rem}.finding p{margin:8px 0}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f3f6f5;padding:18px;border-radius:8px;line-height:1.6}.empty{color:#48626b}footer{margin-top:28px;font-size:.85rem;color:#48626b}
+@media(max-width:640px){main{padding:28px 16px}.stats{gap:8px}.stat{padding:14px}.stat strong{font-size:1.5rem}.images{grid-template-columns:1fr}section{padding:18px}}
+@media print{body{background:white}main{max-width:none;padding:0}section,.stat{break-inside:avoid}.skip{display:none}}
+</style>
+</head>
+<body><a class="skip" href="#findings">Skip to findings</a><main>
+<header class="hero"><div class="eyebrow">Package Builder · Validation</div><h1>Build validation report</h1>
+<p class="muted">Job <strong>{{ job }}</strong> · State: {{ state }}</p><span class="status {{ status }}">{{ status_label }}</span></header>
+<div class="stats"><div class="stat">Release blockers<strong>{{ blocking_count }}</strong></div><div class="stat">Warnings<strong>{{ warning_count }}</strong></div><div class="stat">Artifacts<strong>{{ artifact_count }}</strong></div></div>
+<section aria-labelledby="previews-title"><h2 id="previews-title">Previews</h2><div class="images">
+{{ for image in images }}<figure><img src="data:image/png;base64,{{ image.data }}" width="1920" height="1080" alt="Validated preview: {{ image.id }}"><figcaption>{{ image.id }}</figcaption></figure>{{ end }}
+</div>{{ if images.size == 0 }}<p class="empty">No previews included in this report.</p>{{ end }}</section>
+<section id="findings" tabindex="-1" aria-labelledby="findings-title"><h2 id="findings-title">Findings and suggested fixes</h2>
+{{ for finding in findings }}<article class="finding"><h3>{{ finding.code }}</h3><p><strong>{{ finding.severity }} · {{ finding.blocks }}</strong></p><p>{{ finding.explanation }}</p><p><strong>Suggested fix:</strong> {{ finding.action }}</p><p class="muted">Source: {{ finding.source }} · Artifact: {{ finding.artifact }}</p></article>{{ end }}
+{{ if findings.size == 0 }}<p class="empty">No findings were reported.</p>{{ end }}</section>
+{{ for table in tables }}<section><h2>{{ table.heading }}</h2><div class="table-wrap"><table><thead><tr>{{ for heading in table.headers }}<th scope="col">{{ heading }}</th>{{ end }}</tr></thead><tbody>{{ for row in table.rows }}<tr>{{ for cell in row }}<td>{{ cell }}</td>{{ end }}</tr>{{ end }}</tbody></table></div>{{ if table.rows.size == 0 }}<p class="empty">No entries recorded.</p>{{ end }}</section>{{ end }}
+<section><h2>Pinned versions</h2><pre>{{ versions }}</pre></section>
+<footer>Generated from validation-report/v1. Unmeasured resource values are shown explicitly. Sensitive diagnostic values are redacted.</footer>
+</main></body></html>
