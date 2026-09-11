@@ -79,6 +79,15 @@ those dependencies to be implemented together before their one combined publicat
 Keep separate acceptance evidence, Active Work and eventual Completion Log entries.
 Roll PB-0805–PB-0807 completion into this branch once; all publication gates remain.
 
+### Approved combined scope: PB-0901 through PB-0903
+
+On 2026-09-10 the user explicitly requested PB-0901, PB-0902 and PB-0903 together.
+Use `codex/PB-0901-PB-0903-documentation`, based on freshly synchronized main
+`323e915223bf301b806ec220a42effd01cec150d`. Implement PB-0901 before its dependent
+tasks. Keep separate acceptance, Active Work and eventual Completion Log entries.
+Roll PB-0811 completion into this branch after its main CI succeeds. This exact
+branch is a narrow exception; publication and completion gates remain unchanged.
+
 ### Start every task branch from freshly synchronized main
 
 Before creating any new implementation branch:

@@ -2503,6 +2503,7 @@ The initial ADR inventory is:
 12. [ADR-0012: Quality Toolchain and Thresholds](adr/ADR-0012-quality-toolchain-and-thresholds.md)
 13. [ADR-0013: Installer, Portable Distribution, and Lifecycle Safety](adr/ADR-0013-installer-portable-and-lifecycle-safety.md)
 14. [ADR-0014: Shared Interactive Preview Experience](adr/ADR-0014-shared-interactive-preview-experience.md)
+15. [ADR-0015: Typed Documentation Templates](adr/ADR-0015-typed-documentation-templates.md)
 
 All fourteen ADRs are **Accepted**. Each records context, decision, alternatives, consequences and trade-offs, migration or evolution considerations, implementation status and follow-up work, and relevant repository links. Accepted architecture direction does not mean its implementation is complete. The [ADR index](adr/README.md) defines status and evolution conventions.
 
@@ -2736,3 +2737,12 @@ exercise item identity, overview placement and selection after clean package imp
 The integration records archive byte/hash inventory, geometry metrics and contained
 shared-texture resolution, then disposes generated packages and temporary projects.
 See [criterion-level tests and validation evidence](PB-0811_TWELVE_ITEM_COLLECTION_EVIDENCE.md).
+## PB-0901–PB-0903 implementation boundary
+
+Application owns the pure Scriban 7.4.0 renderer, shared technical data validation and publisher
+resolver. Domain and Contracts retain existing immutable identity/profile/schema ownership;
+Infrastructure supplies bounded strict UTF-8 reads and parent/leaf link checks. Portable consumes
+Application common rendering and shared publisher prose. Only explicit primitive data reaches an
+embedded template; no caller template, CLR object, loader or built-in function is exposed.
+The user approved these three dependent tasks on one branch, with separate lifecycle evidence.
+See [the scope evidence](PB-0901_PB-0903_DOCUMENTATION_EVIDENCE.md) for API compatibility and limits.

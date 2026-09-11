@@ -41,3 +41,10 @@ are pinned to 10.0.11, Microsoft.NET.Test.Sdk to 18.9.0, and the native SQLite b
 The managed SQLitePCLRaw bundle/provider remains at the version resolved by Microsoft.Data.Sqlite;
 the native library is directly pinned to 3.53.3. The inspected Windows x64 DLL is byte-identical to the previous 2.1.12 package (both report SQLite 3.53.3); this package change is not claimed as a newer Windows engine or an additional security fix. The publisher JsonSchema.Net 9.4.0 binary proposal was deferred; PB-0015 adopts its MIT source instead.
 See [the review and validation evidence](PB-0014_DEPENDENCY_MAINTENANCE_EVIDENCE.md).
+
+## Scriban 7.4.0
+
+The Application documentation renderer uses [Scriban 7.4.0](https://github.com/scriban/scriban/tree/7.4.0)
+under the [BSD-2-Clause license](licenses/Scriban-LICENSE.txt). The complete upstream license
+is copied into build/publish output at ThirdPartyNotices/Scriban/LICENSE.txt; preserve it when
+distributing the application. No mandatory paid service or runtime network call is required.

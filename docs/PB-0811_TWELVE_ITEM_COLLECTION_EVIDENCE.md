@@ -162,3 +162,10 @@ branch after the required gates and user confirmation.
 - `tests/fixtures/portable/twelve-item-collection/source/T_SharedStone_Albedo.png`
 - `tests/PackageBuilder.Targets.Portable.Tests/CollectionEndToEndTests.cs`
 - `tests/PackageBuilder.Targets.Portable.Tests/PortableMultiItemTests.cs`
+
+## Completion rollover — 2026-09-10
+
+PR #92 merged task commit f3f37bf79f10f2603b717d30d6a4f2713e666acb into main
+as 323e915223bf301b806ec220a42effd01cec150d. Required main CI run 34520660383
+succeeded; the user confirmed the merge and requested PB-0901–PB-0903. PB-0811 is
+recorded DONE once at that branch start. Publication-pending notes above are historical.

@@ -1,11 +1,38 @@
 using System.Text;
+using PackageBuilder.Application.Documentation;
 using PackageBuilder.Contracts.Configuration;
+using PackageBuilder.Domain.Profiles;
 using PackageBuilder.Infrastructure.Configuration;
 
 namespace PackageBuilder.Infrastructure.Tests.Configuration;
 
 public sealed class FileConfigurationTextReaderTests : IDisposable
 {
+    [Fact]
+    public void Utf8BomIsAcceptedButUtf16CannotOverrideTheUtf8Contract()
+    {
+        string path = CreateTestFile("encoding.json", "{}");
+        File.WriteAllText(path, "{}", new UTF8Encoding(true));
+        Assert.Equal("{}", new FileConfigurationTextReader().Read(path, 1024).Content);
+        File.WriteAllText(path, "{}", Encoding.Unicode);
+        Assert.Equal("CONFIG_ENCODING", new FileConfigurationTextReader().Read(path, 1024).Failure!.Code);
+    }
+
+    [Fact]
+    public void ResolverLoadsConfigurationThroughRealContainedIo()
+    {
+        string path = CreateTestFile("publisher.json", """
+            {"schemaVersion":1,"root":"TestStudio","displayName":"Test Studio","supportContact":{"kind":"email","value":"support@example.com"},"copyright":{"holder":"Test Studio","yearPolicy":{"kind":"publication-year","year":2026}},"aiDisclosure":{"state":"undeclared"}}
+            """);
+        var resolver = new PackageBuilder.Application.Documentation.PublisherProfileResolver(
+            new FileConfigurationTextReader(), new WindowsReparsePointInspector());
+        DocumentationResult<PublisherProfile> result = resolver.Resolve(null, "TestStudio",
+            [new("TestStudio", Path.GetRelativePath(PackageBuilder.Application.Configuration.PackageBuilderPathConfigurationLoader.ApprovedProjectRoot, path).Replace('\\', '/'))]);
+        Assert.True(result.IsSuccess, result.Error);
+        Assert.Equal("TestStudio", result.Value!.Root.Value);
+        Assert.Equal("undeclared", result.Value.AiDisclosure.State.CanonicalIdentifier);
+    }
+
     private readonly string _ownedRoot = Path.Combine(
         @"C:\Dev\PackageBuilder",
         "runtime-data",

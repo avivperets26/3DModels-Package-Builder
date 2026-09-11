@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text;
+using PackageBuilder.Application.Documentation;
 using PackageBuilder.Domain.Animations;
 using PackageBuilder.Domain.Items;
 using PackageBuilder.Domain.Manifests;
@@ -10,6 +11,19 @@ namespace PackageBuilder.Targets.Portable;
 /// <summary>Renders marketplace-neutral case-aware portable documentation from typed data only.</summary>
 public static class PortableReadmeGenerator
 {
+    /// <summary>Renders shared sections from measured portable build results; does not infer unmeasured metrics.</summary>
+    public static DocumentationResult<PortableReadmeDocument> Generate(ProductManifest? manifest, PublisherProfile? publisher,
+        ReadmeBuildData? build, CancellationToken cancellationToken = default)
+    {
+        if (build is not null && !build.Target.Equals(PackageBuilder.Domain.Targets.BuildTarget.Portable))
+        {
+            return new(null, "DOC_TARGET_MISMATCH");
+        }
+
+        DocumentationResult<ReadmeDocument> result = SharedReadmeGenerator.Generate(manifest, publisher, build, cancellationToken);
+        return result.IsSuccess ? new(new PortableReadmeDocument(result.Value!.Text), null) : new(null, result.Error);
+    }
+
     private static readonly Dictionary<string, string> _caseNames =
         new(StringComparer.Ordinal)
         {
@@ -181,29 +195,16 @@ public static class PortableReadmeGenerator
     private static void AppendPublisher(StringBuilder text, PublisherProfile publisher)
     {
         _ = text.Append("\n## AI disclosure\n- ")
-            .Append(AiText(publisher.AiDisclosure)).Append('\n')
+            .Append(PublisherDocumentation.AiText(publisher.AiDisclosure)).Append('\n')
             .Append("\n## Support\n- ")
             .Append(publisher.SupportContact.Kind == SupportContactKind.Email ? "Email: " : "URL: ")
             .Append(publisher.SupportContact.Value).Append('\n')
             .Append("\n## Copyright\n- Copyright © ")
-            .Append(CopyrightYears(publisher.Copyright.YearPolicy))
+            .Append(PublisherDocumentation.CopyrightYears(publisher.Copyright.YearPolicy))
             .Append(' ').Append(publisher.Copyright.Holder.Value).Append('\n');
     }
 
     private static string CaseName(string identifier) => _caseNames[identifier];
-
-    private static string AiText(AiDisclosure disclosure)
-    {
-        string state = disclosure.State.Equals(AiDisclosureState.Undeclared)
-            ? "Undeclared"
-            : disclosure.State.Equals(AiDisclosureState.NoAiAssistance)
-            ? "No AI assistance declared"
-            : "AI-assisted";
-        return disclosure.Text is null ? state : $"{state}: {disclosure.Text}";
-    }
-
-    private static string CopyrightYears(CopyrightYearPolicy policy) =>
-        policy.StartYear.HasValue ? $"{policy.StartYear.Value}-{policy.Year}" : policy.Year.ToString(CultureInfo.InvariantCulture);
 
     private static string Measure(double value) => value.ToString("0.###", CultureInfo.InvariantCulture);
 }

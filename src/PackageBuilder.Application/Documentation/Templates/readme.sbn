@@ -1,0 +1,7 @@
+# {{ title }}
+
+{{ for line in identity }}{{ line }}
+{{ end }}{{ for section in sections }}
+## {{ section.heading }}
+{{ for line in section.lines }}- {{ line }}
+{{ end }}{{ end }}

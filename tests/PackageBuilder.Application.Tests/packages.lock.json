@@ -136,7 +136,8 @@
         "type": "Project",
         "dependencies": {
           "PackageBuilder.Contracts": "[1.0.0, )",
-          "PackageBuilder.Domain": "[1.0.0, )"
+          "PackageBuilder.Domain": "[1.0.0, )",
+          "Scriban": "[7.4.0, )"
         }
       },
       "packagebuilder.contracts": {
@@ -154,6 +155,12 @@
         "requested": "[3.0.10, )",
         "resolved": "3.0.10",
         "contentHash": "yZIhtw8sYuvsONzQbZxWpR60tMWYHXoo0DL6nyOqSFiU5POjBTSEyWFpTQtJEZuy+oqiYTXKXY/Mjx7KnqIQFw=="
+      },
+      "Scriban": {
+        "type": "CentralTransitive",
+        "requested": "[7.4.0, )",
+        "resolved": "7.4.0",
+        "contentHash": "h5QYOAKw7F4ajVNxeScBsq0c7en6YWyKDSC4ZnZIlrkeJrl0ekHk1PlpqP5C4peqkt6NoXl9dlwK3pI4oDC5oA=="
       }
     }
   }

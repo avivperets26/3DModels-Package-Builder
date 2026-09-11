@@ -202,3 +202,6 @@ PB-0808–PB-0810 criterion-level mappings and local evidence are maintained in
 PB-0811's criterion-level mapping for TEST-004/TEST-005, package inventory, actual portable/Unity
 reimport, selection and disposable-artifact cleanup is maintained in
 [the twelve-item collection evidence](PB-0811_TWELVE_ITEM_COLLECTION_EVIDENCE.md).
+
+PB-0901–PB-0903 map template safety, UTF-8, profile resolution, accurate supplied metrics and
+portable document composition to focused tests in [the documentation evidence](PB-0901_PB-0903_DOCUMENTATION_EVIDENCE.md).

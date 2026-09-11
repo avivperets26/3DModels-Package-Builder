@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Scriban" />
+    <EmbeddedResource Include="Documentation/Templates/*.sbn" />
+    <None Include="../../docs/licenses/Scriban-LICENSE.txt" Link="ThirdPartyNotices/Scriban/LICENSE.txt"
+          CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
     <!-- These CLR-only policies ship inside the Editor package and are compiled from the same source here. -->
     <Compile Include="..\..\engine-templates\unity\6000.3\Packages\com.packagebuilder.worker\Editor\Shared\*.cs" Link="Items\Shared\%(Filename)%(Extension)" />
     <ProjectReference Include="..\PackageBuilder.Contracts\PackageBuilder.Contracts.csproj" />

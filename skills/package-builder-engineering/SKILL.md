@@ -8,6 +8,7 @@ description: Apply Package Builder's repository-specific architecture, reuse, do
 The user-approved PB-0805–PB-0807 combined branch exception is recorded in AGENTS.md.
 Keep all three task identities, statuses and acceptance records distinct within that branch.
 The same rule applies to the separately approved PB-0808–PB-0810 combined scope in AGENTS.md.
+The separately approved PB-0901–PB-0903 scope uses `codex/PB-0901-PB-0903-documentation`.
 
 Use this skill for implementation, review, refactoring, or roadmap work in the Package Builder
 repository.

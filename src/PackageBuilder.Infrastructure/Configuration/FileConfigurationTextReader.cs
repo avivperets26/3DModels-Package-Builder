@@ -12,6 +12,12 @@ public sealed class FileConfigurationTextReader : IConfigurationTextReader
 
         try
         {
+            // A caller validates parent containment; a leaf link must not redirect configuration outside it.
+            if ((File.GetAttributes(configurationFilePath) & FileAttributes.ReparsePoint) != 0)
+            {
+                return Failed("CONFIG_REPARSE_POINT", "Configuration must be a physical file.");
+            }
+
             using var stream = new FileStream(
                 configurationFilePath,
                 FileMode.Open,
@@ -28,11 +34,11 @@ public sealed class FileConfigurationTextReader : IConfigurationTextReader
             using var reader = new StreamReader(
                 stream,
                 new UTF8Encoding(encoderShouldEmitUTF8Identifier: false, throwOnInvalidBytes: true),
-                detectEncodingFromByteOrderMarks: true,
+                detectEncodingFromByteOrderMarks: false,
                 bufferSize: 4096,
                 leaveOpen: false);
             string content = reader.ReadToEnd();
-            return ConfigurationReadResult.Success(content);
+            return ConfigurationReadResult.Success(content.TrimStart('\uFEFF'));
         }
         catch (FileNotFoundException)
         {
