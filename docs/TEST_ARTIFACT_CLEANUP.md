@@ -96,3 +96,10 @@ The earlier cleanup scope was published as task commit
 notes above are historical. PB-0808–PB-0810 completion was recorded at this branch's start;
 PB-0811 remains IN PROGRESS pending publication. See its
 [evidence and handoff](PB-0811_TWELVE_ITEM_COLLECTION_EVIDENCE.md).
+## PB-0901–PB-0903 documentation validation — 2026-09-10
+
+PB-0811 was merged through PR #92 with successful main CI and its completion was rolled over.
+The new documentation scope uses in-memory template/archive tests and disposed small configuration
+workspaces. No disposable product packages or engine projects were retained. All 9 cleanup checks
+passed as part of the 35-check repository baseline. Earlier publication-pending statements are
+historical; source fixtures, intended releases and compact evidence remain preserved.

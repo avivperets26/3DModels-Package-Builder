@@ -38,6 +38,7 @@ $script:ExpectedPackageVersions = @{
     'coverlet.collector' = '10.0.1'
     'CommunityToolkit.Mvvm' = '8.4.2'
     'Humanizer.Core' = '3.0.10'
+    'Scriban' = '7.4.0'
     'Microsoft.Data.Sqlite' = '10.0.11'
     'Microsoft.Extensions.Hosting' = '10.0.11'
     'SQLitePCLRaw.lib.e_sqlite3' = '3.53.3'
@@ -54,6 +55,7 @@ $script:ExpectedTestPackages = @(
 )
 
 $script:ApprovedProductionPackages = @{
+    'src/PackageBuilder.Application/PackageBuilder.Application.csproj' = @('Scriban')
     'src/PackageBuilder.App.Wpf/PackageBuilder.App.Wpf.csproj' = @(
         'CommunityToolkit.Mvvm',
         'Microsoft.Extensions.Hosting'

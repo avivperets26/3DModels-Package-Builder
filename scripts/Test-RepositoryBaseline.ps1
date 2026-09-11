@@ -652,6 +652,16 @@ Invoke-Check 'Task branch names and lifecycle markers are valid' {
     $blockedMarker = $blockedEmoji + ' **BLOCKED**'
     $lifecycleStates = @{}
 
+    foreach ($id in @('PB-0901', 'PB-0902', 'PB-0903')) {
+        if (-not (Test-PackageBuilderTaskBranch $id 'codex/PB-0901-PB-0903-documentation')) {
+            throw "Approved documentation scope rejected: $id"
+        }
+    }
+    if ((Test-PackageBuilderTaskBranch 'PB-0904' 'codex/PB-0901-PB-0903-documentation') -or
+        (Test-PackageBuilderTaskBranch 'PB-0901' 'codex/PB-0901-PB-0904-documentation')) {
+        throw 'The documentation branch exception expanded beyond its approved scope.'
+    }
+
     foreach ($id in @('PB-0808', 'PB-0809', 'PB-0810')) {
         if (-not (Test-PackageBuilderTaskBranch $id 'feat/PB-0808-PB-0810-selector-portable-e2e')) {
             throw "Approved selector/portable scope rejected: $id"

@@ -158,7 +158,8 @@ $expectedAdrs = @(
     [pscustomobject]@{ Number = '0011'; File = 'ADR-0011-threat-model-secrets-and-network-consent.md'; Title = 'Threat Model, Secrets, and Network Consent' },
     [pscustomobject]@{ Number = '0012'; File = 'ADR-0012-quality-toolchain-and-thresholds.md'; Title = 'Quality Toolchain and Thresholds' },
     [pscustomobject]@{ Number = '0013'; File = 'ADR-0013-installer-portable-and-lifecycle-safety.md'; Title = 'Installer, Portable Distribution, and Lifecycle Safety' },
-    [pscustomobject]@{ Number = '0014'; File = 'ADR-0014-shared-interactive-preview-experience.md'; Title = 'Shared Interactive Preview Experience' }
+    [pscustomobject]@{ Number = '0014'; File = 'ADR-0014-shared-interactive-preview-experience.md'; Title = 'Shared Interactive Preview Experience' },
+    [pscustomobject]@{ Number = '0015'; File = 'ADR-0015-typed-documentation-templates.md'; Title = 'Typed Documentation Templates' }
 )
 
 $requiredSections = @(

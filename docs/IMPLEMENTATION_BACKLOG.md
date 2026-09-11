@@ -21,12 +21,12 @@
 | Measure | Tasks |
 | --- | ---: |
 | Total | 264 |
-| ⚪ Backlog | 140 |
-| 🟡 In progress | 1 |
+| ⚪ Backlog | 137 |
+| 🟡 In progress | 3 |
 | 🔴 Blocked | 0 |
-| 🟢 Done | 123 |
-| Remaining (all not done) | 141 |
-| Overall completion | 123 / 264 (46.6%) |
+| 🟢 Done | 124 |
+| Remaining (all not done) | 140 |
+| Overall completion | 124 / 264 (47.0%) |
 <!-- status-summary:end -->
 
 Counts include each canonical PB task definition exactly once, including the optional post-v1 roadmap.
@@ -194,7 +194,9 @@ results, DONE statuses or Completion Log entries.
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0811 | 🟡 **IN PROGRESS** | `test/PB-0811-item-collection-e2e` | Codex; user for publication | 2026-09-10 | Validated locally: 2447 tests, zero-warning Release build, actual portable/Unity clean imports, twelve-item UI and matching geometry metrics passed. Disposable test outputs removed (11.18 GB); nine cleanup checks passed. Publication pending. See `docs/PB-0811_TWELVE_ITEM_COLLECTION_EVIDENCE.md`. | None. |
+| PB-0901 | 🟡 **IN PROGRESS** | `codex/PB-0901-PB-0903-documentation` | Codex; user for publication | 2026-09-10 | Validated locally: 2477 tests, zero-warning Release build, 35 baseline checks, format and dependency audit passed. Publication pending. See `docs/PB-0901_PB-0903_DOCUMENTATION_EVIDENCE.md`. | None. |
+| PB-0902 | 🟡 **IN PROGRESS** | `codex/PB-0901-PB-0903-documentation` | Codex; user for publication | 2026-09-10 | Validated locally: 2477 tests, zero-warning Release build, 35 baseline checks, format and dependency audit passed. Publication pending. See `docs/PB-0901_PB-0903_DOCUMENTATION_EVIDENCE.md`. | None. |
+| PB-0903 | 🟡 **IN PROGRESS** | `codex/PB-0901-PB-0903-documentation` | Codex; user for publication | 2026-09-10 | Validated locally: 2477 tests, zero-warning Release build, 35 baseline checks, format and dependency audit passed. Publication pending. See `docs/PB-0901_PB-0903_DOCUMENTATION_EVIDENCE.md`. | None. |
 
 
 ### PB-0802 Completion Evidence
@@ -1697,6 +1699,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0808 | `feat/PB-0808-PB-0810-selector-portable-e2e` | `4beaa9507205e1937895152415c42ccc6eeecc06` | Direct merge | 2026-09-10 | Main `55c4a0213ec20b347bf319804448d9e14a27ad48`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34502635125) passed both jobs (2446 tests). User accepted the publication handoff and requested PB-0811; recorded once at its start. |
 | PB-0809 | `feat/PB-0808-PB-0810-selector-portable-e2e` | `4beaa9507205e1937895152415c42ccc6eeecc06` | Direct merge | 2026-09-10 | Main `55c4a0213ec20b347bf319804448d9e14a27ad48`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34502635125) passed both jobs (2446 tests). User accepted the publication handoff and requested PB-0811; recorded once at its start. |
 | PB-0810 | `feat/PB-0808-PB-0810-selector-portable-e2e` | `4beaa9507205e1937895152415c42ccc6eeecc06` | Direct merge | 2026-09-10 | Main `55c4a0213ec20b347bf319804448d9e14a27ad48`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34502635125) passed both jobs (2446 tests). User accepted the publication handoff and requested PB-0811; recorded once at its start. |
+| PB-0811 | `test/PB-0811-item-collection-e2e` | `f3f37bf79f10f2603b717d30d6a4f2713e666acb` | [#92](https://github.com/avivperets26/3DModels-Package-Builder/pull/92) | 2026-09-10 | Main `323e915223bf301b806ec220a42effd01cec150d`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34520660383) succeeded. User confirmed the merge and requested PB-0901–PB-0903; recorded once at this scope start. |
 
 ## 5. Milestones
 
@@ -2438,7 +2441,7 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0804, PB-0805, PB-0808, PB-0809
   - Done when: one equipment-set fixture passes portable and Unity package/reimport tests.
 
-- [ ] **PB-0811 — Complete twelve-item collection fixture end-to-end** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-0811 — Complete twelve-item collection fixture end-to-end** — **P0** — 🟢 **DONE**
   - Branch: `test/PB-0811-item-collection-e2e`
   - Depends on: PB-0806 through PB-0809
   - Done when: all twelve items have unique prefabs, overview placement, selector behavior, inventory metrics, and clean package imports.
@@ -2451,18 +2454,18 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** Every case receives accurate UTF-8 documentation, professional previews, and actionable reports.
 
-- [ ] **PB-0901 — Select and integrate typed documentation template engine** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-0901-document-template-engine`
+- [ ] **PB-0901 — Select and integrate typed documentation template engine** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `codex/PB-0901-PB-0903-documentation`
   - Depends on: PB-0102 through PB-0107
   - Done when: a permissively licensed template engine renders typed UTF-8 content without unsafe arbitrary code execution; decision is recorded in an ADR.
 
-- [ ] **PB-0902 — Implement publisher-profile resolver** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-0902-publisher-profiles`
+- [ ] **PB-0902 — Implement publisher-profile resolver** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `codex/PB-0901-PB-0903-documentation`
   - Depends on: PB-0111, PB-0901
   - Done when: root name, branding, support, copyright, AI disclosure, and defaults resolve with no hardcoded `AvivPeretsFBX` dependency.
 
-- [ ] **PB-0903 — Implement shared README sections and technical metrics** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-0903-readme-shared-sections`
+- [ ] **PB-0903 — Implement shared README sections and technical metrics** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `codex/PB-0901-PB-0903-documentation`
   - Depends on: PB-0405, PB-0406, PB-0901
   - Done when: contents, formats, versions, dimensions, triangle/material/texture counts, scale, axes, dependencies, usage, and support render accurately.
 

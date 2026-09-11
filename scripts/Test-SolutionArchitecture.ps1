@@ -162,7 +162,7 @@ $projectSpecifications = @(
         Path = 'src/PackageBuilder.Targets.Portable/PackageBuilder.Targets.Portable.csproj'
         Framework = 'net10.0'
         Kind = 'ClassLibrary'
-        References = @('PackageBuilder.Contracts')
+        References = @('PackageBuilder.Contracts', 'PackageBuilder.Application')
     },
     [pscustomobject]@{
         Name = 'PackageBuilder.Targets.Unity'

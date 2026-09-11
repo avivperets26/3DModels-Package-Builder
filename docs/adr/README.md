@@ -27,6 +27,7 @@ Acceptance records the architecture direction; it does not indicate that impleme
 12. [ADR-0012: Quality Toolchain and Thresholds](ADR-0012-quality-toolchain-and-thresholds.md) — **Accepted**
 13. [ADR-0013: Installer, Portable Distribution, and Lifecycle Safety](ADR-0013-installer-portable-and-lifecycle-safety.md) — **Accepted**
 14. [ADR-0014: Shared Interactive Preview Experience](ADR-0014-shared-interactive-preview-experience.md) — **Accepted**
+15. [ADR-0015: Typed Documentation Templates](ADR-0015-typed-documentation-templates.md) — **Accepted**
 
 ## Evolution Rules
 

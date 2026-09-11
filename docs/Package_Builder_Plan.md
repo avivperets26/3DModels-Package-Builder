@@ -1470,3 +1470,11 @@ exercise item identity, overview placement and selection after clean package imp
 The integration records archive byte/hash inventory, geometry metrics and contained
 shared-texture resolution, then disposes generated packages and temporary projects.
 See [criterion-level tests and validation evidence](PB-0811_TWELVE_ITEM_COLLECTION_EVIDENCE.md).
+## Shared documentation foundation (PB-0901–PB-0903)
+
+The common README API renders typed manifest identity, resolved publisher JSON and measured target
+results through a reviewed embedded UTF-8 template. It includes delivered formats/versions, scale,
+axes, pivot, dimensions, triangle/material/texture counts, dependencies, usage and publisher prose.
+Missing required data fails validation. Exact profile selection and a configured default replace
+hardcoded publisher assumptions. Case-specific template migration remains PB-0904.
+See [implementation and acceptance evidence](PB-0901_PB-0903_DOCUMENTATION_EVIDENCE.md).
