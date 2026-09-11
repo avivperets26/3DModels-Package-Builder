@@ -1476,5 +1476,15 @@ The common README API renders typed manifest identity, resolved publisher JSON a
 results through a reviewed embedded UTF-8 template. It includes delivered formats/versions, scale,
 axes, pivot, dimensions, triangle/material/texture counts, dependencies, usage and publisher prose.
 Missing required data fails validation. Exact profile selection and a configured default replace
-hardcoded publisher assumptions. Case-specific template migration remains PB-0904.
+hardcoded publisher assumptions. Case-specific templates are extended by PB-0904 below.
 See [implementation and acceptance evidence](PB-0901_PB-0903_DOCUMENTATION_EVIDENCE.md).
+
+## Case documentation and still captures (PB-0904/PB-0905/PB-0907)
+
+Five product cases now share the reviewed template while adding only their applicable rig,
+animation, assembly or collection information. Animation tables use inspected clip measurements;
+inventory tables require dimensions and counts for every delivered item. Unknown measurements
+fail validation rather than becoming product claims. Unity's still worker renders the final
+materials in five standard 1920×1080 views, with isolated tests and automatic output cleanup.
+Image-quality findings and marketplace image optimization remain PB-0908/PB-0909.
+See [scope evidence](PB-0904_PB-0905_PB-0907_DOCS_CAPTURE_EVIDENCE.md).

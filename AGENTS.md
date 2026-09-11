@@ -88,6 +88,15 @@ tasks. Keep separate acceptance, Active Work and eventual Completion Log entries
 Roll PB-0811 completion into this branch after its main CI succeeds. This exact
 branch is a narrow exception; publication and completion gates remain unchanged.
 
+### Approved combined scope: PB-0904, PB-0905 and PB-0907
+
+On 2026-09-11 the user explicitly requested these three tasks on one branch.
+Use `codex/PB-0904-PB-0905-PB-0907-docs-capture`, based on freshly synchronized main
+`a7b242bce35285f65d4f83dfffdc6879b1b93b9d`. Implement PB-0904 before PB-0905.
+PB-0906 is already DONE and is outside this exception. Keep separate task statuses,
+acceptance evidence and eventual Completion Log entries. Roll PB-0901–PB-0903 into
+DONE after successful main CI. Publication gates remain unchanged.
+
 ### Start every task branch from freshly synchronized main
 
 Before creating any new implementation branch:

@@ -13,14 +13,26 @@ public static class PortableReadmeGenerator
 {
     /// <summary>Renders shared sections from measured portable build results; does not infer unmeasured metrics.</summary>
     public static DocumentationResult<PortableReadmeDocument> Generate(ProductManifest? manifest, PublisherProfile? publisher,
-        ReadmeBuildData? build, CancellationToken cancellationToken = default)
+        ReadmeBuildData? build, CancellationToken cancellationToken = default) =>
+        Generate(manifest, publisher, build, null, cancellationToken);
+
+    public static DocumentationResult<PortableReadmeDocument> Generate(ProductManifest? manifest, PublisherProfile? publisher,
+        ReadmeBuildData? build, IEnumerable<ReadmeItemMeasurements>? itemMeasurements,
+        CancellationToken cancellationToken = default) =>
+        Generate(manifest, publisher, build, itemMeasurements, null, cancellationToken);
+
+    /// <summary>Renders case tables from inspected clip metadata and measured item geometry.</summary>
+    public static DocumentationResult<PortableReadmeDocument> Generate(ProductManifest? manifest, PublisherProfile? publisher,
+        ReadmeBuildData? build, IEnumerable<ReadmeItemMeasurements>? itemMeasurements,
+        IEnumerable<AnimationDefinition>? animationMeasurements,
+        CancellationToken cancellationToken = default)
     {
         if (build is not null && !build.Target.Equals(PackageBuilder.Domain.Targets.BuildTarget.Portable))
         {
             return new(null, "DOC_TARGET_MISMATCH");
         }
 
-        DocumentationResult<ReadmeDocument> result = SharedReadmeGenerator.Generate(manifest, publisher, build, cancellationToken);
+        DocumentationResult<ReadmeDocument> result = SharedReadmeGenerator.Generate(manifest, publisher, build, itemMeasurements, animationMeasurements, cancellationToken);
         return result.IsSuccess ? new(new PortableReadmeDocument(result.Value!.Text), null) : new(null, result.Error);
     }
 

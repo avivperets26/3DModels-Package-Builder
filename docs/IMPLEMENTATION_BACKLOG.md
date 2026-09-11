@@ -21,12 +21,12 @@
 | Measure | Tasks |
 | --- | ---: |
 | Total | 264 |
-| ⚪ Backlog | 137 |
+| ⚪ Backlog | 134 |
 | 🟡 In progress | 3 |
 | 🔴 Blocked | 0 |
-| 🟢 Done | 124 |
-| Remaining (all not done) | 140 |
-| Overall completion | 124 / 264 (47.0%) |
+| 🟢 Done | 127 |
+| Remaining (all not done) | 137 |
+| Overall completion | 127 / 264 (48.1%) |
 <!-- status-summary:end -->
 
 Counts include each canonical PB task definition exactly once, including the optional post-v1 roadmap.
@@ -194,9 +194,9 @@ results, DONE statuses or Completion Log entries.
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0901 | 🟡 **IN PROGRESS** | `codex/PB-0901-PB-0903-documentation` | Codex; user for publication | 2026-09-10 | Validated locally: 2477 tests, zero-warning Release build, 35 baseline checks, format and dependency audit passed. Publication pending. See `docs/PB-0901_PB-0903_DOCUMENTATION_EVIDENCE.md`. | None. |
-| PB-0902 | 🟡 **IN PROGRESS** | `codex/PB-0901-PB-0903-documentation` | Codex; user for publication | 2026-09-10 | Validated locally: 2477 tests, zero-warning Release build, 35 baseline checks, format and dependency audit passed. Publication pending. See `docs/PB-0901_PB-0903_DOCUMENTATION_EVIDENCE.md`. | None. |
-| PB-0903 | 🟡 **IN PROGRESS** | `codex/PB-0901-PB-0903-documentation` | Codex; user for publication | 2026-09-10 | Validated locally: 2477 tests, zero-warning Release build, 35 baseline checks, format and dependency audit passed. Publication pending. See `docs/PB-0901_PB-0903_DOCUMENTATION_EVIDENCE.md`. | None. |
+| PB-0904 | 🟡 **IN PROGRESS** | `codex/PB-0904-PB-0905-PB-0907-docs-capture` | Codex; user for publication | 2026-09-11 | Validated locally: five case variants, applicable rig/assembly/collection sections, safe text and culture checks. Combined scope: 2487 tests, zero-warning Release build, format/lint and 35 baseline checks passed. Publication pending; see `docs/PB-0904_PB-0905_PB-0907_DOCS_CAPTURE_EVIDENCE.md`. | None. |
+| PB-0905 | 🟡 **IN PROGRESS** | `codex/PB-0904-PB-0905-PB-0907-docs-capture` | Codex; user for publication | 2026-09-11 | Validated locally: inspected clip and measured inventory tables, exact coverage, declaration order, single-frame duration and unsafe-cell checks. Combined validation passed; publication pending. See `docs/PB-0904_PB-0905_PB-0907_DOCS_CAPTURE_EVIDENCE.md`. | None. |
+| PB-0907 | 🟡 **IN PROGRESS** | `codex/PB-0904-PB-0905-PB-0907-docs-capture` | Codex; user for publication | 2026-09-11 | Validated locally: real Unity five-view 1920×1080 capture, repeat hashes, final materials, helper exclusion and restoration/failure checks. Contact sheet reviewed; 1.61 GB disposable output cleaned. Publication pending; see `docs/PB-0904_PB-0905_PB-0907_DOCS_CAPTURE_EVIDENCE.md`. | None. |
 
 
 ### PB-0802 Completion Evidence
@@ -1700,6 +1700,9 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0809 | `feat/PB-0808-PB-0810-selector-portable-e2e` | `4beaa9507205e1937895152415c42ccc6eeecc06` | Direct merge | 2026-09-10 | Main `55c4a0213ec20b347bf319804448d9e14a27ad48`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34502635125) passed both jobs (2446 tests). User accepted the publication handoff and requested PB-0811; recorded once at its start. |
 | PB-0810 | `feat/PB-0808-PB-0810-selector-portable-e2e` | `4beaa9507205e1937895152415c42ccc6eeecc06` | Direct merge | 2026-09-10 | Main `55c4a0213ec20b347bf319804448d9e14a27ad48`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34502635125) passed both jobs (2446 tests). User accepted the publication handoff and requested PB-0811; recorded once at its start. |
 | PB-0811 | `test/PB-0811-item-collection-e2e` | `f3f37bf79f10f2603b717d30d6a4f2713e666acb` | [#92](https://github.com/avivperets26/3DModels-Package-Builder/pull/92) | 2026-09-10 | Main `323e915223bf301b806ec220a42effd01cec150d`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34520660383) succeeded. User confirmed the merge and requested PB-0901–PB-0903; recorded once at this scope start. |
+| PB-0901 | `codex/PB-0901-PB-0903-documentation` | `49abdd61838f297df0f73c2c55801382e0a14b3c` | [#93](https://github.com/avivperets26/3DModels-Package-Builder/pull/93) | 2026-09-11 | Main `a7b242bce35285f65d4f83dfffdc6879b1b93b9d`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34578120943) succeeded. User confirmed merge and requested the next combined scope; recorded once at scope start. |
+| PB-0902 | `codex/PB-0901-PB-0903-documentation` | `49abdd61838f297df0f73c2c55801382e0a14b3c` | [#93](https://github.com/avivperets26/3DModels-Package-Builder/pull/93) | 2026-09-11 | Main `a7b242bce35285f65d4f83dfffdc6879b1b93b9d`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34578120943) succeeded. User confirmed merge and requested the next combined scope; recorded once at scope start. |
+| PB-0903 | `codex/PB-0901-PB-0903-documentation` | `49abdd61838f297df0f73c2c55801382e0a14b3c` | [#93](https://github.com/avivperets26/3DModels-Package-Builder/pull/93) | 2026-09-11 | Main `a7b242bce35285f65d4f83dfffdc6879b1b93b9d`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34578120943) succeeded. User confirmed merge and requested the next combined scope; recorded once at scope start. |
 
 ## 5. Milestones
 
@@ -2454,28 +2457,28 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** Every case receives accurate UTF-8 documentation, professional previews, and actionable reports.
 
-- [ ] **PB-0901 — Select and integrate typed documentation template engine** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-0901 — Select and integrate typed documentation template engine** — **P0** — 🟢 **DONE**
   - Branch: `codex/PB-0901-PB-0903-documentation`
   - Depends on: PB-0102 through PB-0107
   - Done when: a permissively licensed template engine renders typed UTF-8 content without unsafe arbitrary code execution; decision is recorded in an ADR.
 
-- [ ] **PB-0902 — Implement publisher-profile resolver** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-0902 — Implement publisher-profile resolver** — **P0** — 🟢 **DONE**
   - Branch: `codex/PB-0901-PB-0903-documentation`
   - Depends on: PB-0111, PB-0901
   - Done when: root name, branding, support, copyright, AI disclosure, and defaults resolve with no hardcoded `AvivPeretsFBX` dependency.
 
-- [ ] **PB-0903 — Implement shared README sections and technical metrics** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-0903 — Implement shared README sections and technical metrics** — **P0** — 🟢 **DONE**
   - Branch: `codex/PB-0901-PB-0903-documentation`
   - Depends on: PB-0405, PB-0406, PB-0901
   - Done when: contents, formats, versions, dimensions, triangle/material/texture counts, scale, axes, dependencies, usage, and support render accurately.
 
-- [ ] **PB-0904 — Implement five case-specific README variants** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-0904-readme-case-variants`
+- [ ] **PB-0904 — Implement five case-specific README variants** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `codex/PB-0904-PB-0905-PB-0907-docs-capture`
   - Depends on: PB-0903, PB-0105, PB-0106
   - Done when: static, rigged, animated, set, and collection docs include only applicable sections and no stale product claims.
 
-- [ ] **PB-0905 — Implement animation and inventory table generators** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-0905-doc-tables`
+- [ ] **PB-0905 — Implement animation and inventory table generators** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `codex/PB-0904-PB-0905-PB-0907-docs-capture`
   - Depends on: PB-0408, PB-0801, PB-0904
   - Done when: animation frames/duration/FPS/loop/root motion and item dimensions/triangles/materials are generated from measured data.
 
@@ -2484,8 +2487,8 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0102, PB-0106
   - Done when: hero, orthographic, detail, animation pose, set overview, collection overview, background, lighting, and visibility are typed and validated.
 
-- [ ] **PB-0907 — Implement Unity still-image capture worker** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-0907-unity-image-capture`
+- [ ] **PB-0907 — Implement Unity still-image capture worker** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `codex/PB-0904-PB-0905-PB-0907-docs-capture`
   - Depends on: PB-0614, PB-0906
   - Done when: 1920×1080 hero/front/back/left/right images render deterministically with final materials and no editor overlays.
 

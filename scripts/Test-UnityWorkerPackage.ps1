@@ -89,6 +89,8 @@ $expectedFiles = @(
     'Editor/UnityItemPrefabIntegration.cs',
     'Editor/UnityProductEditorIntegrationTests.cs',
     'Editor/UnityOverviewScenePipeline.cs',
+    'Editor/UnityStillImageCapture.cs',
+    'Editor/UnityStillImageCaptureIntegration.cs',
     'Editor/UnityOverviewPlayModeSmokeTest.cs',
     'Editor/UnityPackageExporter.cs',
     'Editor/UnityPackageValidator.cs',
@@ -136,7 +138,9 @@ Invoke-Check 'Assembly definition compiles only inside the Unity Editor with the
     if ([string]$assembly.name -cne 'PackageBuilder.UnityWorker.Editor' -or
         @($assembly.includePlatforms).Count -ne 1 -or
         [string]$assembly.includePlatforms[0] -cne 'Editor' -or
-        @($assembly.references).Count -ne 2 -or
+        @($assembly.references).Count -ne 4 -or
+        'Unity.RenderPipelines.Core.Runtime' -notin @($assembly.references) -or
+        'Unity.RenderPipelines.Universal.Runtime' -notin @($assembly.references) -or
         'PackageBuilder.Preview' -notin @($assembly.references) -or
         'Unity.RenderPipelines.Universal.Editor' -notin @($assembly.references) -or
         @($assembly.precompiledReferences).Count -ne 0 -or
@@ -240,6 +244,21 @@ Invoke-Check 'Worker sources are public-safe UTF-8 text with LF endings' {
             throw "Worker file contains public-unsafe content: $($file.FullName)"
         }
     }
+}
+
+Invoke-Check 'Still capture agrees with Domain presentation defaults across the Unity assembly boundary' {
+    $capture = Get-Content -LiteralPath (Join-Path $script:PackageRoot 'Editor/UnityStillImageCapture.cs') -Raw
+    $domain = Get-Content -LiteralPath (Join-Path $script:RepositoryRoot 'src/PackageBuilder.Domain/Preview/PreviewPresentationDefaults.cs') -Raw
+    $fov = [regex]::Match($domain, 'PerspectiveFieldOfViewDegrees = ([0-9.]+)d').Groups[1].Value
+    $padding = [regex]::Match($domain, 'FramingPadding = ([0-9.]+)d').Groups[1].Value
+    if (-not $fov -or -not $padding -or -not $capture.Contains("camera.fieldOfView = ${fov}f;") -or
+        -not $capture.Contains("Padding = ${padding}f;")) {
+        throw 'Capture field of view or padding diverges from the canonical presentation contract.'
+    }
+    $domainRoles = @([regex]::Matches($domain, 'yield return View\("([^"]+)"') | ForEach-Object { $_.Groups[1].Value.ToLowerInvariant() })
+    $captureRoles = [regex]::Match($capture, 'Roles = \{ ([^}]+) \}').Groups[1].Value
+    $roles = @([regex]::Matches($captureRoles, '"([^"]+)"') | ForEach-Object { $_.Groups[1].Value })
+    if (($roles -join ',') -cne ($domainRoles -join ',')) { throw 'Capture view order diverges from Domain defaults.' }
 }
 
 Write-Host ''

@@ -1,5 +1,11 @@
 # PB-0901–PB-0903 — Shared documentation implementation
 
+Publication update (2026-09-11): task commit `49abdd61838f297df0f73c2c55801382e0a14b3c`
+merged through PR #93 as `a7b242bce35285f65d4f83dfffdc6879b1b93b9d`.
+[Main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34578120943)
+succeeded and the user confirmed the merge. Each task's DONE state and one Completion Log row
+were recorded at the start of PB-0904/PB-0905/PB-0907. Pending-publication notes below are historical.
+
 ## Scope and lifecycle
 
 The user explicitly approved all three tasks on `codex/PB-0901-PB-0903-documentation`.

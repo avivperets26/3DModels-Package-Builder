@@ -151,6 +151,8 @@ The [ADR index](adr/README.md) explains status and evolution conventions.
 
 ## Preview and Media Evidence
 
+- [PB-0904/PB-0905/PB-0907 documentation and still capture evidence](PB-0904_PB-0905_PB-0907_DOCS_CAPTURE_EVIDENCE.md)
+
 - [PB-0906 preview presentation specification evidence](PB-0906_PREVIEW_PRESENTATION_SPECIFICATION_EVIDENCE.md)
 - [PB-0913 interactive preview contract evidence](PB-0913_INTERACTIVE_PREVIEW_CONTRACT_EVIDENCE.md)
 
