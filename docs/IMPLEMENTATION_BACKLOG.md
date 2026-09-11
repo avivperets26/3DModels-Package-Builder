@@ -21,12 +21,12 @@
 | Measure | Tasks |
 | --- | ---: |
 | Total | 264 |
-| ⚪ Backlog | 134 |
+| ⚪ Backlog | 131 |
 | 🟡 In progress | 3 |
 | 🔴 Blocked | 0 |
-| 🟢 Done | 127 |
-| Remaining (all not done) | 137 |
-| Overall completion | 127 / 264 (48.1%) |
+| 🟢 Done | 130 |
+| Remaining (all not done) | 134 |
+| Overall completion | 130 / 264 (49.2%) |
 <!-- status-summary:end -->
 
 Counts include each canonical PB task definition exactly once, including the optional post-v1 roadmap.
@@ -194,9 +194,9 @@ results, DONE statuses or Completion Log entries.
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0904 | 🟡 **IN PROGRESS** | `codex/PB-0904-PB-0905-PB-0907-docs-capture` | Codex; user for publication | 2026-09-11 | Validated locally: five case variants, applicable rig/assembly/collection sections, safe text and culture checks. Combined scope: 2487 tests, zero-warning Release build, format/lint and 35 baseline checks passed. Publication pending; see `docs/PB-0904_PB-0905_PB-0907_DOCS_CAPTURE_EVIDENCE.md`. | None. |
-| PB-0905 | 🟡 **IN PROGRESS** | `codex/PB-0904-PB-0905-PB-0907-docs-capture` | Codex; user for publication | 2026-09-11 | Validated locally: inspected clip and measured inventory tables, exact coverage, declaration order, single-frame duration and unsafe-cell checks. Combined validation passed; publication pending. See `docs/PB-0904_PB-0905_PB-0907_DOCS_CAPTURE_EVIDENCE.md`. | None. |
-| PB-0907 | 🟡 **IN PROGRESS** | `codex/PB-0904-PB-0905-PB-0907-docs-capture` | Codex; user for publication | 2026-09-11 | Validated locally: real Unity five-view 1920×1080 capture, repeat hashes, final materials, helper exclusion and restoration/failure checks. Contact sheet reviewed; 1.61 GB disposable output cleaned. Publication pending; see `docs/PB-0904_PB-0905_PB-0907_DOCS_CAPTURE_EVIDENCE.md`. | None. |
+| PB-0908 | 🟡 **IN PROGRESS** | `codex/PB-0908-PB-0910-media-reports` | Codex; user for publication | 2026-09-11 | Validated locally: eight defect checks, real five-view coverage/bounds, 2,530-test suite and 35 baseline checks pass. [Evidence](PB-0908_PB-0910_MEDIA_REPORTS_EVIDENCE.md). Publication pending. | None. |
+| PB-0909 | 🟡 **IN PROGRESS** | `codex/PB-0908-PB-0910-media-reports` | Codex; user for publication | 2026-09-11 | Validated locally: JPEG/PNG quality and exclusive limits, real 212,017-byte gallery, transparency and cleanup pass. [Evidence](PB-0908_PB-0910_MEDIA_REPORTS_EVIDENCE.md). Publication pending. | None. |
+| PB-0910 | 🟡 **IN PROGRESS** | `codex/PB-0908-PB-0910-media-reports` | Codex; user for publication | 2026-09-11 | Validated locally: stable report schema, versions/hashes/metrics/findings/status, redaction and connected Unity report round trip pass. [Evidence](PB-0908_PB-0910_MEDIA_REPORTS_EVIDENCE.md). Publication pending. | None. |
 
 
 ### PB-0802 Completion Evidence
@@ -1703,6 +1703,9 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0901 | `codex/PB-0901-PB-0903-documentation` | `49abdd61838f297df0f73c2c55801382e0a14b3c` | [#93](https://github.com/avivperets26/3DModels-Package-Builder/pull/93) | 2026-09-11 | Main `a7b242bce35285f65d4f83dfffdc6879b1b93b9d`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34578120943) succeeded. User confirmed merge and requested the next combined scope; recorded once at scope start. |
 | PB-0902 | `codex/PB-0901-PB-0903-documentation` | `49abdd61838f297df0f73c2c55801382e0a14b3c` | [#93](https://github.com/avivperets26/3DModels-Package-Builder/pull/93) | 2026-09-11 | Main `a7b242bce35285f65d4f83dfffdc6879b1b93b9d`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34578120943) succeeded. User confirmed merge and requested the next combined scope; recorded once at scope start. |
 | PB-0903 | `codex/PB-0901-PB-0903-documentation` | `49abdd61838f297df0f73c2c55801382e0a14b3c` | [#93](https://github.com/avivperets26/3DModels-Package-Builder/pull/93) | 2026-09-11 | Main `a7b242bce35285f65d4f83dfffdc6879b1b93b9d`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34578120943) succeeded. User confirmed merge and requested the next combined scope; recorded once at scope start. |
+| PB-0904 | `codex/PB-0904-PB-0905-PB-0907-docs-capture` | `48ebe012729225aa8c6cadc757b016deaf52a885` | Direct merge | 2026-09-11 | Main `3d7b564614474283548b49a50d5961f09e6e4efb`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34584179848) passed both jobs. User accepted publication and requested the next scope; recorded once at its start. |
+| PB-0905 | `codex/PB-0904-PB-0905-PB-0907-docs-capture` | `48ebe012729225aa8c6cadc757b016deaf52a885` | Direct merge | 2026-09-11 | Main `3d7b564614474283548b49a50d5961f09e6e4efb`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34584179848) passed both jobs. User accepted publication and requested the next scope; recorded once at its start. |
+| PB-0907 | `codex/PB-0904-PB-0905-PB-0907-docs-capture` | `48ebe012729225aa8c6cadc757b016deaf52a885` | Direct merge | 2026-09-11 | Main `3d7b564614474283548b49a50d5961f09e6e4efb`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34584179848) passed both jobs. User accepted publication and requested the next scope; recorded once at its start. |
 
 ## 5. Milestones
 
@@ -2472,12 +2475,12 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0405, PB-0406, PB-0901
   - Done when: contents, formats, versions, dimensions, triangle/material/texture counts, scale, axes, dependencies, usage, and support render accurately.
 
-- [ ] **PB-0904 — Implement five case-specific README variants** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-0904 — Implement five case-specific README variants** — **P0** — 🟢 **DONE**
   - Branch: `codex/PB-0904-PB-0905-PB-0907-docs-capture`
   - Depends on: PB-0903, PB-0105, PB-0106
   - Done when: static, rigged, animated, set, and collection docs include only applicable sections and no stale product claims.
 
-- [ ] **PB-0905 — Implement animation and inventory table generators** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-0905 — Implement animation and inventory table generators** — **P0** — 🟢 **DONE**
   - Branch: `codex/PB-0904-PB-0905-PB-0907-docs-capture`
   - Depends on: PB-0408, PB-0801, PB-0904
   - Done when: animation frames/duration/FPS/loop/root motion and item dimensions/triangles/materials are generated from measured data.
@@ -2487,23 +2490,23 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0102, PB-0106
   - Done when: hero, orthographic, detail, animation pose, set overview, collection overview, background, lighting, and visibility are typed and validated.
 
-- [ ] **PB-0907 — Implement Unity still-image capture worker** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-0907 — Implement Unity still-image capture worker** — **P0** — 🟢 **DONE**
   - Branch: `codex/PB-0904-PB-0905-PB-0907-docs-capture`
   - Depends on: PB-0614, PB-0906
   - Done when: 1920×1080 hero/front/back/left/right images render deterministically with final materials and no editor overlays.
 
-- [ ] **PB-0908 — Implement bounds, framing, exposure, and empty-image checks** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-0908-preview-validation`
+- [ ] **PB-0908 — Implement bounds, framing, exposure, and empty-image checks** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `codex/PB-0908-PB-0910-media-reports`
   - Depends on: PB-0907
   - Done when: clipped, empty, tiny, overexposed, underexposed, missing-material, helper-visible, and excessive-margin images generate findings.
 
-- [ ] **PB-0909 — Implement media optimization and Fab image-size enforcement** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-0909-media-optimization`
+- [ ] **PB-0909 — Implement media optimization and Fab image-size enforcement** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `codex/PB-0908-PB-0910-media-reports`
   - Depends on: PB-0907, PB-0908
   - Done when: JPEG/PNG remain 1920×1080, individual images stay below configured limits, total gallery limits validate, and visual quality is tested.
 
-- [ ] **PB-0910 — Implement JSON validation report** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-0910-json-validation-report`
+- [ ] **PB-0910 — Implement JSON validation report** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `codex/PB-0908-PB-0910-media-reports`
   - Depends on: PB-0109, PB-0213
   - Done when: job, versions, artifacts, hashes, metrics, findings, and final status serialize through a stable schema.
 

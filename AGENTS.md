@@ -97,6 +97,15 @@ PB-0906 is already DONE and is outside this exception. Keep separate task status
 acceptance evidence and eventual Completion Log entries. Roll PB-0901–PB-0903 into
 DONE after successful main CI. Publication gates remain unchanged.
 
+### Approved combined scope: PB-0908 through PB-0910
+
+On 2026-09-11 the user explicitly approved PB-0908, PB-0909 and PB-0910 together on
+`codex/PB-0908-PB-0910-media-reports`, based on freshly synchronized main
+`3d7b564614474283548b49a50d5961f09e6e4efb`. Implement PB-0908 before PB-0909;
+keep all three acceptance records and lifecycle states separate. Roll PB-0904/PB-0905/PB-0907
+to DONE at this branch start after their successful main CI and user confirmation.
+This exact branch is a narrow exception; publication and completion gates remain unchanged.
+
 ### Start every task branch from freshly synchronized main
 
 Before creating any new implementation branch:

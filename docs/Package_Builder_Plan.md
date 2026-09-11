@@ -1488,3 +1488,24 @@ fail validation rather than becoming product claims. Unity's still worker render
 materials in five standard 1920×1080 views, with isolated tests and automatic output cleanup.
 Image-quality findings and marketplace image optimization remain PB-0908/PB-0909.
 See [scope evidence](PB-0904_PB-0905_PB-0907_DOCS_CAPTURE_EVIDENCE.md).
+
+## Media validation and report baseline (PB-0908–PB-0910)
+
+Captured previews are checked for empty/tiny products, clipping, excessive margins, exposure,
+missing materials and visible helpers. Exposure uses renderer-supplied foreground coverage instead
+of treating a dark studio as missing content. Defaults are configurable: 1% minimum coverage,
+35% maximum single-side margin, sRGB luminance <=2% or >=98% on at least 90% of foreground pixels.
+These conservative checks flag inspection needs; they do not promise semantic recognition of every
+possible material defect or replace final artistic review.
+
+The media optimizer preserves 1920x1080 and alpha, verifies decoded JPEG/PNG quality, and enforces
+exclusive byte limits. Fab defaults are 3,000,000 bytes per image and 25,000,000 bytes total,
+versioned fab-2026-09-11. JPEG candidates use quality 95/90/85/80/75; accepted normalized RMS is
+at most .02 overall and .06 in every 32x32 tile. No candidate meeting both quality and size means
+an actionable failure. No source files are changed and no partial gallery is returned.
+
+The stable validation-report/v1 JSON contract records job state, pinned versions, artifact hashes
+and sizes, resource/technical metrics, findings and derived final status. Unknown measurements
+remain null. HTML presentation remains PB-0911. This scope supplies tested reusable APIs and a
+real Unity-to-report harness; it does not add a new desktop UI or replace legacy portable reports.
+See [scope evidence](PB-0908_PB-0910_MEDIA_REPORTS_EVIDENCE.md).

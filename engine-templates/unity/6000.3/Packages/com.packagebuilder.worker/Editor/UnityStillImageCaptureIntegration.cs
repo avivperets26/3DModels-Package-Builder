@@ -53,6 +53,7 @@ namespace PackageBuilder.UnityWorker.Editor
                 var first = Capture(preview, "first");
                 var second = Capture(preview, "second");
                 Require(first.Length == 5 && first.Select(x => x.sha256).SequenceEqual(second.Select(x => x.sha256)), "Repeat hashes differ.");
+                Require(first.Select(x => x.coverageSha256).SequenceEqual(second.Select(x => x.coverageSha256)), "Repeat coverage hashes differ.");
                 Require(first.Select(x => x.sha256).Distinct().Count() >= 3, "View angles did not change.");
                 Require(position == product.transform.position && rotation == product.transform.rotation &&
                     cameraPosition == preview.PreviewCamera.transform.position && backdropPosition == preview.StudioBackground.localPosition &&
@@ -111,6 +112,12 @@ namespace PackageBuilder.UnityWorker.Editor
                         Require(green > 5000 && pink == 0, "Final material missing or helper visible.");
                         for (int y = 0; y < 270; y++)
                             for (int x = 0; x < 480; x++) sheet.SetPixel(index * 480 + x, y, texture.GetPixel(x * 4, y * 4));
+                        Require(texture.LoadImage(File.ReadAllBytes(Path.Combine(project, receipts[index].coverageFile))), "Coverage decode failed.");
+                        Require(texture.width == 1920 && texture.height == 1080, "Coverage dimensions differ.");
+                        Color32[] coverage = texture.GetPixels32();
+                        Require(coverage.Count(c => c.a >= 16) > 5000 && coverage.Count(c => c.a == 0) > 5000, "Coverage is empty or includes the studio.");
+                        Require(receipts[index].left > 0 && receipts[index].right < 1 && receipts[index].bottom > 0 && receipts[index].top < 1 &&
+                            !receipts[index].depthClipped && receipts[index].visibleHelpers == 0 && receipts[index].missingMaterials == 0, "Render facts differ from scene.");
                     }
                     finally { UnityEngine.Object.DestroyImmediate(texture); }
                 }

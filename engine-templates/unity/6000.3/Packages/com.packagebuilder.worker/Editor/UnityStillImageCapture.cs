@@ -19,6 +19,15 @@ namespace PackageBuilder.UnityWorker.Editor
         public int width;
         public int height;
         public string sha256;
+        public string coverageFile;
+        public string coverageSha256;
+        public float left;
+        public float bottom;
+        public float right;
+        public float top;
+        public bool depthClipped;
+        public int missingMaterials;
+        public int visibleHelpers;
     }
 
     /// <summary>Captures the current, final-material preview pose on the Editor main thread.
@@ -80,6 +89,7 @@ namespace PackageBuilder.UnityWorker.Editor
             GameObject cameraObject = null;
             RenderTexture target = null;
             Texture2D pixels = null;
+            Texture2D coveragePixels = null;
             bool directoryCreated = false;
             bool succeeded = false;
             try
@@ -119,6 +129,7 @@ namespace PackageBuilder.UnityWorker.Editor
                     { antiAliasing = 1, useMipMap = false, autoGenerateMips = false };
                 target.Create();
                 pixels = new Texture2D(Width, Height, TextureFormat.RGB24, false);
+                coveragePixels = new Texture2D(Width, Height, TextureFormat.RGBA32, false);
                 var request = new UniversalRenderPipeline.SingleCameraRequest { destination = target };
                 if (!RenderPipeline.SupportsRenderRequest(camera, request))
                 { diagnosticCode = "UNITY_CAPTURE_RENDER_UNSUPPORTED"; return false; }
@@ -139,25 +150,60 @@ namespace PackageBuilder.UnityWorker.Editor
                     pixels.ReadPixels(new Rect(0, 0, Width, Height), 0, 0, false);
                     pixels.Apply(false, false);
                     byte[] png = pixels.EncodeToPNG();
-                    string file = Roles[index] + ".png";
-                    string path = Path.Combine(output, file);
-                    using (var stream = new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.None))
+                    var receipt = new UnityStillImageReceipt { role = Roles[index], width = Width, height = Height };
+                    receipt.file = WriteImage(png, Roles[index] + ".png", out receipt.sha256);
+                    // Same camera, pose and final materials; exclude only the studio for alpha coverage.
+                    // Restore even when GPU submission or readback fails.
+                    Renderer[] backdrop = background.GetComponentsInChildren<Renderer>(false).Where(r => r.enabled).ToArray();
+                    CameraClearFlags clearFlags = camera.clearFlags;
+                    Color clearColor = camera.backgroundColor;
+                    try
                     {
-                        createdFiles.Add(path);
-                        stream.Write(png, 0, png.Length);
+                        foreach (Renderer renderer in backdrop) renderer.enabled = false;
+                        camera.clearFlags = CameraClearFlags.SolidColor;
+                        camera.backgroundColor = Color.clear;
+                        RenderPipeline.SubmitRenderRequest(camera, request);
+                        RenderTexture.active = target;
+                        coveragePixels.ReadPixels(new Rect(0, 0, Width, Height), 0, 0, false);
+                        coveragePixels.Apply(false, false);
+                        receipt.coverageFile = WriteImage(coveragePixels.EncodeToPNG(), Roles[index] + "-coverage.png", out receipt.coverageSha256);
                     }
-                    using (SHA256 sha = SHA256.Create())
+                    finally
                     {
-                        results.Add(new UnityStillImageReceipt { role = Roles[index], file =
-                            "PackageBuilderCaptures/capture-" + outputName + "/" + file,
-                            width = Width, height = Height,
-                            sha256 = BitConverter.ToString(sha.ComputeHash(png)).Replace("-", "").ToLowerInvariant() });
+                        foreach (Renderer renderer in backdrop) renderer.enabled = true;
+                        camera.clearFlags = clearFlags;
+                        camera.backgroundColor = clearColor;
                     }
+                    receipt.left = receipt.bottom = float.PositiveInfinity;
+                    receipt.right = receipt.top = float.NegativeInfinity;
+                    for (int x = -1; x <= 1; x += 2)
+                        for (int y = -1; y <= 1; y += 2)
+                            for (int z = -1; z <= 1; z += 2)
+                            {
+                                Vector3 point = camera.WorldToViewportPoint(bounds.center + Vector3.Scale(bounds.extents, new Vector3(x, y, z)));
+                                receipt.left = Mathf.Min(receipt.left, point.x); receipt.right = Mathf.Max(receipt.right, point.x);
+                                receipt.bottom = Mathf.Min(receipt.bottom, point.y); receipt.top = Mathf.Max(receipt.top, point.y);
+                                receipt.depthClipped |= point.z <= camera.nearClipPlane || point.z >= camera.farClipPlane;
+                            }
+                    receipt.visibleHelpers = hidden.Count(renderer => renderer.enabled) + canvases.Count(canvas => canvas.enabled);
+                    results.Add(receipt);
                 }
                 receipts = results.ToArray();
                 diagnosticCode = string.Empty;
                 succeeded = true;
                 return true;
+
+                string WriteImage(byte[] bytes, string file, out string hash)
+                {
+                    string path = Path.Combine(output, file);
+                    using (var stream = new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.None))
+                    {
+                        createdFiles.Add(path);
+                        stream.Write(bytes, 0, bytes.Length);
+                    }
+                    using (SHA256 sha = SHA256.Create()) hash = BitConverter.ToString(sha.ComputeHash(bytes)).Replace("-", "").ToLowerInvariant();
+                    return "PackageBuilderCaptures/capture-" + outputName + "/" + file;
+                }
             }
             catch (Exception exception) when (exception is IOException || exception is UnauthorizedAccessException ||
                 exception is UnityException || exception is ArgumentException || exception is InvalidOperationException)
@@ -169,6 +215,7 @@ namespace PackageBuilder.UnityWorker.Editor
             {
                 RenderTexture.active = previousActive;
                 if (pixels != null) UnityEngine.Object.DestroyImmediate(pixels);
+                if (coveragePixels != null) UnityEngine.Object.DestroyImmediate(coveragePixels);
                 if (target != null) { target.Release(); UnityEngine.Object.DestroyImmediate(target); }
                 if (cameraObject != null) UnityEngine.Object.DestroyImmediate(cameraObject);
                 background.localPosition = backgroundPosition;

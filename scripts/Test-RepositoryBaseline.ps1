@@ -652,6 +652,16 @@ Invoke-Check 'Task branch names and lifecycle markers are valid' {
     $blockedMarker = $blockedEmoji + ' **BLOCKED**'
     $lifecycleStates = @{}
 
+    foreach ($id in @('PB-0908', 'PB-0909', 'PB-0910')) {
+        if (-not (Test-PackageBuilderTaskBranch $id 'codex/PB-0908-PB-0910-media-reports')) {
+            throw "Approved media/report scope rejected: $id"
+        }
+    }
+    if ((Test-PackageBuilderTaskBranch 'PB-0907' 'codex/PB-0908-PB-0910-media-reports') -or
+        (Test-PackageBuilderTaskBranch 'PB-0908' 'codex/PB-0908-PB-0911-media-reports')) {
+        throw 'The media/report exception expanded beyond its approved scope.'
+    }
+
     foreach ($id in @('PB-0904', 'PB-0905', 'PB-0907')) {
         if (-not (Test-PackageBuilderTaskBranch $id 'codex/PB-0904-PB-0905-PB-0907-docs-capture')) {
             throw "Approved documentation/capture scope rejected: $id"

@@ -77,7 +77,7 @@ As of this document's review date, .NET 10 is the current LTS line, Unity 6.3 is
 | Schema validation | JsonSchema.Net 9.4.0 (independently compiled MIT source; pinned commit) | Pinned offline Draft 2020-12 validation of manifests and worker contracts |
 | Logging | Dependency-free `System.Text.Json` JSON Lines sink | Deterministic redacted application/per-job logs without an additional runtime package or external service |
 | Persistence | SQLite through `Microsoft.Data.Sqlite` 10.0.11 with patched `SQLitePCLRaw.lib.e_sqlite3` 3.53.3 | Pinned local build history without a server or vulnerable native 2.1.11 runtime |
-| Image processing | SkiaSharp | Resize, inspect, and compress preview media with a permissive ecosystem |
+| Image processing | Windows Imaging Component through WPF | Current Windows JPEG/PNG adapter; engine-neutral validation and optimization policies; no additional native dependency |
 | Archives | `System.IO.Compression.ZipArchive` | Built-in deterministic ZIP construction |
 | Cryptographic hashes | `System.Security.Cryptography` SHA-256 | Artifact identity, cache keys, and duplicate detection |
 
@@ -2762,3 +2762,33 @@ ancestors, and removes its own partial output on failure. It creates no customer
 The pinned Unity CLR cannot reference the net10 Domain assembly. FOV, padding and ordered roles
 therefore have a cross-boundary conformance check; engine-specific AABB projection remains here.
 See [acceptance, limitations and handoff](PB-0904_PB-0905_PB-0907_DOCS_CAPTURE_EVIDENCE.md).
+
+## Media quality, optimization and JSON reports (PB-0908–PB-0910)
+
+Domain owns bounded RGBA snapshots, renderer evidence, quality measurements and image/media
+policies. Application composes validation, codec calls, decoded-image comparison, hashing and
+atomic gallery budgets. Fab supplies a versioned default policy; it does not own pixel rules.
+The current Windows adapter uses the already-required WPF Windows Imaging Component API instead
+of introducing the previously proposed SkiaSharp dependency. The codec interface remains replaceable
+for a future non-Windows host. No image bytes, engine APIs or WPF types enter Contracts/Domain.
+
+Unity emits final RGB PNGs plus separate RGBA coverage images with the backdrop disabled, matched
+hashes, normalized projected bounds and scene inspection counts. Coverage is diagnostic only and is
+excluded from gallery sizes. The coverage pass keeps the final materials and restores temporary
+camera/background state. The decoder verifies both hashes before composing evidence for validation.
+
+The optimizer never changes 1920x1080 dimensions or flattens transparency. It picks the smallest
+encoding passing whole-image and worst-tile RGB RMS thresholds, preserves alpha, revalidates the
+decoded delivery, then validates the total gallery. Any blocker returns an empty delivery collection.
+
+The version-one cross-target validation report embeds the existing build-lock schema through an
+offline registry and reuses PB-0109 finding serialization. Typed resource/technical metrics carry
+explicit units; null resource fields mean unmeasured. Status is derived from job state and blockers.
+Collections are canonically sorted, IDs are bounded path-free ASCII, and output is compact UTF-8
+without a BOM or newline. Existing portable static reports retain their compatibility format.
+Log/report redaction now shares Contracts' SensitiveDiagnosticValueRedactor; the Infrastructure
+logging facade preserves its existing callers and tests. The finding schema shape is intentionally
+repeated in the report schema for external validation; ValidationFindingJson remains its semantic
+owner and report contract tests guard compatibility.
+
+See [acceptance and handoff](PB-0908_PB-0910_MEDIA_REPORTS_EVIDENCE.md).
