@@ -106,6 +106,14 @@ keep all three acceptance records and lifecycle states separate. Roll PB-0904/PB
 to DONE at this branch start after their successful main CI and user confirmation.
 This exact branch is a narrow exception; publication and completion gates remain unchanged.
 
+### Approved combined scope: PB-0911 and PB-0912
+
+On 2026-09-11 the user selected PB-0911 and PB-0912 together as the next implementation scope.
+Use `codex/PB-0911-PB-0912-reports-support`, based on freshly synchronized main
+`0c950f0667b43c7a8f2d09423b3bc0351264a650`. Keep separate acceptance and lifecycle evidence.
+Roll PB-0908–PB-0910 to DONE at branch start following successful main CI and user confirmation.
+This exact combined branch is a narrow exception; publication gates remain unchanged.
+
 ### Start every task branch from freshly synchronized main
 
 Before creating any new implementation branch:

@@ -1509,3 +1509,16 @@ and sizes, resource/technical metrics, findings and derived final status. Unknow
 remain null. HTML presentation remains PB-0911. This scope supplies tested reusable APIs and a
 real Unity-to-report harness; it does not add a new desktop UI or replace legacy portable reports.
 See [scope evidence](PB-0908_PB-0910_MEDIA_REPORTS_EVIDENCE.md).
+
+## HTML validation reports and support exports (PB-0911/PB-0912)
+
+The application generates offline UTF-8 HTML from the canonical validation report, with status,
+blockers, warnings, suggested actions, artifact hashes, versions, metrics and explicitly supplied
+hash-verified previews. Shared template execution and trusted pixel re-encoding prevent raw HTML,
+remote resource references or encoded image metadata from entering the document.
+
+Support export regenerates a labelled manifest summary, build versions, strictly matched per-job
+logs and JSON/HTML reports into a fixed six-entry in-memory ZIP with a hash inventory. It accepts
+no source-file paths or arbitrary attachments and includes no model, texture or preview bytes.
+The stricter shared export redactor preserves local logging compatibility. Desktop report/export
+buttons belong to the later UI scope. See [acceptance and limits](PB-0911_PB-0912_REPORTS_SUPPORT_EVIDENCE.md).

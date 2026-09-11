@@ -7,11 +7,12 @@ Fetch, main checkout, fast-forward pull and clean equality with origin/main prec
 at `3d7b564614474283548b49a50d5961f09e6e4efb`. PB-0904/PB-0905/PB-0907 were rolled to DONE once,
 with task/merge SHA, successful main CI and user confirmation in the Completion Log.
 
-All three tasks are implemented and validated locally; they remain IN PROGRESS pending publication.
-The user authorized staging, commit, push and merge after accepting local validation. Publication
-is now underway; exact Git/main CI results are retained in the local publication receipt and will
-be recorded at the next branch rollover. No implementation blockers remain.
-Counts: 264 total, 130 DONE, 3 IN PROGRESS, 0 BLOCKED, 131 BACKLOG, 134 remaining (49.2%).
+All three tasks are DONE. Task commit `53ecb98befcef5ca0799036ecc4682eba5896724` was pushed and
+merged into main as `0c950f0667b43c7a8f2d09423b3bc0351264a650`.
+[Main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34589603966)
+passed both jobs. The user accepted completion and requested PB-0911/PB-0912. Completion was
+recorded exactly once at that branch start on 2026-09-11; the publication receipt is retained at
+`artifacts/PB-0908-publication.json`. Publication-pending handoff notes below are historical.
 
 ## Acceptance and traceability
 

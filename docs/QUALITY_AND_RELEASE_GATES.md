@@ -217,3 +217,10 @@ visual quality and stable JSON report semantics to the unit and GPU integration 
 [the media/report evidence](PB-0908_PB-0910_MEDIA_REPORTS_EVIDENCE.md). PERF-007 fields are explicit
 in the report; unmeasured values are null rather than fabricated zeroes. Performance-budget
 instrumentation and broad fixture benchmarking remain under PB-1808.
+
+PB-0911/PB-0912 map offline HTML, canonical status/metrics, explicit preview provenance,
+UTF-8/XSS handling, export redaction, cross-job rejection and the closed ZIP inventory to
+[report/support acceptance evidence](PB-0911_PB-0912_REPORTS_SUPPORT_EVIDENCE.md).
+Archive tests use memory only, including failure/cancellation, so no disposable packages remain.
+The local browser URL policy prevented the optional visual check; automated rendering and real
+codec round trips are evidence, not a claim of completed visual inspection.

@@ -2792,3 +2792,17 @@ repeated in the report schema for external validation; ValidationFindingJson rem
 owner and report contract tests guard compatibility.
 
 See [acceptance and handoff](PB-0908_PB-0910_MEDIA_REPORTS_EVIDENCE.md).
+
+## Diagnostic HTML and support archive boundaries (PB-0911/PB-0912)
+
+Application owns one shareable report projection and both generators. Contracts owns the closed
+six-document archive inventory and strict per-job log export; Infrastructure encodes that inventory
+using ZIP without reading files. There are no added project references or packages. The approved
+Scriban execution context is shared with README generation. HTML escaping remains specific to its
+output context, and only the existing trusted image codec can re-encode supplied previews.
+
+Support manifests are allowlisted summaries rather than copied manifests; support HTML never
+embeds previews. The export redaction policy omits whole sensitive fields, including quoted tails
+left by earlier local logging, while the established local logger retains its existing behavior.
+All output is returned as owned bytes for a future host-owned save operation; these services do
+not collect directories, upload data or persist partial archives. See [scope evidence and quotas](PB-0911_PB-0912_REPORTS_SUPPORT_EVIDENCE.md).

@@ -125,3 +125,11 @@ remain. The contact sheet was visually inspected. Optimized images exist only in
 No package archives or new persistent source/golden assets were created; the original fixture
 and engine template remain preserved. The harness now optionally runs the full media pipeline
 before its existing finally cleanup, including when that pipeline fails.
+
+## PB-0911/PB-0912 diagnostic export cleanup — 2026-09-11
+
+The support archive tests build and read ZIPs entirely in memory, including failure and
+cancellation paths. HTML previews also use synthetic in-memory pixels. No disposable package,
+extraction directory or engine project is created. Only an explicitly requested compact synthetic
+HTML sample and test logs/TRX are retained in ignored artifacts/PB-0911. Source/golden fixtures
+and prior intended releases remain untouched. The existing cleanup baseline continues to apply.
