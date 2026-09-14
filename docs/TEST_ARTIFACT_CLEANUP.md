@@ -157,3 +157,16 @@ remain under ignored artifacts/PB-0016 and artifacts/test-results/PB-0016. Sourc
 and intended releases are preserved. Receipt: artifacts/PB-0016/cleanup-verified.json.
 The full repository baseline also passed nine cleanup cases and removed the small synthetic
 disposable outputs beneath artifacts/u/7759de2e; its compact logs/receipts remain.
+
+## PB-1004/PB-1005/PB-1007 Fab validator cleanup — 2026-09-14
+
+Portable validator tests create small real ZIP files in individually owned GUID directories under
+`tests/PackageBuilder.App.Wpf.Tests/bin/Release/net10.0-windows/PB-1004`. Constructor failure and
+test disposal both clean those directories using checked containment. The post-suite audit found
+zero remaining run directories and zero files; receipt: `artifacts/PB-1004/cleanup-verified.json`.
+Unity inspection fixtures and gallery images remain in memory; no fresh Editor import, engine
+clone or persistent product package was created. All nine baseline cleanup cases passed and
+removed the synthetic disposable outputs in `artifacts/u/638666ca`. Compact logs, JSON and TRX
+remain in ignored artifacts directories. Source fixtures and intended releases are preserved.
+The previously documented 15 empty PB-1001 directories remain an unchanged historical exception;
+no automatically rejected removal was retried and no historical DONE/test claim was altered.

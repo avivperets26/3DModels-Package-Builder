@@ -21,12 +21,12 @@
 | Measure | Tasks |
 | --- | ---: |
 | Total | 265 |
-| ⚪ Backlog | 126 |
-| 🟡 In progress | 1 |
+| ⚪ Backlog | 123 |
+| 🟡 In progress | 3 |
 | 🔴 Blocked | 0 |
-| 🟢 Done | 138 |
-| Remaining (all not done) | 127 |
-| Overall completion | 138 / 265 (52.1%) |
+| 🟢 Done | 139 |
+| Remaining (all not done) | 126 |
+| Overall completion | 139 / 265 (52.5%) |
 <!-- status-summary:end -->
 
 Counts include each canonical PB task definition exactly once, including the optional post-v1 roadmap.
@@ -194,7 +194,9 @@ results, DONE statuses or Completion Log entries.
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0016 | 🟡 **IN PROGRESS** | `codex/PB-0016-dependency-refresh` | Dependency Maintenance Engineering; user for publication | 2026-09-14 | Validated locally: four updates, 2,672 tests, 35 baseline checks, warning-free Release build, formatting, signatures and advisory audit pass. Obsolete PR #79 closed. User authorized commit/push/merge on 2026-09-14; publication underway. See PB-0016 evidence. | None. |
+| PB-1004 | 🟡 **IN PROGRESS** | `codex/PB-1004-PB-1005-PB-1007-fab-validators` | Codex; user for publication | 2026-09-14 | Locally implemented and validated: real ZIP safety, manifest relevance, limits and content binding. Publication and main CI remain. | None for this scope; unresolved official profile clauses still block release approval. |
+| PB-1005 | 🟡 **IN PROGRESS** | `codex/PB-1004-PB-1005-PB-1007-fab-validators` | Codex; user for publication | 2026-09-14 | Locally implemented and validated against trusted Unity inspection fixtures; existing engine checks reused. Publication and main CI remain. | None for this scope; no new Editor import is claimed. |
+| PB-1007 | 🟡 **IN PROGRESS** | `codex/PB-1004-PB-1005-PB-1007-fab-validators` | Codex; user for publication | 2026-09-14 | Locally implemented and validated: real PNG/JPEG decoding, profile limits, thumbnail and shared view coverage. Publication and main CI remain. | None. |
 
 
 ### PB-0802 Completion Evidence
@@ -1712,6 +1714,7 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-1001 | `codex/PB-1001-PB-1003-fab-foundation` | `93ddde9c095c9154b6eb441c601b8aa0290644c0` | Direct merge | 2026-09-14 | Main `05371f0e752ca931e26adc46f4d960ed65ae03de`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34881094634) passed both jobs. User accepted publication and requested dependency maintenance; recorded once at PB-0016 start. |
 | PB-1002 | `codex/PB-1001-PB-1003-fab-foundation` | `93ddde9c095c9154b6eb441c601b8aa0290644c0` | Direct merge | 2026-09-14 | Main `05371f0e752ca931e26adc46f4d960ed65ae03de`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34881094634) passed both jobs. User accepted publication and requested dependency maintenance; recorded once at PB-0016 start. |
 | PB-1003 | `codex/PB-1001-PB-1003-fab-foundation` | `93ddde9c095c9154b6eb441c601b8aa0290644c0` | Direct merge | 2026-09-14 | Main `05371f0e752ca931e26adc46f4d960ed65ae03de`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34881094634) passed both jobs. User accepted publication and requested dependency maintenance; recorded once at PB-0016 start. |
+| PB-0016 | `codex/PB-0016-dependency-refresh` | `d11ccca72049edb410a7beabd126da643ddf87c2` | Direct merge | 2026-09-14 | Main `7bbfc38bf4abddf56807881e953e7ce349de9155`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34888255159) passed both jobs; PRs #94–97 closed as superseded. User accepted publication and approved the next combined scope; recorded once at PB-1004/PB-1005/PB-1007 start. |
 
 ## 5. Milestones
 
@@ -1845,7 +1848,7 @@ flowchart LR
   - Done when: JsonSchema.Net and its transitive binary terms are reviewed; a reproducible MIT-source build or compatible permissive alternative provides the required no-subscription workflow without assuming revenue eligibility; schema conformance, offline validation, locked restore, notices, and deployment instructions are validated before promoting the deferred JSON Schema update.
   - Reason: PB-0014 found that the existing JsonSchema.Net 9.3.0 binary already carries conditional maintenance-fee terms; PR #79 remains deferred until this distribution prerequisite is resolved.
 
-- [ ] **PB-0016 — Refresh runtime and test dependencies from Dependabot PRs 94–97** — **P1** — 🟡 **IN PROGRESS**
+- [x] **PB-0016 — Refresh runtime and test dependencies from Dependabot PRs 94–97** — **P1** — 🟢 **DONE**
   - Branch: `codex/PB-0016-dependency-refresh`
   - Owner: Dependency Maintenance Engineering
   - Depends on: PB-0014, PB-0015
@@ -2566,13 +2569,13 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0102, PB-1001
   - Done when: selected listing configuration resolves required/optional portable, Unity, Unreal, GLB, documentation, and media outputs.
 
-- [ ] **PB-1004 — Implement Fab portable/additional-files validator** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-1004-fab-portable-validator`
+- [ ] **PB-1004 — Implement Fab portable/additional-files validator** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `codex/PB-1004-PB-1005-PB-1007-fab-validators`
   - Depends on: PB-0506, PB-1001
   - Done when: accepted formats, archive structure, file limits, relevance, and naming generate blocking findings.
 
-- [ ] **PB-1005 — Implement Fab Unity package validator** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-1005-fab-unity-validator`
+- [ ] **PB-1005 — Implement Fab Unity package validator** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `codex/PB-1004-PB-1005-PB-1007-fab-validators`
   - Depends on: PB-0617, PB-1001
   - Done when: root organization, dependencies, duplicate/redundant files, demo scene, docs, paths, errors, and package content are checked.
 
@@ -2581,8 +2584,8 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-1001; E11 implementation
   - Done when: one project, matching Pack directory, overview map, cleaned redirectors, no unused/generated directories, docs, naming, and logs are checked.
 
-- [ ] **PB-1007 — Implement Fab media-gallery validator** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-1007-fab-media-validator`
+- [ ] **PB-1007 — Implement Fab media-gallery validator** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `codex/PB-1004-PB-1005-PB-1007-fab-validators`
   - Depends on: PB-0909, PB-1001
   - Done when: dimensions, format, per-image size, total size, required thumbnail/gallery presence, and relevant views validate.
 

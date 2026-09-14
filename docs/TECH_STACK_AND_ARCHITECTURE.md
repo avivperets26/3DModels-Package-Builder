@@ -2836,3 +2836,15 @@ adapter 4.0.0. The framework remains xunit.v3.mtp-off 3.2.2 in explicit VSTest m
 Central versions, both existing independent approval maps and NuGet lockfiles must agree;
 exact-version rejection remains enabled. This changes no application or adapter boundary.
 See [compatibility and provenance evidence](PB-0016_DEPENDENCY_REFRESH_EVIDENCE.md).
+
+## Fab artifact validators (PB-1004/PB-1005/PB-1007)
+
+The Fab adapter now exposes portable ZIP, Unity inspection-evidence and final image-gallery
+validators. They take an explicit immutable requirements profile and retain its SHA-256 with
+standard blocking findings. Portable validation composes contained archive preflight and streaming
+hash services. Unity consumes complete manifest/AssetDatabase inventories and exact package/clean-import
+evidence; engine execution remains in the Unity worker. Media inspection reuses the WPF codec through
+the neutral Contracts IEncodedImageInspector interface; the shared presentation specification owns
+required/allowed view roles. A new 2026-09-14.1 candidate adds the consumed artifact policies without
+mutating the historical seed or a user's approved current profile. See
+[boundaries and acceptance](PB-1004_PB-1005_PB-1007_FAB_VALIDATORS_EVIDENCE.md).

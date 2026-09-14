@@ -236,3 +236,11 @@ seven-project discovery/execution/TRX inventory, warning-free Release build, for
 package signatures and transitive vulnerability audit in [the maintenance evidence](PB-0016_DEPENDENCY_REFRESH_EVIDENCE.md).
 A Dependabot baseline failure at an old approval pin is not a compatibility result; skipped
 application CI cannot be counted as passed. Publication and exact-main CI still apply.
+
+PB-1004/PB-1005/PB-1007 map accepted portable formats/counts, hostile archive structures, exact file
+relevance, mutated hashes, Unity roots/dependencies/duplicate or unused content, clean-import evidence,
+real image decode, strict byte/dimension limits and all five product-case view rules to
+[Fab validator acceptance](PB-1004_PB-1005_PB-1007_FAB_VALIDATORS_EVIDENCE.md). Synthetic resolved
+profiles exercise success paths only; they are never evidence of official clarification. Missing,
+stale, incomplete or wrong-job evidence and unresolved applicable rules block release. Upstream
+Unity findings must be preserved. New facade tests do not count as a new real Editor import.
