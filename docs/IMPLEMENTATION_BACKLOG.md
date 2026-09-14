@@ -6,7 +6,7 @@
 **GitHub visibility:** Public, approved by the user on 2026-07-22
 **Runtime data:** `C:\Dev\PackageBuilder\runtime-data`
 **Planned default branch:** `main`
-**Last reviewed:** 2026-09-12
+**Last reviewed:** 2026-09-14
 
 ## Status legend
 
@@ -20,13 +20,13 @@
 <!-- status-summary:start -->
 | Measure | Tasks |
 | --- | ---: |
-| Total | 264 |
+| Total | 265 |
 | ⚪ Backlog | 126 |
-| 🟡 In progress | 3 |
+| 🟡 In progress | 1 |
 | 🔴 Blocked | 0 |
-| 🟢 Done | 135 |
-| Remaining (all not done) | 129 |
-| Overall completion | 135 / 264 (51.1%) |
+| 🟢 Done | 138 |
+| Remaining (all not done) | 127 |
+| Overall completion | 138 / 265 (52.1%) |
 <!-- status-summary:end -->
 
 Counts include each canonical PB task definition exactly once, including the optional post-v1 roadmap.
@@ -194,9 +194,7 @@ results, DONE statuses or Completion Log entries.
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-1001 | 🟡 **IN PROGRESS** | `codex/PB-1001-PB-1003-fab-foundation` | Codex; user for publication | 2026-09-12 | Validated locally: 2,672 regression tests, 85 focused cases and all 35 baseline checks pass. User authorized publication on 2026-09-14; commit/push/merge underway. See PB-1001–PB-1003 evidence. | None. |
-| PB-1002 | 🟡 **IN PROGRESS** | `codex/PB-1001-PB-1003-fab-foundation` | Codex; user for publication | 2026-09-12 | Validated locally: 2,672 regression tests, 85 focused cases and all 35 baseline checks pass. User authorized publication on 2026-09-14; commit/push/merge underway. See PB-1001–PB-1003 evidence. | None. |
-| PB-1003 | 🟡 **IN PROGRESS** | `codex/PB-1001-PB-1003-fab-foundation` | Codex; user for publication | 2026-09-12 | Validated locally: 2,672 regression tests, 85 focused cases and all 35 baseline checks pass. User authorized publication on 2026-09-14; commit/push/merge underway. See PB-1001–PB-1003 evidence. | None. |
+| PB-0016 | 🟡 **IN PROGRESS** | `codex/PB-0016-dependency-refresh` | Dependency Maintenance Engineering; user for publication | 2026-09-14 | Validated locally: four updates, 2,672 tests, 35 baseline checks, warning-free Release build, formatting, signatures and advisory audit pass. Obsolete PR #79 closed. User authorized commit/push/merge on 2026-09-14; publication underway. See PB-0016 evidence. | None. |
 
 
 ### PB-0802 Completion Evidence
@@ -1711,6 +1709,9 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0910 | `codex/PB-0908-PB-0910-media-reports` | `53ecb98befcef5ca0799036ecc4682eba5896724` | Direct merge | 2026-09-11 | Main `0c950f0667b43c7a8f2d09423b3bc0351264a650`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34589603966) passed both jobs. User accepted the result and requested PB-0911/PB-0912; recorded once at that branch start. |
 | PB-0911 | `codex/PB-0911-PB-0912-reports-support` | `d82e21e4fd017ef9c97834444db445b333c121d7` | Direct merge | 2026-09-12 | Main `ea8c727f93836c0a9c1c8d49c5ff27787a6f1113`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34595952321) passed both jobs. User accepted completion and requested PB-1001–PB-1003; recorded once at this branch start. |
 | PB-0912 | `codex/PB-0911-PB-0912-reports-support` | `d82e21e4fd017ef9c97834444db445b333c121d7` | Direct merge | 2026-09-12 | Main `ea8c727f93836c0a9c1c8d49c5ff27787a6f1113`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34595952321) passed both jobs. User accepted completion and requested PB-1001–PB-1003; recorded once at this branch start. |
+| PB-1001 | `codex/PB-1001-PB-1003-fab-foundation` | `93ddde9c095c9154b6eb441c601b8aa0290644c0` | Direct merge | 2026-09-14 | Main `05371f0e752ca931e26adc46f4d960ed65ae03de`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34881094634) passed both jobs. User accepted publication and requested dependency maintenance; recorded once at PB-0016 start. |
+| PB-1002 | `codex/PB-1001-PB-1003-fab-foundation` | `93ddde9c095c9154b6eb441c601b8aa0290644c0` | Direct merge | 2026-09-14 | Main `05371f0e752ca931e26adc46f4d960ed65ae03de`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34881094634) passed both jobs. User accepted publication and requested dependency maintenance; recorded once at PB-0016 start. |
+| PB-1003 | `codex/PB-1001-PB-1003-fab-foundation` | `93ddde9c095c9154b6eb441c601b8aa0290644c0` | Direct merge | 2026-09-14 | Main `05371f0e752ca931e26adc46f4d960ed65ae03de`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34881094634) passed both jobs. User accepted publication and requested dependency maintenance; recorded once at PB-0016 start. |
 
 ## 5. Milestones
 
@@ -1843,6 +1844,13 @@ flowchart LR
   - Depends on: PB-0014
   - Done when: JsonSchema.Net and its transitive binary terms are reviewed; a reproducible MIT-source build or compatible permissive alternative provides the required no-subscription workflow without assuming revenue eligibility; schema conformance, offline validation, locked restore, notices, and deployment instructions are validated before promoting the deferred JSON Schema update.
   - Reason: PB-0014 found that the existing JsonSchema.Net 9.3.0 binary already carries conditional maintenance-fee terms; PR #79 remains deferred until this distribution prerequisite is resolved.
+
+- [ ] **PB-0016 — Refresh runtime and test dependencies from Dependabot PRs 94–97** — **P1** — 🟡 **IN PROGRESS**
+  - Branch: `codex/PB-0016-dependency-refresh`
+  - Owner: Dependency Maintenance Engineering
+  - Depends on: PB-0014, PB-0015
+  - Done when: SQLite 10.0.12, Hosting 10.0.12, Test SDK 18.10.0 and xUnit runner 4.0.0 have reviewed compatibility/licence decisions; central pins, generated lockfiles, validator expectations and current notices agree; locked restore, warning-free Release build, formatting, all seven test projects, signature verification and vulnerability review pass; superseded PR #79 is reconciled; publication and completion gates pass.
+  - Evidence: `docs/PB-0016_DEPENDENCY_REFRESH_EVIDENCE.md`.
 
 **E00 exit:** M0 is complete because PB-0001 through PB-0013 are complete. PB-0014 is subsequent dependency maintenance and does not reopen the foundation milestone.
 
@@ -2543,17 +2551,17 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** Validated target artifacts are packaged and checked against versioned current Fab requirements.
 
-- [ ] **PB-1001 — Create versioned Fab requirements profile** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-1001 — Create versioned Fab requirements profile** — **P0** — 🟢 **DONE**
   - Branch: `codex/PB-1001-PB-1003-fab-foundation`
   - Depends on: PB-0111, PB-0305
   - Done when: current official asset, Unity, Unreal, archive, media, documentation, and effective-date rules are represented with source links.
 
-- [ ] **PB-1002 — Implement Fab requirements-profile loader and updater** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-1002 — Implement Fab requirements-profile loader and updater** — **P0** — 🟢 **DONE**
   - Branch: `codex/PB-1001-PB-1003-fab-foundation`
   - Depends on: PB-1001, PB-0307
   - Done when: cached/current/candidate profiles can be compared, tested, approved, and pinned to builds.
 
-- [ ] **PB-1003 — Implement Fab required-target resolver** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-1003 — Implement Fab required-target resolver** — **P0** — 🟢 **DONE**
   - Branch: `codex/PB-1001-PB-1003-fab-foundation`
   - Depends on: PB-0102, PB-1001
   - Done when: selected listing configuration resolves required/optional portable, Unity, Unreal, GLB, documentation, and media outputs.

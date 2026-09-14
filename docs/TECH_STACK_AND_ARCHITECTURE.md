@@ -76,7 +76,7 @@ As of this document's review date, .NET 10 is the current LTS line, Unity 6.3 is
 | Serialization | `System.Text.Json` | Built into .NET, fast, source-generation support |
 | Schema validation | JsonSchema.Net 9.4.0 (independently compiled MIT source; pinned commit) | Pinned offline Draft 2020-12 validation of manifests and worker contracts |
 | Logging | Dependency-free `System.Text.Json` JSON Lines sink | Deterministic redacted application/per-job logs without an additional runtime package or external service |
-| Persistence | SQLite through `Microsoft.Data.Sqlite` 10.0.11 with patched `SQLitePCLRaw.lib.e_sqlite3` 3.53.3 | Pinned local build history without a server or vulnerable native 2.1.11 runtime |
+| Persistence | SQLite through `Microsoft.Data.Sqlite` 10.0.12 with patched `SQLitePCLRaw.lib.e_sqlite3` 3.53.3 | Pinned local build history without a server or vulnerable native 2.1.11 runtime |
 | Image processing | Windows Imaging Component through WPF | Current Windows JPEG/PNG adapter; engine-neutral validation and optimization policies; no additional native dependency |
 | Archives | `System.IO.Compression.ZipArchive` | Built-in deterministic ZIP construction |
 | Cryptographic hashes | `System.Security.Cryptography` SHA-256 | Artifact identity, cache keys, and duplicate detection |
@@ -2828,3 +2828,11 @@ embeds previews. The export redaction policy omits whole sensitive fields, inclu
 left by earlier local logging, while the established local logger retains its existing behavior.
 All output is returned as owned bytes for a future host-owned save operation; these services do
 not collect directories, upload data or persist partial archives. See [scope evidence and quotas](PB-0911_PB-0912_REPORTS_SUPPORT_EVIDENCE.md).
+
+## Runtime and test dependency refresh (PB-0016)
+
+The approved set uses SQLite and Hosting 10.0.12, Test SDK 18.10.0 and xUnit Visual Studio
+adapter 4.0.0. The framework remains xunit.v3.mtp-off 3.2.2 in explicit VSTest mode.
+Central versions, both existing independent approval maps and NuGet lockfiles must agree;
+exact-version rejection remains enabled. This changes no application or adapter boundary.
+See [compatibility and provenance evidence](PB-0016_DEPENDENCY_REFRESH_EVIDENCE.md).

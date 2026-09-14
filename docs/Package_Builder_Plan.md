@@ -1536,3 +1536,11 @@ This is an API foundation, not final Fab submission certification or desktop set
 artifact validators and packaging follow in PB-1004–PB-1009. The updater takes explicit local JSON
 and a trusted compatibility-suite implementation; it performs no automatic downloads or uploads.
 See [profile workflow, source review and tests](PB-1001_PB-1003_FAB_FOUNDATION_EVIDENCE.md).
+
+## Dependency maintenance (PB-0016)
+
+Review Dependabot updates through one tested maintenance scope: runtime patches first,
+then test SDK and adapter compatibility. Preserve exact approved pins and locked restores;
+compare all seven test-project counts before accepting a runner update. Keep the MIT JSON
+source distribution selected by PB-0015. See [the review](PB-0016_DEPENDENCY_REFRESH_EVIDENCE.md).
+This maintenance does not add a desktop feature or require new asset-package generation.

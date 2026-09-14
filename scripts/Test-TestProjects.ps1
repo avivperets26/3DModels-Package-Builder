@@ -15,16 +15,16 @@ $script:PassCount = 0
 $script:FailureCount = 0
 $script:ExpectedPackages = [ordered]@{
     'coverlet.collector' = '10.0.1'
-    'Microsoft.NET.Test.Sdk' = '18.9.0'
+    'Microsoft.NET.Test.Sdk' = '18.10.0'
     'xunit.v3.mtp-off' = '3.2.2'
-    'xunit.runner.visualstudio' = '3.1.5'
+    'xunit.runner.visualstudio' = '4.0.0'
 }
 $script:ExpectedProductionPackages = [ordered]@{
     'CommunityToolkit.Mvvm' = '8.4.2'
     'Humanizer.Core' = '3.0.10'
     'Scriban' = '7.4.0'
-    'Microsoft.Data.Sqlite' = '10.0.11'
-    'Microsoft.Extensions.Hosting' = '10.0.11'
+    'Microsoft.Data.Sqlite' = '10.0.12'
+    'Microsoft.Extensions.Hosting' = '10.0.12'
     'SQLitePCLRaw.lib.e_sqlite3' = '3.53.3'
 }
 $script:ProjectSpecifications = @(

@@ -3,6 +3,8 @@ function Test-PackageBuilderTaskBranch {
     [OutputType([bool])]
     param([string]$TaskId, [string]$Branch)
 
+    if ($TaskId -eq 'PB-0016' -and $Branch -eq 'codex/PB-0016-dependency-refresh') { return $true }
+
     # The user approved only these three task identities on this exact combined branch.
     if ($TaskId -in @('PB-0805', 'PB-0806', 'PB-0807') -and
         $Branch -eq 'feat/PB-0805-PB-0807-multi-item-flow') { return $true }

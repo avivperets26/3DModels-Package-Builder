@@ -652,6 +652,10 @@ Invoke-Check 'Task branch names and lifecycle markers are valid' {
     $blockedMarker = $blockedEmoji + ' **BLOCKED**'
     $lifecycleStates = @{}
 
+    if (-not (Test-PackageBuilderTaskBranch 'PB-0016' 'codex/PB-0016-dependency-refresh') -or
+        (Test-PackageBuilderTaskBranch 'PB-0017' 'codex/PB-0016-dependency-refresh')) {
+        throw 'Dependency refresh branch identity is invalid.'
+    }
     foreach ($id in @('PB-1001', 'PB-1002', 'PB-1003')) {
         if (-not (Test-PackageBuilderTaskBranch $id 'codex/PB-1001-PB-1003-fab-foundation')) {
             throw 'Approved Fab foundation branch rejected.'
