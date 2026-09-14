@@ -10,10 +10,10 @@ project's tracked `packages.lock.json`.
 | JsonPointer.Net source | Source dependency of JsonSchema.Net | 7.0.2 | MIT, same source commit and notice | JSON Pointer resolution |
 | Json.More.Net source | Source dependency of JsonPointer.Net | 3.0.1 | MIT, same source commit and notice | JSON primitives |
 | [Humanizer.Core](https://www.nuget.org/packages/Humanizer.Core/3.0.10) | NuGet dependency of JsonPointer.Net source | 3.0.10 | MIT | English ordinal formatting |
-| [Microsoft.Data.Sqlite](https://www.nuget.org/packages/Microsoft.Data.Sqlite/10.0.11) | Direct runtime dependency of `PackageBuilder.Infrastructure` | 10.0.11 | [MIT](https://github.com/dotnet/efcore/blob/main/LICENSE.txt) | Serverless SQLite connections, transactions, and consistent backups |
+| [Microsoft.Data.Sqlite](https://www.nuget.org/packages/Microsoft.Data.Sqlite/10.0.12) | Direct runtime dependency of `PackageBuilder.Infrastructure` | 10.0.12 | [MIT](https://github.com/dotnet/efcore/blob/main/LICENSE.txt) | Serverless SQLite connections, transactions, and consistent backups |
 | [SQLitePCLRaw.lib.e_sqlite3](https://www.nuget.org/packages/SQLitePCLRaw.lib.e_sqlite3/3.53.3) | Direct security pin for the native runtime used by `PackageBuilder.Infrastructure` | 3.53.3 | [Public domain](https://www.nuget.org/packages/SQLitePCLRaw.lib.e_sqlite3/3.53.3/License) | Replaces the vulnerable transitive 2.1.11 native SQLite library |
 | [CommunityToolkit.Mvvm](https://www.nuget.org/packages/CommunityToolkit.Mvvm/8.4.2) | Direct runtime dependency of `PackageBuilder.App.Wpf` | 8.4.2 | [MIT](https://github.com/CommunityToolkit/dotnet/blob/main/License.md) | Observable view-model infrastructure without placing application policy in WPF |
-| [Microsoft.Extensions.Hosting](https://www.nuget.org/packages/Microsoft.Extensions.Hosting/10.0.11) | Direct runtime dependency of `PackageBuilder.App.Wpf` | 10.0.11 | [MIT](https://github.com/dotnet/runtime/blob/main/LICENSE.TXT) | Local dependency injection and desktop host lifetime composition |
+| [Microsoft.Extensions.Hosting](https://www.nuget.org/packages/Microsoft.Extensions.Hosting/10.0.12) | Direct runtime dependency of `PackageBuilder.App.Wpf` | 10.0.12 | [MIT](https://github.com/dotnet/runtime/blob/main/LICENSE.TXT) | Local dependency injection and desktop host lifetime composition |
 
 PB-0015 replaces all three publisher JSON binary packages with independently compiled MIT
 source pinned to commit `399f198431f65cf6896fe6038f833ef6d0b27a39`. The publisher's binary
@@ -24,17 +24,17 @@ manifest and distribution README under `ThirdPartyNotices/json-everything`. Pres
 when distributing the application. See [source distribution instructions](../third_party/json-everything/README.md).
 The application continues to evaluate schemas offline. NuGet restores must use `--locked-mode`.
 
-Microsoft.Data.Sqlite 10.0.11 resolves its managed provider and bundle transitively. Package
+Microsoft.Data.Sqlite 10.0.12 resolves its managed provider and bundle transitively. Package
 Builder directly pins `SQLitePCLRaw.lib.e_sqlite3` 3.53.3. The updated managed provider resolves the 2.1.12 bundle; the historical 2.1.11 native dependency had a high-severity advisory. The locked restore and vulnerability audit
 must reject any regression to the vulnerable native version.
 
-CommunityToolkit.Mvvm 8.4.2 and Microsoft.Extensions.Hosting 10.0.11 are used only by the local
+CommunityToolkit.Mvvm 8.4.2 and Microsoft.Extensions.Hosting 10.0.12 are used only by the local
 desktop presentation composition. They add no telemetry, remote service, paid subscription, cloud
 processing, or runtime network requirement. Exact transitive dependencies and hashes remain locked
 in `src/PackageBuilder.App.Wpf/packages.lock.json`.
 
 
-## September 2026 maintenance
+## Historical PB-0014 maintenance — 2026-09-10
 
 PB-0014 reviews the five outstanding Dependabot proposals. Hosting and Microsoft.Data.Sqlite
 are pinned to 10.0.11, Microsoft.NET.Test.Sdk to 18.9.0, and the native SQLite binary to 3.53.3.
@@ -48,3 +48,11 @@ The Application documentation renderer uses [Scriban 7.4.0](https://github.com/s
 under the [BSD-2-Clause license](licenses/Scriban-LICENSE.txt). The complete upstream license
 is copied into build/publish output at ThirdPartyNotices/Scriban/LICENSE.txt; preserve it when
 distributing the application. No mandatory paid service or runtime network call is required.
+
+## PB-0016 dependency refresh — 2026-09-14
+
+Current pins are Microsoft.Data.Sqlite and Microsoft.Extensions.Hosting 10.0.12.
+Test-only tools are Microsoft.NET.Test.Sdk 18.10.0 (MIT) and xunit.runner.visualstudio 4.0.0 (Apache-2.0);
+they do not change the pinned xunit.v3.mtp-off 3.2.2 framework. Licence metadata and
+signature/compatibility evidence are recorded in [PB-0016](PB-0016_DEPENDENCY_REFRESH_EVIDENCE.md).
+The earlier PB-0014 section records historical decisions, not current package pins.

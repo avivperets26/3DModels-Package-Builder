@@ -145,3 +145,15 @@ corrected. Automatic approval review rejected both bounded and explicit-path non
 commands with `blocked by policy`; those empty historical directories remain a recorded cleanup
 exception for the user, not retained packages or claimed successful cleanup. Compact TRX/logs stay
 in ignored artifacts/PB-1001. Source fixtures and intended releases are unchanged.
+
+## PB-0016 dependency refresh cleanup — 2026-09-14
+
+The staged database/desktop runs and complete seven-project suite reuse existing disposing
+fixtures. No engine integration build or new persistent test package was needed. A read-only
+post-test check of the PB-1001 test root confirms the same 15 historical empty directories,
+zero new directories and zero files; the prior automatic-review exception remains unchanged.
+No rejected removal was retried. Compact logs, signatures, metadata, advisory audit and TRX
+remain under ignored artifacts/PB-0016 and artifacts/test-results/PB-0016. Source/golden assets
+and intended releases are preserved. Receipt: artifacts/PB-0016/cleanup-verified.json.
+The full repository baseline also passed nine cleanup cases and removed the small synthetic
+disposable outputs beneath artifacts/u/7759de2e; its compact logs/receipts remain.

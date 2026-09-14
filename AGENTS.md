@@ -123,6 +123,11 @@ roll PB-0911/PB-0912 to DONE at branch start. This exact scope does not change p
 
 ### Start every task branch from freshly synchronized main
 
+PB-0016 dependency maintenance uses the exact branch `codex/PB-0016-dependency-refresh`,
+from synchronized main `05371f0e752ca931e26adc46f4d960ed65ae03de` on 2026-09-14.
+It covers the four reviewed dependency proposals and superseded JSON-package proposal cleanup.
+PB-1001–PB-1003 completion rolls over once here; publication gates remain unchanged.
+
 Before creating any new implementation branch:
 
 1. Inspect the current branch and worktree; preserve all unrelated or uncommitted work.

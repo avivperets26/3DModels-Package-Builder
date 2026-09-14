@@ -230,3 +230,9 @@ gates, atomic SQLite promotion, restart, stale reviews, immutable old pins, and 
 target resolutions to [Fab foundation evidence](PB-1001_PB-1003_FAB_FOUNDATION_EVIDENCE.md).
 Profile approval validates a rules snapshot and fixture compatibility, not an asset's marketplace
 compliance. Unresolved clauses must remain visible until explicitly clarified in a reviewed revision.
+
+PB-0016 maps dependency approval to exact-version/lockfile validators, runtime tests, the
+seven-project discovery/execution/TRX inventory, warning-free Release build, formatting,
+package signatures and transitive vulnerability audit in [the maintenance evidence](PB-0016_DEPENDENCY_REFRESH_EVIDENCE.md).
+A Dependabot baseline failure at an old approval pin is not a compatibility result; skipped
+application CI cannot be counted as passed. Publication and exact-main CI still apply.

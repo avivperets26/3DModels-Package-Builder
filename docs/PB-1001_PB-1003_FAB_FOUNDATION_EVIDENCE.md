@@ -6,14 +6,15 @@ The user approved all three tasks on one branch. `codex/PB-1001-PB-1003-fab-foun
 at freshly fetched/pulled clean main `ea8c727f93836c0a9c1c8d49c5ff27787a6f1113`.
 The exact exception is recorded in AGENTS, the engineering skill and tested branch policy.
 PB-0911/PB-0912 were rolled to DONE once with publication/main-CI/user-confirmation evidence.
-The current three tasks remain IN PROGRESS and are implemented and validated locally. The final
-repository baseline passes all 35 checks. Publication and completion gates remain outstanding.
-On 2026-09-14 the user explicitly authorized commit, push, merge and deployment. Publication is
-underway; the task/merge commits and main CI result will be retained in
-`artifacts/PB-1001-publication.json` for the next-task rollover. The user clarified that updating
-GitHub/main is sufficient deployment for this scope; no separate app distribution is requested.
-Backlog counts: 264 total,
-135 DONE, 3 IN PROGRESS, 0 BLOCKED, 126 BACKLOG, 129 remaining (51.1%).
+The three tasks are DONE, synchronized once at PB-0016 start on 2026-09-14 after the user
+accepted publication and requested the next scope. Task commit
+`93ddde9c095c9154b6eb441c601b8aa0290644c0` was merged/pushed to main as
+`05371f0e752ca931e26adc46f4d960ed65ae03de`;
+[main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34881094634)
+passed both jobs. The local publication receipt is `artifacts/PB-1001-publication.json`.
+The user clarified that GitHub/main is sufficient deployment; no separate distribution was requested.
+Backlog at rollover: 265 total, 138 DONE, 1 IN PROGRESS (PB-0016), 0 BLOCKED,
+126 BACKLOG, 127 remaining (52.1%). Historical validation below is retained.
 
 ## Acceptance and ownership
 
