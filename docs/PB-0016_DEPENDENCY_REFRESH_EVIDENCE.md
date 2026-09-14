@@ -2,12 +2,23 @@
 
 ## Scope and lifecycle
 
-IN PROGRESS on `codex/PB-0016-dependency-refresh`, created on 2026-09-14 after fetch,
+DONE, recorded at PB-1004/PB-1005/PB-1007 start. Implemented on `codex/PB-0016-dependency-refresh`, created on 2026-09-14 after fetch,
 fast-forward pull and verification that clean main equals origin/main at
 `05371f0e752ca931e26adc46f4d960ed65ae03de`. The user approved this maintenance scope.
 PB-1001–PB-1003 roll to DONE once here using their recorded task/merge/main-CI evidence
 and the user's acceptance and continuation. PB-0016 remains unchecked until publication,
 main CI, user confirmation and subsequent rollover. No publication is claimed by local checks.
+
+
+## Publication and completion rollover
+
+Task commit `d11ccca72049edb410a7beabd126da643ddf87c2` was pushed and merged/pushed as
+`7bbfc38bf4abddf56807881e953e7ce349de9155`. Both jobs in
+[main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34888255159)
+passed. Dependabot PRs #94–#97 were closed as superseded and verified by readback.
+The user accepted the result and approved the next combined scope on 2026-09-14; this
+next-task branch records PB-0016 DONE once. The local receipt is artifacts/PB-0016-publication.json.
+Earlier lifecycle/handoff text below records the pre-publication state and is historical.
 
 ## Review decisions
 

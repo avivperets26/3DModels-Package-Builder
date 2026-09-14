@@ -18,6 +18,8 @@ The approved PB-0908–PB-0910 combined scope uses `codex/PB-0908-PB-0910-media-
 
 ## Required workflow
 
+The approved PB-1004/PB-1005/PB-1007 combined scope uses `codex/PB-1004-PB-1005-PB-1007-fab-validators`.
+
 PB-0016 dependency maintenance uses `codex/PB-0016-dependency-refresh`; update package pins,
 NuGet lockfiles and existing approval maps together while preserving exact-version checks.
 

@@ -1544,3 +1544,13 @@ then test SDK and adapter compatibility. Preserve exact approved pins and locked
 compare all seven test-project counts before accepting a runner update. Keep the MIT JSON
 source distribution selected by PB-0015. See [the review](PB-0016_DEPENDENCY_REFRESH_EVIDENCE.md).
 This maintenance does not add a desktop feature or require new asset-package generation.
+
+## Fab portable, Unity and gallery validation (PB-1004/PB-1005/PB-1007)
+
+Portable deliveries now have profile-driven format/count/size and manifest-relevance checks layered
+on existing archive safety. Unity checks consume complete trusted package and clean-import observations;
+media checks decode final images, enforce profile limits and require product-specific view coverage.
+Results remain blocked where the selected profile has unresolved applicable requirements. The new
+artifact-validation profile is an explicit review candidate; loading it does not approve it. These
+APIs prepare PB-1009 composition and do not add desktop controls or automatic upload. See
+[workflow, checks and limitations](PB-1004_PB-1005_PB-1007_FAB_VALIDATORS_EVIDENCE.md).

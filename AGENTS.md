@@ -121,6 +121,14 @@ from synchronized main `ea8c727f93836c0a9c1c8d49c5ff27787a6f1113`. Implement PB-
 its dependent loader/updater and resolver. Retain separate acceptance and lifecycle records;
 roll PB-0911/PB-0912 to DONE at branch start. This exact scope does not change publication gates.
 
+### Approved combined scope: PB-1004, PB-1005 and PB-1007
+
+On 2026-09-14 the user approved these three validators on one branch:
+`codex/PB-1004-PB-1005-PB-1007-fab-validators`, from freshly synchronized main
+`7bbfc38bf4abddf56807881e953e7ce349de9155`. Keep separate acceptance and lifecycle records.
+Roll PB-0016 to DONE once using its successful main CI and user confirmation. This exact
+scope does not include PB-1006 or change publication gates.
+
 ### Start every task branch from freshly synchronized main
 
 PB-0016 dependency maintenance uses the exact branch `codex/PB-0016-dependency-refresh`,

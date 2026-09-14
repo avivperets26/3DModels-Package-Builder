@@ -652,6 +652,14 @@ Invoke-Check 'Task branch names and lifecycle markers are valid' {
     $blockedMarker = $blockedEmoji + ' **BLOCKED**'
     $lifecycleStates = @{}
 
+    foreach ($id in @('PB-1004', 'PB-1005', 'PB-1007')) {
+        if (-not (Test-PackageBuilderTaskBranch $id 'codex/PB-1004-PB-1005-PB-1007-fab-validators')) {
+            throw 'Approved Fab validators branch rejected.'
+        }
+    }
+    if (Test-PackageBuilderTaskBranch 'PB-1006' 'codex/PB-1004-PB-1005-PB-1007-fab-validators') {
+        throw 'Unreal task accepted on the unrelated validators branch.'
+    }
     if (-not (Test-PackageBuilderTaskBranch 'PB-0016' 'codex/PB-0016-dependency-refresh') -or
         (Test-PackageBuilderTaskBranch 'PB-0017' 'codex/PB-0016-dependency-refresh')) {
         throw 'Dependency refresh branch identity is invalid.'

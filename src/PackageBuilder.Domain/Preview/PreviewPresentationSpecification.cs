@@ -177,10 +177,13 @@ public sealed class PreviewPresentationSpecification : IEquatable<PreviewPresent
                     lighting));
     }
 
-    private static PreviewPresentationValidationError RequiredViewError(
+    /// <summary>Shared required-view policy for planned presentations and measured delivery galleries.</summary>
+    public static PreviewPresentationValidationError RequiredViewError(
         ProductCase productCase,
-        HashSet<PreviewViewKind> kinds)
+        IReadOnlySet<PreviewViewKind> kinds)
     {
+        ArgumentNullException.ThrowIfNull(productCase);
+        ArgumentNullException.ThrowIfNull(kinds);
         return !kinds.Contains(PreviewViewKind.Hero)
             ? PreviewPresentationValidationError.MissingHeroView
             : productCase.Equals(ProductCase.RiggedAnimated) &&
@@ -195,8 +198,11 @@ public sealed class PreviewPresentationSpecification : IEquatable<PreviewPresent
             : PreviewPresentationValidationError.None;
     }
 
-    private static bool IsViewAllowed(ProductCase productCase, PreviewViewKind kind)
+    /// <summary>Checks whether a view role applies to this product case without constructing a presentation.</summary>
+    public static bool IsViewAllowed(ProductCase productCase, PreviewViewKind kind)
     {
+        ArgumentNullException.ThrowIfNull(productCase);
+        ArgumentNullException.ThrowIfNull(kind);
         return kind.Equals(PreviewViewKind.AnimationPose)
             ? productCase.Equals(ProductCase.RiggedAnimated)
             : kind.Equals(PreviewViewKind.SetOverview)

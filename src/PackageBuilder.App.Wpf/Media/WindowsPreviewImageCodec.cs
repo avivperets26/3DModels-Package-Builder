@@ -3,16 +3,27 @@ using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using PackageBuilder.Application.Media;
+using PackageBuilder.Contracts.Media;
 using PackageBuilder.Domain.Media;
 
 namespace PackageBuilder.App.Wpf.Media;
 
 /// <summary>Windows Imaging Component adapter using the existing WPF runtime. Only PNG/JPEG
 /// containers are accepted; dimensions are checked before pixel allocation. Encoding discards metadata.</summary>
-public sealed class WindowsPreviewImageCodec : IPreviewImageCodec
+public sealed class WindowsPreviewImageCodec : IPreviewImageCodec, IEncodedImageInspector
 {
+    /// <summary>Fully decodes one bounded image for marketplace inspection, permitting dimensions
+    /// above capture size within the shared raster safety budget. Metadata is never trusted as pixel proof.</summary>
+    public EncodedImageInfo Inspect(ReadOnlyMemory<byte> encoded)
+    {
+        PreviewRaster image = DecodeCore(encoded, requireCaptureSize: false);
+        return new(image.Width, image.Height, encoded.Span[0] == 137 ? EncodedImageFormat.Png : EncodedImageFormat.Jpeg);
+    }
+
     /// <summary>Decodes a single bounded delivery-sized frame into owned RGBA pixels while discarding metadata.</summary>
-    public PreviewRaster Decode(ReadOnlyMemory<byte> encoded)
+    public PreviewRaster Decode(ReadOnlyMemory<byte> encoded) => DecodeCore(encoded, requireCaptureSize: true);
+
+    private static PreviewRaster DecodeCore(ReadOnlyMemory<byte> encoded, bool requireCaptureSize)
     {
         if (encoded.Length is < 8 or > 32_000_000)
         { throw new InvalidDataException("Image input size is invalid."); }
@@ -36,7 +47,9 @@ public sealed class WindowsPreviewImageCodec : IPreviewImageCodec
             if (decoder.Frames.Count != 1)
             { throw new InvalidDataException("Exactly one image frame is required."); }
             BitmapFrame frame = decoder.Frames[0];
-            if (frame.PixelWidth != PreviewRaster.CaptureWidth || frame.PixelHeight != PreviewRaster.CaptureHeight)
+            if (frame.PixelWidth <= 0 || frame.PixelHeight <= 0 || (long)frame.PixelWidth * frame.PixelHeight > PreviewRaster.MaximumPixels)
+            { throw new InvalidDataException("Image dimensions exceed the decoder safety budget."); }
+            if (requireCaptureSize && (frame.PixelWidth != PreviewRaster.CaptureWidth || frame.PixelHeight != PreviewRaster.CaptureHeight))
             { throw new InvalidDataException("Image dimensions must be 1920 by 1080."); }
             var converted = new FormatConvertedBitmap(frame, PixelFormats.Bgra32, null, 0);
             byte[] pixels = new byte[frame.PixelWidth * frame.PixelHeight * 4];
