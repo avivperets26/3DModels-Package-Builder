@@ -19,7 +19,7 @@ public sealed class SqliteToolVersionApprovalRepository : IToolVersionApprovalRe
         string projectRoot,
         string databasePath)
     {
-        if (!TryValidateDatabasePath(projectRoot, databasePath, out string? normalizedPath))
+        if (!SqliteRepositoryPath.TryValidate(projectRoot, databasePath, out string? normalizedPath))
         {
             return Failure<SqliteToolVersionApprovalRepository>(
                 "REPOSITORY_PATH_INVALID",
@@ -566,19 +566,7 @@ public sealed class SqliteToolVersionApprovalRepository : IToolVersionApprovalRe
     private static bool ValidateCompatibility(
         PersistedCompatibilitySuiteResult? result,
         CompatibilitySuiteOutcome requiredOutcome) =>
-        result is not null
-        && result.Outcome == requiredOutcome
-        && IsIdentity(result.RunId)
-        && result.TotalTests > 0
-        && result.PassedTests >= 0
-        && result.FailedTests >= 0
-        && result.PassedTests + result.FailedTests == result.TotalTests
-        && (requiredOutcome == CompatibilitySuiteOutcome.Passed
-            ? result.FailedTests == 0 && result.PassedTests == result.TotalTests
-            : result.FailedTests > 0)
-        && IsLogicalReference(result.EvidenceReference)
-        && IsSha256(result.EvidenceSha256)
-        && IsUtc(result.CompletedAtUtc);
+        CompatibilityEvidenceValidation.IsValid(result, requiredOutcome);
 
     private static bool ValidateModules(IReadOnlyCollection<string>? modules)
     {
@@ -708,65 +696,6 @@ public sealed class SqliteToolVersionApprovalRepository : IToolVersionApprovalRe
         value is not null && value.Length is > 0 && value.Length <= maximumLength
         && !string.IsNullOrWhiteSpace(value) && !char.IsWhiteSpace(value[0])
         && !char.IsWhiteSpace(value[^1]) && !value.Any(char.IsControl);
-
-    private static bool IsLogicalReference(string? value) =>
-        IsText(value) && value![0] != '/' && !value.Contains('\\', StringComparison.Ordinal)
-        && !value.Contains(':', StringComparison.Ordinal) && value.Split('/').All(segment =>
-            segment.Length > 0 && segment is not "." and not ".."
-            && !char.IsWhiteSpace(segment[0]) && !char.IsWhiteSpace(segment[^1]));
-
-    private static bool IsSha256(string value) =>
-        value.Length == 64 && value.All(character => character is >= '0' and <= '9' or >= 'a' and <= 'f');
-
-    private static bool TryValidateDatabasePath(
-        string? projectRoot,
-        string? databasePath,
-        out string? normalizedPath)
-    {
-        normalizedPath = null;
-        if (string.IsNullOrWhiteSpace(projectRoot) || string.IsNullOrWhiteSpace(databasePath))
-        {
-            return false;
-        }
-
-        try
-        {
-            string root = Path.TrimEndingDirectorySeparator(Path.GetFullPath(projectRoot));
-            string candidate = Path.GetFullPath(databasePath);
-            if (!Path.IsPathFullyQualified(projectRoot) || !Path.IsPathFullyQualified(databasePath)
-                || !Directory.Exists(root) || !File.Exists(candidate)
-                || !candidate.StartsWith(root + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
-            {
-                return false;
-            }
-
-            string current = root;
-            foreach (string segment in Path.GetRelativePath(root, candidate).Split(
-                Path.DirectorySeparatorChar,
-                StringSplitOptions.RemoveEmptyEntries))
-            {
-                if ((File.GetAttributes(current) & FileAttributes.ReparsePoint) != 0)
-                {
-                    return false;
-                }
-
-                current = Path.Combine(current, segment);
-            }
-
-            if ((File.GetAttributes(candidate) & FileAttributes.ReparsePoint) != 0)
-            {
-                return false;
-            }
-
-            normalizedPath = candidate;
-            return true;
-        }
-        catch (Exception exception) when (
-            exception is ArgumentException or IOException or NotSupportedException or UnauthorizedAccessException)
-        {
-            return false;
-        }
-    }
 
     private static async Task<RepositoryOperationResult> RunAsync(
         Func<Task<RepositoryOperationResult>> operation,

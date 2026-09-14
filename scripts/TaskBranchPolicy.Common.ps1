@@ -17,6 +17,8 @@ function Test-PackageBuilderTaskBranch {
         $Branch -eq 'codex/PB-0908-PB-0910-media-reports') { return $true }
     if ($TaskId -in @('PB-0911', 'PB-0912') -and
         $Branch -eq 'codex/PB-0911-PB-0912-reports-support') { return $true }
+    if ($TaskId -in @('PB-1001', 'PB-1002', 'PB-1003') -and
+        $Branch -eq 'codex/PB-1001-PB-1003-fab-foundation') { return $true }
     $match = [regex]::Match($Branch,
         '^(chore|docs|feat|fix|test|security|release)/(?<id>PB-\d{4})-[a-z0-9]+(?:-[a-z0-9]+)*$')
     return $match.Success -and $match.Groups['id'].Value -eq $TaskId

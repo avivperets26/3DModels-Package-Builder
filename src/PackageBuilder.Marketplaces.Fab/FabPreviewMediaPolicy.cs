@@ -6,5 +6,10 @@ namespace PackageBuilder.Marketplaces.Fab;
 /// Callers can supply updated versioned limits to the shared optimizer without changing engine code.</summary>
 public static class FabPreviewMediaPolicy
 {
-    public static PreviewMediaPolicy Current { get; } = new("fab-2026-09-11", 3_000_000, 25_000_000);
+    public static PreviewMediaPolicy Current { get; } = FromProfile(FabRequirementsBaseline.Profile);
+
+    /// <summary>Uses the exact selected rules snapshot; conservative decimal units are a recorded local policy.</summary>
+    public static PreviewMediaPolicy FromProfile(FabRequirementsProfile profile) => new(
+        $"fab-{profile.Document.Version}", profile.Rule("image-bytes").Limit!.Value,
+        profile.Rule("gallery-bytes").Limit!.Value);
 }

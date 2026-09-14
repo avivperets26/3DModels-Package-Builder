@@ -18,6 +18,8 @@ The approved PB-0908–PB-0910 combined scope uses `codex/PB-0908-PB-0910-media-
 
 ## Required workflow
 
+The approved PB-1001–PB-1003 combined scope uses `codex/PB-1001-PB-1003-fab-foundation`.
+
 The approved PB-0911/PB-0912 combined scope uses `codex/PB-0911-PB-0912-reports-support`.
 
 1. Read `/AGENTS.md` completely, then read the affected plan, architecture, backlog, and quality

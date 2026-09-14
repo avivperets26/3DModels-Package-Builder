@@ -8,10 +8,12 @@ after fetch, main checkout, fast-forward pull and clean equality with origin/mai
 the engineering skill and tested branch policy. PB-0908–PB-0910 were rolled to DONE once with
 task/merge commits, successful main CI and user confirmation in the Completion Log.
 
-Both current tasks remain IN PROGRESS. The user authorized commit, push and merge after accepting
-the local validation handoff. Publication is underway; exact task/merge commits and main CI results
-will be retained in `artifacts/PB-0911-publication.json` and recorded at the next branch rollover.
-Counts: 264 total, 133 DONE, 2 IN PROGRESS, 0 BLOCKED, 129 BACKLOG, 131 remaining (50.4%).
+Both tasks are DONE, recorded once at the PB-1001–PB-1003 branch start on 2026-09-12 after
+user confirmation. Task commit `d82e21e4fd017ef9c97834444db445b333c121d7` merged as
+`ea8c727f93836c0a9c1c8d49c5ff27787a6f1113`; both jobs in
+[main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34595952321) passed.
+The local publication receipt is `artifacts/PB-0911-publication.json`. Historical local validation
+and optional visual-check limits below are unchanged; current counts live in the backlog summary.
 
 ## Acceptance and API
 

@@ -114,6 +114,13 @@ Use `codex/PB-0911-PB-0912-reports-support`, based on freshly synchronized main
 Roll PB-0908–PB-0910 to DONE at branch start following successful main CI and user confirmation.
 This exact combined branch is a narrow exception; publication gates remain unchanged.
 
+### Approved combined scope: PB-1001 through PB-1003
+
+On 2026-09-12 the user approved these three tasks on `codex/PB-1001-PB-1003-fab-foundation`,
+from synchronized main `ea8c727f93836c0a9c1c8d49c5ff27787a6f1113`. Implement PB-1001 before
+its dependent loader/updater and resolver. Retain separate acceptance and lifecycle records;
+roll PB-0911/PB-0912 to DONE at branch start. This exact scope does not change publication gates.
+
 ### Start every task branch from freshly synchronized main
 
 Before creating any new implementation branch:

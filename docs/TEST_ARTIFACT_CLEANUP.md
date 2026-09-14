@@ -133,3 +133,15 @@ cancellation paths. HTML previews also use synthetic in-memory pixels. No dispos
 extraction directory or engine project is created. Only an explicitly requested compact synthetic
 HTML sample and test logs/TRX are retained in ignored artifacts/PB-0911. Source/golden fixtures
 and prior intended releases remain untouched. The existing cleanup baseline continues to apply.
+
+## PB-1001–PB-1003 profile validation cleanup — 2026-09-12
+
+Profile and resolver checks use synthetic in-memory JSON; integration tests use disposable SQLite
+workspaces under `tests/PackageBuilder.App.Wpf.Tests/bin/Release/net10.0-windows/PB-1001`.
+Successful and failed test bodies dispose their own databases and backup directories. No asset
+package, extraction or engine project is generated. Initial fixture-constructor failures left 15
+empty GUID directories (zero files/bytes) in that exact test root. The backup-directory setup was
+corrected. Automatic approval review rejected both bounded and explicit-path nonrecursive cleanup
+commands with `blocked by policy`; those empty historical directories remain a recorded cleanup
+exception for the user, not retained packages or claimed successful cleanup. Compact TRX/logs stay
+in ignored artifacts/PB-1001. Source fixtures and intended releases are unchanged.
