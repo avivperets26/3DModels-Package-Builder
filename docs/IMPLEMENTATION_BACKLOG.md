@@ -6,7 +6,7 @@
 **GitHub visibility:** Public, approved by the user on 2026-07-22
 **Runtime data:** `C:\Dev\PackageBuilder\runtime-data`
 **Planned default branch:** `main`
-**Last reviewed:** 2026-09-11
+**Last reviewed:** 2026-09-12
 
 ## Status legend
 
@@ -21,12 +21,12 @@
 | Measure | Tasks |
 | --- | ---: |
 | Total | 264 |
-| ⚪ Backlog | 129 |
-| 🟡 In progress | 2 |
+| ⚪ Backlog | 126 |
+| 🟡 In progress | 3 |
 | 🔴 Blocked | 0 |
-| 🟢 Done | 133 |
-| Remaining (all not done) | 131 |
-| Overall completion | 133 / 264 (50.4%) |
+| 🟢 Done | 135 |
+| Remaining (all not done) | 129 |
+| Overall completion | 135 / 264 (51.1%) |
 <!-- status-summary:end -->
 
 Counts include each canonical PB task definition exactly once, including the optional post-v1 roadmap.
@@ -194,8 +194,9 @@ results, DONE statuses or Completion Log entries.
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-0911 | 🟡 **IN PROGRESS** | `codex/PB-0911-PB-0912-reports-support` | Codex; user for publication | 2026-09-11 | Implemented; 2,587 tests passed. [Evidence](PB-0911_PB-0912_REPORTS_SUPPORT_EVIDENCE.md). User authorized commit/push/merge; publication underway. Main CI and completion confirmation pending; optional visual review unverified (browser policy). | None. |
-| PB-0912 | 🟡 **IN PROGRESS** | `codex/PB-0911-PB-0912-reports-support` | Codex; user for publication | 2026-09-11 | Implemented; 2,587 tests passed. [Evidence](PB-0911_PB-0912_REPORTS_SUPPORT_EVIDENCE.md). User authorized commit/push/merge; publication underway. Main CI and completion confirmation pending; optional visual review unverified (browser policy). | None. |
+| PB-1001 | 🟡 **IN PROGRESS** | `codex/PB-1001-PB-1003-fab-foundation` | Codex; user for publication | 2026-09-12 | Validated locally: 2,672 regression tests, 85 focused cases and all 35 baseline checks pass. User authorized publication on 2026-09-14; commit/push/merge underway. See PB-1001–PB-1003 evidence. | None. |
+| PB-1002 | 🟡 **IN PROGRESS** | `codex/PB-1001-PB-1003-fab-foundation` | Codex; user for publication | 2026-09-12 | Validated locally: 2,672 regression tests, 85 focused cases and all 35 baseline checks pass. User authorized publication on 2026-09-14; commit/push/merge underway. See PB-1001–PB-1003 evidence. | None. |
+| PB-1003 | 🟡 **IN PROGRESS** | `codex/PB-1001-PB-1003-fab-foundation` | Codex; user for publication | 2026-09-12 | Validated locally: 2,672 regression tests, 85 focused cases and all 35 baseline checks pass. User authorized publication on 2026-09-14; commit/push/merge underway. See PB-1001–PB-1003 evidence. | None. |
 
 
 ### PB-0802 Completion Evidence
@@ -1708,6 +1709,8 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-0908 | `codex/PB-0908-PB-0910-media-reports` | `53ecb98befcef5ca0799036ecc4682eba5896724` | Direct merge | 2026-09-11 | Main `0c950f0667b43c7a8f2d09423b3bc0351264a650`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34589603966) passed both jobs. User accepted the result and requested PB-0911/PB-0912; recorded once at that branch start. |
 | PB-0909 | `codex/PB-0908-PB-0910-media-reports` | `53ecb98befcef5ca0799036ecc4682eba5896724` | Direct merge | 2026-09-11 | Main `0c950f0667b43c7a8f2d09423b3bc0351264a650`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34589603966) passed both jobs. User accepted the result and requested PB-0911/PB-0912; recorded once at that branch start. |
 | PB-0910 | `codex/PB-0908-PB-0910-media-reports` | `53ecb98befcef5ca0799036ecc4682eba5896724` | Direct merge | 2026-09-11 | Main `0c950f0667b43c7a8f2d09423b3bc0351264a650`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34589603966) passed both jobs. User accepted the result and requested PB-0911/PB-0912; recorded once at that branch start. |
+| PB-0911 | `codex/PB-0911-PB-0912-reports-support` | `d82e21e4fd017ef9c97834444db445b333c121d7` | Direct merge | 2026-09-12 | Main `ea8c727f93836c0a9c1c8d49c5ff27787a6f1113`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34595952321) passed both jobs. User accepted completion and requested PB-1001–PB-1003; recorded once at this branch start. |
+| PB-0912 | `codex/PB-0911-PB-0912-reports-support` | `d82e21e4fd017ef9c97834444db445b333c121d7` | Direct merge | 2026-09-12 | Main `ea8c727f93836c0a9c1c8d49c5ff27787a6f1113`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34595952321) passed both jobs. User accepted completion and requested PB-1001–PB-1003; recorded once at this branch start. |
 
 ## 5. Milestones
 
@@ -2512,12 +2515,12 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0109, PB-0213
   - Done when: job, versions, artifacts, hashes, metrics, findings, and final status serialize through a stable schema.
 
-- [ ] **PB-0911 — Implement human-readable HTML validation report** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-0911 — Implement human-readable HTML validation report** — **P0** — 🟢 **DONE**
   - Branch: `codex/PB-0911-PB-0912-reports-support`
   - Depends on: PB-0910
   - Done when: report summarizes pass/fail, previews, artifacts, versions, blocking findings, warnings, and suggested actions without exposing private source data.
 
-- [ ] **PB-0912 — Implement support bundle generator** — **P1** — 🟡 **IN PROGRESS**
+- [x] **PB-0912 — Implement support bundle generator** — **P1** — 🟢 **DONE**
   - Branch: `codex/PB-0911-PB-0912-reports-support`
   - Depends on: PB-0212, PB-0910
   - Done when: logs/manifests/versions/reports can be bundled while source models, textures, credentials, and personal paths are excluded or redacted.
@@ -2540,18 +2543,18 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** Validated target artifacts are packaged and checked against versioned current Fab requirements.
 
-- [ ] **PB-1001 — Create versioned Fab requirements profile** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-1001-fab-requirements-profile`
+- [ ] **PB-1001 — Create versioned Fab requirements profile** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `codex/PB-1001-PB-1003-fab-foundation`
   - Depends on: PB-0111, PB-0305
   - Done when: current official asset, Unity, Unreal, archive, media, documentation, and effective-date rules are represented with source links.
 
-- [ ] **PB-1002 — Implement Fab requirements-profile loader and updater** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-1002-fab-profile-updates`
+- [ ] **PB-1002 — Implement Fab requirements-profile loader and updater** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `codex/PB-1001-PB-1003-fab-foundation`
   - Depends on: PB-1001, PB-0307
   - Done when: cached/current/candidate profiles can be compared, tested, approved, and pinned to builds.
 
-- [ ] **PB-1003 — Implement Fab required-target resolver** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-1003-fab-target-resolution`
+- [ ] **PB-1003 — Implement Fab required-target resolver** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `codex/PB-1001-PB-1003-fab-foundation`
   - Depends on: PB-0102, PB-1001
   - Done when: selected listing configuration resolves required/optional portable, Unity, Unreal, GLB, documentation, and media outputs.
 

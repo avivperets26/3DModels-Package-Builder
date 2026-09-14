@@ -224,3 +224,9 @@ UTF-8/XSS handling, export redaction, cross-job rejection and the closed ZIP inv
 Archive tests use memory only, including failure/cancellation, so no disposable packages remain.
 The local browser URL policy prevented the optional visual check; automated rendering and real
 codec round trips are evidence, not a claim of completed visual inspection.
+
+PB-1001–PB-1003 map sourced profile coverage, strict/hostile JSON, canonical identity, test/review
+gates, atomic SQLite promotion, restart, stale reviews, immutable old pins, and all five product-case
+target resolutions to [Fab foundation evidence](PB-1001_PB-1003_FAB_FOUNDATION_EVIDENCE.md).
+Profile approval validates a rules snapshot and fixture compatibility, not an asset's marketplace
+compliance. Unresolved clauses must remain visible until explicitly clarified in a reviewed revision.

@@ -652,6 +652,15 @@ Invoke-Check 'Task branch names and lifecycle markers are valid' {
     $blockedMarker = $blockedEmoji + ' **BLOCKED**'
     $lifecycleStates = @{}
 
+    foreach ($id in @('PB-1001', 'PB-1002', 'PB-1003')) {
+        if (-not (Test-PackageBuilderTaskBranch $id 'codex/PB-1001-PB-1003-fab-foundation')) {
+            throw 'Approved Fab foundation branch rejected.'
+        }
+    }
+    if ((Test-PackageBuilderTaskBranch 'PB-1004' 'codex/PB-1001-PB-1003-fab-foundation') -or
+        (Test-PackageBuilderTaskBranch 'PB-1001' 'codex/PB-1001-PB-1004-fab-foundation')) {
+        throw 'Fab foundation exception expanded beyond approved scope.'
+    }
     foreach ($id in @('PB-0911', 'PB-0912')) {
         if (-not (Test-PackageBuilderTaskBranch $id 'codex/PB-0911-PB-0912-reports-support')) {
             throw "Approved HTML/support scope rejected: $id"

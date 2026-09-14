@@ -41,7 +41,15 @@ Add future marketplaces through new compiled adapters and versioned profiles. Mi
 
 ## Implementation Status and Follow-up Work
 
-Acceptance records the architecture direction; it does not indicate that implementation is complete. No Fab requirements profile, updater, validator, release composer, or upload capability is claimed as implemented. E10 and PB-1610 own that work, and manual marketplace publication remains outside automated release composition.
+Acceptance records the architecture direction; it does not indicate that implementation is complete.
+PB-1001–PB-1003 implement the versioned Fab profile, offline loader/updater and selected-target
+resolver. The generic SQLite boundary retains immutable cached revisions and reviewed promotion
+receipts. Existing build.lock v1 pins encode revision plus canonical SHA-256. Approval requires a
+trusted complete fixture-suite result and explicit review; unresolved official clauses remain visible.
+See [foundation acceptance evidence](../PB-1001_PB-1003_FAB_FOUNDATION_EVIDENCE.md).
+Detailed artifact validators and release composition remain PB-1004–PB-1009; candidate discovery
+and broad maintenance automation remain PB-1610. No upload capability is introduced, and manual
+marketplace publication remains outside automated release composition.
 
 ## Related Documentation
 

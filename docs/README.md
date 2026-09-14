@@ -182,3 +182,4 @@ The repository baseline also invokes the quality validator in-process and throug
 
 - [PB-0908–PB-0910 image validation, optimization and JSON report evidence](PB-0908_PB-0910_MEDIA_REPORTS_EVIDENCE.md)
 - [PB-0911–PB-0912 HTML reports and support bundle evidence](PB-0911_PB-0912_REPORTS_SUPPORT_EVIDENCE.md)
+- [PB-1001–PB-1003 Fab requirements foundation evidence](PB-1001_PB-1003_FAB_FOUNDATION_EVIDENCE.md)

@@ -2,7 +2,8 @@ using System.Text.Json;
 
 namespace PackageBuilder.Contracts.Json;
 
-internal enum JsonInputError
+/// <summary>Expected bounded JSON input failures shared by core contracts and adapters.</summary>
+public enum JsonInputError
 {
     None = 0,
     Null,
@@ -13,7 +14,9 @@ internal enum JsonInputError
     DuplicateProperty,
 }
 
-internal static class JsonInputSafeguards
+/// <summary>Rejects oversized, deeply nested, non-object and duplicate-property JSON before binding.
+/// Successful callers own and must dispose the returned document.</summary>
+public static class JsonInputSafeguards
 {
     public const int MaximumInputCharacters = 1_048_576;
     public const int MaximumDepth = 64;

@@ -1936,6 +1936,28 @@ Marketplace rules change independently of engine versions. Requirements profiles
 
 The Fab adapter ships with an updateable profile. New profile versions enter the same candidate/test/promotion process as engine versions. A completed build records the exact requirements profile used.
 
+PB-1001–PB-1003 implement this foundation in `PackageBuilder.Marketplaces.Fab`. The strict,
+bounded `FabRequirementsProfileJson` loader creates an immutable canonical UTF-8 snapshot;
+the shipped JSON lives in `profiles/marketplaces/requirements/` and is embedded for offline use.
+The existing generic `profiles/marketplaces/fab.json` remains an identity-only schema-v1 file.
+Source revision/review dates and local effective adoption dates remain separate. Official facts,
+local policies and unresolved clauses are explicit; an unresolved rule cannot imply compliance.
+
+`FabRequirementsProfileUpdater` imports into the existing `RequirementsProfiles` table through
+the marketplace-neutral `IRequirementsProfileRepository`. `SqliteRequirementsProfileRepository`
+atomically saves approval evidence and the current pointer in namespaced `Settings` rows. No schema
+migration or new dependency is needed. Immutable version/hash conflicts and stale-current reviews
+are rejected. `IFabRequirementsCompatibilitySuite` is the trusted caller-supplied fixture boundary;
+it must run the complete relevant suite, and review must be explicitly affirmative. No network
+discovery, automatic approval or engine-installation lifecycle is introduced.
+
+The existing build.lock v1 profile version stores `<revision>+sha256.<digest>` (within its 128-character
+limit). `LoadPinnedAsync` requires that exact approved cached snapshot, never the latest default.
+`FabRequiredTargetResolver` resolves selected category/formats into required/optional outputs and
+existing `BuildTarget` families. GLB belongs to portable; docs/media are companions. It does not
+build, upload or certify artifacts. PB-1004–PB-1009 own artifact validators and final assembly;
+later UI scope owns desktop controls. See [API and acceptance evidence](PB-1001_PB-1003_FAB_FOUNDATION_EVIDENCE.md).
+
 ## 16. Persistence Model
 
 SQLite stores metadata, not large binary artifacts.

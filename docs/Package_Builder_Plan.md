@@ -1522,3 +1522,17 @@ logs and JSON/HTML reports into a fixed six-entry in-memory ZIP with a hash inve
 no source-file paths or arbitrary attachments and includes no model, texture or preview bytes.
 The stricter shared export redactor preserves local logging compatibility. Desktop report/export
 buttons belong to the later UI scope. See [acceptance and limits](PB-0911_PB-0912_REPORTS_SUPPORT_EVIDENCE.md).
+
+## Fab requirements foundation (PB-1001–PB-1003)
+
+The Fab adapter now supplies a versioned, sourced offline baseline, strict immutable profile loading,
+cached candidates, deterministic comparison, fixture-test evidence and explicit reviewed promotion.
+SQLite retains immutable versions plus approval receipts; build.lock records the revision and exact
+canonical SHA-256. Updating the current profile does not change earlier build pins. Listing choices
+resolve required/optional portable, Unity, Unreal, GLB, documentation and media outputs without
+silently adding unselected engine packages. Unknown official clauses are returned for manual review.
+
+This is an API foundation, not final Fab submission certification or desktop settings UI. Detailed
+artifact validators and packaging follow in PB-1004–PB-1009. The updater takes explicit local JSON
+and a trusted compatibility-suite implementation; it performs no automatic downloads or uploads.
+See [profile workflow, source review and tests](PB-1001_PB-1003_FAB_FOUNDATION_EVIDENCE.md).
