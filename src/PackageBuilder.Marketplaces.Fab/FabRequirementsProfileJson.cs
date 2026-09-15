@@ -124,7 +124,8 @@ public static class FabRequirementsProfileJson
         && uri.UserInfo.Length == 0 && uri.Query.Length == 0 && uri.Fragment.Length == 0
         && (uri.Host == "dev.epicgames.com" && uri.AbsolutePath.StartsWith("/documentation/en-us/fab/", StringComparison.Ordinal)
             || uri.Host == "www.fab.com" && uri.AbsolutePath == "/o/technical-requirements"
-            || uri.Host == "assetstore.unity.com" && uri.AbsolutePath == "/publishing/submission-guidelines");
+            || uri.Host == "assetstore.unity.com" && uri.AbsolutePath == "/publishing/submission-guidelines"
+            || uri.Host == "forums.unrealengine.com" && uri.AbsolutePath == "/t/request-for-uploading-large-file-package-on-fab-store/2539119");
 
     private static RepositoryOperationResult<FabRequirementsProfile> Invalid(string message) =>
         RepositoryOperationResult.Failure<FabRequirementsProfile>("FAB_PROFILE_INVALID", message);

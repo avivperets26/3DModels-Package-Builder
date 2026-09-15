@@ -129,6 +129,16 @@ On 2026-09-14 the user approved these three validators on one branch:
 Roll PB-0016 to DONE once using its successful main CI and user confirmation. This exact
 scope does not include PB-1006 or change publication gates.
 
+### Approved combined scope: PB-1008 through PB-1010
+
+On 2026-09-14 the user approved these three tasks together on
+`codex/PB-1008-PB-1010-fab-release`, from synchronized main
+`491efe6175d2e0858146ba9701bfea70e297ab60`. This milestone supports portable/Unity releases;
+Unreal requests must fail until PB-1006 and E11 are implemented. PB-1009's Unreal dependency
+is conditional on that target. Implement dependent tasks sequentially in this branch, preserve
+unresolved requirement blockers, and keep separate acceptance records. Roll PB-1004/PB-1005/PB-1007
+to DONE once using successful main CI and user confirmation. Publication gates remain unchanged.
+
 ### Start every task branch from freshly synchronized main
 
 PB-0016 dependency maintenance uses the exact branch `codex/PB-0016-dependency-refresh`,

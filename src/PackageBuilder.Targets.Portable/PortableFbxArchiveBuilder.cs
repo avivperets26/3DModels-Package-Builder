@@ -149,41 +149,14 @@ public static class PortableFbxArchiveBuilder
         }
     }
 
-    private static async Task<(long Bytes, string Digest)> CopyAndHashAsync(
-        Stream source,
-        Stream destination,
-        CancellationToken cancellationToken)
-    {
-        using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
-        byte[] buffer = new byte[64 * 1024];
-        long bytes = 0;
-        int read;
-        while ((read = await source.ReadAsync(buffer, cancellationToken).ConfigureAwait(false)) != 0)
-        {
-            await destination.WriteAsync(buffer.AsMemory(0, read), cancellationToken).ConfigureAwait(false);
-            hash.AppendData(buffer, 0, read);
-            bytes = checked(bytes + read);
-        }
+    private static Task<(long Bytes, string Digest)> CopyAndHashAsync(
+        Stream source, Stream destination, CancellationToken cancellationToken) =>
+        ArtifactStreamTransfer.CopyAndHashAsync(source, destination, long.MaxValue, cancellationToken);
 
-        return (bytes, Convert.ToHexString(hash.GetHashAndReset()).ToLowerInvariant());
-    }
-
-    private static async Task<(long Bytes, string Digest)> HashAsync(
-        Stream source,
-        CancellationToken cancellationToken)
+    private static Task<(long Bytes, string Digest)> HashAsync(Stream source, CancellationToken cancellationToken)
     {
         source.Position = 0;
-        using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
-        byte[] buffer = new byte[64 * 1024];
-        long bytes = 0;
-        int read;
-        while ((read = await source.ReadAsync(buffer, cancellationToken).ConfigureAwait(false)) != 0)
-        {
-            hash.AppendData(buffer, 0, read);
-            bytes = checked(bytes + read);
-        }
-
-        return (bytes, Convert.ToHexString(hash.GetHashAndReset()).ToLowerInvariant());
+        return ArtifactStreamTransfer.CopyAndHashAsync(source, Stream.Null, source.Length, cancellationToken);
     }
 
     private static Sha256Digest CreateLogicalIdentity(

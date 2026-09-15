@@ -1958,6 +1958,23 @@ existing `BuildTarget` families. GLB belongs to portable; docs/media are compani
 build, upload or certify artifacts. PB-1004–PB-1009 own artifact validators and final assembly;
 later UI scope owns desktop controls. See [API and acceptance evidence](PB-1001_PB-1003_FAB_FOUNDATION_EVIDENCE.md).
 
+PB-1008–PB-1010 use `FabListingChecklistGenerator` and `FabReleaseComposer` in the marketplace adapter.
+The composer invokes the existing profile loader, target resolver and Fab validators itself; callers
+cannot substitute an externally authored aggregate pass. Engine and quality observations remain
+trusted in-process boundaries with job/artifact/content binding. `IReleaseArchiveWriter` is the neutral
+stream boundary; Infrastructure's `VerifiedReleaseArchiveWriter` sorts entries, verifies their hashes
+and clears failed staging. `ArtifactStreamTransfer` is shared with the portable FBX writer, while
+`DeliveryPath` centralizes generated archive naming. Caller-owned physical streams must come from the
+contained frozen artifact store. Existing store transitions and atomic promotion publish success;
+there is no new filesystem traversal, release state machine, database schema or runtime dependency.
+See [scope and limitations](PB-1008_PB-1010_FAB_RELEASE_EVIDENCE.md).
+
+The 2026-09-15 candidate is explicitly scoped to static FBX/Unity by the shared target resolver.
+Its exchange-size interpretation is local policy supported by one exact allowlisted Fab discussion.
+Historical unresolved profiles remain immutable; the new candidate requires the existing test/review
+approval path. The live fixture connects measured engine inventory, capture and documentation to
+the same composer; no marketplace logic is copied into the engine worker.
+
 ## 16. Persistence Model
 
 SQLite stores metadata, not large binary artifacts.

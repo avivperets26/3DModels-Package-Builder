@@ -1554,3 +1554,16 @@ Results remain blocked where the selected profile has unresolved applicable requ
 artifact-validation profile is an explicit review candidate; loading it does not approve it. These
 APIs prepare PB-1009 composition and do not add desktop controls or automatic upload. See
 [workflow, checks and limitations](PB-1004_PB-1005_PB-1007_FAB_VALIDATORS_EVIDENCE.md).
+
+## Fab listing and portable/Unity release assembly (PB-1008–PB-1010)
+
+The approved combined milestone generates bounded UTF-8 listing data and an unchecked human upload
+checklist, then composes only selected validated portable/Unity/docs/media deliveries. The composer
+loads the exact approved build.lock profile, preserves upstream findings and rehashes every archived
+payload. It returns a private staged envelope for the existing artifact store and atomic promotion.
+The outer archive is a local handoff, not an additional Fab upload. Unreal is rejected until E11 and
+PB-1006; that dependency is conditional on selecting Unreal. Desktop controls and automatic uploads
+remain outside this scope. The 2026-09-15 static candidate records a sourced local interpretation of
+the exchange-size ambiguity and maps applicable technical requirements. It does not replace earlier
+approved pins; synthetic compatibility alone cannot satisfy real-release acceptance. See
+[implementation and acceptance evidence](PB-1008_PB-1010_FAB_RELEASE_EVIDENCE.md).

@@ -187,3 +187,4 @@ The repository baseline also invokes the quality validator in-process and throug
 - [PB-0016 runtime and test dependency refresh evidence](PB-0016_DEPENDENCY_REFRESH_EVIDENCE.md)
 
 - [PB-1004/PB-1005/PB-1007 Fab artifact validator evidence](PB-1004_PB-1005_PB-1007_FAB_VALIDATORS_EVIDENCE.md)
+- [PB-1008–PB-1010 listing, release composition and acceptance evidence](PB-1008_PB-1010_FAB_RELEASE_EVIDENCE.md)

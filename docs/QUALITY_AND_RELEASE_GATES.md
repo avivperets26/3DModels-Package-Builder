@@ -244,3 +244,15 @@ real image decode, strict byte/dimension limits and all five product-case view r
 profiles exercise success paths only; they are never evidence of official clarification. Missing,
 stale, incomplete or wrong-job evidence and unresolved applicable rules block release. Upstream
 Unity findings must be preserved. New facade tests do not count as a new real Editor import.
+
+PB-1008–PB-1010 map metadata, explicit AI choices, dependency disclosure, exact approved profile pins,
+selected-output inventories, deterministic entry hashes, missing/stale evidence, source mutation,
+hostile paths, cancellation cleanup and existing atomic promotion to `FabReleaseTests` and
+[release evidence](PB-1008_PB-1010_FAB_RELEASE_EVIDENCE.md). Successful synthetic composition does not
+prove a real Unity export/import or a Fab-ready product. PB-1010's final acceptance is blocked while
+applicable official requirements are unresolved; preserve these findings and do not promote the
+synthetic test profile into production. Publication must never use failed or uncleared staging.
+The reviewed static candidate is covered by `FabStaticReleaseCandidateTests`; separate live acceptance
+uses `Invoke-FabStaticReleaseIntegration.ps1` and requires a `realEngineRun` receipt after clean Unity
+import, Blender reimport, measured asset/media validation and every final entry hash check. Normal CI
+does not manufacture live evidence. See the dated continuation in the combined evidence.

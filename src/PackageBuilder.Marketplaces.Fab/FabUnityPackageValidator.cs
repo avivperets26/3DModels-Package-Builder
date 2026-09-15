@@ -1,7 +1,6 @@
 using System.Collections.Immutable;
 using PackageBuilder.Contracts.Artifacts;
 using PackageBuilder.Domain.BuildJobs;
-using PackageBuilder.Domain.Naming;
 
 namespace PackageBuilder.Marketplaces.Fab;
 
@@ -112,8 +111,5 @@ public static class FabUnityPackageValidator
 internal static class FabContentPath
 {
     /// <summary>Accepts bounded logical paths whose individual name tokens satisfy shared safe naming.</summary>
-    internal static bool Valid(string? path) => path is { Length: > 0 and <= 1024 }
-        && !path.Contains('\\') && path.Split('/').All(segment =>
-            segment is not ("" or "." or "..") && !segment.EndsWith('.')
-            && segment.Split('.').All(part => ProductFolderName.Create(part).IsValid));
+    internal static bool Valid(string? path) => DeliveryPath.IsValid(path);
 }

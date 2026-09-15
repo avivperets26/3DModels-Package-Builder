@@ -144,6 +144,7 @@ $expectedWorkerPackageFiles = @(
     'Packages/com.packagebuilder.worker/Editor/UnityOverviewScenePipeline.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityStillImageCapture.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityStillImageCaptureIntegration.cs',
+    'Packages/com.packagebuilder.worker/Editor/UnityFabReleaseInspection.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityOverviewPlayModeSmokeTest.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityPackageExporter.cs',
     'Packages/com.packagebuilder.worker/Editor/UnityPackageValidator.cs',
