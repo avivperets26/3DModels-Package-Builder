@@ -7,6 +7,7 @@ public static class FabRequirementsBaseline
 {
     private static readonly Lazy<FabRequirementsProfile> _profile = new(() => Load("Baseline"));
     private static readonly Lazy<FabRequirementsProfile> _artifactValidationProfile = new(() => Load("ArtifactValidation"));
+    private static readonly Lazy<FabRequirementsProfile> _staticReleaseProfile = new(() => Load("StaticRelease"));
 
     private static FabRequirementsProfile Load(string resource)
     {
@@ -22,4 +23,8 @@ public static class FabRequirementsBaseline
     /// <summary>New review candidate for the artifact validators; does not replace an approved cached
     /// revision or the historical baseline. Import/test/approve it explicitly through the existing updater.</summary>
     public static FabRequirementsProfile ArtifactValidationProfile => _artifactValidationProfile.Value;
+
+    /// <summary>Reviewed static-release candidate; historical pins stay immutable. The size interpretation
+    /// is explicit local policy. Caching this snapshot does not approve it or change the current profile.</summary>
+    public static FabRequirementsProfile StaticReleaseProfile => _staticReleaseProfile.Value;
 }

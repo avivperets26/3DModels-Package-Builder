@@ -21,12 +21,12 @@
 | Measure | Tasks |
 | --- | ---: |
 | Total | 265 |
-| ⚪ Backlog | 123 |
+| ⚪ Backlog | 120 |
 | 🟡 In progress | 3 |
 | 🔴 Blocked | 0 |
-| 🟢 Done | 139 |
-| Remaining (all not done) | 126 |
-| Overall completion | 139 / 265 (52.5%) |
+| 🟢 Done | 142 |
+| Remaining (all not done) | 123 |
+| Overall completion | 142 / 265 (53.6%) |
 <!-- status-summary:end -->
 
 Counts include each canonical PB task definition exactly once, including the optional post-v1 roadmap.
@@ -194,9 +194,9 @@ results, DONE statuses or Completion Log entries.
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-1004 | 🟡 **IN PROGRESS** | `codex/PB-1004-PB-1005-PB-1007-fab-validators` | Codex; user for publication | 2026-09-14 | Locally implemented and validated: real ZIP safety, manifest relevance, limits and content binding. Publication and main CI remain. | None for this scope; unresolved official profile clauses still block release approval. |
-| PB-1005 | 🟡 **IN PROGRESS** | `codex/PB-1004-PB-1005-PB-1007-fab-validators` | Codex; user for publication | 2026-09-14 | Locally implemented and validated against trusted Unity inspection fixtures; existing engine checks reused. Publication and main CI remain. | None for this scope; no new Editor import is claimed. |
-| PB-1007 | 🟡 **IN PROGRESS** | `codex/PB-1004-PB-1005-PB-1007-fab-validators` | Codex; user for publication | 2026-09-14 | Locally implemented and validated: real PNG/JPEG decoding, profile limits, thumbnail and shared view coverage. Publication and main CI remain. | None. |
+| PB-1008 | 🟡 **IN PROGRESS** | `codex/PB-1008-PB-1010-fab-release` | Codex; user for publication | 2026-09-14 | Locally validated: 2,771 tests passed; real static release acceptance passed on 2026-09-15. Publication and main CI remain. | None for implementation. |
+| PB-1009 | 🟡 **IN PROGRESS** | `codex/PB-1008-PB-1010-fab-release` | Codex; user for publication | 2026-09-14 | Locally validated: 2,771 tests passed; real static release acceptance passed on 2026-09-15. Publication and main CI remain. | None for implementation. |
+| PB-1010 | 🟡 **IN PROGRESS** | `codex/PB-1008-PB-1010-fab-release` | Codex | 2026-09-15 | Real static release passed: fresh Unity import, Blender reimport, five views, 13 verified entries; 2,771 tests passed. Publication gates remain. | Three portable test folders retained after automatic cleanup rejection; see cleanup audit. |
 
 
 ### PB-0802 Completion Evidence
@@ -1715,6 +1715,9 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-1002 | `codex/PB-1001-PB-1003-fab-foundation` | `93ddde9c095c9154b6eb441c601b8aa0290644c0` | Direct merge | 2026-09-14 | Main `05371f0e752ca931e26adc46f4d960ed65ae03de`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34881094634) passed both jobs. User accepted publication and requested dependency maintenance; recorded once at PB-0016 start. |
 | PB-1003 | `codex/PB-1001-PB-1003-fab-foundation` | `93ddde9c095c9154b6eb441c601b8aa0290644c0` | Direct merge | 2026-09-14 | Main `05371f0e752ca931e26adc46f4d960ed65ae03de`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34881094634) passed both jobs. User accepted publication and requested dependency maintenance; recorded once at PB-0016 start. |
 | PB-0016 | `codex/PB-0016-dependency-refresh` | `d11ccca72049edb410a7beabd126da643ddf87c2` | Direct merge | 2026-09-14 | Main `7bbfc38bf4abddf56807881e953e7ce349de9155`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34888255159) passed both jobs; PRs #94–97 closed as superseded. User accepted publication and approved the next combined scope; recorded once at PB-1004/PB-1005/PB-1007 start. |
+| PB-1004 | `codex/PB-1004-PB-1005-PB-1007-fab-validators` | `2113870e7cb3a9af3d6225040caaeb99aadad1a2` | Direct merge | 2026-09-14 | Main `491efe6175d2e0858146ba9701bfea70e297ab60`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34892739991) passed both jobs. User accepted publication and approved the next scope; recorded once at PB-1008–PB-1010 start. |
+| PB-1005 | `codex/PB-1004-PB-1005-PB-1007-fab-validators` | `2113870e7cb3a9af3d6225040caaeb99aadad1a2` | Direct merge | 2026-09-14 | Main `491efe6175d2e0858146ba9701bfea70e297ab60`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34892739991) passed both jobs. User accepted publication and approved the next scope; recorded once at PB-1008–PB-1010 start. |
+| PB-1007 | `codex/PB-1004-PB-1005-PB-1007-fab-validators` | `2113870e7cb3a9af3d6225040caaeb99aadad1a2` | Direct merge | 2026-09-14 | Main `491efe6175d2e0858146ba9701bfea70e297ab60`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34892739991) passed both jobs. User accepted publication and approved the next scope; recorded once at PB-1008–PB-1010 start. |
 
 ## 5. Milestones
 
@@ -2569,12 +2572,12 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0102, PB-1001
   - Done when: selected listing configuration resolves required/optional portable, Unity, Unreal, GLB, documentation, and media outputs.
 
-- [ ] **PB-1004 — Implement Fab portable/additional-files validator** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-1004 — Implement Fab portable/additional-files validator** — **P0** — 🟢 **DONE**
   - Branch: `codex/PB-1004-PB-1005-PB-1007-fab-validators`
   - Depends on: PB-0506, PB-1001
   - Done when: accepted formats, archive structure, file limits, relevance, and naming generate blocking findings.
 
-- [ ] **PB-1005 — Implement Fab Unity package validator** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-1005 — Implement Fab Unity package validator** — **P0** — 🟢 **DONE**
   - Branch: `codex/PB-1004-PB-1005-PB-1007-fab-validators`
   - Depends on: PB-0617, PB-1001
   - Done when: root organization, dependencies, duplicate/redundant files, demo scene, docs, paths, errors, and package content are checked.
@@ -2584,23 +2587,23 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-1001; E11 implementation
   - Done when: one project, matching Pack directory, overview map, cleaned redirectors, no unused/generated directories, docs, naming, and logs are checked.
 
-- [ ] **PB-1007 — Implement Fab media-gallery validator** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-1007 — Implement Fab media-gallery validator** — **P0** — 🟢 **DONE**
   - Branch: `codex/PB-1004-PB-1005-PB-1007-fab-validators`
   - Depends on: PB-0909, PB-1001
   - Done when: dimensions, format, per-image size, total size, required thumbnail/gallery presence, and relevant views validate.
 
-- [ ] **PB-1008 — Implement Fab listing metadata and manual-upload checklist** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-1008-fab-listing-checklist`
+- [ ] **PB-1008 — Implement Fab listing metadata and manual-upload checklist** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `codex/PB-1008-PB-1010-fab-release`
   - Depends on: PB-0904, PB-1001
   - Done when: title, description inputs, categories, formats, engine versions, dependencies, AI disclosure, media, and manual submission steps produce a reviewable checklist.
 
-- [ ] **PB-1009 — Implement final Fab release composer** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-1009-fab-release-composer`
-  - Depends on: PB-1003 through PB-1008
+- [ ] **PB-1009 — Implement final Fab release composer** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `codex/PB-1008-PB-1010-fab-release`
+  - Depends on: PB-1003, PB-1004, PB-1005, PB-1007, PB-1008; PB-1006 is required when Unreal support is enabled (deferred in the approved portable/Unity scope).
   - Done when: versioned Fab output contains only requested validated deliverables and records the exact requirements profile.
 
-- [ ] **PB-1010 — Complete Fab portable-and-Unity release fixture** — **P0** — ⚪ **BACKLOG**
-  - Branch: `test/PB-1010-fab-unity-release-e2e`
+- [ ] **PB-1010 — Complete Fab portable-and-Unity release fixture** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `codex/PB-1008-PB-1010-fab-release`
   - Depends on: PB-0618, PB-0909, PB-0911, PB-1009
   - Done when: a static product produces a complete Fab-ready portable/Unity/media/docs release with no blocking findings.
 

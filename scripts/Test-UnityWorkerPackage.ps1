@@ -91,6 +91,7 @@ $expectedFiles = @(
     'Editor/UnityOverviewScenePipeline.cs',
     'Editor/UnityStillImageCapture.cs',
     'Editor/UnityStillImageCaptureIntegration.cs',
+    'Editor/UnityFabReleaseInspection.cs',
     'Editor/UnityOverviewPlayModeSmokeTest.cs',
     'Editor/UnityPackageExporter.cs',
     'Editor/UnityPackageValidator.cs',

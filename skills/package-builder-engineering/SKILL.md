@@ -18,6 +18,9 @@ The approved PB-0908–PB-0910 combined scope uses `codex/PB-0908-PB-0910-media-
 
 ## Required workflow
 
+The approved PB-1008–PB-1010 portable/Unity release scope uses `codex/PB-1008-PB-1010-fab-release`.
+Unreal remains unsupported, and unresolved sourced rules must not be silently waived for E2E acceptance.
+
 The approved PB-1004/PB-1005/PB-1007 combined scope uses `codex/PB-1004-PB-1005-PB-1007-fab-validators`.
 
 PB-0016 dependency maintenance uses `codex/PB-0016-dependency-refresh`; update package pins,

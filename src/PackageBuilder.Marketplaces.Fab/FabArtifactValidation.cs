@@ -27,6 +27,9 @@ internal sealed class FabValidation(FabRequirementsProfile profile)
 {
     private readonly List<ValidationFinding> _findings = [];
 
+    /// <summary>Preserves all findings from validators invoked within this composition operation.</summary>
+    internal void Include(FabArtifactValidation result) => _findings.AddRange(result.Findings);
+
     /// <summary>Accumulates a blocking finding using the existing report contract.</summary>
     internal void Add(string code, string message, string action, BuildArtifactId? artifact = null) =>
         _findings.Add(ValidationFinding.Create(FindingCode.Create(code).Value, FindingSeverity.Error,

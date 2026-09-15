@@ -2,11 +2,14 @@
 
 ## Scope and lifecycle
 
-All three tasks are IN PROGRESS on the user-approved combined branch
+All three tasks are DONE, rolled over at the start of PB-1008–PB-1010 after task commit
+`2113870e7cb3a9af3d6225040caaeb99aadad1a2`, main merge `491efe6175d2e0858146ba9701bfea70e297ab60`,
+[successful main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34892739991)
+and user confirmation. The implementation used the user-approved combined branch
 `codex/PB-1004-PB-1005-PB-1007-fab-validators`, created from freshly fetched/pulled clean main
 `7bbfc38bf4abddf56807881e953e7ce349de9155` on 2026-09-14. PB-0016 rolls to DONE once here,
 using its task/main commits, successful main CI and the user's acceptance of the next scope.
-Publication, main CI and completion confirmation for these three tasks remain outstanding.
+The publication-pending handoff below is historical and is preserved for traceability.
 
 ## Acceptance and boundaries
 

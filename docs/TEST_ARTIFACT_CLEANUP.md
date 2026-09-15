@@ -170,3 +170,41 @@ removed the synthetic disposable outputs in `artifacts/u/638666ca`. Compact logs
 remain in ignored artifacts directories. Source fixtures and intended releases are preserved.
 The previously documented 15 empty PB-1001 directories remain an unchanged historical exception;
 no automatically rejected removal was retried and no historical DONE/test claim was altered.
+
+## PB-1008–PB-1010 release composition validation — 2026-09-14
+
+Real ZIP inputs, private release staging and synthetic atomically promoted releases are owned by
+per-test GUID workspaces under `tests/PackageBuilder.App.Wpf.Tests/bin/Release/net10.0-windows/PB-1010`.
+Constructor failure and disposal clean the complete owned workspace. After the 2,766-test suite,
+the read-only audit found zero remaining run directories and zero files. Gallery pixels remain in
+memory. No new real Unity export/import or engine clone was created; PB-1010 real-release acceptance
+remains blocked by unresolved profile requirements. Compact logs/TRX and the cleanup receipt remain
+in ignored `artifacts/PB-1008` and `artifacts/test-results/PB-1008`. The previous PB-1001 exception is
+unchanged at 15 empty directories and zero files, with no blocked deletion retried. Source fixtures,
+user assets and intended releases are preserved. Receipt: `artifacts/PB-1008/cleanup-verified.json`.
+The final repository baseline passed all nine cleanup cases and removed its disposable outputs in
+`artifacts/u/161b4221`; only diagnostic logs/reports remain there.
+
+## PB-1010 continuation — 2026-09-15
+
+The initial portable manual run is retained as a new cleanup exception:
+`artifacts/PB-0507/manual/run-20260915-091407-b1dd1f2a1ab145d88b1f0838312bc7ae`.
+Automatic approval review rejected its bounded deletion with `blocked by policy`; the command
+did not execute. No alternate deletion method is authorized by that rejection, and no retry was made.
+The user was informed. This is distinct from the historical PB-1001 empty-directory exception.
+Automatic approval review also rejected the bounded deletion of these two later diagnostic runs
+with `blocked by policy`; that command did not execute, and neither removal was retried:
+
+- `artifacts/PB-0507/manual/run-20260915-092530-688be393a6f04da6923d56bd202cf34e`
+- `artifacts/PB-0507/manual/run-20260915-093625-5db88445abc3478a9d117eb18b336ba2`
+
+Read-only verification found 22 files / 305,879 bytes in each of the three portable exceptions
+(66 files / 917,637 bytes total). These are disposable test outputs, not intended releases.
+Live Unity run `artifacts/u/4d77ed1c` passed final release validation and visual inspection.
+Standard contained cleanup removed 12,814,964,824 bytes across 14 owned payload paths; all engine
+projects, exported packages and capture payloads are gone. Logs/JSON/TRX remain. Receipt:
+`artifacts/u/4d77ed1c/cleanup-result.json`. Project/package pointers are historical after cleanup.
+The full 2,771-test suite left zero PB-1010 fixture run directories and zero files; receipt:
+`artifacts/PB-1010/cleanup-verified.json`. Shared tools/caches and source fixtures were preserved.
+The baseline's nine cleanup checks passed and removed their disposable synthetic outputs in
+`artifacts/u/1c86931d`; compact diagnostic evidence remains.

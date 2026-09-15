@@ -1,0 +1,442 @@
+{
+  "schemaVersion": 1,
+  "marketplace": "fab",
+  "profile": "asset-listing",
+  "version": "2026-09-15.1",
+  "effectiveOn": "2026-09-15",
+  "effectiveDateBasis": "local-reviewed-adoption",
+  "sources": [
+    {
+      "id": "fab-formats",
+      "url": "https://dev.epicgames.com/documentation/en-us/fab/asset-file-format-and-structure-requirements-in-fab",
+      "updatedOn": null,
+      "reviewedOn": "2026-09-15"
+    },
+    {
+      "id": "fab-listings",
+      "url": "https://dev.epicgames.com/documentation/en-us/fab/publishing-assets-for-sale-or-free-download-in-fab",
+      "updatedOn": null,
+      "reviewedOn": "2026-09-15"
+    },
+    {
+      "id": "fab-technical",
+      "url": "https://www.fab.com/o/technical-requirements",
+      "updatedOn": "2026-03-17",
+      "reviewedOn": "2026-09-15"
+    },
+    {
+      "id": "unity-guidelines",
+      "url": "https://assetstore.unity.com/publishing/submission-guidelines",
+      "updatedOn": "2026-05-20",
+      "reviewedOn": "2026-09-15"
+    },
+    {
+      "id": "fab-upload-reply",
+      "url": "https://forums.unrealengine.com/t/request-for-uploading-large-file-package-on-fab-store/2539119",
+      "updatedOn": "2025-06-10",
+      "reviewedOn": "2026-09-15"
+    }
+  ],
+  "rules": [
+    {
+      "id": "asset-formats",
+      "section": "assets",
+      "origin": "official",
+      "source": "fab-formats",
+      "status": "verified",
+      "summary": "Exchange/DCC and engine downloads depend on category.",
+      "limit": null,
+      "unit": null,
+      "comparison": null
+    },
+    {
+      "id": "unity-delegation",
+      "section": "unity",
+      "origin": "official",
+      "source": "fab-formats",
+      "status": "verified",
+      "summary": "Unity packages follow Unity submission guidelines.",
+      "limit": null,
+      "unit": null,
+      "comparison": null
+    },
+    {
+      "id": "unreal-layout",
+      "section": "unreal",
+      "origin": "official",
+      "source": "fab-formats",
+      "status": "verified",
+      "summary": "One project/plugin per ZIP; content project includes uproject, Content and Config.",
+      "limit": null,
+      "unit": null,
+      "comparison": null
+    },
+    {
+      "id": "unreal-overview",
+      "section": "unreal",
+      "origin": "official",
+      "source": "fab-formats",
+      "status": "verified",
+      "summary": "Visual products require an overview map.",
+      "limit": null,
+      "unit": null,
+      "comparison": null
+    },
+    {
+      "id": "unreal-project-bytes",
+      "section": "unreal",
+      "origin": "official",
+      "source": "fab-formats",
+      "status": "verified",
+      "summary": "Larger projects require Fab review.",
+      "limit": 15000000000,
+      "unit": "bytes",
+      "comparison": "lte"
+    },
+    {
+      "id": "additional-bytes",
+      "section": "archives",
+      "origin": "official",
+      "source": "fab-formats",
+      "status": "verified",
+      "summary": "Additional file size.",
+      "limit": 6000000000,
+      "unit": "bytes",
+      "comparison": "lte"
+    },
+    {
+      "id": "additional-count",
+      "section": "archives",
+      "origin": "official",
+      "source": "fab-formats",
+      "status": "verified",
+      "summary": "Additional file count.",
+      "limit": 3,
+      "unit": "count",
+      "comparison": "lte"
+    },
+    {
+      "id": "other-format-bytes",
+      "section": "archives",
+      "origin": "package-builder-policy",
+      "source": "fab-upload-reply",
+      "status": "verified",
+      "summary": "Reviewed 6 GB interpretation supported by the June 2025 Fab forum reply; decimal-byte adoption. The summary page still prints 6B; this is an explicit local interpretation, not a corrected official page.",
+      "limit": 6000000000,
+      "unit": "bytes",
+      "comparison": "lte"
+    },
+    {
+      "id": "image-width",
+      "section": "media",
+      "origin": "official",
+      "source": "fab-formats",
+      "status": "verified",
+      "summary": "Minimum image width.",
+      "limit": 1920,
+      "unit": "pixels",
+      "comparison": "gte"
+    },
+    {
+      "id": "image-height",
+      "section": "media",
+      "origin": "official",
+      "source": "fab-formats",
+      "status": "verified",
+      "summary": "Minimum image height.",
+      "limit": 1080,
+      "unit": "pixels",
+      "comparison": "gte"
+    },
+    {
+      "id": "image-bytes",
+      "section": "media",
+      "origin": "official",
+      "source": "fab-formats",
+      "status": "verified",
+      "summary": "Individual image size.",
+      "limit": 3000000,
+      "unit": "bytes",
+      "comparison": "lt"
+    },
+    {
+      "id": "gallery-bytes",
+      "section": "media",
+      "origin": "official",
+      "source": "fab-formats",
+      "status": "verified",
+      "summary": "Combined image size.",
+      "limit": 25000000,
+      "unit": "bytes",
+      "comparison": "lt"
+    },
+    {
+      "id": "image-formats",
+      "section": "media",
+      "origin": "official",
+      "source": "fab-formats",
+      "status": "verified",
+      "summary": "JPEG or PNG.",
+      "limit": null,
+      "unit": null,
+      "comparison": null
+    },
+    {
+      "id": "preview-bytes",
+      "section": "media",
+      "origin": "official",
+      "source": "fab-formats",
+      "status": "verified",
+      "summary": "3D preview size.",
+      "limit": 500000000,
+      "unit": "bytes",
+      "comparison": "lt"
+    },
+    {
+      "id": "video-bytes",
+      "section": "media",
+      "origin": "official",
+      "source": "fab-formats",
+      "status": "verified",
+      "summary": "Video size.",
+      "limit": 300000000,
+      "unit": "bytes",
+      "comparison": "lte"
+    },
+    {
+      "id": "video-formats",
+      "section": "media",
+      "origin": "official",
+      "source": "fab-formats",
+      "status": "verified",
+      "summary": "1920 by 1080; MP4, MOV or WEBM.",
+      "limit": null,
+      "unit": null,
+      "comparison": null
+    },
+    {
+      "id": "listing-description",
+      "section": "documentation",
+      "origin": "official",
+      "source": "fab-listings",
+      "status": "verified",
+      "summary": "Describe usage, technical specifications and prerequisites.",
+      "limit": null,
+      "unit": null,
+      "comparison": null
+    },
+    {
+      "id": "gallery-representation",
+      "section": "media",
+      "origin": "official",
+      "source": "fab-listings",
+      "status": "verified",
+      "summary": "Clarify which illustrated content is included.",
+      "limit": null,
+      "unit": null,
+      "comparison": null
+    },
+    {
+      "id": "unity-package-bytes",
+      "section": "unity",
+      "origin": "official",
+      "source": "unity-guidelines",
+      "status": "verified",
+      "summary": "Submission size.",
+      "limit": 6000000000,
+      "unit": "bytes",
+      "comparison": "lte"
+    },
+    {
+      "id": "unity-upm-bytes",
+      "section": "unity",
+      "origin": "official",
+      "source": "unity-guidelines",
+      "status": "verified",
+      "summary": "UPM package size.",
+      "limit": 700000000,
+      "unit": "bytes",
+      "comparison": "lte"
+    },
+    {
+      "id": "unity-version",
+      "section": "unity",
+      "origin": "official",
+      "source": "unity-guidelines",
+      "status": "verified",
+      "summary": "New and updated submissions use Unity 2022.3 or newer.",
+      "limit": null,
+      "unit": null,
+      "comparison": null
+    },
+    {
+      "id": "unity-pipeline",
+      "section": "unity",
+      "origin": "official",
+      "source": "unity-guidelines",
+      "status": "verified",
+      "summary": "Editor 6.5 and newer submissions require URP or HDRP.",
+      "limit": null,
+      "unit": null,
+      "comparison": null
+    },
+    {
+      "id": "unity-structure",
+      "section": "unity",
+      "origin": "official",
+      "source": "unity-guidelines",
+      "status": "verified",
+      "summary": "One root folder with documented exceptions; disclose dependencies and include category-required demos.",
+      "limit": null,
+      "unit": null,
+      "comparison": null
+    },
+    {
+      "id": "unity-archives",
+      "section": "archives",
+      "origin": "official",
+      "source": "unity-guidelines",
+      "status": "verified",
+      "summary": "Do not hide primary Unity content in archives; source archives and documented supplements have exceptions.",
+      "limit": null,
+      "unit": null,
+      "comparison": null
+    },
+    {
+      "id": "unity-documentation",
+      "section": "documentation",
+      "origin": "official",
+      "source": "unity-guidelines",
+      "status": "verified",
+      "summary": "Code, shaders and configuration need documentation; supported text/document formats include Markdown and HTML.",
+      "limit": null,
+      "unit": null,
+      "comparison": null
+    },
+    {
+      "id": "technical-review",
+      "section": "assets",
+      "origin": "official",
+      "source": "fab-technical",
+      "status": "verified",
+      "summary": "Sections 1, 2, 3 and 5 reviewed for static portable/Unity releases; see PB-1010 review map. Product-specific human judgments remain in the manual-upload checklist. Unreal remains unsupported by the composer.",
+      "limit": null,
+      "unit": null,
+      "comparison": null
+    },
+    {
+      "id": "byte-units",
+      "section": "archives",
+      "origin": "package-builder-policy",
+      "source": "fab-formats",
+      "status": "verified",
+      "summary": "Interpret size labels conservatively as decimal bytes.",
+      "limit": null,
+      "unit": null,
+      "comparison": null
+    },
+    {
+      "id": "companion-defaults",
+      "section": "documentation",
+      "origin": "package-builder-policy",
+      "source": "fab-listings",
+      "status": "verified",
+      "summary": "Generate README and media for each supported listing.",
+      "limit": null,
+      "unit": null,
+      "comparison": null
+    },
+    {
+      "summary": "Unity asset paths include Assets/ and are shorter than 150 characters.",
+      "comparison": "lt",
+      "unit": "count",
+      "limit": 150,
+      "origin": "official",
+      "status": "verified",
+      "id": "unity-path-length",
+      "source": "unity-guidelines",
+      "section": "unity"
+    },
+    {
+      "summary": "Exclude duplicate, unused or redundant assets and AssetStoreTools directories.",
+      "comparison": null,
+      "unit": null,
+      "limit": null,
+      "origin": "official",
+      "status": "verified",
+      "id": "unity-redundancy",
+      "source": "unity-guidelines",
+      "section": "unity"
+    },
+    {
+      "summary": "Generated delivery paths use shared safe ASCII segments, dots only between nonempty tokens, and manifest-planned contents. Strict product-root layout excludes unreviewed special-folder exceptions.",
+      "comparison": null,
+      "unit": null,
+      "limit": null,
+      "origin": "package-builder-policy",
+      "status": "verified",
+      "id": "delivery-paths",
+      "source": "fab-formats",
+      "section": "archives"
+    },
+    {
+      "summary": "Image-only delivery includes one designated representative thumbnail and product coverage; multi-item listings require an overview covering all included items. Thumbnails reference gallery images and are counted once.",
+      "comparison": null,
+      "unit": null,
+      "limit": null,
+      "origin": "package-builder-policy",
+      "status": "verified",
+      "id": "gallery-delivery",
+      "source": "fab-listings",
+      "section": "media"
+    },
+    {
+      "summary": "Generated Unity packages include an overview scene and offline docs; no nested archives or video payloads. Reviewed source/supplement exceptions require a separate supported profile and validator capability.",
+      "comparison": null,
+      "unit": null,
+      "limit": null,
+      "origin": "package-builder-policy",
+      "status": "verified",
+      "id": "unity-generated-content",
+      "source": "unity-guidelines",
+      "section": "unity"
+    },
+    {
+      "id": "static-review-scope",
+      "section": "assets",
+      "origin": "package-builder-policy",
+      "source": "fab-technical",
+      "status": "verified",
+      "summary": "Reviewed release candidate applies only to static 3D-model listings with FBX and/or Unity, documentation and 2D gallery images. Other product cases require further technical review.",
+      "limit": null,
+      "unit": null,
+      "comparison": null
+    }
+  ],
+  "listings": [
+    {
+      "category": "3d-model",
+      "formats": [
+        "fbx",
+        "glb",
+        "unity",
+        "unreal"
+      ],
+      "documentationRequired": true,
+      "mediaRequired": true,
+      "source": "fab-formats",
+      "companionPolicy": "package-builder-policy"
+    },
+    {
+      "category": "animation",
+      "formats": [
+        "unity",
+        "unreal"
+      ],
+      "documentationRequired": true,
+      "mediaRequired": true,
+      "source": "fab-formats",
+      "companionPolicy": "package-builder-policy"
+    }
+  ]
+}

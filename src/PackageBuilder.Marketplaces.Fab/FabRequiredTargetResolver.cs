@@ -35,6 +35,15 @@ public static class FabRequiredTargetResolver
                 "FAB_LISTING_INVALID", "Select a supported category and one or more distinct allowed download formats.");
         }
 
+        // A scoped review must not silently certify product cases or delivery types it did not cover.
+        if (profile.Document.Rules.Any(rule => rule.Id == "static-review-scope")
+            && (listing.ProductCase != ProductCase.Static || listing.Category != "3d-model"
+                || listing.Formats.Any(format => format is not ("fbx" or "unity"))))
+        {
+            return RepositoryOperationResult.Failure<FabRequiredTargets>(
+                "FAB_REVIEW_SCOPE_UNSUPPORTED", "This reviewed profile supports static FBX/Unity listings only.");
+        }
+
         var required = new HashSet<FabOutput>();
         var available = new HashSet<FabOutput>();
         foreach (string format in listing.Formats)
