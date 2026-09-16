@@ -28,6 +28,7 @@ public sealed class WorkerJsonTests
             "result-failure.json",
             "result-cancelled.json",
             "blender-probe-result.json",
+            "unreal-probe-result.json",
         ];
 
     [Fact]

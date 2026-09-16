@@ -3,6 +3,9 @@ function Test-PackageBuilderTaskBranch {
     [OutputType([bool])]
     param([string]$TaskId, [string]$Branch)
 
+    if ($TaskId -in @('PB-1101', 'PB-1102', 'PB-1103') -and
+        $Branch -eq 'codex/PB-1101-PB-1103-unreal-foundation') { return $true }
+
     if ($TaskId -in @('PB-1008', 'PB-1009', 'PB-1010') -and
         $Branch -eq 'codex/PB-1008-PB-1010-fab-release') { return $true }
 

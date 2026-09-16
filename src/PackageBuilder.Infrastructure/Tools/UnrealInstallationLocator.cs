@@ -521,9 +521,16 @@ public sealed class UnrealInstallationLocator(IUnrealDiscoveryFileSystem fileSys
         }
     }
 
-    private static bool TryParseBuildVersion(byte[] bytes, out ToolVersion? version)
+    /// <summary>Parses bounded vendor metadata without granting installation trust or selection.</summary>
+    /// <remarks>Shared with explicit external-engine smoke preflight; malformed JSON throws JsonException.</remarks>
+    public static bool TryParseBuildVersion(byte[] bytes, out ToolVersion? version)
     {
         version = null;
+        ArgumentNullException.ThrowIfNull(bytes);
+        if (bytes.Length > MaximumBuildVersionBytes)
+        {
+            return false;
+        }
         using var document = JsonDocument.Parse(
             bytes,
             new JsonDocumentOptions

@@ -6,7 +6,7 @@
 **GitHub visibility:** Public, approved by the user on 2026-07-22
 **Runtime data:** `C:\Dev\PackageBuilder\runtime-data`
 **Planned default branch:** `main`
-**Last reviewed:** 2026-09-14
+**Last reviewed:** 2026-09-16
 
 ## Status legend
 
@@ -21,12 +21,12 @@
 | Measure | Tasks |
 | --- | ---: |
 | Total | 265 |
-| ⚪ Backlog | 120 |
+| ⚪ Backlog | 117 |
 | 🟡 In progress | 3 |
 | 🔴 Blocked | 0 |
-| 🟢 Done | 142 |
-| Remaining (all not done) | 123 |
-| Overall completion | 142 / 265 (53.6%) |
+| 🟢 Done | 145 |
+| Remaining (all not done) | 120 |
+| Overall completion | 145 / 265 (54.7%) |
 <!-- status-summary:end -->
 
 Counts include each canonical PB task definition exactly once, including the optional post-v1 roadmap.
@@ -194,9 +194,9 @@ results, DONE statuses or Completion Log entries.
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-1008 | 🟡 **IN PROGRESS** | `codex/PB-1008-PB-1010-fab-release` | Codex; user for publication | 2026-09-14 | Locally validated: 2,771 tests passed; real static release acceptance passed on 2026-09-15. Publication and main CI remain. | None for implementation. |
-| PB-1009 | 🟡 **IN PROGRESS** | `codex/PB-1008-PB-1010-fab-release` | Codex; user for publication | 2026-09-14 | Locally validated: 2,771 tests passed; real static release acceptance passed on 2026-09-15. Publication and main CI remain. | None for implementation. |
-| PB-1010 | 🟡 **IN PROGRESS** | `codex/PB-1008-PB-1010-fab-release` | Codex | 2026-09-15 | Real static release passed: fresh Unity import, Blender reimport, five views, 13 verified entries; 2,771 tests passed. Publication gates remain. | Three portable test folders retained after automatic cleanup rejection; see cleanup audit. |
+| PB-1101 | 🟡 **IN PROGRESS** | `codex/PB-1101-PB-1103-unreal-foundation` | Codex | 2026-09-16 | Locally validated: signed Unreal 5.8.2; live save/reopen/rejected request passed; all test project clones removed. | Publication remains. First-run Zen helper removal was rejected by automatic approval review; see cleanup audit. Global production compatibility approval is not claimed. |
+| PB-1102 | 🟡 **IN PROGRESS** | `codex/PB-1101-PB-1103-unreal-foundation` | Codex | 2026-09-16 | Locally validated: signed Unreal 5.8.2; live save/reopen/rejected request passed; all test project clones removed. | Publication remains. First-run Zen helper removal was rejected by automatic approval review; see cleanup audit. Global production compatibility approval is not claimed. |
+| PB-1103 | 🟡 **IN PROGRESS** | `codex/PB-1101-PB-1103-unreal-foundation` | Codex | 2026-09-16 | Locally validated: signed Unreal 5.8.2; live save/reopen/rejected request passed; all test project clones removed. | Publication remains. First-run Zen helper removal was rejected by automatic approval review; see cleanup audit. Global production compatibility approval is not claimed. |
 
 
 ### PB-0802 Completion Evidence
@@ -1718,6 +1718,9 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-1004 | `codex/PB-1004-PB-1005-PB-1007-fab-validators` | `2113870e7cb3a9af3d6225040caaeb99aadad1a2` | Direct merge | 2026-09-14 | Main `491efe6175d2e0858146ba9701bfea70e297ab60`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34892739991) passed both jobs. User accepted publication and approved the next scope; recorded once at PB-1008–PB-1010 start. |
 | PB-1005 | `codex/PB-1004-PB-1005-PB-1007-fab-validators` | `2113870e7cb3a9af3d6225040caaeb99aadad1a2` | Direct merge | 2026-09-14 | Main `491efe6175d2e0858146ba9701bfea70e297ab60`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34892739991) passed both jobs. User accepted publication and approved the next scope; recorded once at PB-1008–PB-1010 start. |
 | PB-1007 | `codex/PB-1004-PB-1005-PB-1007-fab-validators` | `2113870e7cb3a9af3d6225040caaeb99aadad1a2` | Direct merge | 2026-09-14 | Main `491efe6175d2e0858146ba9701bfea70e297ab60`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34892739991) passed both jobs. User accepted publication and approved the next scope; recorded once at PB-1008–PB-1010 start. |
+| PB-1008 | `codex/PB-1008-PB-1010-fab-release` | `bcde9230e05ec94e469572561db6523b73b84216` | Direct merge | 2026-09-15 | Main `bcd696b1d9aa61ce97228849fbbd120cea34e844`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34955099753) passed both jobs. User accepted publication and approved the Unreal foundation scope on 2026-09-16; recorded once at PB-1101–PB-1103 start. Cleanup exceptions remain documented. |
+| PB-1009 | `codex/PB-1008-PB-1010-fab-release` | `bcde9230e05ec94e469572561db6523b73b84216` | Direct merge | 2026-09-15 | Main `bcd696b1d9aa61ce97228849fbbd120cea34e844`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34955099753) passed both jobs. User accepted publication and approved the Unreal foundation scope on 2026-09-16; recorded once at PB-1101–PB-1103 start. Cleanup exceptions remain documented. |
+| PB-1010 | `codex/PB-1008-PB-1010-fab-release` | `bcde9230e05ec94e469572561db6523b73b84216` | Direct merge | 2026-09-15 | Main `bcd696b1d9aa61ce97228849fbbd120cea34e844`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34955099753) passed both jobs. User accepted publication and approved the Unreal foundation scope on 2026-09-16; recorded once at PB-1101–PB-1103 start. Cleanup exceptions remain documented. |
 
 ## 5. Milestones
 
@@ -2592,17 +2595,17 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0909, PB-1001
   - Done when: dimensions, format, per-image size, total size, required thumbnail/gallery presence, and relevant views validate.
 
-- [ ] **PB-1008 — Implement Fab listing metadata and manual-upload checklist** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-1008 — Implement Fab listing metadata and manual-upload checklist** — **P0** — 🟢 **DONE**
   - Branch: `codex/PB-1008-PB-1010-fab-release`
   - Depends on: PB-0904, PB-1001
   - Done when: title, description inputs, categories, formats, engine versions, dependencies, AI disclosure, media, and manual submission steps produce a reviewable checklist.
 
-- [ ] **PB-1009 — Implement final Fab release composer** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-1009 — Implement final Fab release composer** — **P0** — 🟢 **DONE**
   - Branch: `codex/PB-1008-PB-1010-fab-release`
   - Depends on: PB-1003, PB-1004, PB-1005, PB-1007, PB-1008; PB-1006 is required when Unreal support is enabled (deferred in the approved portable/Unity scope).
   - Done when: versioned Fab output contains only requested validated deliverables and records the exact requirements profile.
 
-- [ ] **PB-1010 — Complete Fab portable-and-Unity release fixture** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-1010 — Complete Fab portable-and-Unity release fixture** — **P0** — 🟢 **DONE**
   - Branch: `codex/PB-1008-PB-1010-fab-release`
   - Depends on: PB-0618, PB-0909, PB-0911, PB-1009
   - Done when: a static product produces a complete Fab-ready portable/Unity/media/docs release with no blocking findings.
@@ -2615,18 +2618,18 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** A static normalized product becomes a clean Unreal project, material, overview map, preview, and Fab-valid ZIP.
 
-- [ ] **PB-1101 — Install and verify the latest approved stable Unreal Engine** — **P0** — ⚪ **BACKLOG**
-  - Branch: `chore/PB-1101-install-unreal`
+- [ ] **PB-1101 — Install and verify the latest approved stable Unreal Engine** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `codex/PB-1101-PB-1103-unreal-foundation`
   - Depends on: PB-0304 through PB-0307
   - Done when: newest candidate production release is installed, detected, smoke-tested, and recorded as approved or rejected with evidence.
 
-- [ ] **PB-1102 — Create versioned Unreal project template** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-1102-unreal-template`
+- [ ] **PB-1102 — Create versioned Unreal project template** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `codex/PB-1101-PB-1103-unreal-foundation`
   - Depends on: PB-1101
   - Done when: minimal project enables only required plugins, contains one generated Pack root, and excludes caches/generated folders.
 
-- [ ] **PB-1103 — Create Unreal worker plugin and Python entrypoint** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-1103-unreal-worker-shell`
+- [ ] **PB-1103 — Create Unreal worker plugin and Python entrypoint** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `codex/PB-1101-PB-1103-unreal-foundation`
   - Depends on: PB-0112, PB-1102
   - Done when: Unreal reads requests, emits progress, writes results, saves assets, and exits through command-line execution.
 

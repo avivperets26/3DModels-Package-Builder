@@ -208,3 +208,29 @@ The full 2,771-test suite left zero PB-1010 fixture run directories and zero fil
 `artifacts/PB-1010/cleanup-verified.json`. Shared tools/caches and source fixtures were preserved.
 The baseline's nine cleanup checks passed and removed their disposable synthetic outputs in
 `artifacts/u/1c86931d`; compact diagnostic evidence remains.
+
+## 2026-09-16 — Unreal foundation preparation
+
+The 13 new Unreal adapter tests disposed all temporary fixture directories; read-only inspection
+found zero directories remaining in `artifacts/validation/PB-1103`. The missing-engine preflight
+created no Unreal clone or package. Compact evidence: `artifacts/PB-1101/cleanup-verified.json`.
+The live harness owns only its unique `artifacts/ue/<guid>` project, checks containment/reparse
+boundaries and removes it in finally; actual engine cleanup remains unverified until installation.
+The prior automatically rejected deletion exceptions above were neither retried nor removed.
+
+### Live Unreal continuation — 2026-09-16
+
+All three live clones were removed by the guarded harness finally block:
+`artifacts/ue/b7251f31555a447cb87cc3331a2ae7e6`,
+`artifacts/ue/6ebff8a064b343ef93933408e43ccbaf`, and
+`artifacts/ue/ff4fbb94456f41d89ac6e00a74426e5a`.
+Each retained receipt under `artifacts/PB-1103/<id>/receipt.json` confirms cleanup. Read-only
+verification found no run directories under `artifacts/ue`; only compact logs/results remain.
+
+The first run's Zen bootstrap created ten helper files (68,101,924 bytes) under
+`%LOCALAPPDATA%/UnrealEngine/Common/Zen/Install`, at 09:58:18–09:58:22 UTC.
+The initial log records no prior installation; no Zen process remained after testing. Automatic
+approval review rejected the bounded cleanup command with `blocked by policy`; it did not execute.
+No alternate deletion method was attempted. These helper copies remain as an explicit exception;
+the original user-installed engine is untouched. The revised harness uses local filesystem DDC
+and disables Zen auto-launch, and the final logs contain no writes to that user-profile location.

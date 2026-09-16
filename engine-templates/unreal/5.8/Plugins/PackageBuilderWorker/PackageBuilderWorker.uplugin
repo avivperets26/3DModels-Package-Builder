@@ -1,0 +1,15 @@
+{
+  "FileVersion": 3,
+  "Version": 1,
+  "VersionName": "0.1.0",
+  "FriendlyName": "Package Builder Editor Worker",
+  "Description": "Python commandlet bootstrap for disposable build projects. Exclude from customer deliveries.",
+  "Category": "Editor",
+  "CanContainContent": true,
+  "EnabledByDefault": false,
+  "IsBetaVersion": false,
+  "Plugins": [
+    { "Name": "PythonScriptPlugin", "Enabled": true },
+    { "Name": "EditorScriptingUtilities", "Enabled": true }
+  ]
+}

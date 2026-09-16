@@ -1,6 +1,15 @@
 # PB-1008–PB-1010 — Listing and portable/Unity release flow
 
-## Scope and lifecycle
+## Completion rollover — 2026-09-16
+
+PB-1008–PB-1010 are DONE. Task commit `bcde9230e05ec94e469572561db6523b73b84216`
+merged into main `bcd696b1d9aa61ce97228849fbbd120cea34e844`; both jobs in
+[main CI 34955099753](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34955099753)
+passed. The user accepted publication and approved the Unreal foundation scope. The backlog
+recorded each completion once at the start of that next branch. The following handoff describes
+historical implementation/publication states; its cleanup exceptions remain in the cleanup audit.
+
+## Historical scope and lifecycle
 
 User-approved branch: `codex/PB-1008-PB-1010-fab-release`, based on freshly fetched/pulled clean main
 `491efe6175d2e0858146ba9701bfea70e297ab60` on 2026-09-14. Previous PB-1004/PB-1005/PB-1007 tasks

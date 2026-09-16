@@ -139,6 +139,25 @@ is conditional on that target. Implement dependent tasks sequentially in this br
 unresolved requirement blockers, and keep separate acceptance records. Roll PB-1004/PB-1005/PB-1007
 to DONE once using successful main CI and user confirmation. Publication gates remain unchanged.
 
+### Approved combined scope: PB-1101 through PB-1103
+
+On 2026-09-16 the user approved these three tasks on one branch:
+`codex/PB-1101-PB-1103-unreal-foundation`, from freshly synchronized main
+`bcd696b1d9aa61ce97228849fbbd120cea34e844`. Implement installation verification, template and
+worker shell in dependency order; prepare independent code while installation is pending, but do
+not claim engine acceptance without a real run. Roll PB-1008–PB-1010 to DONE once using successful
+main CI and user confirmation. Keep all three acceptance records separate. Publication gates remain.
+
+### User-approved Unreal installation exception
+
+On 2026-09-16 the user chose Epic's installation under `C:\Program Files\Epic Games` and
+confirmed installation finished. The verified 5.8.2 root is `C:\Program Files\Epic Games\UE_5.8`.
+The foundation harness may execute that exact signed engine in place. Do not relocate, modify
+or delete the installation. This overrides root containment only for the externally managed engine;
+project clones, requests, outputs, logs and caches remain under `C:\Dev\PackageBuilder`.
+Production discovery continues to report external installations as informational; this development
+harness exception does not silently approve arbitrary external tools or global version selection.
+
 ### Start every task branch from freshly synchronized main
 
 PB-0016 dependency maintenance uses the exact branch `codex/PB-0016-dependency-refresh`,

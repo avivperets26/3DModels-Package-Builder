@@ -119,3 +119,20 @@ The combined command, hash, signature, containment, template, and build summary 
 - **Approval:** Explicitly approved by the user on 2026-07-22.
 - **Unchanged requirements:** every local PB-0001 acceptance check, documentation update, user-controlled commit and push, integration into `main`, and explicit user completion confirmation remains required.
 - **No precedent:** this exception does not weaken CI requirements for PB-0002 or any later task and cannot be reused without a new explicit user approval and documented scope.
+
+## 2026-09-16 Unreal candidate follow-up
+
+The user confirmed Unreal is not installed. No engine or Epic Launcher was found in the project,
+registered locations or standard installation paths. The sourced candidate is 5.8.2, intended for
+`tools/unreal/5.8.2`; it has not been approved or selected. Epic sign-in/licence acceptance remains
+user-operated. See [foundation evidence](PB-1101_PB-1103_UNREAL_FOUNDATION_EVIDENCE.md) for the
+prepared offline template/worker and outstanding live checks. The initial environment inventory
+above remains historical.
+
+### Installation completed later on 2026-09-16
+
+The user installed and authorized Unreal 5.8.2 at `C:\Program Files\Epic Games\UE_5.8`.
+The signed Epic editor and Build.version were verified, and real foundation save/reopen/failure
+checks passed. The earlier missing-installation note is historical. The engine remains outside
+Git; generated projects/cache stay in the repository under the AGENTS exception. A first-run Zen
+bootstrap cleanup rejection is recorded in the cleanup audit; final runs disable Zen auto-launch.

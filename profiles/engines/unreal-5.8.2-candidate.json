@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "tool": "unreal",
+  "version": "5.8.2",
+  "reviewedOn": "2026-09-16",
+  "state": "installed-candidate",
+  "userApprovedExternalInstallationRoot": "C:\\Program Files\\Epic Games\\UE_5.8",
+  "template": "engine-templates/unreal/5.8",
+  "installationRoot": "tools/unreal/5.8.2",
+  "sources": [
+    "https://www.unrealengine.com/news/unreal-engine-5-8-is-now-available",
+    "https://forums.unrealengine.com/t/5-8-2-hotfix-released/2746335",
+    "https://www.unrealengine.com/download"
+  ],
+  "approvalScope": "User-selected foundation development only; live save/reopen/rejected-request smoke passed. Global production approval still requires full compatibility evidence.",
+  "foundationEvidence": "docs/PB-1101_PB-1103_UNREAL_FOUNDATION_EVIDENCE.md"
+}
