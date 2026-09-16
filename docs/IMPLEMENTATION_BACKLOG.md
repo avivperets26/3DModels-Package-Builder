@@ -21,12 +21,12 @@
 | Measure | Tasks |
 | --- | ---: |
 | Total | 265 |
-| ⚪ Backlog | 117 |
+| ⚪ Backlog | 114 |
 | 🟡 In progress | 3 |
 | 🔴 Blocked | 0 |
-| 🟢 Done | 145 |
-| Remaining (all not done) | 120 |
-| Overall completion | 145 / 265 (54.7%) |
+| 🟢 Done | 148 |
+| Remaining (all not done) | 117 |
+| Overall completion | 148 / 265 (55.8%) |
 <!-- status-summary:end -->
 
 Counts include each canonical PB task definition exactly once, including the optional post-v1 roadmap.
@@ -194,9 +194,9 @@ results, DONE statuses or Completion Log entries.
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-1101 | 🟡 **IN PROGRESS** | `codex/PB-1101-PB-1103-unreal-foundation` | Codex | 2026-09-16 | Locally validated: signed Unreal 5.8.2; live save/reopen/rejected request passed; all test project clones removed. | Publication remains. First-run Zen helper removal was rejected by automatic approval review; see cleanup audit. Global production compatibility approval is not claimed. |
-| PB-1102 | 🟡 **IN PROGRESS** | `codex/PB-1101-PB-1103-unreal-foundation` | Codex | 2026-09-16 | Locally validated: signed Unreal 5.8.2; live save/reopen/rejected request passed; all test project clones removed. | Publication remains. First-run Zen helper removal was rejected by automatic approval review; see cleanup audit. Global production compatibility approval is not claimed. |
-| PB-1103 | 🟡 **IN PROGRESS** | `codex/PB-1101-PB-1103-unreal-foundation` | Codex | 2026-09-16 | Locally validated: signed Unreal 5.8.2; live save/reopen/rejected request passed; all test project clones removed. | Publication remains. First-run Zen helper removal was rejected by automatic approval review; see cleanup audit. Global production compatibility approval is not claimed. |
+| PB-1104 | 🟡 **IN PROGRESS** | `codex/PB-1104-PB-1106-unreal-import` | Codex | 2026-09-16 | Locally validated: isolated clones, cross-process and same-lease exclusion, timeout/cancellation cleanup. See [evidence](PB-1104_PB-1106_UNREAL_IMPORT_EVIDENCE.md). | Publication/main CI/user confirmation remain; empty scratch cleanup exception documented. |
+| PB-1105 | 🟡 **IN PROGRESS** | `codex/PB-1104-PB-1106-unreal-import` | Codex | 2026-09-16 | Locally validated: versioned project/Pack naming, five-case folder plans and stable asset references. See [evidence](PB-1104_PB-1106_UNREAL_IMPORT_EVIDENCE.md). | Publication/main CI/user confirmation remain; empty scratch cleanup exception documented. |
+| PB-1106 | 🟡 **IN PROGRESS** | `codex/PB-1104-PB-1106-unreal-import` | Codex | 2026-09-16 | Locally validated: nine texture policies imported and independently reopened in Unreal 5.8.2. See [evidence](PB-1104_PB-1106_UNREAL_IMPORT_EVIDENCE.md). | Publication/main CI/user confirmation remain; empty scratch cleanup exception documented. |
 
 
 ### PB-0802 Completion Evidence
@@ -1721,6 +1721,9 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-1008 | `codex/PB-1008-PB-1010-fab-release` | `bcde9230e05ec94e469572561db6523b73b84216` | Direct merge | 2026-09-15 | Main `bcd696b1d9aa61ce97228849fbbd120cea34e844`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34955099753) passed both jobs. User accepted publication and approved the Unreal foundation scope on 2026-09-16; recorded once at PB-1101–PB-1103 start. Cleanup exceptions remain documented. |
 | PB-1009 | `codex/PB-1008-PB-1010-fab-release` | `bcde9230e05ec94e469572561db6523b73b84216` | Direct merge | 2026-09-15 | Main `bcd696b1d9aa61ce97228849fbbd120cea34e844`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34955099753) passed both jobs. User accepted publication and approved the Unreal foundation scope on 2026-09-16; recorded once at PB-1101–PB-1103 start. Cleanup exceptions remain documented. |
 | PB-1010 | `codex/PB-1008-PB-1010-fab-release` | `bcde9230e05ec94e469572561db6523b73b84216` | Direct merge | 2026-09-15 | Main `bcd696b1d9aa61ce97228849fbbd120cea34e844`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/34955099753) passed both jobs. User accepted publication and approved the Unreal foundation scope on 2026-09-16; recorded once at PB-1101–PB-1103 start. Cleanup exceptions remain documented. |
+| PB-1101 | `codex/PB-1101-PB-1103-unreal-foundation` | `aad9af368faf57016a1fbb5a31de7f9b53163570` | Direct merge | 2026-09-16 | Main `10ce0042025a8cd2dd36f9e6f3c65674111f00c5`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/35085945756) passed both jobs. User accepted publication and approved PB-1104–PB-1106; recorded once at this branch start. Foundation approval remains candidate-only; cleanup exceptions documented. |
+| PB-1102 | `codex/PB-1101-PB-1103-unreal-foundation` | `aad9af368faf57016a1fbb5a31de7f9b53163570` | Direct merge | 2026-09-16 | Main `10ce0042025a8cd2dd36f9e6f3c65674111f00c5`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/35085945756) passed both jobs. User accepted publication and approved PB-1104–PB-1106; recorded once at this branch start. Foundation approval remains candidate-only; cleanup exceptions documented. |
+| PB-1103 | `codex/PB-1101-PB-1103-unreal-foundation` | `aad9af368faf57016a1fbb5a31de7f9b53163570` | Direct merge | 2026-09-16 | Main `10ce0042025a8cd2dd36f9e6f3c65674111f00c5`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/35085945756) passed both jobs. User accepted publication and approved PB-1104–PB-1106; recorded once at this branch start. Foundation approval remains candidate-only; cleanup exceptions documented. |
 
 ## 5. Milestones
 
@@ -2618,33 +2621,33 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
 
 **Goal:** A static normalized product becomes a clean Unreal project, material, overview map, preview, and Fab-valid ZIP.
 
-- [ ] **PB-1101 — Install and verify the latest approved stable Unreal Engine** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-1101 — Install and verify the latest approved stable Unreal Engine** — **P0** — 🟢 **DONE**
   - Branch: `codex/PB-1101-PB-1103-unreal-foundation`
   - Depends on: PB-0304 through PB-0307
   - Done when: newest candidate production release is installed, detected, smoke-tested, and recorded as approved or rejected with evidence.
 
-- [ ] **PB-1102 — Create versioned Unreal project template** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-1102 — Create versioned Unreal project template** — **P0** — 🟢 **DONE**
   - Branch: `codex/PB-1101-PB-1103-unreal-foundation`
   - Depends on: PB-1101
   - Done when: minimal project enables only required plugins, contains one generated Pack root, and excludes caches/generated folders.
 
-- [ ] **PB-1103 — Create Unreal worker plugin and Python entrypoint** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-1103 — Create Unreal worker plugin and Python entrypoint** — **P0** — 🟢 **DONE**
   - Branch: `codex/PB-1101-PB-1103-unreal-foundation`
   - Depends on: PB-0112, PB-1102
   - Done when: Unreal reads requests, emits progress, writes results, saves assets, and exits through command-line execution.
 
-- [ ] **PB-1104 — Implement Unreal template cloning and exclusive execution** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-1104-unreal-job-clone`
+- [ ] **PB-1104 — Implement Unreal template cloning and exclusive execution** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `codex/PB-1104-PB-1106-unreal-import`
   - Depends on: PB-0208, PB-1102, PB-1103
   - Done when: each job uses an isolated project clone and concurrent writers cannot target one clone.
 
-- [ ] **PB-1105 — Implement Unreal content folder and naming generator** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-1105-unreal-folders-names`
+- [ ] **PB-1105 — Implement Unreal content folder and naming generator** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `codex/PB-1104-PB-1106-unreal-import`
   - Depends on: PB-0101, PB-1103
   - Done when: project/Pack name, Meshes, Materials, Textures, Maps, Documentation, and optional folders follow the target profile.
 
-- [ ] **PB-1106 — Implement Unreal texture import policies** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-1106-unreal-textures`
+- [ ] **PB-1106 — Implement Unreal texture import policies** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `codex/PB-1104-PB-1106-unreal-import`
   - Depends on: PB-0104, PB-1105
   - Done when: sRGB/data/normal settings, compression, alpha, normal orientation, and references are deterministic.
 

@@ -259,6 +259,13 @@ does not manufacture live evidence. See the dated continuation in the combined e
 
 ## Unreal foundation acceptance (PB-1101–PB-1103)
 
+PB-1104–PB-1106 map isolation, cross-process exclusion, cancellation/timeout cleanup, hostile
+plan/source handling, five-case naming/folders and nine texture-policy cases to concrete tests
+in [the import acceptance matrix](PB-1104_PB-1106_UNREAL_IMPORT_EVIDENCE.md#acceptance-mapping).
+Actual candidate import/reopen and duplicate-import rejection are separate from simulated CI
+tests. Verification must compare persisted engine properties without silently repairing them,
+preserve source bytes and reject changed asset hashes. The live receipt must prove cleanup.
+
 The [criterion-level foundation matrix](PB-1101_PB-1103_UNREAL_FOUNDATION_EVIDENCE.md#acceptance-mapping)
 maps installation discovery, source-template inventory, protocol boundaries, saved-asset restart
 and cleanup to concrete checks. Simulated engine tests and the cross-language result golden are

@@ -45,6 +45,8 @@ def _reject_duplicate_pairs(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
 
 
 def _depth(value: Any, current: int = 1) -> int:
+    if current > MAXIMUM_JSON_DEPTH:
+        return current
     if isinstance(value, dict):
         return max([current, *(_depth(item, current + 1) for item in value.values())])
     if isinstance(value, list):
@@ -121,6 +123,12 @@ def reject_linked_path(path: Path) -> None:
 def load_request(request_path: Path) -> dict[str, Any]:
     """Read one bounded UTF-8 request while rejecting links, duplicates, and excess depth."""
 
+    return validate_request(load_bounded_json(request_path))
+
+
+def load_bounded_json(request_path: Path) -> Any:
+    """Read bounded UTF-8 JSON for requests or typed adapter plans with identical safety limits."""
+
     reject_linked_path(request_path)
     if not request_path.is_absolute() or not request_path.is_file():
         raise WorkerInputError("The request file is unavailable or unsafe.")
@@ -134,7 +142,7 @@ def load_request(request_path: Path) -> dict[str, Any]:
         raise WorkerInputError("The request is not valid UTF-8 JSON.") from error
     if _depth(value) > MAXIMUM_JSON_DEPTH:
         raise WorkerInputError("The request exceeds the maximum JSON depth.")
-    return validate_request(value)
+    return value
 
 
 def resolve_logical_reference(workspace: Path, reference: str) -> Path:

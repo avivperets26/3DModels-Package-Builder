@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "profile": "unreal-content-v1",
+  "projectName": "PBTextureFixture",
+  "packRoot": "/Game/PBTextureFixture",
+  "folders": [
+    "Documentation",
+    "Maps",
+    "Materials",
+    "Meshes",
+    "Textures"
+  ],
+  "textures": [
+    {
+      "assetName": "T_AO",
+      "sourceReference": "texture.png",
+      "sha256": "4cc3629eebf844f5ac6602e4d96a2851775d5006249bc288b8477f9f216270e9",
+      "byteCount": 508,
+      "srgb": false,
+      "compression": "TC_MASKS",
+      "noAlpha": true,
+      "flipGreenChannel": false
+    },
+    {
+      "assetName": "T_Albedo",
+      "sourceReference": "texture.png",
+      "sha256": "4cc3629eebf844f5ac6602e4d96a2851775d5006249bc288b8477f9f216270e9",
+      "byteCount": 508,
+      "srgb": true,
+      "compression": "TC_DEFAULT",
+      "noAlpha": false,
+      "flipGreenChannel": false
+    },
+    {
+      "assetName": "T_Emission",
+      "sourceReference": "texture.png",
+      "sha256": "4cc3629eebf844f5ac6602e4d96a2851775d5006249bc288b8477f9f216270e9",
+      "byteCount": 508,
+      "srgb": true,
+      "compression": "TC_DEFAULT",
+      "noAlpha": true,
+      "flipGreenChannel": false
+    },
+    {
+      "assetName": "T_Height",
+      "sourceReference": "texture.png",
+      "sha256": "4cc3629eebf844f5ac6602e4d96a2851775d5006249bc288b8477f9f216270e9",
+      "byteCount": 508,
+      "srgb": false,
+      "compression": "TC_MASKS",
+      "noAlpha": true,
+      "flipGreenChannel": false
+    },
+    {
+      "assetName": "T_Metallic",
+      "sourceReference": "texture.png",
+      "sha256": "4cc3629eebf844f5ac6602e4d96a2851775d5006249bc288b8477f9f216270e9",
+      "byteCount": 508,
+      "srgb": false,
+      "compression": "TC_MASKS",
+      "noAlpha": true,
+      "flipGreenChannel": false
+    },
+    {
+      "assetName": "T_NormalDX",
+      "sourceReference": "texture.png",
+      "sha256": "4cc3629eebf844f5ac6602e4d96a2851775d5006249bc288b8477f9f216270e9",
+      "byteCount": 508,
+      "srgb": false,
+      "compression": "TC_NORMALMAP",
+      "noAlpha": true,
+      "flipGreenChannel": false
+    },
+    {
+      "assetName": "T_NormalGL",
+      "sourceReference": "texture.png",
+      "sha256": "4cc3629eebf844f5ac6602e4d96a2851775d5006249bc288b8477f9f216270e9",
+      "byteCount": 508,
+      "srgb": false,
+      "compression": "TC_NORMALMAP",
+      "noAlpha": true,
+      "flipGreenChannel": true
+    },
+    {
+      "assetName": "T_Opacity",
+      "sourceReference": "texture.png",
+      "sha256": "4cc3629eebf844f5ac6602e4d96a2851775d5006249bc288b8477f9f216270e9",
+      "byteCount": 508,
+      "srgb": false,
+      "compression": "TC_MASKS",
+      "noAlpha": false,
+      "flipGreenChannel": false
+    },
+    {
+      "assetName": "T_Roughness",
+      "sourceReference": "texture.png",
+      "sha256": "4cc3629eebf844f5ac6602e4d96a2851775d5006249bc288b8477f9f216270e9",
+      "byteCount": 508,
+      "srgb": false,
+      "compression": "TC_MASKS",
+      "noAlpha": true,
+      "flipGreenChannel": false
+    }
+  ]
+}
