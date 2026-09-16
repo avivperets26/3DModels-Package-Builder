@@ -21,12 +21,12 @@
 | Measure | Tasks |
 | --- | ---: |
 | Total | 265 |
-| ⚪ Backlog | 114 |
+| ⚪ Backlog | 111 |
 | 🟡 In progress | 3 |
 | 🔴 Blocked | 0 |
-| 🟢 Done | 148 |
-| Remaining (all not done) | 117 |
-| Overall completion | 148 / 265 (55.8%) |
+| 🟢 Done | 151 |
+| Remaining (all not done) | 114 |
+| Overall completion | 151 / 265 (57.0%) |
 <!-- status-summary:end -->
 
 Counts include each canonical PB task definition exactly once, including the optional post-v1 roadmap.
@@ -194,9 +194,9 @@ results, DONE statuses or Completion Log entries.
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-1104 | 🟡 **IN PROGRESS** | `codex/PB-1104-PB-1106-unreal-import` | Codex | 2026-09-16 | Locally validated: isolated clones, cross-process and same-lease exclusion, timeout/cancellation cleanup. See [evidence](PB-1104_PB-1106_UNREAL_IMPORT_EVIDENCE.md). | Publication/main CI/user confirmation remain; empty scratch cleanup exception documented. |
-| PB-1105 | 🟡 **IN PROGRESS** | `codex/PB-1104-PB-1106-unreal-import` | Codex | 2026-09-16 | Locally validated: versioned project/Pack naming, five-case folder plans and stable asset references. See [evidence](PB-1104_PB-1106_UNREAL_IMPORT_EVIDENCE.md). | Publication/main CI/user confirmation remain; empty scratch cleanup exception documented. |
-| PB-1106 | 🟡 **IN PROGRESS** | `codex/PB-1104-PB-1106-unreal-import` | Codex | 2026-09-16 | Locally validated: nine texture policies imported and independently reopened in Unreal 5.8.2. See [evidence](PB-1104_PB-1106_UNREAL_IMPORT_EVIDENCE.md). | Publication/main CI/user confirmation remain; empty scratch cleanup exception documented. |
+| PB-1107 | 🟡 **IN PROGRESS** | `feat/PB-1107-PB-1109-unreal-materials-meshes` | Codex | 2026-09-16 | Locally validated: exact ORM pixel/PNG roundtrip and native masks import passed; shared raster/codec reused. See [evidence](PB-1107_PB-1109_UNREAL_SURFACE_EVIDENCE.md). | None; publication/main CI/user-confirmation gates remain. Empty scratch cleanup exception recorded. |
+| PB-1108 | 🟡 **IN PROGRESS** | `feat/PB-1107-PB-1109-unreal-materials-meshes` | Codex | 2026-09-16 | Locally validated: material/instance save/reopen and all seven GPU comparisons passed on 5.8.2. See [evidence](PB-1107_PB-1109_UNREAL_SURFACE_EVIDENCE.md). | None; publication/main CI/user-confirmation gates remain. Empty scratch cleanup exception recorded. |
+| PB-1109 | 🟡 **IN PROGRESS** | `feat/PB-1107-PB-1109-unreal-materials-meshes` | Codex | 2026-09-16 | Locally validated: asymmetric FBX scale/axes, named slots, LOD, normals and three collision policies passed after reopening; generated projects removed. See [evidence](PB-1107_PB-1109_UNREAL_SURFACE_EVIDENCE.md). | None; publication/main CI/user-confirmation gates remain. Empty scratch cleanup exception recorded. |
 
 
 ### PB-0802 Completion Evidence
@@ -1724,6 +1724,9 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-1101 | `codex/PB-1101-PB-1103-unreal-foundation` | `aad9af368faf57016a1fbb5a31de7f9b53163570` | Direct merge | 2026-09-16 | Main `10ce0042025a8cd2dd36f9e6f3c65674111f00c5`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/35085945756) passed both jobs. User accepted publication and approved PB-1104–PB-1106; recorded once at this branch start. Foundation approval remains candidate-only; cleanup exceptions documented. |
 | PB-1102 | `codex/PB-1101-PB-1103-unreal-foundation` | `aad9af368faf57016a1fbb5a31de7f9b53163570` | Direct merge | 2026-09-16 | Main `10ce0042025a8cd2dd36f9e6f3c65674111f00c5`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/35085945756) passed both jobs. User accepted publication and approved PB-1104–PB-1106; recorded once at this branch start. Foundation approval remains candidate-only; cleanup exceptions documented. |
 | PB-1103 | `codex/PB-1101-PB-1103-unreal-foundation` | `aad9af368faf57016a1fbb5a31de7f9b53163570` | Direct merge | 2026-09-16 | Main `10ce0042025a8cd2dd36f9e6f3c65674111f00c5`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/35085945756) passed both jobs. User accepted publication and approved PB-1104–PB-1106; recorded once at this branch start. Foundation approval remains candidate-only; cleanup exceptions documented. |
+| PB-1104 | `codex/PB-1104-PB-1106-unreal-import` | `8a7647f9eff2d4c8f032b2e8e989402c9f4c0c8c` | Direct merge | 2026-09-16 | Main `e1616b807c7e40e0a537fc1abdfe3b8b7eceadba`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/35103041229) passed both jobs. User accepted publication and approved PB-1107–PB-1109; recorded once at branch start. |
+| PB-1105 | `codex/PB-1104-PB-1106-unreal-import` | `8a7647f9eff2d4c8f032b2e8e989402c9f4c0c8c` | Direct merge | 2026-09-16 | Main `e1616b807c7e40e0a537fc1abdfe3b8b7eceadba`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/35103041229) passed both jobs. User accepted publication and approved PB-1107–PB-1109; recorded once at branch start. |
+| PB-1106 | `codex/PB-1104-PB-1106-unreal-import` | `8a7647f9eff2d4c8f032b2e8e989402c9f4c0c8c` | Direct merge | 2026-09-16 | Main `e1616b807c7e40e0a537fc1abdfe3b8b7eceadba`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/35103041229) passed both jobs. User accepted publication and approved PB-1107–PB-1109; recorded once at branch start. |
 
 ## 5. Milestones
 
@@ -2636,33 +2639,33 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0112, PB-1102
   - Done when: Unreal reads requests, emits progress, writes results, saves assets, and exits through command-line execution.
 
-- [ ] **PB-1104 — Implement Unreal template cloning and exclusive execution** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-1104 — Implement Unreal template cloning and exclusive execution** — **P0** — 🟢 **DONE**
   - Branch: `codex/PB-1104-PB-1106-unreal-import`
   - Depends on: PB-0208, PB-1102, PB-1103
   - Done when: each job uses an isolated project clone and concurrent writers cannot target one clone.
 
-- [ ] **PB-1105 — Implement Unreal content folder and naming generator** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-1105 — Implement Unreal content folder and naming generator** — **P0** — 🟢 **DONE**
   - Branch: `codex/PB-1104-PB-1106-unreal-import`
   - Depends on: PB-0101, PB-1103
   - Done when: project/Pack name, Meshes, Materials, Textures, Maps, Documentation, and optional folders follow the target profile.
 
-- [ ] **PB-1106 — Implement Unreal texture import policies** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-1106 — Implement Unreal texture import policies** — **P0** — 🟢 **DONE**
   - Branch: `codex/PB-1104-PB-1106-unreal-import`
   - Depends on: PB-0104, PB-1105
   - Done when: sRGB/data/normal settings, compression, alpha, normal orientation, and references are deterministic.
 
-- [ ] **PB-1107 — Implement Unreal ORM packing** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-1107-unreal-orm-packing`
+- [ ] **PB-1107 — Implement Unreal ORM packing** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `feat/PB-1107-PB-1109-unreal-materials-meshes`
   - Depends on: PB-1106
   - Done when: AO or white is red, Roughness is green, Metallic is blue, and pixel tests verify the generated map.
 
-- [ ] **PB-1108 — Implement Unreal material compiler** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-1108-unreal-materials`
+- [ ] **PB-1108 — Implement Unreal material compiler** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `feat/PB-1107-PB-1109-unreal-materials-meshes`
   - Depends on: PB-1106, PB-1107
   - Done when: Base, Normal, ORM, Emission, opacity/cutout, two-sided, and material instances render correctly.
 
-- [ ] **PB-1109 — Implement static mesh import and collision policy** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-1109-unreal-static-mesh`
+- [ ] **PB-1109 — Implement static mesh import and collision policy** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `feat/PB-1107-PB-1109-unreal-materials-meshes`
   - Depends on: PB-0415, PB-1105, PB-1108
   - Done when: `SM_` assets import at correct scale/orientation with intended materials, LOD settings, normals/tangents, and explicit collision behavior.
 

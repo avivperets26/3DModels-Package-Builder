@@ -527,6 +527,11 @@ generation; an additional URP canonicalization pass must make no change.
 
 ### Unreal and GLB Packing
 
+PB-1107–PB-1109 implement Unreal ORM packing, material graphs/instances and static normalized-FBX
+import with explicit collision. Pixel, persistence and rendered checks are tracked in
+[the acceptance matrix](PB-1107_PB-1109_UNREAL_SURFACE_EVIDENCE.md).
+This adapter milestone excludes subsequent product overview, preview and final ZIP tasks.
+
 The builder creates an ORM texture where appropriate:
 
 - Red: ambient occlusion, or white if AO is unavailable.

@@ -2,7 +2,6 @@
 
 import argparse
 import json
-import os
 import re
 import shutil
 import sys
@@ -16,15 +15,13 @@ from package_builder_protocol import atomic_write_result, load_bounded_json  # n
 
 from package_builder_unreal.import_plan import file_identity  # noqa: E402
 from package_builder_unreal.project import UnrealProjectClone, remove_owned_tree  # noqa: E402
+from unreal_candidate_process import candidate_editor, commandlet  # noqa: E402
 
 
 def main(editor: Path, timeout: int):
     """Run import, independent reopen and no-overwrite failure through the actual clone adapter."""
     profile = load_bounded_json(REPO / "profiles/engines/unreal-5.8.2-candidate.json")
-    expected_editor = (
-        Path(profile["userApprovedExternalInstallationRoot"])
-        / "Engine/Binaries/Win64/UnrealEditor-Cmd.exe"
-    )
+    expected_editor = candidate_editor(profile)
     if editor != expected_editor:
         raise ValueError("Only the preflight-approved candidate is allowed.")
     run_id = uuid.uuid4().hex
@@ -75,33 +72,7 @@ def main(editor: Path, timeout: int):
                 }
                 atomic_write_result(job / "request.json", request)
                 native_log = evidence / (key + ".log")
-                environment = dict(
-                    os.environ,
-                    PACKAGEBUILDER_WORKERS_ROOT=str(REPO / "workers"),
-                    PACKAGEBUILDER_UNREAL_REQUEST=str(job / "request.json"),
-                    PYTHONDONTWRITEBYTECODE="1",
-                    TEMP=str(job / "temp"),
-                    TMP=str(job / "temp"),
-                )
-                environment["UE-LocalDataCachePath"] = str(REPO / "runtime-data/unreal/5.8.2/ddc")
-                environment["UE-SharedDataCachePath"] = "None"
-                arguments = [
-                    str(clone.project / "PBTextureFixture.uproject"),
-                    "-run=pythonscript",
-                    "-script="
-                    + str(
-                        clone.project
-                        / "Plugins/PackageBuilderWorker/Content/Python/pb_worker_entry.py"
-                    ),
-                    "-unattended",
-                    "-nosplash",
-                    "-nosound",
-                    "-NullRHI",
-                    "-ddc=(Local)",
-                    "-ini:EditorSettings:[/Script/UnrealEd.AnalyticsPrivacySettings]:bSendUsageData=False",
-                    "-UserDir=" + str(job / "user"),
-                    "-abslog=" + str(native_log),
-                ]
+                arguments, environment = commandlet(clone, REPO, evidence, key)
                 receipt["realEngineRun"] = True
                 code = clone.execute(editor, arguments, environment, timeout)
                 result = load_bounded_json(job / "output/result.json")

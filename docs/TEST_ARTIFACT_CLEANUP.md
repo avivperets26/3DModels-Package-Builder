@@ -250,3 +250,26 @@ The .NET runner left 24 empty scratch directories under `artifacts/validation/PB
 (zero files). Automatic approval review rejected their bounded deletion with `blocked by policy`.
 That command did not execute; no alternate method or retry was used. These empty directories
 remain as a new documented exception. Prior PB-1001, portable and Zen exceptions are unchanged.
+
+## PB-1107–PB-1109 scratch cleanup exception — 2026-09-16
+
+The full .NET suite left 24 empty directories and zero files beneath
+`C:\Dev\PackageBuilder\artifacts\validation\PB-1107\temp` (verified read-only).
+Automatic approval review rejected the bounded PowerShell removal with `blocked by policy`;
+the command did not execute. No alternate deletion method or retry was attempted. The user was
+informed. These are empty scratch directories, not generated packages. Prior cleanup exceptions
+remain unchanged. The new Unreal integration harness separately removes each owned engine job
+in finally and retains its compact evidence and cleanup receipt.
+
+### Live surface and texture regression audit
+
+All six surface jobs were removed, including failed diagnostic runs:
+`4114f1388548424b94f01bf9e8164cc5`, `3644a18ecfdd4f2ebd6bbff96b1fbcd0`,
+`ae19f18b45eb48d189f6b2bd75a87d21`, `b6ab0b5b730349db91f146d7c9713578`,
+`4fd99bcbabb74040b5acf3d8a813859f`, and `5ca759be4d814c389a0f194e44bb2522`.
+Their receipts under `artifacts/PB-1107/<id>` confirm cleanup. The live texture regression
+job `7e911c3a2480467995b15b12f71a371a` was also removed, with its receipt under
+`artifacts/PB-1104`. Read-only inspection found no jobs under `artifacts/ue`.
+Source/golden fixtures, tools and shared DDC were preserved; only compact evidence and GPU
+captures remain. See `artifacts/PB-1107/cleanup-verified.json` for the recorded audit and
+the separate 24-empty-directory exception above.

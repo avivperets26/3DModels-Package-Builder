@@ -90,6 +90,12 @@ public sealed partial class UnrealImportPlan
     public string ToJson() => JsonSerializer.Serialize(this, _jsonOptions);
 
     private static readonly JsonSerializerOptions _jsonOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+    /// <summary>Shares the versioned ASCII identity boundary with subsequent Unreal asset plans.</summary>
+    internal static void ValidateName(string value)
+    {
+        if (!Segment().IsMatch(value))
+        { throw new ArgumentException("Invalid Unreal asset identity.", nameof(value)); }
+    }
     [GeneratedRegex("\\A[A-Za-z][A-Za-z0-9_]{0,39}\\z", RegexOptions.CultureInvariant)]
     private static partial Regex Segment();
     [GeneratedRegex("\\A[a-f0-9]{64}\\z", RegexOptions.CultureInvariant)]

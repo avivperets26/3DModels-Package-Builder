@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import re
+import traceback
 from pathlib import Path
 from typing import Any, TextIO
 
@@ -16,6 +17,7 @@ from package_builder_protocol import (
 )
 
 from package_builder_unreal import __version__
+from package_builder_unreal.surfaces import import_surfaces
 from package_builder_unreal.textures import TexturePolicyError, import_textures
 
 ASSET = "/Game/Pack/PB_WorkerProbe"
@@ -126,12 +128,18 @@ def run(request_path: Path, unreal: Any, stdout: TextIO, stderr: TextIO) -> int:
             "verify-unreal-worker",
             "import-unreal-textures",
             "verify-unreal-textures",
+            "import-unreal-surfaces",
+            "verify-unreal-surfaces",
         }:
             failure = "UNREAL_OPERATION_UNSUPPORTED"
             code = 4
         else:
             result["retrySafety"] = "requires-cleanup"
-            if request["operation"] in {"import-unreal-textures", "verify-unreal-textures"}:
+            if request["operation"] in {"import-unreal-surfaces", "verify-unreal-surfaces"}:
+                artifacts = import_surfaces(
+                    unreal, workspace, source, request["operation"] == "verify-unreal-surfaces"
+                )
+            elif request["operation"] in {"import-unreal-textures", "verify-unreal-textures"}:
                 artifacts = import_textures(
                     unreal, workspace, source, request["operation"] == "verify-unreal-textures"
                 )
@@ -145,6 +153,8 @@ def run(request_path: Path, unreal: Any, stdout: TextIO, stderr: TextIO) -> int:
     except TexturePolicyError as error:
         failure = str(error)
     except Exception:
+        if hasattr(unreal, "log_error"):
+            unreal.log_error(traceback.format_exc())
         failure = "UNREAL_WORKER_EXECUTION_FAILED"
     if code:
         finding = {

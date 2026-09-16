@@ -62,6 +62,16 @@ Lifecycle markers supplement rather than replace task checkboxes, acceptance evi
 
 ## Permanent One-Merge Rollover Workflow
 
+### Future branch and commit naming
+
+The user's standing preference from 2026-09-16 replaces the default `codex/` branch prefix.
+For new branches, use the appropriate conventional prefix: `feat/`, `fix/`, `docs/`, `chore/`,
+`test/`, `security/` or `release/`, followed by the documented PB task identity and description.
+Use conventional commit subjects such as `feat: ...`, `fix: ...` or `docs: ...`; never use
+`codex/` as a branch or commit-subject prefix for future work. Historical branch names below
+are evidence of previous work and must not be rewritten. Approved combined scopes also use
+the appropriate conventional prefix for any newly created branch.
+
 ### Approved combined scope: PB-0805 through PB-0807
 
 On 2026-09-10 the user explicitly requested PB-0805, PB-0806 and PB-0807 on one branch.
@@ -157,6 +167,15 @@ texture imports in dependency order. Roll PB-1101–PB-1103 to DONE once using s
 main CI and user confirmation. Keep separate acceptance records and remove disposable test
 projects after validation. The exact signed external engine exception also applies to this
 development validation; global production approval and publication gates remain unchanged.
+
+### Approved combined scope: PB-1107 through PB-1109
+
+On 2026-09-16 the user approved these three tasks and the pending naming-guideline edit on
+`feat/PB-1107-PB-1109-unreal-materials-meshes`, from freshly synchronized main
+`e1616b807c7e40e0a537fc1abdfe3b8b7eceadba`. Implement ORM, materials and static meshes in
+that order; keep separate acceptance records. Roll PB-1104–PB-1106 to DONE once using
+successful main CI and user confirmation. The signed engine exception applies; remove all
+owned disposable test projects. Publication gates and candidate-only approval remain unchanged.
 
 ### User-approved Unreal installation exception
 

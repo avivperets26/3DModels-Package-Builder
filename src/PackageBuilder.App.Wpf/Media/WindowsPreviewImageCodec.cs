@@ -23,6 +23,12 @@ public sealed class WindowsPreviewImageCodec : IPreviewImageCodec, IEncodedImage
     /// <summary>Decodes a single bounded delivery-sized frame into owned RGBA pixels while discarding metadata.</summary>
     public PreviewRaster Decode(ReadOnlyMemory<byte> encoded) => DecodeCore(encoded, requireCaptureSize: true);
 
+    /// <summary>Decodes bounded texture data with the same container checks, without the preview resolution requirement.</summary>
+    public static PreviewRaster DecodeTexture(ReadOnlyMemory<byte> encoded) => DecodeCore(encoded, requireCaptureSize: false);
+
+    /// <summary>Encodes lossless RGBA texture pixels without colour correction or metadata.</summary>
+    public static byte[] EncodeTexture(PreviewRaster image) => EncodeCore(image, PreviewImageFormat.Png, 100, false);
+
     private static PreviewRaster DecodeCore(ReadOnlyMemory<byte> encoded, bool requireCaptureSize)
     {
         if (encoded.Length is < 8 or > 32_000_000)
@@ -63,9 +69,12 @@ public sealed class WindowsPreviewImageCodec : IPreviewImageCodec, IEncodedImage
 
     /// <summary>Encodes fixed-resolution pixels with no metadata, preserving alpha for PNG and rejecting it for JPEG.</summary>
     public byte[] Encode(PreviewRaster image, PreviewImageFormat format, int jpegQuality)
+        => EncodeCore(image, format, jpegQuality, true);
+
+    private static byte[] EncodeCore(PreviewRaster image, PreviewImageFormat format, int jpegQuality, bool requireCaptureSize)
     {
         ArgumentNullException.ThrowIfNull(image);
-        if (image.Width != PreviewRaster.CaptureWidth || image.Height != PreviewRaster.CaptureHeight ||
+        if ((requireCaptureSize && (image.Width != PreviewRaster.CaptureWidth || image.Height != PreviewRaster.CaptureHeight)) ||
             !Enum.IsDefined(format) || jpegQuality is < 1 or > 100)
         { throw new InvalidDataException("Invalid encoding options."); }
         byte[] pixels = image.Pixels.ToArray();
