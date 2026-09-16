@@ -25,10 +25,10 @@ version, copies only the six reviewed template files into a unique disposable pr
 starts three separate `UnrealEditor-Cmd.exe` processes. The first saves one probe material; the
 second loads it and checks its bytes; the third rejects an unsupported request without changing it. Per-process timeout defaults to ten minutes. Timeout
 stops the owned process tree. This is a development smoke harness, not the production cloning
-and exclusive-execution adapter planned in PB-1104.
+and exclusive-execution adapter implemented separately in PB-1104.
 
 Requests use the existing worker v1 contract. `probe-unreal-worker` and `verify-unreal-worker`
-are the only operations; requests cannot select arbitrary Python code. The plugin bootstrap
+remain foundation operations; requests cannot select arbitrary Python code. The plugin bootstrap
 is passed explicitly with `-run=pythonscript -script=...`. There is no automatic startup script.
 Python is an editor automation feature, not customer runtime code; Epic currently labels it
 Experimental in its [Python documentation](https://dev.epicgames.com/documentation/en-us/unreal-engine/scripting-the-unreal-editor-using-python).
@@ -44,7 +44,7 @@ process exit code need not equal the internal protocol code. Results never promo
 
 The tracked template has only the project descriptor, two configs, a `Content/Pack` placeholder,
 plugin descriptor and bootstrap. No caches or `.uasset` files belong in it. Dynamic product
-names, imports, overview maps and customer-package stripping remain later E11 tasks. The
+names and texture imports now use the adapter described below; overview maps and customer-package stripping remain later E11 tasks. The
 worker plugin and probe must never be shipped in a customer release.
 
 Default cleanup removes the entire owned test clone after success or failure. Compact results,
@@ -59,3 +59,42 @@ copies in the user profile; automatic approval review rejected their cleanup. Se
 
 A passing smoke is only candidate evidence. Full approved-version selection requires the
 existing compatibility suite and explicit approval; this harness does not alter the approval database.
+
+## Isolated jobs and texture imports (PB-1104–PB-1106)
+
+`UnrealImportPlan.Create` in `PackageBuilder.Targets.Unreal` accepts existing validated Domain
+identities, product cases and texture assignments, plus snapshot hashes/lengths. Its
+`unreal-content-v1` profile uses one `/Game/<ProjectName>` Pack root with Meshes, Materials,
+Textures, Maps and Documentation. Rigged cases add Skeletons, animated cases add Animations,
+and sets/collections add Blueprints. Names are bounded ASCII identifiers; collisions are rejected
+case-insensitively rather than silently renamed. Publisher branding remains configuration-owned.
+
+The host serializes `ToJson()` into the input snapshot as `unreal-import-plan.json`. Texture
+source references are relative to that input snapshot. `UnrealProjectClone` copies only reviewed
+template sources, renames the project/Pack placeholder and holds an OS lease across every engine
+process and cleanup. A second process cannot lease the same job; a second execution on the same
+lease is rejected. The adapter must be used by every caller that launches an Editor against a
+job; it is not an operating-system sandbox for manually launched external applications.
+The caller supplies the preflight-verified executable and trusted argument array; input manifests
+cannot choose executables or scripts. Timeout stops the owned process before disposal.
+
+The worker supports `import-unreal-textures` and `verify-unreal-textures`. It validates the entire
+bounded plan and input hashes before importing, never overwrites an existing asset, and applies
+explicit settings through Unreal's TextureFactory and AssetImportTask. Albedo/emission use sRGB;
+data and normal textures use linear space. Normal compression, data masks and colour compression
+are explicit. Albedo/opacity preserve alpha; other roles discard it. OpenGL normal maps flip green
+for Unreal; DirectX does not. Auto orientation must be resolved before planning. Compression is
+applied before sRGB because Unreal can reset colour space during a compression change.
+
+The separate verify operation loads saved Texture2D assets without repairing them, checks every
+policy property and returns their exact hashes. The live harness verifies all nine policy cases,
+unchanged input bytes, fresh-process reopen, duplicate-import rejection and cleanup:
+
+```powershell
+./scripts/Invoke-UnrealTextureIntegration.ps1
+```
+
+Evidence stays in `artifacts/PB-1104/<run-id>`; disposable projects and images are removed from
+`artifacts/ue/<run-id>` in finally. Source fixtures and shared DDC remain. No UI, materials,
+meshes, ORM packing, product rendering or final package export is added by this scope.
+See [acceptance evidence](../../docs/PB-1104_PB-1106_UNREAL_IMPORT_EVIDENCE.md).

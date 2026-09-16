@@ -2868,6 +2868,18 @@ mutating the historical seed or a user's approved current profile. See
 
 ## Unreal foundation candidate (PB-1101–PB-1103)
 
+PB-1104–PB-1106 extend this foundation with the .NET `UnrealImportPlan` and a Python host
+`UnrealProjectClone`. The target adapter reuses canonical Domain identity, product-case and
+texture-assignment rules; its immutable, sorted `unreal-content-v1` plan crosses the engine
+boundary as bounded JSON in the input snapshot. Python validates that boundary and applies
+explicit engine settings; it does not infer texture roles or reimplement material semantics.
+The host lease covers cloning, process execution, timeout handling and cleanup, including
+separate-process and same-lease contention. Sources stay immutable and imports never overwrite.
+The input limits are 128 texture operations and 256 MiB per file for this adapter milestone.
+Both development harnesses share candidate installation/signature/discovery checks. The legacy
+foundation smoke remains independent; new content jobs use the leased host adapter. See
+[the mapped acceptance evidence](PB-1104_PB-1106_UNREAL_IMPORT_EVIDENCE.md).
+
 The versioned `engine-templates/unreal/5.8` source enables PythonScriptPlugin,
 EditorScriptingUtilities and the content-only PackageBuilderWorker plugin. Its explicit commandlet
 bootstrap invokes the engine adapter, while Blender and Unreal share the existing v1 protocol

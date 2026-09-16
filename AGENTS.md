@@ -148,6 +148,16 @@ worker shell in dependency order; prepare independent code while installation is
 not claim engine acceptance without a real run. Roll PB-1008–PB-1010 to DONE once using successful
 main CI and user confirmation. Keep all three acceptance records separate. Publication gates remain.
 
+### Approved combined scope: PB-1104 through PB-1106
+
+On 2026-09-16 the user approved these three tasks together on
+`codex/PB-1104-PB-1106-unreal-import`, from freshly synchronized main
+`10ce0042025a8cd2dd36f9e6f3c65674111f00c5`. Implement isolated cloning, content naming and
+texture imports in dependency order. Roll PB-1101–PB-1103 to DONE once using successful
+main CI and user confirmation. Keep separate acceptance records and remove disposable test
+projects after validation. The exact signed external engine exception also applies to this
+development validation; global production approval and publication gates remain unchanged.
+
 ### User-approved Unreal installation exception
 
 On 2026-09-16 the user chose Epic's installation under `C:\Program Files\Epic Games` and

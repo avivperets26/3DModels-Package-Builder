@@ -18,6 +18,10 @@ The approved PB-0908–PB-0910 combined scope uses `codex/PB-0908-PB-0910-media-
 
 ## Required workflow
 
+The approved PB-1104–PB-1106 scope uses `codex/PB-1104-PB-1106-unreal-import`.
+Reuse canonical naming/texture rules and shared Python containment helpers; validate real
+save/reopen behavior and exclusive execution, then remove disposable projects.
+
 The approved PB-1101–PB-1103 combined Unreal foundation scope uses
 `codex/PB-1101-PB-1103-unreal-foundation`; live engine acceptance remains required independently
 of plain-Python or .NET contract tests. Reuse shared protocol helpers across engine adapters.

@@ -652,6 +652,15 @@ Invoke-Check 'Task branch names and lifecycle markers are valid' {
     $blockedMarker = $blockedEmoji + ' **BLOCKED**'
     $lifecycleStates = @{}
 
+    foreach ($id in @('PB-1104', 'PB-1105', 'PB-1106')) {
+        if (-not (Test-PackageBuilderTaskBranch $id 'codex/PB-1104-PB-1106-unreal-import')) {
+            throw 'Approved Unreal import branch rejected.'
+        }
+    }
+    if (Test-PackageBuilderTaskBranch 'PB-1107' 'codex/PB-1104-PB-1106-unreal-import') {
+        throw 'Unreal import exception expanded beyond its approved scope.'
+    }
+
     foreach ($id in @('PB-1101', 'PB-1102', 'PB-1103')) {
         if (-not (Test-PackageBuilderTaskBranch $id 'codex/PB-1101-PB-1103-unreal-foundation')) {
             throw 'Approved Unreal foundation branch rejected.'
@@ -824,6 +833,7 @@ Invoke-Check 'Tracked and candidate files contain no prohibited content' {
     $generatedPath = '(^|/)(bin|obj|\.vs|Library|Temp|UserSettings|Intermediate|Saved|DerivedDataCache|__pycache__)(/|$)'
     $prohibitedExtension = '(?i)\.(exe|dll|pdb|msi|msix|appx|zip|7z|rar|nupkg|vsix|fbx|glb|gltf|blend|unitypackage|uasset|umap|pak|pfx|p12|key|dmp)$'
     $approvedBinaryFixtures = @(
+        'tests/fixtures/unreal/source/texture.png',
         'tests/fixtures/portable/static-vertical-slice/source/StoneArch.fbx',
         'tests/fixtures/portable/twelve-item-collection/source/Column01.fbx',
         'tests/fixtures/portable/twelve-item-collection/source/Column02.fbx',

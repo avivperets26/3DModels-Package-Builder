@@ -16,6 +16,7 @@ from package_builder_protocol import (
 )
 
 from package_builder_unreal import __version__
+from package_builder_unreal.textures import TexturePolicyError, import_textures
 
 ASSET = "/Game/Pack/PB_WorkerProbe"
 
@@ -120,16 +121,29 @@ def run(request_path: Path, unreal: Any, stdout: TextIO, stderr: TextIO) -> int:
         runtime = unreal.SystemLibrary.get_engine_version().split("-", 1)[0]
         if runtime != request["engineVersion"]:
             failure = "UNREAL_ENGINE_VERSION_MISMATCH"
-        elif request["operation"] not in {"probe-unreal-worker", "verify-unreal-worker"}:
+        elif request["operation"] not in {
+            "probe-unreal-worker",
+            "verify-unreal-worker",
+            "import-unreal-textures",
+            "verify-unreal-textures",
+        }:
             failure = "UNREAL_OPERATION_UNSUPPORTED"
             code = 4
         else:
             result["retrySafety"] = "requires-cleanup"
-            artifact = _asset(unreal, workspace, request["operation"])
-            artifact["jobId"] = job
-            result.update(status="success", retrySafety="unsafe", artifacts=[artifact])
+            if request["operation"] in {"import-unreal-textures", "verify-unreal-textures"}:
+                artifacts = import_textures(
+                    unreal, workspace, source, request["operation"] == "verify-unreal-textures"
+                )
+            else:
+                artifacts = [_asset(unreal, workspace, request["operation"])]
+            for artifact in artifacts:
+                artifact["jobId"] = job
+            result.update(status="success", retrySafety="unsafe", artifacts=artifacts)
             _progress(stdout, job, "worker-complete", 100)
             code = 0
+    except TexturePolicyError as error:
+        failure = str(error)
     except Exception:
         failure = "UNREAL_WORKER_EXECUTION_FAILED"
     if code:

@@ -234,3 +234,19 @@ approval review rejected the bounded cleanup command with `blocked by policy`; i
 No alternate deletion method was attempted. These helper copies remain as an explicit exception;
 the original user-installed engine is untouched. The revised harness uses local filesystem DDC
 and disables Zen auto-launch, and the final logs contain no writes to that user-profile location.
+
+## PB-1104–PB-1106 — 2026-09-16
+
+Four texture-policy harness clones were removed after their processes exited, including the
+initial failed diagnostic run: `0def4c32c2a54a9bbe15306de559816a`,
+`780a64d252b04d87bf93f3b3eb26e8c3`, `c2dd24a0e5b1455b8be723b56e95bf26`, and
+`97d644960ab94b50be651b77534fa7b0`. Their compact receipts are in `artifacts/PB-1104/<id>`.
+The foundation regression clone `2b8bcb60617b4a56bf7e2785d66d6699` was also removed;
+its receipt remains under `artifacts/PB-1103`. Read-only inspection found zero directories
+under `artifacts/ue` and zero Python fixture workspaces. Source/golden fixtures, tools and DDC
+were preserved. Cleanup evidence: `artifacts/PB-1104/cleanup-verified.json`.
+
+The .NET runner left 24 empty scratch directories under `artifacts/validation/PB-1104/temp`
+(zero files). Automatic approval review rejected their bounded deletion with `blocked by policy`.
+That command did not execute; no alternate method or retry was used. These empty directories
+remain as a new documented exception. Prior PB-1001, portable and Zen exceptions are unchanged.

@@ -1572,3 +1572,13 @@ remain outside this scope. The 2026-09-15 static candidate records a sourced loc
 the exchange-size ambiguity and maps applicable technical requirements. It does not replace earlier
 approved pins; synthetic compatibility alone cannot satisfy real-release acceptance. See
 [implementation and acceptance evidence](PB-1008_PB-1010_FAB_RELEASE_EVIDENCE.md).
+
+## Unreal isolated jobs and texture preparation (PB-1104–PB-1106)
+
+The Unreal adapter now clones reviewed templates under an exclusive job lease, generates a
+versioned product folder/name plan and imports textures with explicit colour-space, compression,
+alpha and resolved normal-orientation policies. Import and fresh-process verification run on
+the user-selected signed 5.8.2 development candidate. Test projects are disposable; only compact
+evidence is retained. This milestone adds no desktop workflow or final Unreal package. ORM packing,
+material compilation and mesh import follow separately. See
+[the acceptance matrix and local evidence](PB-1104_PB-1106_UNREAL_IMPORT_EVIDENCE.md).
