@@ -259,6 +259,10 @@ does not manufacture live evidence. See the dated continuation in the combined e
 
 ## Unreal foundation acceptance (PB-1101–PB-1103)
 
+PB-1107–PB-1109 add exact ORM pixels, canonical materials, native asset persistence, asymmetric
+mesh dimensions, explicit collision and rendered comparisons. See [the surface acceptance matrix](PB-1107_PB-1109_UNREAL_SURFACE_EVIDENCE.md#acceptance-mapping).
+Import/reopen alone is insufficient for material rendering acceptance; the GPU receipt must pass.
+
 PB-1104–PB-1106 map isolation, cross-process exclusion, cancellation/timeout cleanup, hostile
 plan/source handling, five-case naming/folders and nine texture-policy cases to concrete tests
 in [the import acceptance matrix](PB-1104_PB-1106_UNREAL_IMPORT_EVIDENCE.md#acceptance-mapping).

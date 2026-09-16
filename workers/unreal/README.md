@@ -1,5 +1,12 @@
 # Unreal foundation worker
 
+PB-1107–PB-1109 add `import-unreal-surfaces` and `verify-unreal-surfaces`, consuming
+`unreal-surface-plan.json` alongside the existing texture plan after textures are imported.
+Masters, instances and static meshes are built only from explicit validated settings; source
+FBX hashes and every target are checked before mutation. Use
+`scripts/Invoke-UnrealSurfaceIntegration.ps1` for native save/reopen and rendered acceptance.
+See [limits and evidence](../../docs/PB-1107_PB-1109_UNREAL_SURFACE_EVIDENCE.md).
+
 PB-1101–PB-1103 provide a versioned UE 5.8 template and protocol shell. Real 5.8.2
 foundation save/reopen and rejected-request checks passed on 2026-09-16. Full product compatibility
 and global ApprovedLatest selection are separate gates.

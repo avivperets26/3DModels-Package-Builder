@@ -18,6 +18,12 @@ The approved PB-0908–PB-0910 combined scope uses `codex/PB-0908-PB-0910-media-
 
 ## Required workflow
 
+New branches use conventional prefixes (`feat/`, `fix/`, `docs/`, etc.), never `codex/`;
+historical branch names remain evidence. Commit subjects use conventional `feat:`, `fix:`, etc.
+The approved PB-1107–PB-1109 scope uses `feat/PB-1107-PB-1109-unreal-materials-meshes`.
+Reuse canonical material definitions and existing image/mesh policies; validate pixels and actual
+Unreal material/mesh save, reopen and rendering behavior, then clean disposable projects.
+
 The approved PB-1104–PB-1106 scope uses `codex/PB-1104-PB-1106-unreal-import`.
 Reuse canonical naming/texture rules and shared Python containment helpers; validate real
 save/reopen behavior and exclusive execution, then remove disposable projects.

@@ -2868,6 +2868,12 @@ mutating the historical seed or a user's approved current profile. See
 
 ## Unreal foundation candidate (PB-1101–PB-1103)
 
+PB-1107–PB-1109 add host ORM packing and the companion `unreal-surfaces-v1` material/static-mesh
+plan. Domain retains material intent; Python adapts native graph, instance and FBX/collision APIs.
+WIC exposes bounded texture decoding/PNG encoding alongside existing preview resolution checks.
+The surface harness uses .NET plans and PB-0415 normalized FBX, then verifies save/reopen and GPU
+rendering. See [scope, limits and acceptance](PB-1107_PB-1109_UNREAL_SURFACE_EVIDENCE.md).
+
 PB-1104–PB-1106 extend this foundation with the .NET `UnrealImportPlan` and a Python host
 `UnrealProjectClone`. The target adapter reuses canonical Domain identity, product-case and
 texture-assignment rules; its immutable, sorted `unreal-content-v1` plan crosses the engine

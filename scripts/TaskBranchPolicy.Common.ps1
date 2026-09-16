@@ -3,6 +3,9 @@ function Test-PackageBuilderTaskBranch {
     [OutputType([bool])]
     param([string]$TaskId, [string]$Branch)
 
+    if ($TaskId -in @('PB-1107', 'PB-1108', 'PB-1109') -and
+        $Branch -eq 'feat/PB-1107-PB-1109-unreal-materials-meshes') { return $true }
+
     if ($TaskId -in @('PB-1104', 'PB-1105', 'PB-1106') -and
         $Branch -eq 'codex/PB-1104-PB-1106-unreal-import') { return $true }
 
