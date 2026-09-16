@@ -236,6 +236,11 @@ remains PB-0617 work.
 
 ### 3.4 Unreal Worker
 
+PB-1101–PB-1103 provide the versioned 5.8 template and protocol shell. The user-installed Unreal
+5.8.2 has passed real save/reopen and rejected-request tests. Global product compatibility approval
+remains separate; the foundation uses the explicit external-installation exception in AGENTS. See [foundation evidence](PB-1101_PB-1103_UNREAL_FOUNDATION_EVIDENCE.md). The following
+pipeline describes the full E11 target, not capabilities already accepted by this foundation.
+
 An Unreal Python/Editor Utility module runs inside a clean product project. It:
 
 - Imports static or skeletal FBX assets.

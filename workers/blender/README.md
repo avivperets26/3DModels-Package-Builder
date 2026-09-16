@@ -1,6 +1,9 @@
 # Package Builder Blender Worker
 
 This directory contains the protocol shell loaded by the selected contained Blender executable.
+The protocol implementation is shared with Unreal in `workers/shared/package_builder_protocol.py`.
+Keep `workers/shared` alongside `workers/blender` when copying the worker; the existing Blender
+`protocol` module remains an import-compatible facade. No extra Python package is required.
 PB-0401 implements request validation, JSON Lines progress, atomic result output, and stable exit
 codes. PB-0402 adds direct-data scene reset and temporary data-block ownership utilities. PB-0403
 and PB-0404 add bounded FBX and single-file GLB import adapters. PB-0405 adds deterministic

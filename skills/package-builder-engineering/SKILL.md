@@ -18,6 +18,12 @@ The approved PB-0908–PB-0910 combined scope uses `codex/PB-0908-PB-0910-media-
 
 ## Required workflow
 
+The approved PB-1101–PB-1103 combined Unreal foundation scope uses
+`codex/PB-1101-PB-1103-unreal-foundation`; live engine acceptance remains required independently
+of plain-Python or .NET contract tests. Reuse shared protocol helpers across engine adapters.
+Honor the explicit external Unreal installation exception in AGENTS.md; keep all generated state
+in the repository and never change the user-managed engine installation.
+
 The approved PB-1008–PB-1010 portable/Unity release scope uses `codex/PB-1008-PB-1010-fab-release`.
 Unreal remains unsupported, and unresolved sourced rules must not be silently waived for E2E acceptance.
 

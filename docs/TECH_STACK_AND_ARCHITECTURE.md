@@ -2865,3 +2865,21 @@ the neutral Contracts IEncodedImageInspector interface; the shared presentation 
 required/allowed view roles. A new 2026-09-14.1 candidate adds the consumed artifact policies without
 mutating the historical seed or a user's approved current profile. See
 [boundaries and acceptance](PB-1004_PB-1005_PB-1007_FAB_VALIDATORS_EVIDENCE.md).
+
+## Unreal foundation candidate (PB-1101–PB-1103)
+
+The versioned `engine-templates/unreal/5.8` source enables PythonScriptPlugin,
+EditorScriptingUtilities and the content-only PackageBuilderWorker plugin. Its explicit commandlet
+bootstrap invokes the engine adapter, while Blender and Unreal share the existing v1 protocol
+implementation under `workers/shared`. Dedicated flushed JSONL progress avoids mixing native
+Unreal log lines with contract events. Results are atomic, never promoted, and contain exact saved
+asset hashes. Requests are bounded and reject overlapping or linked paths.
+
+The development harness reuses the .NET Unreal locator and bounded metadata parser, then saves and independently reopens a
+fixed material in a disposable source-template clone. It retains compact diagnostics, cleans the
+clone in finally and keeps cache settings inside the repository. Production orchestration remains
+PB-1104; product imports/export remain later E11 work. The user-approved external 5.8.2 installation
+has passed real foundation tests; production discovery still reports external roots as informational.
+A signed exact-root harness exception permits these tests without globally selecting ApprovedLatest.
+Built-in animation defaults avoid an unnecessary ACL plugin; filesystem-only DDC disables Zen
+auto-launch and keeps the final runs cache-contained. Full product compatibility remains pending. See [evidence](PB-1101_PB-1103_UNREAL_FOUNDATION_EVIDENCE.md).

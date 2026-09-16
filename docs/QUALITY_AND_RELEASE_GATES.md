@@ -256,3 +256,12 @@ The reviewed static candidate is covered by `FabStaticReleaseCandidateTests`; se
 uses `Invoke-FabStaticReleaseIntegration.ps1` and requires a `realEngineRun` receipt after clean Unity
 import, Blender reimport, measured asset/media validation and every final entry hash check. Normal CI
 does not manufacture live evidence. See the dated continuation in the combined evidence.
+
+## Unreal foundation acceptance (PB-1101–PB-1103)
+
+The [criterion-level foundation matrix](PB-1101_PB-1103_UNREAL_FOUNDATION_EVIDENCE.md#acceptance-mapping)
+maps installation discovery, source-template inventory, protocol boundaries, saved-asset restart
+and cleanup to concrete checks. Simulated engine tests and the cross-language result golden are
+necessary but insufficient for live Unreal acceptance. The candidate must be installed and the
+commandlet harness must produce fresh real-engine and cleanup receipts. A smoke test never grants
+global tool approval; the existing compatibility suite and approval workflow remain required.

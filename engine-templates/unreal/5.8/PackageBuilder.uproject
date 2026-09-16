@@ -1,0 +1,12 @@
+{
+  "FileVersion": 3,
+  "EngineAssociation": "5.8",
+  "Category": "Package Builder",
+  "Description": "Disposable editor template; exact candidate version is checked at launch.",
+  "DisableEnginePluginsByDefault": true,
+  "Plugins": [
+    { "Name": "PythonScriptPlugin", "Enabled": true },
+    { "Name": "EditorScriptingUtilities", "Enabled": true },
+    { "Name": "PackageBuilderWorker", "Enabled": true }
+  ]
+}

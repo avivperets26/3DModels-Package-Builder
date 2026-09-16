@@ -652,6 +652,15 @@ Invoke-Check 'Task branch names and lifecycle markers are valid' {
     $blockedMarker = $blockedEmoji + ' **BLOCKED**'
     $lifecycleStates = @{}
 
+    foreach ($id in @('PB-1101', 'PB-1102', 'PB-1103')) {
+        if (-not (Test-PackageBuilderTaskBranch $id 'codex/PB-1101-PB-1103-unreal-foundation')) {
+            throw 'Approved Unreal foundation branch rejected.'
+        }
+    }
+    if (Test-PackageBuilderTaskBranch 'PB-1104' 'codex/PB-1101-PB-1103-unreal-foundation') {
+        throw 'Unreal foundation exception expanded beyond its approved scope.'
+    }
+
     foreach ($id in @('PB-1008', 'PB-1009', 'PB-1010')) {
         if (-not (Test-PackageBuilderTaskBranch $id 'codex/PB-1008-PB-1010-fab-release')) {
             throw 'Approved Fab release branch rejected.'
@@ -981,6 +990,33 @@ Invoke-Check 'Core CI configuration validator supports standalone Windows PowerS
 Invoke-Check 'Unity test artifacts clean safely and preserve evidence' {
     & (Join-Path $script:RepositoryRoot 'scripts/Test-UnityTestArtifacts.ps1') `
         -RepositoryRoot $script:RepositoryRoot
+}
+
+Invoke-Check 'Unreal foundation template contains only reviewed source and required plugins' {
+    $template = Join-Path $script:RepositoryRoot 'engine-templates/unreal/5.8'
+    $expected = @('PackageBuilder.uproject', 'Config/DefaultEngine.ini', 'Config/DefaultEditor.ini',
+        'Content/Pack/.gitkeep', 'Plugins/PackageBuilderWorker/PackageBuilderWorker.uplugin',
+        'Plugins/PackageBuilderWorker/Content/Python/pb_worker_entry.py')
+    $actual = @(Get-ChildItem -LiteralPath $template -File -Recurse -Force | ForEach-Object {
+        $_.FullName.Substring($template.Length + 1).Replace('\', '/')
+    })
+    if (Compare-Object ($expected | Sort-Object) ($actual | Sort-Object)) { throw 'Unexpected Unreal template contents.' }
+    $project = Get-Content -LiteralPath (Join-Path $template 'PackageBuilder.uproject') -Raw | ConvertFrom-Json
+    if ($project.EngineAssociation -cne '5.8' -or -not $project.DisableEnginePluginsByDefault) {
+        throw 'Unreal template version/plugin defaults changed.'
+    }
+    if (Compare-Object @('EditorScriptingUtilities', 'PackageBuilderWorker', 'PythonScriptPlugin') `
+        @($project.Plugins | Where-Object Enabled | Select-Object -ExpandProperty Name | Sort-Object)) {
+        throw 'Unexpected Unreal plugins.'
+    }
+    $profile = Get-Content -LiteralPath (Join-Path $script:RepositoryRoot 'profiles/engines/unreal-5.8.2-candidate.json') -Raw | ConvertFrom-Json
+    if ($profile.version -cne '5.8.2' -or $profile.state -cne 'installed-candidate' -or
+        $profile.userApprovedExternalInstallationRoot -cne 'C:\Program Files\Epic Games\UE_5.8') {
+        throw 'Candidate state changed without corresponding reviewed acceptance evidence.'
+    }
+    if (-not (Test-Path -LiteralPath (Join-Path $script:RepositoryRoot 'workers/shared/package_builder_protocol.py'))) {
+        throw 'Missing shared Python protocol dependency.'
+    }
 }
 
 Invoke-Check 'git diff --check passes for working tree and index' {
