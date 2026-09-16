@@ -177,6 +177,15 @@ that order; keep separate acceptance records. Roll PB-1104–PB-1106 to DONE onc
 successful main CI and user confirmation. The signed engine exception applies; remove all
 owned disposable test projects. Publication gates and candidate-only approval remain unchanged.
 
+### Approved combined scope: PB-1110 through PB-1112
+
+On 2026-09-16 the user approved these three tasks on
+`feat/PB-1110-PB-1112-unreal-overview-validation`, from freshly synchronized main
+`8ae7175aba5eb9732728b690bcb6daf0ed0b0dc2`. Implement overview before rendering and validation.
+Reuse shared presentation/media contracts and native adapters; validate saved map reopening,
+rendered views and rejection of contaminated projects. Roll PB-1107–PB-1109 to DONE once using
+successful main CI and user acceptance. Clean disposable projects; publication gates remain.
+
 ### User-approved Unreal installation exception
 
 On 2026-09-16 the user chose Epic's installation under `C:\Program Files\Epic Games` and

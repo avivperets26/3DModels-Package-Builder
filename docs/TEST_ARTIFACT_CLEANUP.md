@@ -273,3 +273,20 @@ job `7e911c3a2480467995b15b12f71a371a` was also removed, with its receipt under
 Source/golden fixtures, tools and shared DDC were preserved; only compact evidence and GPU
 captures remain. See `artifacts/PB-1107/cleanup-verified.json` for the recorded audit and
 the separate 24-empty-directory exception above.
+
+## PB-1110–PB-1112 scratch cleanup exception — 2026-09-16
+
+The full .NET runs left 48 empty directories and zero files beneath
+`C:DevPackageBuilderartifactsalidationPB-1110	emp` (read-only verified; no links).
+Automatic approval review rejected their bounded PowerShell removal with `blocked by policy`.
+The command did not execute; no alternate method or retry was used. These empty scratch
+directories contain no generated packages. Earlier documented cleanup exceptions are unchanged.
+
+### Native overview cleanup audit
+
+All 17 disposable overview jobs, including failed diagnostic attempts, were removed by the
+owned-job finally cleanup. Successful run `4f7dd0ad96ba4071bf739855a9356288` confirms native
+acceptance and cleanup. Read-only inspection found zero remaining jobs under `artifacts/ue`.
+The audit is `artifacts/PB-1110/cleanup-verified.json`. Compact native logs, receipts and
+preview images remain as evidence; source fixtures, engine tools and shared DDC are preserved.
+The empty scratch-directory exception above remains unchanged.

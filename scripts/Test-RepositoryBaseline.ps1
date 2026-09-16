@@ -652,6 +652,15 @@ Invoke-Check 'Task branch names and lifecycle markers are valid' {
     $blockedMarker = $blockedEmoji + ' **BLOCKED**'
     $lifecycleStates = @{}
 
+    foreach ($id in @('PB-1110', 'PB-1111', 'PB-1112')) {
+        if (-not (Test-PackageBuilderTaskBranch $id 'feat/PB-1110-PB-1112-unreal-overview-validation')) {
+            throw 'Approved Unreal overview branch rejected.'
+        }
+    }
+    if (Test-PackageBuilderTaskBranch 'PB-1113' 'feat/PB-1110-PB-1112-unreal-overview-validation') {
+        throw 'Unreal overview exception expanded beyond its approved scope.'
+    }
+
     foreach ($id in @('PB-1107', 'PB-1108', 'PB-1109')) {
         if (-not (Test-PackageBuilderTaskBranch $id 'feat/PB-1107-PB-1109-unreal-materials-meshes')) {
             throw 'Approved Unreal surface branch rejected.'
