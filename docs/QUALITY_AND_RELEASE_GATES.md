@@ -259,6 +259,12 @@ does not manufacture live evidence. See the dated continuation in the combined e
 
 ## Unreal foundation acceptance (PB-1101–PB-1103)
 
+PB-1110–PB-1112 require native saved-map reopening, exact scene/dependency inventories,
+real requested-view captures with hash-bound product coverage, shared media validation,
+redirector repair/recheck and negative unused-content/lighting/log cases. See the
+[overview acceptance matrix](PB-1110_PB-1112_UNREAL_OVERVIEW_EVIDENCE.md#acceptance-mapping).
+Raw capture or simulated scene success never substitutes for these gates.
+
 PB-1107–PB-1109 add exact ORM pixels, canonical materials, native asset persistence, asymmetric
 mesh dimensions, explicit collision and rendered comparisons. See [the surface acceptance matrix](PB-1107_PB-1109_UNREAL_SURFACE_EVIDENCE.md#acceptance-mapping).
 Import/reopen alone is insufficient for material rendering acceptance; the GPU receipt must pass.

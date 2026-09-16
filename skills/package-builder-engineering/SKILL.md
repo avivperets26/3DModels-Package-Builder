@@ -18,6 +18,10 @@ The approved PB-0908–PB-0910 combined scope uses `codex/PB-0908-PB-0910-media-
 
 ## Required workflow
 
+The approved PB-1110–PB-1112 scope uses `feat/PB-1110-PB-1112-unreal-overview-validation`.
+Reuse shared presentation tokens and image validation. Native saved-map reopen, final-material
+captures, product-only coverage and hostile-project rejection are required; remove test projects.
+
 New branches use conventional prefixes (`feat/`, `fix/`, `docs/`, etc.), never `codex/`;
 historical branch names remain evidence. Commit subjects use conventional `feat:`, `fix:`, etc.
 The approved PB-1107–PB-1109 scope uses `feat/PB-1107-PB-1109-unreal-materials-meshes`.

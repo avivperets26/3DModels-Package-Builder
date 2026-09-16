@@ -236,6 +236,12 @@ remains PB-0617 work.
 
 ### 3.4 Unreal Worker
 
+PB-1110–PB-1112 add static overview maps, requested native 1920×1080 stills and project
+validation. They reuse the PB-0906 presentation and shared media gates; capture success alone
+does not approve media or release. See [overview evidence](PB-1110_PB-1112_UNREAL_OVERVIEW_EVIDENCE.md)
+for the current validation state, scope and cleanup. Interactive controls and final ZIPs remain
+PB-1116 and PB-1113 respectively.
+
 PB-1101–PB-1103 provide the versioned 5.8 template and protocol shell. The user-installed Unreal
 5.8.2 has passed real save/reopen and rejected-request tests. Global product compatibility approval
 remains separate; the foundation uses the explicit external-installation exception in AGENTS. See [foundation evidence](PB-1101_PB-1103_UNREAL_FOUNDATION_EVIDENCE.md). The following

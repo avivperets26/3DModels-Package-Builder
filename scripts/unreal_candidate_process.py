@@ -40,3 +40,23 @@ def candidate_editor(profile):
         Path(profile["userApprovedExternalInstallationRoot"])
         / "Engine/Binaries/Win64/UnrealEditor-Cmd.exe"
     )
+
+
+def repair_redirectors(clone, repository, evidence, editor, timeout):
+    """Resave references, then rescan/delete redirectors in a fresh project-only commandlet.
+
+    UE 5.8's registry can retain the old map dependency during the resave process. A second
+    bounded invocation reads the saved map; the caller still verifies no redirectors remain.
+    """
+    for key in ("fix-redirectors", "fix-redirectors-final"):
+        arguments, environment = commandlet(clone, repository, evidence, key)
+        arguments[1:3] = [
+            "-run=ResavePackages",
+            "-fixupredirects",
+            "-projectonly",
+            "-SCCProvider=None",
+        ]
+        code = clone.execute(editor, arguments, environment, timeout)
+        if code:
+            return code
+    return 0

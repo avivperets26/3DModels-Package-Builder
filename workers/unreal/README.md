@@ -1,5 +1,12 @@
 # Unreal foundation worker
 
+PB-1110–PB-1112 add `create-unreal-overview`, `validate-unreal-overview` and
+`render-unreal-previews` for one static product mesh. The companion overview plan comes from
+the shared presentation specification. Capture receipts include final image and product-only
+coverage hashes; the host must run shared media validation and inspect complete native logs
+before release. Project-only redirector fixup runs under the existing clone lease.
+See [overview evidence](../../docs/PB-1110_PB-1112_UNREAL_OVERVIEW_EVIDENCE.md).
+
 PB-1107–PB-1109 add `import-unreal-surfaces` and `verify-unreal-surfaces`, consuming
 `unreal-surface-plan.json` alongside the existing texture plan after textures are imported.
 Masters, instances and static meshes are built only from explicit validated settings; source

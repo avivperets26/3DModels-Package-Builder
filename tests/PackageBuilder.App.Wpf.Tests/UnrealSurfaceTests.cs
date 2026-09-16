@@ -114,10 +114,10 @@ public sealed class UnrealSurfaceTests
         { File.WriteAllText(Path.Combine(output, "unreal-surface-plan.json"), plan.ToJson()); }
     }
 
-    private static UnrealStaticMeshEntry Mesh(string id, string material, string collision, string hash, long size) =>
+    internal static UnrealStaticMeshEntry Mesh(string id, string material, string collision, string hash, long size) =>
         new(id, "Asymmetric.fbx", hash, size, [material], collision, [100, 200, 300], ["FixtureSurface"]);
 
-    private static UnrealMaterialEntry Material(SurfaceMode mode)
+    internal static UnrealMaterialEntry Material(SurfaceMode mode)
     {
         TextureRole[] roles = [TextureRole.Albedo, TextureRole.Normal, TextureRole.Emission, TextureRole.Opacity];
         TextureAssignment[] assignments = [.. roles.Select(role => TextureAssignment.Create(SourceAsset.Create(SourceAssetKind.Image, role.CanonicalIdentifier + ".png").Value!, role, role.RequiredColourSpace,
@@ -129,7 +129,7 @@ public sealed class UnrealSurfaceTests
             roles.ToDictionary(r => r.CanonicalIdentifier + ".png", r => "T_" + r.CanonicalIdentifier, StringComparer.Ordinal), "T_ORM");
     }
 
-    private static Dictionary<string, PreviewRaster> TexturePixels() => new(StringComparer.Ordinal)
+    internal static Dictionary<string, PreviewRaster> TexturePixels() => new(StringComparer.Ordinal)
     {
         ["albedo"] = Raster(i => (byte)(64 + i % 128), i => (byte)(i % 16 < 8 ? 255 : 0)),
         ["normal"] = new(16, 16, Enumerable.Range(0, 256).SelectMany(i => new byte[] { (byte)(96 + i % 64), 160, 245, 255 }).ToArray()),
@@ -138,7 +138,7 @@ public sealed class UnrealSurfaceTests
         ["ORM"] = UnrealOrmPacker.Pack(Raster(i => (byte)(128 + i % 128)), Raster(i => (byte)(i % 256)), Raster(i => (byte)(255 - i % 256)))
     };
 
-    private static IEnumerable<UnrealTextureSource> TextureSources(Dictionary<string, byte[]>? bytes = null)
+    internal static IEnumerable<UnrealTextureSource> TextureSources(Dictionary<string, byte[]>? bytes = null)
     {
         bytes ??= TexturePixels().ToDictionary(p => p.Key, p => WindowsPreviewImageCodec.EncodeTexture(p.Value), StringComparer.Ordinal);
         foreach (KeyValuePair<string, byte[]> entry in bytes)
@@ -153,7 +153,7 @@ public sealed class UnrealSurfaceTests
     private static PreviewRaster Raster(Func<int, byte> red, Func<int, byte>? alpha = null) =>
         new(16, 16, Enumerable.Range(0, 256).SelectMany(i => new byte[] { red(i), 37, 91, alpha?.Invoke(i) ?? 255 }).ToArray());
 
-    private static string FindRepository()
+    internal static string FindRepository()
     {
         DirectoryInfo? directory = new(AppContext.BaseDirectory);
         while (directory is not null && !File.Exists(Path.Combine(directory.FullName, "PackageBuilder.sln")))

@@ -1,5 +1,6 @@
 """Generate original CC0 asymmetric acceptance geometry using the existing normalized FBX exporter."""
 
+import os
 import sys
 from pathlib import Path
 
@@ -23,7 +24,7 @@ bpy.ops.object.delete(use_global=False)
 bpy.ops.mesh.primitive_cube_add(size=1, location=(0, 0, 1.5))
 cube = bpy.context.active_object
 cube.name = "Asymmetric"
-cube.dimensions = (1, 2, 3)
+cube.dimensions = (3, 3, 3) if os.environ.get("PB_UNREAL_OVERVIEW_FIXTURE") == "1" else (1, 2, 3)
 bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
 cube.data.materials.append(bpy.data.materials.new("FixtureSurface"))
 plan = NormalizedFbxExportPlan(

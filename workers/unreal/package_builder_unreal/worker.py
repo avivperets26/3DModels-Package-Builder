@@ -17,6 +17,9 @@ from package_builder_protocol import (
 )
 
 from package_builder_unreal import __version__
+from package_builder_unreal.overview import create_overview
+from package_builder_unreal.preview_capture import render_previews
+from package_builder_unreal.project_validation import OverviewValidationError, validate_overview
 from package_builder_unreal.surfaces import import_surfaces
 from package_builder_unreal.textures import TexturePolicyError, import_textures
 
@@ -130,12 +133,21 @@ def run(request_path: Path, unreal: Any, stdout: TextIO, stderr: TextIO) -> int:
             "verify-unreal-textures",
             "import-unreal-surfaces",
             "verify-unreal-surfaces",
+            "create-unreal-overview",
+            "validate-unreal-overview",
+            "render-unreal-previews",
         }:
             failure = "UNREAL_OPERATION_UNSUPPORTED"
             code = 4
         else:
             result["retrySafety"] = "requires-cleanup"
-            if request["operation"] in {"import-unreal-surfaces", "verify-unreal-surfaces"}:
+            if request["operation"] == "create-unreal-overview":
+                artifacts = create_overview(unreal, workspace, source)
+            elif request["operation"] == "validate-unreal-overview":
+                artifacts = validate_overview(unreal, workspace, source)[0]
+            elif request["operation"] == "render-unreal-previews":
+                artifacts = render_previews(unreal, workspace, source, output)
+            elif request["operation"] in {"import-unreal-surfaces", "verify-unreal-surfaces"}:
                 artifacts = import_surfaces(
                     unreal, workspace, source, request["operation"] == "verify-unreal-surfaces"
                 )
@@ -150,7 +162,7 @@ def run(request_path: Path, unreal: Any, stdout: TextIO, stderr: TextIO) -> int:
             result.update(status="success", retrySafety="unsafe", artifacts=artifacts)
             _progress(stdout, job, "worker-complete", 100)
             code = 0
-    except TexturePolicyError as error:
+    except (TexturePolicyError, OverviewValidationError) as error:
         failure = str(error)
     except Exception:
         if hasattr(unreal, "log_error"):

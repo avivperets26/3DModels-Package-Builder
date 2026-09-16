@@ -211,6 +211,13 @@ flowchart LR
 
 ## 7. Logical Architecture
 
+The PB-1110–PB-1112 Unreal overview adapter translates immutable Domain presentation intent
+into a bounded companion plan. Native actors/maps, camera-coordinate conversion, product-only
+coverage and dependency scans belong to the Unreal worker; image-quality and gallery rules
+remain in the shared Domain/Application media validator. The host additionally checks complete
+native logs after process exit, so a successful worker response alone cannot approve release.
+See [scope and validation evidence](PB-1110_PB-1112_UNREAL_OVERVIEW_EVIDENCE.md).
+
 Package Builder follows a modular hexagonal architecture. Dependencies point inward toward the domain and application layers.
 
 ### 7.1 Domain Layer
