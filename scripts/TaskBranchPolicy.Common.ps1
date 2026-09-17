@@ -3,6 +3,9 @@ function Test-PackageBuilderTaskBranch {
     [OutputType([bool])]
     param([string]$TaskId, [string]$Branch)
 
+    if ($TaskId -in @('PB-1113', 'PB-1114', 'PB-1116') -and
+        $Branch -eq 'feat/PB-1113-PB-1114-PB-1116-unreal-package-preview') { return $true }
+
     if ($TaskId -in @('PB-1110', 'PB-1111', 'PB-1112') -and
         $Branch -eq 'feat/PB-1110-PB-1112-unreal-overview-validation') { return $true }
 

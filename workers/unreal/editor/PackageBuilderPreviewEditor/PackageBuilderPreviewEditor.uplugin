@@ -1,0 +1,13 @@
+{
+  "FileVersion": 3,
+  "Version": 1,
+  "VersionName": "1.0.0",
+  "FriendlyName": "Package Builder Preview Editor",
+  "Description": "Editor-only widget generation support. Never included in customer projects.",
+  "Category": "Editor",
+  "CanContainContent": false,
+  "EnabledByDefault": false,
+  "Modules": [
+    { "Name": "PackageBuilderPreviewEditor", "Type": "Editor", "LoadingPhase": "Default" }
+  ]
+}

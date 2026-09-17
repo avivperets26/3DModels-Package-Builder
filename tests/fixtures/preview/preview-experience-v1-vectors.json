@@ -3,7 +3,15 @@
   "camera": [
     { "name": "pitch-clamps-high", "start": [0, 75, 1], "orbit": [30, 20], "expected": [30, 80, 1] },
     { "name": "yaw-wraps", "start": [175, 0, 1], "orbit": [15, 0], "expected": [-170, 0, 1] },
-    { "name": "zoom-clamps-near", "start": [0, 0, 1], "zoomSteps": 100, "step": 0.14, "expected": [0, 0, 0.75] }
+    { "name": "zoom-clamps-near", "start": [0, 0, 1], "zoomSteps": 100, "step": 0.14, "expected": [0, 0, 0.75] },
+    { "name": "pitch-clamps-low", "start": [0, -75, 1], "orbit": [-30, -20], "expected": [-30, -80, 1] },
+    { "name": "negative-yaw-wraps", "start": [-175, 0, 1], "orbit": [-15, 0], "expected": [170, 0, 1] },
+    { "name": "zoom-clamps-far", "start": [0, 0, 1], "zoomSteps": -100, "step": 0.14, "expected": [0, 0, 50] }
+  ],
+  "light": [
+    { "name": "light-pitch-clamps-high", "start": [0, 75], "adjust": [30, 20], "expected": [30, 80] },
+    { "name": "light-pitch-clamps-low", "start": [0, -75], "adjust": [-30, -20], "expected": [-30, -80] },
+    { "name": "light-yaw-wraps", "start": [175, 0], "adjust": [15, 0], "expected": [-170, 0] }
   ],
   "items": [
     { "name": "empty-next-safe", "items": [], "action": "next", "expectedMode": "Empty", "expectedIndex": null },

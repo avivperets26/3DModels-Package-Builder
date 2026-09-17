@@ -8,6 +8,7 @@ from package_builder_unreal.capture_geometry import camera_frame
 from package_builder_unreal.import_plan import file_identity, load_plan
 from package_builder_unreal.materials import MaterialGraph
 from package_builder_unreal.overview_plan import load_overview_plan
+from package_builder_unreal.preview_plan import PREVIEW_UI_CONFIG, load_preview_plan
 from package_builder_unreal.surface_plan import load_surface_plan
 from package_builder_unreal.surfaces import import_surfaces
 
@@ -115,6 +116,11 @@ def studio_material(u, root, background):
 def create_overview(u, workspace, source):
     """Build one blank map; never reuse an earlier world or overwrite an existing map/studio."""
     project, content, _, plan = context(u, workspace, source)
+    preview = load_preview_plan(source, plan)
+    if preview is not None and not hasattr(u, "PackageBuilderPreviewEditorLibrary"):
+        raise WorkerInputError(
+            "Interactive preview requires the verified editor-only authoring helper."
+        )
     config_path = resolve_logical_reference(project, "Config/DefaultEngine.ini")
     config = config_path.read_text("utf-8")
     if config.count("EditorStartupMap=\n") != 1 or config.count("GameDefaultMap=\n") != 1:
@@ -151,6 +157,7 @@ def create_overview(u, workspace, source):
             rotation=(-intent["pitchDegrees"], intent["yawDegrees"], 0),
         )
         light.light_component.set_mobility(u.ComponentMobility.MOVABLE)
+        light.light_component.set_editor_property("forward_shading_priority", 1 if i == 0 else 0)
         light.light_component.set_intensity(intent["intensity"] * LIGHT_INTENSITY_SCALE)
         light.light_component.set_light_color(u.LinearColor(*intent["colour"], 1))
     minimum, maximum = bounds_of(product)
@@ -186,9 +193,14 @@ def create_overview(u, workspace, source):
     config_path.write_text(
         config.replace("EditorStartupMap=\n", "EditorStartupMap=" + map_name(plan) + "\n").replace(
             "GameDefaultMap=\n", "GameDefaultMap=" + map_name(plan) + "\n"
-        ),
+        )
+        + (PREVIEW_UI_CONFIG if preview is not None else ""),
         encoding="utf-8",
     )
+    if preview is not None:
+        from package_builder_unreal.preview import create_preview
+
+        artifacts.extend(create_preview(u, workspace, source))
     for path in ("Maps/L_Overview.umap", "Materials/M_PBStudio.uasset"):
         artifacts.append(artifact(workspace, plan, path))
     return artifacts

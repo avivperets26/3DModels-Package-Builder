@@ -110,5 +110,28 @@ unchanged input bytes, fresh-process reopen, duplicate-import rejection and clea
 
 Evidence stays in `artifacts/PB-1104/<run-id>`; disposable projects and images are removed from
 `artifacts/ue/<run-id>` in finally. Source fixtures and shared DDC remain. No UI, materials,
-meshes, ORM packing, product rendering or final package export is added by this scope.
+meshes, ORM packing, product rendering or final package export was added by that historical scope.
 See [acceptance evidence](../../docs/PB-1104_PB-1106_UNREAL_IMPORT_EVIDENCE.md).
+
+## Interactive preview and clean delivery (PB-1113 / PB-1114 / PB-1116)
+
+Supply `unreal-preview-plan.json` from `UnrealPreviewPlan.Create` alongside the existing import,
+surface and overview plans to request an interactive static-product overview. Install the
+hash-verified editor helper into the disposable generation clone using
+`scripts/unreal_preview_helper.py`; `Invoke-UnrealPreviewEditorBuild.ps1` builds it with the
+documented VS Code-compatible tools. `create-unreal-overview` then adds the three product-local
+Blueprint/UMG assets. Missing helper or unsupported contract values fail before generation.
+Without that plan, the overview remains static.
+
+Press Play in the delivered overview. Drag the studio to orbit and use the wheel to zoom.
+Click the studio for keyboard arrows, Page Up/Page Down or +/- zoom. R resets the camera;
+L resets lighting. Tab/Shift+Tab focuses controls and Enter/Space activates them. Focus Light
+Direction for arrow-key adjustment, or drag the yaw/pitch sliders. H hides/restores the panel;
+Show Controls remains available when hidden. The model's original transform is unchanged.
+
+`prepare-unreal-delivery` validates and sanitizes metadata, returning a hash-bound clean inventory
+for `UnrealProjectArchive`. `verify-unreal-delivery` independently verifies the extraction.
+Neither worker nor authoring helper is delivered; the ZIP has no plugin/module dependency.
+Run `scripts/Invoke-UnrealDeliveryIntegration.ps1 -Preview` for controls, captures, fresh
+helper-free PIE, negative gates, preservation and automatic test-package cleanup.
+See [delivery evidence](../../docs/PB-1113_PB-1114_PB-1116_UNREAL_DELIVERY_EVIDENCE.md).

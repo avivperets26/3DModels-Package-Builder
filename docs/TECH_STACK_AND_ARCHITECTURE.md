@@ -211,6 +211,17 @@ flowchart LR
 
 ## 7. Logical Architecture
 
+The PB-1113/PB-1114 Unreal delivery adapter delegates byte-checked deterministic ZIP writing to
+the shared archive writer and extraction to the existing safe archive service. Native sanitization
+and independent map/asset validation remain in the worker; native-log gating remains in the host.
+Only an explicit validated inventory enters the project ZIP. PB-1116 serializes the shared
+preview contract into an explicit interactive plan. An editor-only generator authors native
+Blueprint/UMG camera, light and accessible overlay controls. Customer assets use built-in
+Engine/UMG classes; the authoring helper never ships. Shared Domain vectors verify the necessary
+Blueprint math translation, and independent PIE tests exercise the clean extraction without
+that helper. Product transforms remain immutable. Static requests omit the preview assets.
+See [delivery scope and evidence](PB-1113_PB-1114_PB-1116_UNREAL_DELIVERY_EVIDENCE.md).
+
 The PB-1110–PB-1112 Unreal overview adapter translates immutable Domain presentation intent
 into a bounded companion plan. Native actors/maps, camera-coordinate conversion, product-only
 coverage and dependency scans belong to the Unreal worker; image-quality and gallery rules

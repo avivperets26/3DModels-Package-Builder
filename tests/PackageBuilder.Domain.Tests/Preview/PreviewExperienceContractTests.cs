@@ -237,6 +237,16 @@ public sealed class PreviewExperienceContractTests
             Assert.Equal(expected[2], state.DistanceMultiplier);
         }
 
+        foreach (JsonElement vector in root.GetProperty("light").EnumerateArray())
+        {
+            double[] start = [.. vector.GetProperty("start").EnumerateArray().Select(value => value.GetDouble())];
+            double[] delta = [.. vector.GetProperty("adjust").EnumerateArray().Select(value => value.GetDouble())];
+            double[] expected = [.. vector.GetProperty("expected").EnumerateArray().Select(value => value.GetDouble())];
+            PreviewLightState state = new PreviewLightState(start[0], start[1]).Adjust(delta[0], delta[1], PreviewExperienceDefaults.Contract.LightControls);
+            Assert.Equal(expected[0], state.YawDegrees);
+            Assert.Equal(expected[1], state.PitchDegrees);
+        }
+
         foreach (JsonElement vector in root.GetProperty("items").EnumerateArray())
         {
             InternalAssetId[] items = [.. vector.GetProperty("items").EnumerateArray().Select(value => Id(value.GetString()!))];

@@ -259,6 +259,17 @@ does not manufacture live evidence. See the dated continuation in the combined e
 
 ## Unreal foundation acceptance (PB-1101–PB-1103)
 
+PB-1113/PB-1114 require explicit clean ZIP inventories, sanitized source metadata, exact extracted
+hashes, independent native map/asset reopening, source preservation and cleanup. Missing maps,
+source-path leakage, altered descriptors and native warnings/errors block acceptance. The
+[delivery acceptance matrix](PB-1113_PB-1114_PB-1116_UNREAL_DELIVERY_EVIDENCE.md#acceptance-mapping)
+maps the tests and live evidence. PB-1116 additionally requires shared camera/light vectors,
+native input/focus/reset/overlay checks, visible/hidden viewport inspection, unchanged product
+transforms and helper-free extracted-project PIE. Missing preview assets and competing light
+priorities block validation. One exact candidate renderer warning may be classified separately
+only when independently reproduced in a stock-engine baseline; all other warnings/errors fail.
+Static ZIP acceptance alone never substitutes for these interactive checks.
+
 PB-1110–PB-1112 require native saved-map reopening, exact scene/dependency inventories,
 real requested-view captures with hash-bound product coverage, shared media validation,
 redirector repair/recheck and negative unused-content/lighting/log cases. See the
