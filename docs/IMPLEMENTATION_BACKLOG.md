@@ -6,7 +6,7 @@
 **GitHub visibility:** Public, approved by the user on 2026-07-22
 **Runtime data:** `C:\Dev\PackageBuilder\runtime-data`
 **Planned default branch:** `main`
-**Last reviewed:** 2026-09-16
+**Last reviewed:** 2026-09-17
 
 ## Status legend
 
@@ -21,12 +21,12 @@
 | Measure | Tasks |
 | --- | ---: |
 | Total | 265 |
-| ⚪ Backlog | 105 |
-| 🟡 In progress | 3 |
+| ⚪ Backlog | 103 |
+| 🟡 In progress | 2 |
 | 🔴 Blocked | 0 |
-| 🟢 Done | 157 |
-| Remaining (all not done) | 108 |
-| Overall completion | 157 / 265 (59.2%) |
+| 🟢 Done | 160 |
+| Remaining (all not done) | 105 |
+| Overall completion | 160 / 265 (60.4%) |
 <!-- status-summary:end -->
 
 Counts include each canonical PB task definition exactly once, including the optional post-v1 roadmap.
@@ -194,9 +194,8 @@ results, DONE statuses or Completion Log entries.
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-1113 | 🟡 **IN PROGRESS** | `feat/PB-1113-PB-1114-PB-1116-unreal-package-preview` | Codex | 2026-09-17 | Locally implemented/validated: 15-file interactive clean ZIP, safe extraction, native reopen and negative gates; [evidence](PB-1113_PB-1114_PB-1116_UNREAL_DELIVERY_EVIDENCE.md). Publication remains. | None. |
-| PB-1114 | 🟡 **IN PROGRESS** | `feat/PB-1113-PB-1114-PB-1116-unreal-package-preview` | Codex | 2026-09-17 | Locally implemented/validated: helper-free extracted-project PIE, unchanged delivered/source hashes and automatic cleanup; [evidence](PB-1113_PB-1114_PB-1116_UNREAL_DELIVERY_EVIDENCE.md). Publication remains. | None. |
-| PB-1116 | 🟡 **IN PROGRESS** | `feat/PB-1113-PB-1114-PB-1116-unreal-package-preview` | Codex | 2026-09-17 | Locally implemented/validated: shared camera/light vectors, native input/focus/reset/sliders, accessible hide/restore panel, visual captures and helper-free PIE; [evidence](PB-1113_PB-1114_PB-1116_UNREAL_DELIVERY_EVIDENCE.md). Publication remains. | None. |
+| PB-1006 | 🟡 **IN PROGRESS** | `feat/PB-1006-PB-1115-unreal-fab-e2e` | Codex | 2026-09-17 | Locally validated: unit/native acceptance, final build, tests and formatting pass. Commit/push/merge, main CI and user acceptance remain; [evidence](PB-1006_PB-1115_UNREAL_FAB_EVIDENCE.md). | None. |
+| PB-1115 | 🟡 **IN PROGRESS** | `feat/PB-1006-PB-1115-unreal-fab-e2e` | Codex | 2026-09-17 | Real portable/Unity/Unreal Fab release passes; owned packages cleaned and final checks pass. Publication and acceptance remain; [evidence](PB-1006_PB-1115_UNREAL_FAB_EVIDENCE.md). | None. |
 
 ### PB-0802 Completion Evidence
 
@@ -1733,6 +1732,9 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-1110 | `feat/PB-1110-PB-1112-unreal-overview-validation` | `a7aa8c45da4bd3c613e2e167578d1816b386553d` | Direct merge | 2026-09-16 | Main `4389ff27dca342578745a339e8ff415697958d39`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/35131715740) passed both jobs. User accepted publication and selected PB-1113/PB-1114/PB-1116; recorded once at branch start. |
 | PB-1111 | `feat/PB-1110-PB-1112-unreal-overview-validation` | `a7aa8c45da4bd3c613e2e167578d1816b386553d` | Direct merge | 2026-09-16 | Main `4389ff27dca342578745a339e8ff415697958d39`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/35131715740) passed both jobs. User accepted publication and selected PB-1113/PB-1114/PB-1116; recorded once at branch start. |
 | PB-1112 | `feat/PB-1110-PB-1112-unreal-overview-validation` | `a7aa8c45da4bd3c613e2e167578d1816b386553d` | Direct merge | 2026-09-16 | Main `4389ff27dca342578745a339e8ff415697958d39`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/35131715740) passed both jobs. User accepted publication and selected PB-1113/PB-1114/PB-1116; recorded once at branch start. |
+| PB-1113 | `feat/PB-1113-PB-1114-PB-1116-unreal-package-preview` | `417486af5150a4acfb79a563155bcb79b5ddfa56` | Direct merge | 2026-09-17 | Main `bfc03c6a6c974bc8ab7f3be74ae317c7c07f04fb`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/35239395920) passed both jobs. User accepted publication and selected PB-1006/PB-1115; recorded once at branch start. |
+| PB-1114 | `feat/PB-1113-PB-1114-PB-1116-unreal-package-preview` | `417486af5150a4acfb79a563155bcb79b5ddfa56` | Direct merge | 2026-09-17 | Main `bfc03c6a6c974bc8ab7f3be74ae317c7c07f04fb`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/35239395920) passed both jobs. User accepted publication and selected PB-1006/PB-1115; recorded once at branch start. |
+| PB-1116 | `feat/PB-1113-PB-1114-PB-1116-unreal-package-preview` | `417486af5150a4acfb79a563155bcb79b5ddfa56` | Direct merge | 2026-09-17 | Main `bfc03c6a6c974bc8ab7f3be74ae317c7c07f04fb`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/35239395920) passed both jobs. User accepted publication and selected PB-1006/PB-1115; recorded once at branch start. |
 
 ## 5. Milestones
 
@@ -2597,8 +2599,8 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0617, PB-1001
   - Done when: root organization, dependencies, duplicate/redundant files, demo scene, docs, paths, errors, and package content are checked.
 
-- [ ] **PB-1006 — Implement Fab Unreal project validator** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-1006-fab-unreal-validator`
+- [ ] **PB-1006 — Implement Fab Unreal project validator** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `feat/PB-1006-PB-1115-unreal-fab-e2e`
   - Depends on: PB-1001; E11 implementation
   - Done when: one project, matching Pack directory, overview map, cleaned redirectors, no unused/generated directories, docs, naming, and logs are checked.
 
@@ -2690,22 +2692,22 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-1110
   - Done when: redirectors are fixed, unused assets detected, map loads, required lighting state validates, and package-caused errors/warnings block release.
 
-- [ ] **PB-1113 — Implement clean Unreal project ZIP** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-1113 — Implement clean Unreal project ZIP** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-1113-PB-1114-PB-1116-unreal-package-preview`
   - Depends on: PB-0202, PB-1112
   - Done when: one project is zipped without Saved, Intermediate, DerivedDataCache, Binaries, unrelated plugins, or absolute paths.
 
-- [ ] **PB-1114 — Implement Unreal clean extraction and reopen test** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-1114 — Implement Unreal clean extraction and reopen test** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-1113-PB-1114-PB-1116-unreal-package-preview`
   - Depends on: PB-1113
   - Done when: clean extraction opens through command line, assets load, overview map validates, and structured results return.
 
-- [ ] **PB-1115 — Complete Unreal static vertical slice** — **P0** — ⚪ **BACKLOG**
-  - Branch: `test/PB-1115-unreal-static-e2e`
+- [ ] **PB-1115 — Complete Unreal static vertical slice** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `feat/PB-1006-PB-1115-unreal-fab-e2e`
   - Depends on: PB-0213, PB-0507, PB-1111, PB-1114, PB-1116, PB-1006
   - Done when: static source produces portable, Unity, Unreal, media, docs, and Fab release outputs with clean reimport/reopen.
 
-- [ ] **PB-1116 — Implement Unreal interactive dark-studio preview shell** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-1116 — Implement Unreal interactive dark-studio preview shell** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-1113-PB-1114-PB-1116-unreal-package-preview`
   - Depends on: PB-0913, PB-1110
   - Done when: the packaged overview map implements the shared contract with left-drag bounded yaw/pitch orbit, mouse-wheel distance zoom, keyboard/reset equivalents, the approved seamless horizon-free near-black background with soft brighter centre, adjustable/resettable key-light direction through a minimal accessible UMG overlay, hideable controls for capture, and tests proving unchanged product transforms, clean PIE execution, and no unnecessary editor/plugin runtime dependency.

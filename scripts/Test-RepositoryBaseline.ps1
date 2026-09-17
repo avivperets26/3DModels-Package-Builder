@@ -652,6 +652,14 @@ Invoke-Check 'Task branch names and lifecycle markers are valid' {
     $blockedMarker = $blockedEmoji + ' **BLOCKED**'
     $lifecycleStates = @{}
 
+    foreach ($id in @('PB-1006', 'PB-1115')) {
+        if (-not (Test-PackageBuilderTaskBranch $id 'feat/PB-1006-PB-1115-unreal-fab-e2e')) {
+            throw 'Approved Fab Unreal combined scope must be accepted.'
+        }
+    }
+    if (Test-PackageBuilderTaskBranch 'PB-1201' 'feat/PB-1006-PB-1115-unreal-fab-e2e') {
+        throw 'The approved combined scope must not include unrelated tasks.'
+    }
     foreach ($id in @('PB-1113', 'PB-1114', 'PB-1116')) {
         if (-not (Test-PackageBuilderTaskBranch $id 'feat/PB-1113-PB-1114-PB-1116-unreal-package-preview')) {
             throw 'Approved Unreal delivery branch rejected.'

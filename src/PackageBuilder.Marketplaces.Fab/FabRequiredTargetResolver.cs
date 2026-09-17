@@ -38,10 +38,11 @@ public static class FabRequiredTargetResolver
         // A scoped review must not silently certify product cases or delivery types it did not cover.
         if (profile.Document.Rules.Any(rule => rule.Id == "static-review-scope")
             && (listing.ProductCase != ProductCase.Static || listing.Category != "3d-model"
-                || listing.Formats.Any(format => format is not ("fbx" or "unity"))))
+                || listing.Formats.Any(format => format is not ("fbx" or "unity")
+                    && !(format == "unreal" && profile.Document.Rules.Any(rule => rule.Id == "static-unreal-review-scope" && rule.Status == "verified")))))
         {
             return RepositoryOperationResult.Failure<FabRequiredTargets>(
-                "FAB_REVIEW_SCOPE_UNSUPPORTED", "This reviewed profile supports static FBX/Unity listings only.");
+                "FAB_REVIEW_SCOPE_UNSUPPORTED", "This reviewed profile does not cover the selected product case or format.");
         }
 
         var required = new HashSet<FabOutput>();

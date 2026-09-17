@@ -192,3 +192,5 @@ The repository baseline also invokes the quality validator in-process and throug
 - [PB-1101–PB-1103 Unreal foundation evidence](PB-1101_PB-1103_UNREAL_FOUNDATION_EVIDENCE.md)
 - [Unreal installation and worker smoke guide](../workers/unreal/README.md)
 - [PB-1104–PB-1106 Unreal isolation, naming and texture-import evidence](PB-1104_PB-1106_UNREAL_IMPORT_EVIDENCE.md)
+
+- [PB-1006/PB-1115 Fab Unreal validator and static release evidence](PB-1006_PB-1115_UNREAL_FAB_EVIDENCE.md).

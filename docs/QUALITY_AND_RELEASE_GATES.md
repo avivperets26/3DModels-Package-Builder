@@ -293,3 +293,12 @@ and cleanup to concrete checks. Simulated engine tests and the cross-language re
 necessary but insufficient for live Unreal acceptance. The candidate must be installed and the
 commandlet harness must produce fresh real-engine and cleanup receipts. A smoke test never grants
 global tool approval; the existing compatibility suite and approval workflow remain required.
+
+## Fab Unreal static acceptance (PB-1006/PB-1115)
+
+The [criterion-level evidence](PB-1006_PB-1115_UNREAL_FAB_EVIDENCE.md) maps project structure,
+Pack naming, native redirects/usage/logs, clean reopening, decompressed size, exact profile/version
+pins and full release contents. `FabUnrealProjectValidatorTests` supplies hostile and missing-evidence
+cases. `Invoke-FabStaticReleaseIntegration.ps1 -IncludeUnreal` is required for actual three-target
+acceptance, with identical source hashes, native renders, fresh imports/reopen and cleanup.
+A CI pass without its real-engine receipt cannot be described as live end-to-end acceptance.

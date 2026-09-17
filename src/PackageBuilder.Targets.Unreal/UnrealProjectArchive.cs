@@ -15,7 +15,7 @@ public static class UnrealProjectArchive
     {
         UnrealImportPlan.ValidateName(projectName);
         ArgumentNullException.ThrowIfNull(writer);
-        return validatedFiles.IsDefaultOrEmpty || validatedFiles.Any(f => f is null || !Allowed(projectName, f.Path))
+        return validatedFiles.IsDefaultOrEmpty || validatedFiles.Any(f => f is null || !UnrealContentDeliveryPolicy.Allows(projectName, f.Path))
             || !validatedFiles.Any(f => f.Path == projectName + ".uproject")
             || !validatedFiles.Any(f => f.Path == "Config/DefaultEngine.ini")
             || !validatedFiles.Any(f => f.Path == $"Content/{projectName}/Maps/L_Overview.umap")
@@ -25,24 +25,4 @@ public static class UnrealProjectArchive
             destination, cancellationToken);
     }
 
-    private static bool Allowed(string projectName, string path)
-    {
-        if (!DeliveryPath.IsValid(path))
-        { return false; }
-        if (path == projectName + ".uproject" || path == "Config/DefaultEngine.ini")
-        { return true; }
-        string root = "Content/" + projectName + "/";
-        if (!path.StartsWith(root, StringComparison.Ordinal))
-        { return false; }
-        string relative = path[root.Length..];
-        string[] segments = relative.Split('/');
-        return segments.Length == 2 && segments[0] switch
-        {
-            "Maps" => segments[1] == "L_Overview.umap",
-            "Documentation" => segments[1] == "README.md",
-            "Meshes" => segments[1].StartsWith("SM_", StringComparison.Ordinal) && segments[1].EndsWith(".uasset", StringComparison.Ordinal),
-            "Materials" or "Textures" or "Preview" => segments[1].EndsWith(".uasset", StringComparison.Ordinal),
-            _ => false,
-        };
-    }
 }

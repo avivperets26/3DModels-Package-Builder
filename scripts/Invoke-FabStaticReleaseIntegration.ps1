@@ -1,12 +1,12 @@
 [CmdletBinding()]
-param([string]$UnityResultPointer, [switch]$KeepArtifacts)
+param([string]$UnityResultPointer, [switch]$KeepArtifacts, [switch]$IncludeUnreal)
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $repository = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..')).TrimEnd([char[]]'\/')
 . (Join-Path $PSScriptRoot 'Enter-PackageBuilderEnvironment.ps1')
 . (Join-Path $PSScriptRoot 'UnityTestArtifacts.Common.ps1')
 . (Join-Path $PSScriptRoot 'UnityCleanReimport.Common.ps1')
-$evidence = Join-Path $repository 'artifacts/PB-1010'
+$evidence = Join-Path $repository $(if ($IncludeUnreal) { 'artifacts/PB-1115' } else { 'artifacts/PB-1010' })
 New-Item -ItemType Directory -Path $evidence -Force | Out-Null
 $portableWorkspace = $null
 $unity = $null
@@ -16,11 +16,11 @@ try {
     if (-not $UnityResultPointer) {
         $UnityResultPointer = Join-Path $evidence ('unity-' + [Guid]::NewGuid().ToString('N') + '.json')
         & (Join-Path $PSScriptRoot 'Invoke-UnityProductIntegration.ps1') -RepositoryRoot $repository `
-            -ResultPointerPath $UnityResultPointer -KeepArtifacts
+            -ResultPointerPath $UnityResultPointer -KeepArtifacts -StaticOnly:$IncludeUnreal
     }
     $pointer = [IO.Path]::GetFullPath($UnityResultPointer)
     if (-not $pointer.StartsWith($evidence + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) {
-        throw 'Existing Unity pointer must belong to PB-1010.'
+        throw 'Existing Unity pointer must belong to this task evidence directory.'
     }
     $unity = Get-Content -LiteralPath $pointer -Raw | ConvertFrom-Json
     $run = [IO.Path]::GetFullPath($unity.runRoot)
@@ -98,10 +98,15 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Portable FBX reimport failed.' }
     $oldEnvironment['PB_FAB_REAL_RELEASE_POINTER'] = [Environment]::GetEnvironmentVariable('PB_FAB_REAL_RELEASE_POINTER', 'Process')
     $env:PB_FAB_REAL_RELEASE_POINTER = $pointer
-    & dotnet test (Join-Path $repository 'tests/PackageBuilder.App.Wpf.Tests/PackageBuilder.App.Wpf.Tests.csproj') `
-        -c Release --no-restore --filter 'FullyQualifiedName~ReviewedCandidateRequiresCompatibilityAndApprovalBeforeRelease' `
-        --logger 'trx;LogFileName=fab-release.trx' --results-directory $run
-    if ($LASTEXITCODE -ne 0) { throw "Real Fab release validation failed; see $run" }
+    if ($IncludeUnreal) {
+        & (Join-Path $PSScriptRoot 'Invoke-UnrealDeliveryIntegration.ps1') -Preview -Fab
+    }
+    else {
+        & dotnet test (Join-Path $repository 'tests/PackageBuilder.App.Wpf.Tests/PackageBuilder.App.Wpf.Tests.csproj') `
+            -c Release --no-restore --filter 'FullyQualifiedName~ReviewedCandidateRequiresCompatibilityAndApprovalBeforeRelease' `
+            --logger 'trx;LogFileName=fab-release.trx' --results-directory $run
+        if ($LASTEXITCODE -ne 0) { throw "Real Fab release validation failed; see $run" }
+    }
     $result = Get-Content -LiteralPath (Join-Path $run 'fab-release-result.json') -Raw | ConvertFrom-Json
     if (-not $result.passed -or -not $result.realEngineRun) { throw 'Missing real release pass receipt.' }
     Copy-Item -LiteralPath (Join-Path $run 'fab-release-result.json') -Destination $evidence -Force

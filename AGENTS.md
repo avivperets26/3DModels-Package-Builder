@@ -195,6 +195,16 @@ preview contracts. Validate clean native reopening and actual interactive runtim
 remove owned generated ZIPs/projects. Roll PB-1110–PB-1112 to DONE once using successful
 main CI and user acceptance. Keep individual evidence; publication gates remain unchanged.
 
+### Approved combined scope: PB-1006 and PB-1115
+
+On 2026-09-17 the user approved these tasks together on
+`feat/PB-1006-PB-1115-unreal-fab-e2e`, from freshly synchronized main
+`bfc03c6a6c974bc8ab7f3be74ae317c7c07f04fb`. Implement the Fab validator before the
+static cross-target release fixture; reuse native validation and archive contracts. Roll
+PB-1113/PB-1114/PB-1116 to DONE once using successful main CI and user acceptance.
+Keep separate acceptance records, clean generated packages and close owned processes.
+Publication gates and candidate-engine scope remain unchanged.
+
 ### User-approved Unreal installation exception
 
 On 2026-09-16 the user chose Epic's installation under `C:\Program Files\Epic Games` and

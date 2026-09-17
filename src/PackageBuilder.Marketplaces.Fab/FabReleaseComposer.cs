@@ -11,7 +11,7 @@ using PackageBuilder.Domain.Validation;
 namespace PackageBuilder.Marketplaces.Fab;
 
 /// <summary>Exact generated deliverable with a trusted stream opener. Sources must be frozen and contained;
-/// the writer rehashes their bytes. Kind is fbx, glb, additional, unity or documentation.</summary>
+/// the writer rehashes their bytes. Kind is fbx, glb, additional, unity, unreal or documentation.</summary>
 public sealed record FabReleaseSource(BuildArtifactId ArtifactId, string Kind, string FileName,
     ArtifactContentIdentity Content, Func<CancellationToken, Task<Stream>> OpenReadAsync, FabTargetEvidence Evidence);
 
@@ -19,7 +19,7 @@ public sealed record FabReleaseSource(BuildArtifactId ArtifactId, string Kind, s
 public sealed record FabReleaseRequest(FabValidationContext Context, string Version, BuildLock Versions,
     FabListingDraft Listing, ImmutableArray<FabPortableDownload> Downloads, FabUnityPackageInspection? Unity,
     ImmutableArray<FabGalleryImage> Gallery, ImmutableArray<FabReleaseSource> Sources,
-    ImmutableArray<FabTargetEvidence> MediaQualityEvidence);
+    ImmutableArray<FabTargetEvidence> MediaQualityEvidence, FabUnrealProjectInspection? Unreal = null);
 
 /// <summary>Success identifies a private staged envelope. Atomic artifact-store promotion remains a separate gate.</summary>
 public sealed record FabComposedRelease(string? FileName, ArtifactContentIdentity? Content, FabArtifactValidation Validation)
@@ -28,8 +28,8 @@ public sealed record FabComposedRelease(string? FileName, ArtifactContentIdentit
     public bool IsSuccess => Content is not null && Validation.Passed;
 }
 
-/// <summary>Composes selected portable/Unity outputs using approved pinned rules and existing target validators.
-/// No upload, directory scanning, default-profile substitution or unsupported Unreal output is allowed.</summary>
+/// <summary>Composes selected portable/Unity/Unreal outputs using approved pinned rules and existing target validators.
+/// No upload, directory scanning, default-profile substitution or unvalidated output is allowed.</summary>
 public sealed class FabReleaseComposer(FabRequirementsProfileUpdater profiles, FabPortableValidator portable,
     FabMediaGalleryValidator media, IReleaseArchiveWriter writer)
 {
@@ -56,11 +56,6 @@ public sealed class FabReleaseComposer(FabRequirementsProfileUpdater profiles, F
         if (!validation.Context(request.Context))
         { return new(null, null, validation.Result()); }
         FabRequiredTargets targets = FabRequiredTargetResolver.Resolve(profile, request.Context.Listing).Value!;
-        if (targets.Required.Contains(FabOutput.Unreal))
-        {
-            validation.Add("FAB_UNREAL_UNSUPPORTED", "This release milestone does not support Unreal.", "Deselect Unreal or implement and validate PB-1006 and the Unreal pipeline.");
-            return new(null, null, validation.Result());
-        }
         if (!DeliveryPath.IsValid(request.Context.ProductKey) || request.Context.ProductKey.Contains('/')
             || !DeliveryPath.IsValid(request.Version) || request.Version.Contains('/')
             || request.Sources.IsDefaultOrEmpty || request.Sources.Length > 512
@@ -86,6 +81,15 @@ public sealed class FabReleaseComposer(FabRequirementsProfileUpdater profiles, F
         }
         else if (request.Unity is not null)
         { validation.Add("FAB_RELEASE_UNREQUESTED", "Unity evidence was supplied for an unselected format.", "Remove unrequested outputs."); }
+        bool needsUnreal = targets.Required.Contains(FabOutput.Unreal);
+        if (needsUnreal)
+        {
+            validation.Include(FabUnrealProjectValidator.Validate(profile, request.Context, request.Unreal, cancellationToken));
+            if (request.Unreal is not null && request.Unreal.EngineVersion != request.Versions.Unreal.Value)
+            { validation.Add("FAB_UNREAL_VERSION_MISMATCH", "Unreal inspection differs from the pinned engine.", "Use the exact engine recorded in build.lock."); }
+        }
+        else if (request.Unreal is not null)
+        { validation.Add("FAB_RELEASE_UNREQUESTED", "Unreal evidence was supplied for an unselected format.", "Remove unrequested outputs."); }
         // Own gallery data before validation and serialization so later caller mutation cannot alter it.
         ImmutableArray<FabGalleryImage> images = [.. request.Gallery.Select(image => image is null ? null! : image with { Bytes = image.Bytes.ToArray() })];
         if (images.Any(image => image is not null && request.Sources.Any(source => Equals(source.ArtifactId, image.ArtifactId))))
@@ -120,6 +124,12 @@ public sealed class FabReleaseComposer(FabRequirementsProfileUpdater profiles, F
                     || !Equals(request.Unity.Content, source.Content) || request.Unity.FileName != source.FileName)
                 { validation.Add("FAB_RELEASE_INVENTORY_MISMATCH", "Unity delivery differs from its inspected package.", "Use the inspected package bytes and filename.", source.ArtifactId); }
             }
+            else if (source.Kind == "unreal")
+            {
+                if (!needsUnreal || request.Unreal is null || !Equals(request.Unreal.ArtifactId, source.ArtifactId)
+                    || !Equals(request.Unreal.Content, source.Content) || request.Unreal.FileName != source.FileName)
+                { validation.Add("FAB_RELEASE_INVENTORY_MISMATCH", "Unreal delivery differs from its inspected archive.", "Use the inspected project bytes and filename.", source.ArtifactId); }
+            }
             else if (source.Kind is "fbx" or "glb" or "additional")
             {
                 if (!request.Downloads.Any(download => download is not null && Equals(download.ArtifactId, source.ArtifactId)
@@ -130,7 +140,8 @@ public sealed class FabReleaseComposer(FabRequirementsProfileUpdater profiles, F
             else
             { validation.Add("FAB_RELEASE_UNREQUESTED", "An unknown delivery kind was supplied.", "Remove source assets and unselected outputs.", source.ArtifactId); }
         }
-        if (needsDocs && docs == 0 || needsUnity && request.Sources.Count(source => source.Kind == "unity") != 1
+        if (needsUnreal && request.Sources.Count(source => source.Kind == "unreal") != 1
+            || needsDocs && docs == 0 || needsUnity && request.Sources.Count(source => source.Kind == "unity") != 1
             || request.Downloads.Any(download => download is not null && request.Sources.Count(source => Equals(source.ArtifactId, download.ArtifactId)
                 && source.Kind == (download.IsAdditional ? "additional" : download.Format)) != 1))
         { validation.Add("FAB_RELEASE_DELIVERY_MISSING", "The selected release is missing a required delivery.", "Complete all requested outputs before composition."); }
@@ -178,7 +189,7 @@ public sealed class FabReleaseComposer(FabRequirementsProfileUpdater profiles, F
         ArtifactContentIdentity.Create(bytes.Length, Sha256Digest.Create(Convert.ToHexStringLower(SHA256.HashData(bytes))).Value).Value!,
         _ => Task.FromResult<Stream>(new MemoryStream(bytes, writable: false)));
 
-    private static string Folder(string kind) => kind switch { "documentation" => "Documentation", "unity" => "Unity", "additional" => "Additional", _ => "Portable" };
+    private static string Folder(string kind) => kind switch { "documentation" => "Documentation", "unity" => "Unity", "unreal" => "Unreal", "additional" => "Additional", _ => "Portable" };
 
     private static FabComposedRelease Failure(string code, string action) => new(null, null, new("",
         [ValidationFinding.Create(FindingCode.Create(code).Value, FindingSeverity.Error,

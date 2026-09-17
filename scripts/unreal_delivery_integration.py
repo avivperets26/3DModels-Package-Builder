@@ -12,6 +12,7 @@ REPO = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(REPO / "workers/shared"), str(REPO / "workers/unreal")]
 from package_builder_protocol import atomic_write_result, load_bounded_json  # noqa: E402
 
+from package_builder_unreal import __version__ as worker_version  # noqa: E402
 from package_builder_unreal.import_plan import file_identity  # noqa: E402
 from package_builder_unreal.project import (  # noqa: E402
     UnrealProjectClone,
@@ -25,14 +26,18 @@ from package_builder_unreal.project_validation import (  # noqa: E402
 from unreal_candidate_process import candidate_editor, commandlet  # noqa: E402
 
 
-def main(editor, timeout, preview=False):
+def main(editor, timeout, preview=False, fab=False):
     """Use an owned source clone and independent extraction; keep compact receipts on failure too."""
+    if fab and (not preview or "PB_FAB_REAL_RELEASE_POINTER" not in os.environ):
+        raise ValueError(
+            "Fab acceptance requires interactive preview and the owned Unity/portable handoff."
+        )
     profile = load_bounded_json(REPO / "profiles/engines/unreal-5.8.2-candidate.json")
     if editor != candidate_editor(profile):
         raise ValueError("Unexpected candidate editor.")
     run_id = uuid.uuid4().hex
     job = REPO / "artifacts/ue" / run_id
-    evidence = REPO / "artifacts/PB-1113" / run_id
+    evidence = REPO / ("artifacts/PB-1115" if fab else "artifacts/PB-1113") / run_id
     source = job / "input"
     source.mkdir(parents=True)
     (job / "temp").mkdir()
@@ -61,6 +66,7 @@ def main(editor, timeout, preview=False):
                 PB_UNREAL_OVERVIEW_INPUT=str(source),
                 PB_UNREAL_DELIVERY_JOB=str(job),
                 PB_UNREAL_INTERACTIVE="1" if preview else "0",
+                PB_UNREAL_STATIC_E2E="1" if fab else "0",
             )
 
             def dotnet_test(name):
@@ -81,20 +87,43 @@ def main(editor, timeout, preview=False):
                 ):
                     raise RuntimeError("Host acceptance failed: " + name)
 
-            if clone.execute(
-                REPO / "tools/blender/5.0.0/blender.exe",
-                [
-                    "--background",
-                    "--factory-startup",
-                    "--python",
-                    str(REPO / "scripts/unreal_surface_fixture.py"),
-                    "--",
-                    str(source),
-                ],
-                env,
-                timeout,
-            ):
-                raise RuntimeError("Fixture geometry failed.")
+            if fab:
+                fixture = (
+                    REPO / "tests/fixtures/portable/static-vertical-slice/source/StoneArch.fbx"
+                )
+                receipt["sourceSha256"] = file_identity(fixture)[0]
+                if clone.execute(
+                    REPO / "tools/blender/5.0.0/blender.exe",
+                    [
+                        "--background",
+                        "--factory-startup",
+                        "--python-exit-code",
+                        "1",
+                        "--python",
+                        str(REPO / "scripts/unreal_static_source.py"),
+                        "--",
+                        str(source),
+                    ],
+                    env,
+                    timeout,
+                ):
+                    raise RuntimeError("Static source normalization failed.")
+                receipt["normalizedSourceSha256"] = file_identity(source / "Asymmetric.fbx")[0]
+            else:
+                if clone.execute(
+                    REPO / "tools/blender/5.0.0/blender.exe",
+                    [
+                        "--background",
+                        "--factory-startup",
+                        "--python",
+                        str(REPO / "scripts/unreal_surface_fixture.py"),
+                        "--",
+                        str(source),
+                    ],
+                    env,
+                    timeout,
+                ):
+                    raise RuntimeError("Fixture geometry failed.")
             dotnet_test("ExportLiveOverviewFixtureWhenRequested")
             if preview:
                 shutil.copy2(
@@ -103,7 +132,7 @@ def main(editor, timeout, preview=False):
             (source / "product.json").write_text("{}", encoding="utf-8")
             original_inputs = {p.name: file_identity(p) for p in source.iterdir()}
 
-            def operation(target, name, key, expected=None):
+            def operation(target, name, key, expected=None, render=False):
                 request = {
                     "protocolVersion": 1,
                     "jobId": "Job-" + run_id,
@@ -116,7 +145,7 @@ def main(editor, timeout, preview=False):
                     "target": "unreal",
                 }
                 atomic_write_result(target.job / "request.json", request)
-                args, native_env = commandlet(target, REPO, evidence, key)
+                args, native_env = commandlet(target, REPO, evidence, key, render=render)
                 if target is not clone:
                     args[2] = "-script=" + str(
                         REPO
@@ -192,6 +221,10 @@ def main(editor, timeout, preview=False):
                 if preview and name == "prepare-unreal-delivery":
                     play(clone, "preview-play")
                 operation(clone, name, name)
+            if fab:
+                operation(clone, "render-unreal-previews", "render-unreal-previews", render=True)
+                env["PB_UNREAL_OVERVIEW_MEDIA"] = str(job / "output/previews")
+                dotnet_test("ValidateLiveOverviewGalleryWhenRequested")
             dotnet_test("CreateAndExtractLiveUnrealDeliveryWhenRequested")
             shutil.copy2(job / "archive-receipt.json", evidence / "archive-receipt.json")
             shutil.copy2(job / "output/delivery/inventory.json", evidence / "inventory.json")
@@ -282,6 +315,31 @@ def main(editor, timeout, preview=False):
                 hidden.rename(clone.project)
             if original_inputs != {p.name: file_identity(p) for p in source.iterdir()}:
                 raise AssertionError("Input mutation.")
+            if fab:
+                # Emit only after independent reopen, helper-free PIE, all negative gates and byte checks.
+                atomic_write_result(
+                    job / "fab-native-evidence.json",
+                    {
+                        "passed": True,
+                        "realEngineRun": True,
+                        "engineVersion": profile["version"],
+                        "workerVersion": worker_version,
+                        "archiveSha256": file_identity(job / "delivery.zip")[0],
+                        "sourceSha256": receipt["sourceSha256"],
+                        "normalizedSourceSha256": receipt["normalizedSourceSha256"],
+                        "operations": receipt["operations"],
+                    },
+                )
+                dotnet_test("UnrealCandidateRequiresCompatibilityAndApprovalBeforeRelease")
+                unity_pointer = load_bounded_json(Path(env["PB_FAB_REAL_RELEASE_POINTER"]))
+                shutil.copy2(
+                    Path(unity_pointer["runRoot"]) / "fab-release-result.json",
+                    evidence / "fab-release-result.json",
+                )
+                shutil.copy2(
+                    job / "output/previews/media-validation.json",
+                    evidence / "media-validation.json",
+                )
             receipt.update(
                 passed=True,
                 engineVersion=profile["version"],
@@ -303,5 +361,6 @@ if __name__ == "__main__":
     parser.add_argument("--editor", type=Path, required=True)
     parser.add_argument("--timeout", type=int, default=900)
     parser.add_argument("--preview", action="store_true")
+    parser.add_argument("--fab", action="store_true")
     args = parser.parse_args()
-    main(args.editor, args.timeout, args.preview)
+    main(args.editor, args.timeout, args.preview, args.fab)
