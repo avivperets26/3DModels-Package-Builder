@@ -1585,8 +1585,8 @@ The approved combined milestone generates bounded UTF-8 listing data and an unch
 checklist, then composes only selected validated portable/Unity/docs/media deliveries. The composer
 loads the exact approved build.lock profile, preserves upstream findings and rehashes every archived
 payload. It returns a private staged envelope for the existing artifact store and atomic promotion.
-The outer archive is a local handoff, not an additional Fab upload. Unreal is rejected until E11 and
-PB-1006; that dependency is conditional on selecting Unreal. Desktop controls and automatic uploads
+The outer archive is a local handoff, not an additional Fab upload. PB-1006/PB-1115 extends this
+composer with validated static Unreal delivery under its own requirements revision. Desktop controls and automatic uploads
 remain outside this scope. The 2026-09-15 static candidate records a sourced local interpretation of
 the exchange-size ambiguity and maps applicable technical requirements. It does not replace earlier
 approved pins; synthetic compatibility alone cannot satisfy real-release acceptance. See
@@ -1601,3 +1601,15 @@ the user-selected signed 5.8.2 development candidate. Test projects are disposab
 evidence is retained. This milestone adds no desktop workflow or final Unreal package. ORM packing,
 material compilation and mesh import follow separately. See
 [the acceptance matrix and local evidence](PB-1104_PB-1106_UNREAL_IMPORT_EVIDENCE.md).
+
+## Fab Unreal validation and static release (PB-1006/PB-1115)
+
+The content-only Unreal gate consumes trusted native project, clean-reopen and log observations
+bound to the exact ZIP. It shares the archive writer's layout policy, checks the full inventory,
+rejects unused/redirector/generated content and requires the overview and customer documentation.
+The size check uses uncompressed project bytes. Listing data includes the exact Unreal engine
+version and a manual Project File Link step; no hosting or upload occurs automatically.
+The 2026-09-17.1 candidate extends the earlier static scope without changing historical pins.
+The cross-target harness uses the same source FBX for portable, Unity and Unreal, checks clean
+imports/reopen, renders native views and verifies the final release inventory before cleanup.
+See [acceptance evidence](PB-1006_PB-1115_UNREAL_FAB_EVIDENCE.md).

@@ -373,3 +373,35 @@ remaining project-tool processes; no project-owned Unreal, Unity, Blender, shade
 crash reporter or build worker remained. User apps and reusable disk caches were preserved.
 The standing shutdown/ownership/verification rule is recorded in AGENTS.md and the engineering
 skill. This process cleanup does not change task lifecycle states or the retained-file exceptions.
+
+### PB-1006 / PB-1115 static Fab acceptance — 2026-09-17
+
+The failed native attempt `f9dbcc6d4df74424b93e2fcddc467360` and successful corrected run
+`b8ccb09ffc1541028e2feb01ef071b72` both report `cleanupSucceeded: true` under
+`artifacts/PB-1115/<id>/receipt.json`. Read-only verification confirmed both owned
+`artifacts/ue/<id>` roots are absent. The successful 15-file Unreal ZIP and fresh extraction
+were deleted after clean reopening, helper-free PIE and negative-case validation; the final
+Fab envelope was composed in memory and disposed. Compact receipts, logs and preview UI
+screenshots remain. The unchanged source/golden fixtures and reusable caches remain.
+
+Unity runs `4ffbd106` and `b77c938b` have `status: cleaned` receipts, recording removal of
+12,804,402,976 and 4,821,815,660 bytes respectively. The latter keeps no FBX, ZIP,
+unitypackage, uasset or uproject files. Owned portable runs
+`run-20260917-165430-d8607e4b3f50461d8d4e4befced7d319` and
+`run-20260917-170956-863e3ceb720540c7aa7b3863cac3c762` under
+`artifacts/PB-0507/manual` were removed in the harness finally path and independently
+confirmed absent. The historical PB-1010 release summary was restored after preserving
+the new PB-1115 summary; historical task evidence was not rewritten.
+
+An optional separate normalization smoke/temporary-cleanup command was rejected by automatic
+approval review as "blocked by policy" before execution. It created no folder and performed
+no deletion. It was not retried or bypassed; the maintained E2E harness independently tested
+normalization and completed its ordinary cleanup. All earlier recorded denied-cleanup
+exceptions remain untouched.
+
+After final tests and formatting, 15 owned MSBuild nodes and one compiler server were
+identified by contained executable, command line, creation time and build parent identity.
+The contained SDK's graceful shutdown succeeded. Fresh inspection found zero remaining
+project-tool, Unity, Unreal, Blender, shader-compiler or crash-reporter processes; unrelated
+user apps and reusable disk caches were preserved. Shutdown evidence is under
+`artifacts/PB-1115-shutdown.log` and `artifacts/PB-1115-processes-after.json`.

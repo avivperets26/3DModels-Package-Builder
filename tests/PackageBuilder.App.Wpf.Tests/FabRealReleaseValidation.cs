@@ -133,6 +133,26 @@ internal static class FabRealReleaseValidation
                 FabReleaseFixtures.Source(context, "docs", "documentation", "README.md", Encoding.UTF8.GetBytes(document.Value!.Text))],
             MediaQualityEvidence = [.. gallery.Select(image => Evidence(context, image.ArtifactId, image.Content, "media-quality"))]
         };
+        string? unrealJob = Environment.GetEnvironmentVariable("PB_UNREAL_DELIVERY_JOB");
+        if (unrealJob is not null)
+        {
+            context = context with { Listing = context.Listing with { Formats = ["fbx", "unity", "unreal"] } };
+            (FabUnrealProjectInspection unrealInspection, FabReleaseSource unrealSource, string unrealWorkerVersion) = FabUnrealLiveObservation.Read(repository, unrealJob, context,
+                reimport.RootElement.GetProperty("sourceSha256").GetString()!);
+            request = request with
+            {
+                Context = context,
+                Unreal = unrealInspection,
+                Versions = request.Versions with
+                {
+                    Unreal = PackageBuilder.Domain.Tools.ToolVersion.Create(PackageBuilder.Domain.Tools.ToolKind.Unreal, unrealInspection.EngineVersion).Value!,
+                    Workers = [.. request.Versions.Workers, new("unreal-worker", unrealWorkerVersion)]
+                },
+                Sources = [.. request.Sources, unrealSource,
+                    FabReleaseFixtures.Source(context, "unreal-docs", "documentation", "Unreal-README.md",
+                        File.ReadAllBytes(Contained(unrealJob, "fresh/project/Content/" + unrealInspection.ProjectName + "/Documentation/README.md")))]
+            };
+        }
         using var output = new MemoryStream();
         var composer = new FabReleaseComposer(updater, new(new SafeZipArchiveService(), new ArtifactHashService()), new(codec), new VerifiedReleaseArchiveWriter());
         FabComposedRelease release = await composer.ComposeAsync(request, output, token);
@@ -145,13 +165,17 @@ internal static class FabRealReleaseValidation
             sha256 = release.Content?.Sha256.Value,
             findings = release.Validation.Findings.Select(f => new { code = f.Code.Value, message = f.Explanation.Value }),
             unityAssets = assets.Count,
-            galleryImages = gallery.Length
+            galleryImages = gallery.Length,
+            unrealFiles = request.Unreal?.Files.Length,
+            unrealVersion = request.Unreal?.EngineVersion,
+            sourceSha256 = reimport.RootElement.GetProperty("sourceSha256").GetString(),
+            outputs = request.Context.Listing.Formats
         }, _json);
         if (!release.IsSuccess)
         { await File.WriteAllTextAsync(Contained(run, "fab-release-result.json"), report, token); }
         Assert.True(release.IsSuccess, report);
         using var composed = new ZipArchive(output, ZipArchiveMode.Read, true);
-        Assert.Equal(13, composed.Entries.Count);
+        Assert.Equal(unrealJob is null ? 13 : 15, composed.Entries.Count);
         using var reader = new StreamReader(composed.GetEntry("StoneArch/1.0.0/release-manifest.json")!.Open());
         using var inventory = JsonDocument.Parse(await reader.ReadToEndAsync(token));
         foreach (JsonElement entry in inventory.RootElement.GetProperty("entries").EnumerateArray())

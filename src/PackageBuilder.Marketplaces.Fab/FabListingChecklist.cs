@@ -69,7 +69,8 @@ public static class FabListingChecklistGenerator
             subcategories = draft.Subcategories.Order(StringComparer.Ordinal),
             formats = context.Listing.Formats.Order(StringComparer.Ordinal),
             platforms = draft.Platforms.Order(StringComparer.Ordinal),
-            engineVersions = context.Listing.Formats.Contains("unity") ? new[] { new { engine = "unity", version = versions.Unity.Value } } : [],
+            engineVersions = new[] { new { engine = "unity", version = versions.Unity.Value }, new { engine = "unreal", version = versions.Unreal.Value } }
+                .Where(item => context.Listing.Formats.Contains(item.engine)),
             dependencies = draft.Dependencies.OrderBy(item => item.Name, StringComparer.Ordinal),
             publisher = draft.Publisher.DisplayName.Value,
             support = draft.Publisher.SupportContact.Value,
@@ -90,6 +91,7 @@ public static class FabListingChecklistGenerator
             + "[ ] Confirm AI creation/assistance disclosures and any Unity Asset Store listing link.\n"
             + "[ ] Review rights, content policy, licence, pricing, promotional and audience declarations in Fab.\n"
             + "[ ] Create or edit the listing; upload each selected inner delivery from release-manifest.json.\n"
+            + (context.Listing.Formats.Contains("unreal") ? "[ ] Host the Unreal ZIP at a download link accessible without login; enter it as the Project File Link and retain it until the product is live.\n" : "")
             + "[ ] Add the gallery and designated thumbnail; check automatically imported technical fields.\n"
             + "[ ] Preview the listing and resolve all missing fields and validation findings.\n"
             + "[ ] Submit for Fab review and explicitly choose manual or automatic activation.\n\n"

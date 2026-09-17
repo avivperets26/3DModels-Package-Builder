@@ -4,7 +4,8 @@ param(
     [string]$UnityExecutable,
     [string]$BlenderExecutable,
     [string]$ResultPointerPath,
-    [switch]$KeepArtifacts
+    [switch]$KeepArtifacts,
+    [switch]$StaticOnly
 )
 
 Set-StrictMode -Version Latest
@@ -343,6 +344,34 @@ try {
             $cleanReimportResult.rendererCount -lt 1 -or $cleanReimportResult.materialCount -lt 1 -or
             $cleanReimportResult.textureCount -lt 1 -or @($cleanReimportResult.findings).Count -ne 0) {
             throw 'Unity clean package reimport returned an invalid or failing structured result.'
+        }
+
+        if ($StaticOnly) {
+            # The cross-target static milestone needs the exact static package and clean import,
+            # not additional imports of unrelated rigged/set/collection regression packages.
+            $staticPointer = @{
+                schemaVersion = 1
+                runRoot = $runRoot
+                project = $cloneRoot
+                cleanProject = $cleanCloneRoot
+                package = $packageOutputPath
+                packageManifest = $packageManifestPath
+                cleanReimportResult = $cleanReimportResultPath
+                artifactsRetained = [bool]$KeepArtifacts
+                cleanupReport = (Join-Path $runRoot 'cleanup-result.json')
+            }
+            $staticPointerPath = Join-Path $runRoot 'integration-result.json'
+            $staticPointer | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $staticPointerPath -Encoding UTF8
+            if (-not [string]::IsNullOrWhiteSpace($ResultPointerPath)) {
+                $resolvedPointerPath = [IO.Path]::GetFullPath($ResultPointerPath)
+                if (-not $resolvedPointerPath.StartsWith($repositoryRootPath + [IO.Path]::DirectorySeparatorChar,
+                    [StringComparison]::OrdinalIgnoreCase)) { throw 'Static result pointer escapes the repository.' }
+                New-Item -ItemType Directory -Path (Split-Path $resolvedPointerPath -Parent) -Force | Out-Null
+                Copy-Item -LiteralPath $staticPointerPath -Destination $resolvedPointerPath
+            }
+            $integrationSucceeded = $true
+            Write-Host 'Static Unity package generation, exact inventory and clean reimport passed.'
+            return
         }
 
         $itemReimportResult = Invoke-CleanUnityPackageValidation `

@@ -9,6 +9,11 @@ public static class FabRequirementsBaseline
     private static readonly Lazy<FabRequirementsProfile> _artifactValidationProfile = new(() => Load("ArtifactValidation"));
     private static readonly Lazy<FabRequirementsProfile> _staticReleaseProfile = new(() => Load("StaticRelease"));
 
+    private static readonly Lazy<FabRequirementsProfile> _unrealStaticReleaseProfile = new(() => Load("UnrealStaticRelease"));
+
+    /// <summary>Static Unreal extension candidate; callers must still test, approve and pin this exact revision.</summary>
+    public static FabRequirementsProfile UnrealStaticReleaseProfile => _unrealStaticReleaseProfile.Value;
+
     private static FabRequirementsProfile Load(string resource)
     {
         using Stream stream = typeof(FabRequirementsBaseline).Assembly.GetManifestResourceStream(

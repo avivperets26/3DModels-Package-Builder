@@ -2919,3 +2919,20 @@ has passed real foundation tests; production discovery still reports external ro
 A signed exact-root harness exception permits these tests without globally selecting ApprovedLatest.
 Built-in animation defaults avoid an unnecessary ACL plugin; filesystem-only DDC disables Zen
 auto-launch and keeps the final runs cache-contained. Full product compatibility remains pending. See [evidence](PB-1101_PB-1103_UNREAL_FOUNDATION_EVIDENCE.md).
+
+## Fab Unreal boundary and static acceptance (PB-1006/PB-1115)
+
+`UnrealContentDeliveryPolicy` in Contracts owns the content-only archive layout shared by
+`UnrealProjectArchive` and `FabUnrealProjectValidator`; neither duplicates the other's allowlist.
+Native map loading, reference closure, redirectors, plugin safety and diagnostics stay in the
+Unreal worker. The Fab adapter consumes trusted hash-bound observations, checks marketplace
+limits and preserves native findings. Its result is not a replacement for real engine execution.
+`FabReleaseComposer` requires exactly one inspected Unreal ZIP for a selected Unreal target,
+checks its version against build.lock and streams it through the existing verified archive writer.
+
+The PB-1115 harness extends the existing Fab static and Unreal delivery harnesses, preserving
+their cleanup and native negative gates. A live-only mapper checks native completion, the source
+identity, every extracted file and ZIP entry before creating Fab evidence. Synthetic CI is
+reported separately from engine acceptance. The candidate profile is cached, tested, explicitly
+approved in an isolated test database and pinned; existing user profiles are not changed.
+See [acceptance and reuse mapping](PB-1006_PB-1115_UNREAL_FAB_EVIDENCE.md).

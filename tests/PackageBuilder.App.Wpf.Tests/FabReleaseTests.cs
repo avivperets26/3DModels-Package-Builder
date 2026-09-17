@@ -104,11 +104,11 @@ public sealed class FabReleaseTests
     }
 
     [Fact]
-    public async Task UnrealSelectionIsExplicitlyUnsupported()
+    public async Task UnrealSelectionRequiresNativeInspection()
     {
         using var fixture = new FabReleaseFixtures();
         FabReleaseRequest request = fixture.Request with { Context = fixture.Request.Context with { Listing = fixture.Request.Context.Listing with { Formats = ["fbx", "unity", "unreal"] } } };
-        await Fails(fixture, request, "FAB_UNREAL_UNSUPPORTED");
+        await Fails(fixture, request, "FAB_UNREAL_EVIDENCE_INVALID");
     }
 
     [Fact]

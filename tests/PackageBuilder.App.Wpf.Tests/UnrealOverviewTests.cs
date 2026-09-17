@@ -47,6 +47,11 @@ public sealed class UnrealOverviewTests
         Assert.False(File.Exists(Path.Combine(path, "unreal-overview-plan.json")));
         byte[] fbx = File.ReadAllBytes(Path.Combine(path, "Asymmetric.fbx"));
         (UnrealImportPlan content, UnrealSurfacePlan surfaces) = Plans(Convert.ToHexStringLower(SHA256.HashData(fbx)), fbx.Length);
+        if (Environment.GetEnvironmentVariable("PB_UNREAL_STATIC_E2E") == "1")
+        {
+            surfaces = UnrealSurfacePlan.Create(content, surfaces.Materials,
+                [surfaces.Meshes[0] with { ExpectedSizeCm = [200, 200, 200], SourceSlots = ["M_StoneArch"] }]);
+        }
         foreach (KeyValuePair<string, PreviewRaster> pair in UnrealSurfaceTests.TexturePixels().Where(p => p.Key != "opacity"))
         { File.WriteAllBytes(Path.Combine(path, pair.Key + ".png"), WindowsPreviewImageCodec.EncodeTexture(pair.Value)); }
         File.WriteAllText(Path.Combine(path, "unreal-import-plan.json"), content.ToJson());

@@ -12,9 +12,17 @@ namespace PackageBuilder.App.Wpf.Tests;
 public sealed class FabStaticReleaseCandidateTests
 {
     [Fact]
-    public async Task ReviewedCandidateRequiresCompatibilityAndApprovalBeforeRelease()
+    public Task ReviewedCandidateRequiresCompatibilityAndApprovalBeforeRelease() =>
+        ValidateCandidateAsync(FabRequirementsBaseline.StaticReleaseProfile);
+
+    [Fact]
+    public Task UnrealCandidateRequiresCompatibilityAndApprovalBeforeRelease() =>
+        ValidateCandidateAsync(FabRequirementsBaseline.UnrealStaticReleaseProfile);
+
+    /// <summary>Every new revision must pass the same cache, compatibility, approval and exact-pin gates.</summary>
+    private static async Task ValidateCandidateAsync(FabRequirementsProfile profile)
     {
-        using var fixture = new FabReleaseFixtures(FabRequirementsBaseline.StaticReleaseProfile);
+        using var fixture = new FabReleaseFixtures(profile);
         string database = Path.Combine(fixture.Root, "profiles.db");
         _ = Directory.CreateDirectory(Path.Combine(fixture.Root, "backups"));
         Assert.True(new SqliteDatabaseMigrator().Migrate(fixture.Root, database, Path.Combine(fixture.Root, "backups"), Token).IsSuccess);
@@ -74,8 +82,25 @@ public sealed class FabStaticReleaseCandidateTests
             Assert.False((await fixture.Composer().ComposeAsync(fixture.Request with { Sources = [] }, missing, cancellationToken)).IsSuccess);
             using var unapproved = new MemoryStream();
             Assert.False((await fixture.Composer(false).ComposeAsync(fixture.Request, unapproved, cancellationToken)).IsSuccess);
-            string evidence = candidate.Sha256 + "\nvalid-release:pass\nmissing-source:rejected\nunapproved:rejected\n";
-            return new("fab-static-release-compatibility", CompatibilitySuiteOutcome.Passed, 3, 3, 0,
+            int checks = 3;
+            if (candidate.Document.Rules.Any(rule => rule.Id == "static-unreal-review-scope"))
+            {
+                FabValidationContext context = fixture.Request.Context with { Listing = fixture.Request.Context.Listing with { Formats = ["fbx", "unity", "unreal"] } };
+                byte[] bytes = "synthetic native observation"u8.ToArray();
+                FabReleaseRequest request = fixture.Request with
+                {
+                    Context = context,
+                    Unreal = FabUnrealProjectValidatorTests.Project(context, bytes),
+                    Sources = [.. fixture.Request.Sources, FabReleaseFixtures.Source(context, "unreal", "unreal", "Product_Unreal.zip", bytes)]
+                };
+                using var unreal = new MemoryStream();
+                Assert.True((await fixture.Composer().ComposeAsync(request, unreal, cancellationToken)).IsSuccess);
+                using var stale = new MemoryStream();
+                Assert.False((await fixture.Composer().ComposeAsync(request with { Unreal = null }, stale, cancellationToken)).IsSuccess);
+                checks += 2;
+            }
+            string evidence = candidate.Sha256 + "\nvalid-release:pass\nmissing-source:rejected\nunapproved:rejected\nchecks:" + checks;
+            return new("fab-static-release-compatibility", CompatibilitySuiteOutcome.Passed, checks, checks, 0,
                 "reports/fab-static-compatibility.txt", Identity(Encoding.UTF8.GetBytes(evidence)).Sha256.Value, DateTimeOffset.UtcNow);
         }
     }

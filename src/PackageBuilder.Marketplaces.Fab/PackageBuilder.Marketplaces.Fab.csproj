@@ -9,6 +9,7 @@
     <EmbeddedResource Include="..\..\profiles\marketplaces\requirements\fab-2026-09-12.1.json" LogicalName="PackageBuilder.Fab.Requirements.Baseline.json" />
     <EmbeddedResource Include="..\..\profiles\marketplaces\requirements\fab-2026-09-14.1.json" LogicalName="PackageBuilder.Fab.Requirements.ArtifactValidation.json" />
     <EmbeddedResource Include="..\..\profiles\marketplaces\requirements\fab-2026-09-15.1.json" LogicalName="PackageBuilder.Fab.Requirements.StaticRelease.json" />
+    <EmbeddedResource Include="..\..\profiles\marketplaces\requirements\fab-2026-09-17.1.json" LogicalName="PackageBuilder.Fab.Requirements.UnrealStaticRelease.json" />
   </ItemGroup>
 
 </Project>

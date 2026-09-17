@@ -18,6 +18,11 @@ The approved PB-0908–PB-0910 combined scope uses `codex/PB-0908-PB-0910-media-
 
 ## Required workflow
 
+The approved PB-1006/PB-1115 scope uses `feat/PB-1006-PB-1115-unreal-fab-e2e`.
+Reuse native delivery/reopen and shared archive policy. Verify one source across all three
+targets, bind native findings to exact archive hashes, and preserve historical profile pins.
+
+
 The approved PB-1113/PB-1114/PB-1116 scope uses
 `feat/PB-1113-PB-1114-PB-1116-unreal-package-preview`. Reuse safe archives and canonical
 preview controls, verify fresh native extraction/reopen and runtime behavior, and clean outputs.
@@ -47,7 +52,7 @@ Honor the explicit external Unreal installation exception in AGENTS.md; keep all
 in the repository and never change the user-managed engine installation.
 
 The approved PB-1008–PB-1010 portable/Unity release scope uses `codex/PB-1008-PB-1010-fab-release`.
-Unreal remains unsupported, and unresolved sourced rules must not be silently waived for E2E acceptance.
+That historical milestone excluded Unreal; PB-1006/PB-1115 adds it with separate evidence and a new pinned profile. Unresolved sourced rules must never be waived for E2E acceptance.
 
 The approved PB-1004/PB-1005/PB-1007 combined scope uses `codex/PB-1004-PB-1005-PB-1007-fab-validators`.
 
