@@ -17,6 +17,7 @@ from package_builder_protocol import (
 )
 
 from package_builder_unreal import __version__
+from package_builder_unreal.delivery import prepare_delivery, verify_delivery
 from package_builder_unreal.overview import create_overview
 from package_builder_unreal.preview_capture import render_previews
 from package_builder_unreal.project_validation import OverviewValidationError, validate_overview
@@ -136,12 +137,18 @@ def run(request_path: Path, unreal: Any, stdout: TextIO, stderr: TextIO) -> int:
             "create-unreal-overview",
             "validate-unreal-overview",
             "render-unreal-previews",
+            "prepare-unreal-delivery",
+            "verify-unreal-delivery",
         }:
             failure = "UNREAL_OPERATION_UNSUPPORTED"
             code = 4
         else:
             result["retrySafety"] = "requires-cleanup"
-            if request["operation"] == "create-unreal-overview":
+            if request["operation"] == "prepare-unreal-delivery":
+                artifacts = prepare_delivery(unreal, workspace, source, output)
+            elif request["operation"] == "verify-unreal-delivery":
+                artifacts = verify_delivery(unreal, workspace, source)
+            elif request["operation"] == "create-unreal-overview":
                 artifacts = create_overview(unreal, workspace, source)
             elif request["operation"] == "validate-unreal-overview":
                 artifacts = validate_overview(unreal, workspace, source)[0]

@@ -186,6 +186,15 @@ Reuse shared presentation/media contracts and native adapters; validate saved ma
 rendered views and rejection of contaminated projects. Roll PB-1107–PB-1109 to DONE once using
 successful main CI and user acceptance. Clean disposable projects; publication gates remain.
 
+### Approved combined scope: PB-1113, PB-1114 and PB-1116
+
+On 2026-09-16 the user approved these three tasks on
+`feat/PB-1113-PB-1114-PB-1116-unreal-package-preview`, from freshly synchronized main
+`4389ff27dca342578745a339e8ff415697958d39`. Reuse safe archive/extraction and shared
+preview contracts. Validate clean native reopening and actual interactive runtime behavior;
+remove owned generated ZIPs/projects. Roll PB-1110–PB-1112 to DONE once using successful
+main CI and user acceptance. Keep individual evidence; publication gates remain unchanged.
+
 ### User-approved Unreal installation exception
 
 On 2026-09-16 the user chose Epic's installation under `C:\Program Files\Epic Games` and
@@ -195,6 +204,18 @@ or delete the installation. This overrides root containment only for the externa
 project clones, requests, outputs, logs and caches remain under `C:\Dev\PackageBuilder`.
 Production discovery continues to report external installations as informational; this development
 harness exception does not silently approve arbitrary external tools or global version selection.
+
+### User-approved native compiler installation
+
+On 2026-09-17 the user authorized installing Visual Studio 2022 C++ Build Tools and the
+Windows SDK to unblock PB-1116 while retaining Visual Studio Code as the editor. The required
+.NET Framework 4.8 SDK is included; the user explicitly authorized retrying its cancelled
+administrator prompt on the same day. The verified
+Microsoft bootstrapper is retained under `downloads/visualstudio/2022`; the tool instance is
+installed under `tools/msvc/2022`. Microsoft's installer may manage its required shared SDK,
+installer, registry and temporary state in standard Windows locations. This narrow installation
+exception does not authorize unrelated software, engine modification or relocation of project
+outputs. Record installed versions and native compilation evidence before clearing the blocker.
 
 ### Start every task branch from freshly synchronized main
 
@@ -319,6 +340,21 @@ These rules are mandatory acceptance requirements. Follow [the detailed quality 
   by default through `scripts/UnityTestArtifacts.Common.ps1`. `-KeepArtifacts` retains a successful
   run for inspection; use `Remove-UnityTestArtifacts` afterwards. Other/manual harnesses must also
   have their disposable outputs removed before handoff under this standing user instruction.
+
+### End-of-task process cleanup
+
+The user's standing instruction from 2026-09-17 requires releasing CPU and memory after work.
+After the final build/test/validation command, close task-owned engine sessions, preview apps,
+test runners, compiler/build servers and other temporary background helpers, including leftovers
+from failed runs. Prefer graceful shutdown; for this repository's .NET SDK, run
+`dotnet build-server shutdown` from the contained environment after all builds/tests finish.
+Before stopping a process, verify ownership using its executable, command line, start time and
+parent/run identity. Never terminate all processes by name or close the user's unrelated apps,
+games, browser, editor, Codex or another active task's processes. Stop only verified owned
+leftovers if graceful shutdown fails, and recheck that they have exited. Preserve disk caches
+and source/evidence; stopping background work does not authorize deleting them. Report any
+process that could not be closed and the reason. An intentionally retained preview/server needs
+a concrete user inspection purpose and a recorded shutdown follow-up.
 
 ### 9. Visual Studio Code
 

@@ -31,6 +31,20 @@ def log_findings(text):
     )
 
 
+def preview_diagnostics(text, baseline):
+    """Classify the exact UE 5.8 TSR CVar notice only when a blank native run reproduces it.
+
+    All other warnings/errors still block, including a changed message, package warnings,
+    or additional repetitions. Engine source declares this CVar without RenderThreadSafe;
+    the TSR read emits the notice independently of imported assets or preview Blueprints.
+    """
+    notice = "LogConsoleManager: Warning: Console variable 'r.MotionVectorSimulation' used in the render thread. Rendering artifacts could happen. Use ECVF_RenderThreadSafe or don't use in render thread."
+    count = text.count(notice)
+    if count == 1 and baseline.count(notice) == 1:
+        return {"engineBaselineNotices": count, "findings": log_findings(text.replace(notice, ""))}
+    return {"engineBaselineNotices": 0, "findings": log_findings(text)}
+
+
 def repair_diagnostics(text, editor_directory, content_directory):
     """Classify only UE's fixed local-SCC deletion notice, never package/compiler warnings.
 
@@ -78,9 +92,12 @@ def unused_packages(packages, dependencies, entry):
     return set(packages) - reached
 
 
-def validate_overview(u, workspace, source):
+def validate_overview(u, workspace, source, delivery=False):
     """Independently load the saved map, compare scene state and block stale/missing content."""
     project, content, surfaces, plan = context(u, workspace, source)
+    from package_builder_unreal.preview_plan import PREVIEW_ASSETS, load_preview_plan
+
+    preview = load_preview_plan(source, plan)
     root = content["packRoot"]
     config = resolve_logical_reference(project, "Config/DefaultEngine.ini").read_text("utf-8")
     if any(
@@ -106,6 +123,8 @@ def validate_overview(u, workspace, source):
     }
     expected |= {root + "/Meshes/SM_" + m["id"] for m in surfaces["meshes"]}
     expected |= {map_name(plan), root + "/Materials/M_PBStudio"}
+    if preview is not None:
+        expected |= {root + "/Preview/" + name for name in PREVIEW_ASSETS}
     packages = {str(a.package_name) for a in assets}
     if packages != expected:
         u.log("Overview package inventory difference: " + str(sorted(packages ^ expected)))
@@ -116,6 +135,25 @@ def validate_overview(u, workspace, source):
     dependencies = {
         name: [str(x) for x in registry.get_dependencies(name, options)] for name in packages
     }
+    if preview is not None and any(
+        dependency.startswith("/Script/")
+        and dependency
+        not in {
+            "/Script/CoreUObject",
+            "/Script/Engine",
+            "/Script/UMG",
+            "/Script/SlateCore",
+            "/Script/InputCore",
+            # Native graph metadata is part of an editable Blueprint, not a plugin runtime call.
+            "/Script/BlueprintGraph",
+            "/Script/UMGEditor",
+        }
+        for name, refs in dependencies.items()
+        if name.startswith(root + "/Preview/")
+        for dependency in refs
+    ):
+        u.log("Preview dependency inventory: " + str(dependencies))
+        raise OverviewValidationError("UNREAL_PREVIEW_RUNTIME_DEPENDENCY")
     if unused_packages(packages, dependencies, map_name(plan)):
         raise OverviewValidationError("UNREAL_UNUSED_ASSET")
     # Physical inventory must agree too: registry scans can omit damaged or foreign packages.
@@ -128,6 +166,8 @@ def validate_overview(u, workspace, source):
         name.removeprefix("/Game/") + (".umap" if name == map_name(plan) else ".uasset")
         for name in expected
     }
+    if delivery:
+        required.add(plan["projectName"] + "/Documentation/README.md")
     # The reviewed clone template carries one empty source-control placeholder, not an asset.
     placeholder = project / "Content" / plan["projectName"] / ".gitkeep"
     if (
@@ -145,6 +185,8 @@ def validate_overview(u, workspace, source):
     editor = actor_editor(u)
     actors = {a.get_actor_label(): a for a in editor.get_all_level_actors()}
     names = {"PB_Product", "PB_Key", "PB_Fill", "PB_Floor", "PB_Background", "PB_Camera"}
+    if preview is not None:
+        names.add("PB_Preview")
     if plan["label"] is not None:
         names.add("PB_Label")
     # WorldSettings and the native builder brush are engine-owned, not leftover product actors.
@@ -156,6 +198,20 @@ def validate_overview(u, workspace, source):
     if any(a.get_editor_property("hidden") for a in custom):
         raise OverviewValidationError("UNREAL_ACTOR_HIDDEN")
     product = actors["PB_Product"]
+    if preview is not None:
+        actor = actors["PB_Preview"]
+        if (
+            actor.get_class().get_path_name() != root + "/Preview/BP_Preview.BP_Preview_C"
+            or actor.get_editor_property("Camera") != actors["PB_Camera"]
+            or actor.get_editor_property("KeyLight") != actors["PB_Key"]
+        ):
+            raise OverviewValidationError("UNREAL_PREVIEW_REFERENCES")
+        mode = world.get_world_settings().get_editor_property("default_game_mode")
+        if (
+            mode is None
+            or mode.get_path_name() != root + "/Preview/BP_PreviewGameMode.BP_PreviewGameMode_C"
+        ):
+            raise OverviewValidationError("UNREAL_PREVIEW_GAME_MODE")
     if not isinstance(product, u.StaticMeshActor):
         raise OverviewValidationError("UNREAL_PRODUCT_REFERENCE")
     mesh = product.static_mesh_component.static_mesh
@@ -253,6 +309,8 @@ def validate_overview(u, workspace, source):
         if not isinstance(actor, u.DirectionalLight):
             raise OverviewValidationError("UNREAL_LIGHTING_STATE")
         light = actor.light_component
+        if light.get_editor_property("forward_shading_priority") != (1 if name == "PB_Key" else 0):
+            raise OverviewValidationError("UNREAL_LIGHTING_PRIORITY")
         rotation = actor.get_actor_rotation()
         colour = light.get_light_color()
         u.log(

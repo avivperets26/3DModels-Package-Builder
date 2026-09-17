@@ -109,3 +109,10 @@ git push -u origin feat/PB-1110-PB-1112-unreal-overview-validation
 ```
 
 Merge/main push, main CI and user acceptance remain the publication gates before rollover.
+## Completion rollover — 2026-09-16
+
+Published task `a7aa8c45da4bd3c613e2e167578d1816b386553d` was merged as
+`4389ff27dca342578745a339e8ff415697958d39`. Both required jobs passed in
+[main CI 35131715740](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/35131715740).
+The user accepted publication and selected PB-1113/PB-1114/PB-1116. Each previous task is
+recorded DONE exactly once in that successor branch; prior local evidence remains historical.

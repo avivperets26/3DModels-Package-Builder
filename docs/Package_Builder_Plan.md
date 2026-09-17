@@ -236,11 +236,19 @@ remains PB-0617 work.
 
 ### 3.4 Unreal Worker
 
+PB-1113/PB-1114 add validated content-only ZIP preparation and safe extraction with independent
+native reopening. The static project excludes editor plugins/caches and strips machine-specific
+reimport paths. PB-1116 adds native orbit/zoom, keyboard controls, light direction/reset and an
+accessible hideable UMG panel from the shared preview contract. The VS Code-compatible editor
+helper authors content-only Blueprints and is excluded from delivery. Native controls and
+helper-free extracted-project PIE have passed; see [delivery evidence](PB-1113_PB-1114_PB-1116_UNREAL_DELIVERY_EVIDENCE.md)
+for final regression evidence and the separate publication gates.
+
 PB-1110–PB-1112 add static overview maps, requested native 1920×1080 stills and project
 validation. They reuse the PB-0906 presentation and shared media gates; capture success alone
 does not approve media or release. See [overview evidence](PB-1110_PB-1112_UNREAL_OVERVIEW_EVIDENCE.md)
-for the current validation state, scope and cleanup. Interactive controls and final ZIPs remain
-PB-1116 and PB-1113 respectively.
+for the original static overview validation state, scope and cleanup. PB-1116 extends it with
+interactive controls while preserving the shared studio presentation and product transforms.
 
 PB-1101–PB-1103 provide the versioned 5.8 template and protocol shell. The user-installed Unreal
 5.8.2 has passed real save/reopen and rejected-request tests. Global product compatibility approval

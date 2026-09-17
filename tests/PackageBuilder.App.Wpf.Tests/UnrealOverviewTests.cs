@@ -4,6 +4,7 @@ using System.Text.Json;
 using PackageBuilder.App.Wpf.Media;
 using PackageBuilder.Application.Media;
 using PackageBuilder.Contracts.Artifacts;
+using PackageBuilder.Contracts.Preview;
 using PackageBuilder.Domain.BuildJobs;
 using PackageBuilder.Domain.Materials;
 using PackageBuilder.Domain.Media;
@@ -51,6 +52,9 @@ public sealed class UnrealOverviewTests
         File.WriteAllText(Path.Combine(path, "unreal-import-plan.json"), content.ToJson());
         File.WriteAllText(Path.Combine(path, "unreal-surface-plan.json"), surfaces.ToJson());
         File.WriteAllText(Path.Combine(path, "unreal-overview-plan.json"), UnrealOverviewPlan.Create(surfaces, PreviewPresentationDefaults.Create(ProductCase.Static).Value!, "Static product"));
+        File.WriteAllText(Path.Combine(path, "preview-experience.json"), PreviewExperienceJson.Serialize(PreviewExperienceDefaults.Contract).Json!);
+        if (Environment.GetEnvironmentVariable("PB_UNREAL_INTERACTIVE") == "1")
+        { File.WriteAllText(Path.Combine(path, "unreal-preview-plan.json"), UnrealPreviewPlan.Create(content.ProjectName, PreviewExperienceDefaults.Contract)); }
     }
 
     [Fact]

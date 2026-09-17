@@ -277,7 +277,7 @@ the separate 24-empty-directory exception above.
 ## PB-1110–PB-1112 scratch cleanup exception — 2026-09-16
 
 The full .NET runs left 48 empty directories and zero files beneath
-`C:DevPackageBuilderartifactsalidationPB-1110	emp` (read-only verified; no links).
+`C:\Dev\PackageBuilder\artifacts\validation\PB-1110\temp` (read-only verified; no links).
 Automatic approval review rejected their bounded PowerShell removal with `blocked by policy`.
 The command did not execute; no alternate method or retry was used. These empty scratch
 directories contain no generated packages. Earlier documented cleanup exceptions are unchanged.
@@ -290,3 +290,86 @@ acceptance and cleanup. Read-only inspection found zero remaining jobs under `ar
 The audit is `artifacts/PB-1110/cleanup-verified.json`. Compact native logs, receipts and
 preview images remain as evidence; source fixtures, engine tools and shared DDC are preserved.
 The empty scratch-directory exception above remains unchanged.
+
+## PB-1113/PB-1114/PB-1116 cleanup — 2026-09-16
+
+The delivery harness removes its owned ZIP, original project clone, fresh extraction, fault
+copies and scratch data in `finally`, including failed native attempts. Accepted run
+`a7473877a0c144b9a7d0ab32141ebf0a` records `cleanupSucceeded: true`; earlier delivery failures
+also record successful cleanup. The API-probe clones used to diagnose PB-1116 were removed
+after every probe. `artifacts/ue` is empty following acceptance. Only compact native logs,
+JSON receipts and API diagnostics remain under `artifacts/PB-1113`. No previous denied cleanup
+was retried, and no historical DONE status or test result was changed by this cleanup.
+
+Automatic approval review separately rejected removal of
+`C:\Dev\PackageBuilder\artifacts\validation\PB-1113\temp` with "blocked by policy".
+Read-only inspection found 25 directories and one 30,297-byte .NET workload NuGet scratch
+file. No 3D test ZIP or Unreal project remains there. This removal was not retried through
+another command or tool. Preserve this recorded exception for future tasks; ordinary owned
+native-run cleanup remains verified separately by its receipts.
+
+### PB-1116 compiler verification — 2026-09-17
+
+The first owned C++ helper build project was removed in finally after UnrealBuildTool rejected
+the missing .NET Framework SDK. Its receipt under `artifacts/PB-1116` records build exit 8,
+`passed: false` and `cleanupSucceeded: true`; no generated project or test package remains in
+`artifacts/ue`. Compiler tools are retained under `tools/msvc/2022` as the authorized reusable
+toolchain, not test-package garbage. Microsoft's shared installer/SDK state is covered by the
+narrow installation exception in AGENTS.md. No prior denied cleanup was retried.
+
+### Native compiler scratch exception — 2026-09-17
+
+UnrealBuildTool created two empty default accelerator session directories during the first
+compiler checks: `C:\ProgramData\Epic\UnrealBuildAccelerator\sessions\260917_095710` and
+`C:\ProgramData\Epic\UnrealBuildAccelerator\sessions\260917_102818`. Read-only inspection
+found zero files in either. Automatic approval review rejected their bounded non-recursive
+removal as "blocked by policy"; no deletion ran, and it was not retried or bypassed.
+The reviewed build harness now supplies an explicit owned `-UBARootDir` and trace path; its
+accepted build log confirms the accelerator root stays inside the disposable repository job.
+The global accelerator root also contains its empty `castemp` directory and zero-byte cloud
+detection markers; these contain no product package. Preserve this explicit exception.
+
+The successful helper probe `c272c84a3f2c44cf8f89d1b0cc2c4c48` and maintained harness run
+`63a69a3c49cf4d9ca8c6198485613ada` both removed their native build/test projects and compiler
+scratch directories in finally. Their receipts confirm cleanup; `artifacts/ue` is empty.
+Only compact evidence and the reusable ignored helper binaries remain. The two denied empty
+global-session directories above were not retried, and earlier cleanup exceptions are unchanged.
+
+### PB-1116 interactive acceptance — 2026-09-17
+
+Native delivery runs `57359789ded34bb384635874b1cb9a1b` and
+`a31b537364244998a80da0a94ad4fb58` passed with 15-file interactive ZIPs, independent
+helper-free PIE, unchanged source/delivered hashes and `cleanupSucceeded: true`.
+Their owned `artifacts/ue/<id>` trees, including ZIPs and extracted projects, no longer exist.
+Receipts, logs and two compact UI screenshots per run remain under `artifacts/PB-1113`.
+Reusable helper binaries, compiler tools, golden fixtures and shared DDC are retained.
+
+A final read-only scan found four late `user/Saved/Crashes/.../CrashContext.runtime-xml`
+files in earlier failed native graph-probe jobs, totalling 275,843 bytes. These were recreated
+after the probes' immediate cleanup receipts; no `.uasset`, `.uproject` or ZIP remains there.
+The exact owned roots under `C:\Dev\PackageBuilder\artifacts\ue` are:
+
+- `64e1025c46554a9ab843c23166459821`
+- `77c32c15f42f4d2ca8e4f10ef53e6842`
+- `a4d0e425737a4ad6a07280d86957029f`
+- `ff1d6fe25c124f98ba1c0b8af14c6ae1`
+
+Their original failure/cleanup receipts remain under `artifacts/PB-1116/<id>`.
+No Unreal editor or crash reporter was running at inspection. Automatic approval review
+rejected a guarded archive-and-cleanup command with "blocked by policy" before execution.
+No copy or deletion ran and no alternative route was attempted. Preserve this exception for
+future tasks; do not infer these four roots are empty from the earlier immediate receipts.
+The retained files are small crash diagnostics, not generated test-package garbage.
+
+### Post-validation process shutdown — 2026-09-17
+
+The user requested that task-owned tools be closed after work to release CPU and memory.
+Inspection found 15 reusable MSBuild nodes and one Roslyn compiler server from the completed
+build, all running from `tools/dotnet/10.0.302` with matching build start/parent identities.
+Their combined working sets were 1,976.4 MiB before shutdown (not a measurement of unique
+physical memory). The contained environment's `dotnet build-server shutdown` reported both
+MSBuild and compiler servers stopped successfully. A fresh process inventory found zero
+remaining project-tool processes; no project-owned Unreal, Unity, Blender, shader compiler,
+crash reporter or build worker remained. User apps and reusable disk caches were preserved.
+The standing shutdown/ownership/verification rule is recorded in AGENTS.md and the engineering
+skill. This process cleanup does not change task lifecycle states or the retained-file exceptions.

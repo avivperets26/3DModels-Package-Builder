@@ -18,6 +18,14 @@ The approved PB-0908–PB-0910 combined scope uses `codex/PB-0908-PB-0910-media-
 
 ## Required workflow
 
+The approved PB-1113/PB-1114/PB-1116 scope uses
+`feat/PB-1113-PB-1114-PB-1116-unreal-package-preview`. Reuse safe archives and canonical
+preview controls, verify fresh native extraction/reopen and runtime behavior, and clean outputs.
+For this scope, honor the user-approved VS 2022 Build Tools installation exception in AGENTS.md.
+VS Code remains the editor; compile the editor-only helper and validate it in Unreal before
+claiming that prerequisite installation resolves the preview runtime acceptance.
+
+
 The approved PB-1110–PB-1112 scope uses `feat/PB-1110-PB-1112-unreal-overview-validation`.
 Reuse shared presentation tokens and image validation. Native saved-map reopen, final-material
 captures, product-only coverage and hostile-project rejection are required; remove test projects.
@@ -73,6 +81,11 @@ The approved PB-0911/PB-0912 combined scope uses `codex/PB-0911-PB-0912-reports-
    This applies retroactively to completed tasks and to every future task/rerun. Check
    `docs/TEST_ARTIFACT_CLEANUP.md` at startup for retained-run exceptions; update that audit after
    removing historical outputs without changing DONE statuses or historical validation results.
+   After the last validation, follow AGENTS.md's end-of-task process cleanup: shut down owned
+   engines, previews, test runners and build/compiler servers, then verify exit. Use the contained
+   .NET environment's `dotnet build-server shutdown` after builds finish. Verify process ownership
+   before stopping leftovers; preserve unrelated user apps, active tasks and reusable disk caches.
+   Record intentional retention or shutdown failures in the handoff/cleanup audit.
 9. Synchronize only genuinely affected documentation and lifecycle evidence.
 10. Report the reuse/duplication audit, intentional duplicates, validation evidence, and manual Git
     handoff. Never stage, commit, push, merge, or publish without exact user authorization.

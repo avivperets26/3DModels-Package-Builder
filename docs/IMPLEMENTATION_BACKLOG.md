@@ -21,12 +21,12 @@
 | Measure | Tasks |
 | --- | ---: |
 | Total | 265 |
-| ⚪ Backlog | 108 |
+| ⚪ Backlog | 105 |
 | 🟡 In progress | 3 |
 | 🔴 Blocked | 0 |
-| 🟢 Done | 154 |
-| Remaining (all not done) | 111 |
-| Overall completion | 154 / 265 (58.1%) |
+| 🟢 Done | 157 |
+| Remaining (all not done) | 108 |
+| Overall completion | 157 / 265 (59.2%) |
 <!-- status-summary:end -->
 
 Counts include each canonical PB task definition exactly once, including the optional post-v1 roadmap.
@@ -194,10 +194,9 @@ results, DONE statuses or Completion Log entries.
 
 | Task | Status | Branch | Owner | Started | Current verified state | Current blocker |
 |---|---|---|---|---|---|---|
-| PB-1110 | 🟡 **IN PROGRESS** | `feat/PB-1110-PB-1112-unreal-overview-validation` | Codex | 2026-09-16 | Locally implemented/validated: Unreal 5.8.2 overview, five native media-validated views, redirector/unused-asset/lighting fault gates; [evidence](PB-1110_PB-1112_UNREAL_OVERVIEW_EVIDENCE.md). Publication/main CI/user acceptance remain. | None. |
-| PB-1111 | 🟡 **IN PROGRESS** | `feat/PB-1110-PB-1112-unreal-overview-validation` | Codex | 2026-09-16 | Locally implemented/validated: Unreal 5.8.2 overview, five native media-validated views, redirector/unused-asset/lighting fault gates; [evidence](PB-1110_PB-1112_UNREAL_OVERVIEW_EVIDENCE.md). Publication/main CI/user acceptance remain. | None. |
-| PB-1112 | 🟡 **IN PROGRESS** | `feat/PB-1110-PB-1112-unreal-overview-validation` | Codex | 2026-09-16 | Locally implemented/validated: Unreal 5.8.2 overview, five native media-validated views, redirector/unused-asset/lighting fault gates; [evidence](PB-1110_PB-1112_UNREAL_OVERVIEW_EVIDENCE.md). Publication/main CI/user acceptance remain. | None. |
-
+| PB-1113 | 🟡 **IN PROGRESS** | `feat/PB-1113-PB-1114-PB-1116-unreal-package-preview` | Codex | 2026-09-17 | Locally implemented/validated: 15-file interactive clean ZIP, safe extraction, native reopen and negative gates; [evidence](PB-1113_PB-1114_PB-1116_UNREAL_DELIVERY_EVIDENCE.md). Publication remains. | None. |
+| PB-1114 | 🟡 **IN PROGRESS** | `feat/PB-1113-PB-1114-PB-1116-unreal-package-preview` | Codex | 2026-09-17 | Locally implemented/validated: helper-free extracted-project PIE, unchanged delivered/source hashes and automatic cleanup; [evidence](PB-1113_PB-1114_PB-1116_UNREAL_DELIVERY_EVIDENCE.md). Publication remains. | None. |
+| PB-1116 | 🟡 **IN PROGRESS** | `feat/PB-1113-PB-1114-PB-1116-unreal-package-preview` | Codex | 2026-09-17 | Locally implemented/validated: shared camera/light vectors, native input/focus/reset/sliders, accessible hide/restore panel, visual captures and helper-free PIE; [evidence](PB-1113_PB-1114_PB-1116_UNREAL_DELIVERY_EVIDENCE.md). Publication remains. | None. |
 
 ### PB-0802 Completion Evidence
 
@@ -1731,6 +1730,10 @@ During the approved next-task rollover, append exactly one row for the immediate
 | PB-1108 | `feat/PB-1107-PB-1109-unreal-materials-meshes` | `2b187bfaa3c55cd6ad3dde65a14e258d8f7f3025` | Direct merge | 2026-09-16 | Main `8ae7175aba5eb9732728b690bcb6daf0ed0b0dc2`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/35113648602) passed both jobs. User accepted publication and selected PB-1110–PB-1112; recorded once at branch start. |
 | PB-1109 | `feat/PB-1107-PB-1109-unreal-materials-meshes` | `2b187bfaa3c55cd6ad3dde65a14e258d8f7f3025` | Direct merge | 2026-09-16 | Main `8ae7175aba5eb9732728b690bcb6daf0ed0b0dc2`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/35113648602) passed both jobs. User accepted publication and selected PB-1110–PB-1112; recorded once at branch start. |
 
+| PB-1110 | `feat/PB-1110-PB-1112-unreal-overview-validation` | `a7aa8c45da4bd3c613e2e167578d1816b386553d` | Direct merge | 2026-09-16 | Main `4389ff27dca342578745a339e8ff415697958d39`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/35131715740) passed both jobs. User accepted publication and selected PB-1113/PB-1114/PB-1116; recorded once at branch start. |
+| PB-1111 | `feat/PB-1110-PB-1112-unreal-overview-validation` | `a7aa8c45da4bd3c613e2e167578d1816b386553d` | Direct merge | 2026-09-16 | Main `4389ff27dca342578745a339e8ff415697958d39`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/35131715740) passed both jobs. User accepted publication and selected PB-1113/PB-1114/PB-1116; recorded once at branch start. |
+| PB-1112 | `feat/PB-1110-PB-1112-unreal-overview-validation` | `a7aa8c45da4bd3c613e2e167578d1816b386553d` | Direct merge | 2026-09-16 | Main `4389ff27dca342578745a339e8ff415697958d39`; [main CI](https://github.com/avivperets26/3DModels-Package-Builder/actions/runs/35131715740) passed both jobs. User accepted publication and selected PB-1113/PB-1114/PB-1116; recorded once at branch start. |
+
 ## 5. Milestones
 
 | Milestone | Outcome | Required epics |
@@ -2672,28 +2675,28 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0415, PB-1105, PB-1108
   - Done when: `SM_` assets import at correct scale/orientation with intended materials, LOD settings, normals/tangents, and explicit collision behavior.
 
-- [ ] **PB-1110 — Implement Unreal overview map generator** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-1110 — Implement Unreal overview map generator** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-1110-PB-1112-unreal-overview-validation`
   - Depends on: PB-1109
   - Done when: required map contains lighting, floor/background, camera, product actor, labels where appropriate, and no previous/unused assets.
 
-- [ ] **PB-1111 — Implement Unreal preview still rendering** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-1111 — Implement Unreal preview still rendering** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-1110-PB-1112-unreal-overview-validation`
   - Depends on: PB-0906, PB-1110
   - Done when: requested 1920×1080 views render from final Unreal materials and pass the shared media validator.
 
-- [ ] **PB-1112 — Implement redirector, unused-asset, map, and log validation** — **P0** — 🟡 **IN PROGRESS**
+- [x] **PB-1112 — Implement redirector, unused-asset, map, and log validation** — **P0** — 🟢 **DONE**
   - Branch: `feat/PB-1110-PB-1112-unreal-overview-validation`
   - Depends on: PB-1110
   - Done when: redirectors are fixed, unused assets detected, map loads, required lighting state validates, and package-caused errors/warnings block release.
 
-- [ ] **PB-1113 — Implement clean Unreal project ZIP** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-1113-unreal-project-zip`
+- [ ] **PB-1113 — Implement clean Unreal project ZIP** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `feat/PB-1113-PB-1114-PB-1116-unreal-package-preview`
   - Depends on: PB-0202, PB-1112
   - Done when: one project is zipped without Saved, Intermediate, DerivedDataCache, Binaries, unrelated plugins, or absolute paths.
 
-- [ ] **PB-1114 — Implement Unreal clean extraction and reopen test** — **P0** — ⚪ **BACKLOG**
-  - Branch: `test/PB-1114-unreal-clean-reopen`
+- [ ] **PB-1114 — Implement Unreal clean extraction and reopen test** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `feat/PB-1113-PB-1114-PB-1116-unreal-package-preview`
   - Depends on: PB-1113
   - Done when: clean extraction opens through command line, assets load, overview map validates, and structured results return.
 
@@ -2702,8 +2705,8 @@ cases, and every documented E01 task is `[x]` / 🟢 **DONE**.
   - Depends on: PB-0213, PB-0507, PB-1111, PB-1114, PB-1116, PB-1006
   - Done when: static source produces portable, Unity, Unreal, media, docs, and Fab release outputs with clean reimport/reopen.
 
-- [ ] **PB-1116 — Implement Unreal interactive dark-studio preview shell** — **P0** — ⚪ **BACKLOG**
-  - Branch: `feat/PB-1116-unreal-interactive-preview`
+- [ ] **PB-1116 — Implement Unreal interactive dark-studio preview shell** — **P0** — 🟡 **IN PROGRESS**
+  - Branch: `feat/PB-1113-PB-1114-PB-1116-unreal-package-preview`
   - Depends on: PB-0913, PB-1110
   - Done when: the packaged overview map implements the shared contract with left-drag bounded yaw/pitch orbit, mouse-wheel distance zoom, keyboard/reset equivalents, the approved seamless horizon-free near-black background with soft brighter centre, adjustable/resettable key-light direction through a minimal accessible UMG overlay, hideable controls for capture, and tests proving unchanged product transforms, clean PIE execution, and no unnecessary editor/plugin runtime dependency.
 
