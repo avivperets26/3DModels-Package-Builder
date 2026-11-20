@@ -7,7 +7,7 @@ updates:
       day: "monday"
       time: "09:00"
       timezone: "Europe/London"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 0
     target-branch: "main"
 
   - package-ecosystem: "github-actions"
@@ -17,5 +17,5 @@ updates:
       day: "monday"
       time: "09:30"
       timezone: "Europe/London"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 0
     target-branch: "main"
