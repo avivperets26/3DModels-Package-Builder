@@ -2,6 +2,19 @@
 
 These rules apply permanently to the entire `C:\Dev\PackageBuilder` tree unless the user explicitly replaces or amends them.
 
+## Scheduled work pause
+
+The owner's 2026-11-20 instruction pauses scheduled work for this Package Builder
+project until further notice. Do not create, resume or replace recurring project
+automation without an explicit request to resume. This instruction does not apply
+to World Footage or any other project. Dependabot version-update proposals are
+paused when both ecosystems' `open-pull-requests-limit` values are zero on GitHub's
+default branch. Keep the existing weekly configuration for a later approved resume.
+Security alerts and event-triggered push/pull-request CI are unchanged. Local edits
+do not establish that the GitHub pause is active; verify the published configuration.
+
+## Project rules
+
 1. `C:\Dev\PackageBuilder` is the single project root.
 2. All source code, documentation, downloads, local tools, runtime data, logs, fixtures, and generated artifacts must remain beneath this root.
 3. Never use `C:\Dev\PackageBuilderData` or scatter project files elsewhere.

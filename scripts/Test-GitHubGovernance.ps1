@@ -444,8 +444,8 @@ Invoke-Check 'Dependabot v2 monitors bounded weekly NuGet and GitHub Actions upd
             throw "$($starts[$entryIndex].Ecosystem) is missing open-pull-requests-limit."
         }
         $limit = [int]$limitMatch.Groups['limit'].Value
-        if ($limit -lt 1 -or $limit -gt 5) {
-            throw "$($starts[$entryIndex].Ecosystem) open-pull-requests-limit must be between 1 and 5."
+        if ($limit -lt 0 -or $limit -gt 5) {
+            throw "$($starts[$entryIndex].Ecosystem) open-pull-requests-limit must be between 0 (paused) and 5."
         }
     }
 
